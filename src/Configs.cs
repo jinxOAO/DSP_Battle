@@ -11,13 +11,13 @@ namespace DSP_Battle
     {
         public static string versionString = "2.2.5";
         public static string qq = "694213906";
-        public static bool developerMode = false; //发布前务必修改！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+        public static bool developerMode = true; //发布前务必修改！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
         
         public static bool enableProliferator4 = false;
         public static bool enableBattleBGM = true;
         public static bool enableAlertTextGlowing = true;
         public static int versionWhenImporting = -1;
-        public static int versionCode = 30230415;
+        public static int versionCode = 30230426;
 
 
         public static int difficulty = 0; // -1 easy, 0 normal, 1 hard
@@ -59,7 +59,7 @@ namespace DSP_Battle
 
         public static int missile3Range;
 
-        public static int dropletAtk = 4000;
+        public static int dropletAtk = 400000;
 
         public static double dropletSpd = 30000.0;
 
@@ -118,7 +118,6 @@ namespace DSP_Battle
         public static int nextWaveIntensity = 0;
         public static int nextWaveWormCount = 0;
         public static int[] nextWaveEnemy = new int[10];
-        public static Wormhole[] nextWaveWormholes = new Wormhole[100];
         public static int nextWaveElite = 0;
 
         public static int nextWaveMatrixExpectation = 0;
@@ -317,7 +316,6 @@ namespace DSP_Battle
             w.Write(nextWaveIntensity);
             
             w.Write(nextWaveWormCount);
-            for (var i = 0; i < 100; ++i) nextWaveWormholes[i].Export(w);
 
             for (var i = 0; i < 10; ++i) w.Write(nextWaveEnemy[i]);
 
@@ -350,7 +348,6 @@ namespace DSP_Battle
             nextWaveIntensity = r.ReadInt32();
 
             nextWaveWormCount = r.ReadInt32();
-            for (var i = 0; i < 100; ++i) nextWaveWormholes[i].Import(r);
 
             for (var i = 0; i < 10; ++i) nextWaveEnemy[i] = r.ReadInt32();
 
@@ -409,7 +406,6 @@ namespace DSP_Battle
 
             nextWaveIntensity = 0;
             nextWaveWormCount = 0;
-            for (var i = 0; i < 100; ++i) nextWaveWormholes[i] = new Wormhole();
 
             nextWaveEnemy = new int[10];
 
