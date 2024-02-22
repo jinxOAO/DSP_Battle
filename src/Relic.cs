@@ -20,12 +20,15 @@ namespace DSP_Battle
         public static int relic0_2CanActivate = 1; // 新版女神泪在每次入侵中只能激活一次，激活后设置为0。下次入侵才设置为1
         public static int minShieldPlanetId = -1; // 饮血剑现在会给护盾量最低的星球回盾，但是每秒才更新一次护盾量最低的星球
         public static List<int> recordRelics = new List<int>(); // 被Relic4-6保存的圣物
+        public static int autoConstructMegaStructureCountDown = 0;
+        public static int autoConstructMegaStructurePPoint = 0;
 
         //不存档的设定参数
         public static int relicHoldMax = 8; // 最多可以持有的遗物数
         public static int[] relicNumByType = { 11, 12, 18, 18, 7 }; // 当前版本各种类型的遗物各有多少种，每种类型均不能大于30
-        public static double[] relicTypeProbability = { 0.03, 0.09, 0.2, 0.96, 1 }; // 各类型遗物刷新的概率，注意不是权重，是有次序地判断随机数 // 普通0.96
-        public static double[] relicTypeProbabilityBuffed = { 0.045, 0.135, 0.3, 0.93, 1 }; // 普通0.93
+        public static double[] relicTypeProbability = { 0.03, 0.06, 0.11, 0.76, 0.04 }; // 各类型遗物刷新的权重
+        public static double[] relicTypeProbabilityBuffed = { 0.045, 0.09, 0.165, 0.63, 0.07 }; // 五叶草buff后
+        public static int[] modifierByEvent = new int[] { 0, 0, 0, 0, 0, 0 };
         public static double[] relicRemoveProbabilityByRelicCount = { 0, 0, 0, 0, 0.05, 0.1, 0.12, 0.15, 1, 1, 1 }; // 拥有i个reilc时，第三个槽位刷新的是删除relic的概率
         public static double firstRelicIsRare = 0.5; // 第一个遗物至少是稀有的概率
         public static bool canSelectNewRelic = false; // 当canSelectNewRelic为true时点按按钮才是有效的选择
@@ -41,6 +44,9 @@ namespace DSP_Battle
         public static int dropletDamageGrowth = 10; // relic0-10每次水滴击杀的伤害成长
         public static int dropletDamageLimitGrowth = 400; // relic0-10每次消耗水滴提供的伤害成长上限的成长
         public static int relic0_2MaxCharge = 1000; // 新版女神泪充能上限
+        public static int disturbDamage1612 = 2000; // relic0-8胶囊伤害
+        public static int disturbDamage1613 = 3000; // relic0-8胶囊伤害
+        public static int energyPerMegaDamage = 10; // tickEnergy开根号后除以此项得到伤害
 
         public static int starIndexWithMaxLuminosity = 0; // 具有最大光度的恒星系的index， 读档时刷新
 
@@ -95,6 +101,14 @@ namespace DSP_Battle
             {
                 relics[type] |= 1 << num;
                 RelicFunctionPatcher.CheckAndModifyStarLuminosity(type*100+num);
+            }
+            else if ((type == 0 && num == 5))
+            {
+                relics[type] |= 1 << num;
+                GameMain.data.history.UnlockTechUnlimited(1918, false);
+                GameMain.data.history.UnlockTechUnlimited(1919, false);
+                GameMain.data.mainPlayer.TryAddItemToPackage(9511, 3, 0, true);
+                Utils.UIItemUp(9511, 3);
             }
             else if (type == 1 && num == 4)
             {
@@ -239,10 +253,10 @@ namespace DSP_Battle
         }
 
         // 允许玩家选择一个新的遗物
-        public static bool PrepareNewRelic()
+        public static bool PrepareNewRelic(int bonusRollCount = 0)
         {
             //if (GetRelicCount() >= relicHoldMax) return false;
-            rollCount = -1; // 从-1开始是因为每次准备给玩家新的relic都要重新随机一次
+            rollCount = -1 - bonusRollCount; // 从-1开始是因为每次准备给玩家新的relic都要重新随机一次
             canSelectNewRelic = true;
 
             
@@ -300,7 +314,20 @@ namespace DSP_Battle
         }
 
         // 任何额外伤害都需要经过此函数来计算并处理，dealDamage默认为false，代表只用这个函数计算而尚未实际造成伤害
-        public static int BonusDamage(double damage, double bonus, bool DealDamage = false)
+        public static int BonusDamage(double damage, double bonus)
+        {
+            if (HaveRelic(2, 13))
+            {
+                bonus = 2 * bonus * damage;
+            }
+            else
+            {
+                bonus = bonus * damage;
+            }
+            return (int)bonus;
+        }
+
+        public static int BonusedDamage(double damage, double bonus)
         {
             if (HaveRelic(2, 13))
             {
@@ -382,6 +409,8 @@ namespace DSP_Battle
             {
                 w.Write(item);
             }
+            w.Write(autoConstructMegaStructureCountDown);
+            w.Write(autoConstructMegaStructurePPoint);
         }
 
         public static void Import(BinaryReader r)
@@ -429,6 +458,8 @@ namespace DSP_Battle
                     recordRelics.Add(r.ReadInt32());
                 }
             }
+            autoConstructMegaStructureCountDown = r.ReadInt32();
+            autoConstructMegaStructurePPoint = r.ReadInt32();
             InitAll();
         }
 
@@ -440,6 +471,8 @@ namespace DSP_Battle
             relics[3] = 0;
             relics[4] = 0;
             recordRelics.Clear();
+            autoConstructMegaStructureCountDown = 0;
+            autoConstructMegaStructurePPoint = 0;
             InitAll();
         }
     }
@@ -459,14 +492,14 @@ namespace DSP_Battle
                 CheckPlayerHasaki();
 
             TryRecalcDysonLumin();
-            AutoBuildMegaWhenWaveFinished();
+            AutoBuildMega();
             AutoBuildMegaOfMaxLuminStar(time);
         }
 
 
 
         /// <summary>
-        /// relic 0-1 0-2 1-6 2-4 2-11 2-8 3-0 3-6 3-14
+        /// relic 0-1 1-6 2-4 2-11 2-8 3-0 3-6 3-14
         /// </summary>
         /// <param name="__instance"></param>
         /// <param name="power"></param>
@@ -636,25 +669,25 @@ namespace DSP_Battle
             }
             else if (__instance.recipeType == ERecipeType.Chemical)
             {
-                // relic0-2 女神之泪效果
-                if (Relic.HaveRelic(0, 2) && __instance.requires.Length > 1)
-                {
-                    if (__instance.served[0] < 20 * __instance.requireCounts[0])
-                    {
-                        if (__instance.time >= __instance.timeSpend - 1 && __instance.produced[0] < 20 * __instance.productCounts[0])
-                        {
-                            //if (__instance.served[0] > 0)
-                            //    __instance.incServed[0] += __instance.incServed[0] / __instance.served[0] * __instance.requireCounts[0];
-                            __instance.incServed[0] += 4 * __instance.requireCounts[0];
-                            __instance.served[0] += __instance.requireCounts[0];
-                            int[] obj = consumeRegister;
-                            lock (obj)
-                            {
-                                consumeRegister[__instance.requires[0]] -= __instance.requireCounts[0];
-                            }
-                        }
-                    }
-                }
+                // relic0-2 老女神之泪效果
+                //if (Relic.HaveRelic(0, 2) && __instance.requires.Length > 1)
+                //{
+                //    if (__instance.served[0] < 20 * __instance.requireCounts[0])
+                //    {
+                //        if (__instance.time >= __instance.timeSpend - 1 && __instance.produced[0] < 20 * __instance.productCounts[0])
+                //        {
+                //            //if (__instance.served[0] > 0)
+                //            //    __instance.incServed[0] += __instance.incServed[0] / __instance.served[0] * __instance.requireCounts[0];
+                //            __instance.incServed[0] += 4 * __instance.requireCounts[0];
+                //            __instance.served[0] += __instance.requireCounts[0];
+                //            int[] obj = consumeRegister;
+                //            lock (obj)
+                //            {
+                //                consumeRegister[__instance.requires[0]] -= __instance.requireCounts[0];
+                //            }
+                //        }
+                //    }
+                //}
             }
             else if (__instance.recipeType == ERecipeType.Smelt)
             {
@@ -697,6 +730,71 @@ namespace DSP_Battle
             return true;
         }
 
+        /// <summary>
+        /// relic0-2
+        /// </summary>
+        /// <param name="__instance"></param>
+        /// <param name="entityId"></param>
+        /// <param name="offset"></param>
+        /// <param name="filter"></param>
+        /// <param name="needs"></param>
+        /// <param name="stack"></param>
+        /// <param name="inc"></param>
+        /// <param name="__result"></param>
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(PlanetFactory), "PickFrom")]
+        public static void AutoProliferate(ref PlanetFactory __instance, int entityId, int offset, int filter, int[] needs, ref byte stack, ref byte inc, ref int __result)
+        {
+            if (!Relic.HaveRelic(0, 2)) return;
+            int itemId = __result;
+            if (itemId == 0) return;
+
+            var _this = __instance;
+            int beltId = _this.entityPool[entityId].beltId;
+            if (beltId <= 0)
+            {
+                int assemblerId = _this.entityPool[entityId].assemblerId;
+                if (assemblerId > 0)
+                {
+                    Mutex obj = _this.entityMutexs[entityId];
+                    lock (obj)
+                    {
+                        int[] products = _this.factorySystem.assemblerPool[assemblerId].products;
+                        int num = products.Length;
+                        for (int i = 0; i < num; i++)
+                        {
+                            if (products[i] == itemId)
+                            {
+                                inc = (byte)(4 * stack);
+                                return;
+                            }
+                        }
+                        return;
+                    }
+                }
+                int labId = _this.entityPool[entityId].labId;
+                if(labId > 0)
+                {
+                    Mutex obj = _this.entityMutexs[entityId];
+                    lock (obj)
+                    {
+                        int[] products = _this.factorySystem.labPool[labId].products;
+                        int num = products.Length;
+                        for (int i = 0; i < num; i++)
+                        {
+                            if (products[i] == itemId)
+                            {
+                                inc = (byte)(4 * stack);
+                                return;
+                            }
+                        }
+                        return;
+                    }
+                    return;
+                }
+            }
+        }
+
 
         /// <summary>
         /// relic0-4
@@ -736,37 +834,258 @@ namespace DSP_Battle
             return false;
         }
 
-        public static void WrathOfGoddess()
+        /// <summary>
+        /// relic 0-6
+        /// </summary>
+        /// <param name="__instance"></param>
+        /// <param name="consumeRegister"></param>
+        /// <returns></returns>
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(TurretComponent), "LoadAmmo")]
+        public static bool LudensSealPatch(ref TurretComponent __instance, ref int[] consumeRegister)
         {
-            
+            if (!Relic.HaveRelic(0, 6))
+                return true;
+            else
+            {
+                ref var _this = ref __instance;
+                if (_this.itemCount == 0 || _this.bulletCount > 0)
+                {
+                    return false;
+                }
+                int num = (int)((float)_this.itemInc / (float)_this.itemCount + 0.5f);
+                num = ((num > 10) ? 10 : num);
+                short num2 = (short)((double)_this.itemBulletCount * Cargo.incTableMilli[num] + ((_this.itemBulletCount < 12) ? 0.51 : 0.1));
+                _this.bulletCount = (short)(_this.itemBulletCount + num2);
+                //_this.itemCount -= 1;
+                //_this.itemInc -= (short)num;
+                _this.currentBulletInc = (byte)num;
+                consumeRegister[(int)_this.itemId]++;
+                return false;
+            }
         }
+
 
         /// <summary>
         /// relic0-7
         /// </summary>
         public static void CheckMegaStructureAttack()
         {
-            
-        }
+            if (!Relic.HaveRelic(0, 7))
+                return;
 
-        /// <summary>
-        /// relic0-8 命中时，在这里强制计算护盾回复。
-        /// </summary>
-        /// <param name="damage"></param>
-        public static void ApplyBloodthirster(int damage)
-        {
-            
-        }
-
-        /// <summary>
-        /// relic1-0
-        /// </summary>
-        public static void AutoBuildMegaWhenWaveFinished()
-        {
-            if (Configs.nextWaveState == 0 && Relic.HaveRelic(1, 0) && Configs.nextWaveIntensity > 0)
+            SpaceSector sector = GameMain.data.spaceSector;
+            if (sector == null) return;
+            EnemyData[] pool = GameMain.data.spaceSector.enemyPool;
+            for (int i = 0; i < sector.enemyCursor; i++)
             {
-                Configs.nextWaveIntensity -= 20;
+                ref EnemyData e = ref pool[i];
+                if (e.unitId <= 0 || e.id <= 0)
+                    continue;
+
+                EnemyDFHiveSystem[] hivesByAstro = sector.dfHivesByAstro;
+                EnemyDFHiveSystem hive = hivesByAstro[e.originAstroId - 1000000];
+                int starIndex = hive?.starData?.index ?? -1;
+                if (starIndex >= 0 && GameMain.data.dysonSpheres != null)
+                {
+                    DysonSphere sphere = GameMain.data.dysonSpheres[starIndex];
+                    if (sphere != null && sphere.energyGenCurrentTick > 0)
+                    {
+                        long tickEnergy = sphere.energyGenCurrentTick;
+                        int damage = (int)(Math.Pow(tickEnergy, 0.5) / Relic.energyPerMegaDamage);
+                        if (starIndex < 1000 && MoreMegaStructure.MoreMegaStructure.StarMegaStructureType[starIndex] == 6)
+                            damage *= 2;
+                        damage = Relic.BonusDamage(damage, 1);
+                        SkillTarget target;
+                        SkillTarget caster;
+                        target.id = e.id;
+                        target.astroId = e.originAstroId;
+                        target.type = ETargetType.Enemy;
+                        caster.id = 1;
+                        caster.type = ETargetType.Player;
+                        caster.astroId = 0;
+                        sector.skillSystem.DamageObject(damage, 1, ref target, ref caster);
+                    }
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// relic 0-8
+        /// </summary>
+        /// <param name="__instance"></param>
+        /// <param name="skillSystem"></param>
+        /// <returns></returns>
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(LocalDisturbingWave), "TickSkillLogic")]
+        public static bool DisturbingDamagePatch(ref LocalDisturbingWave __instance, ref SkillSystem skillSystem)
+        {
+            if (!Relic.HaveRelic(0, 8))
+                return true;
+
+            ref var _this = ref __instance;
+            if (_this.life <= 0)
+            {
+                return false;
+            }
+            _this.currentDiffuseRadius += _this.diffusionSpeed * 0.016666668f;
+            if (_this.caster.id == 0)
+            {
+                return false;
+            }
+            float num = _this.thickness * 0.5f;
+            float num2 = _this.currentDiffuseRadius - num;
+            float num3 = _this.currentDiffuseRadius + num;
+            if (num2 < 0f)
+            {
+                num2 = 0f;
+            }
+            if (num3 > _this.diffusionMaxRadius)
+            {
+                num3 = _this.diffusionMaxRadius;
+                _this.life = 0;
+            }
+            float num4 = num2 * num2;
+            float num5 = num3 * num3;
+            float num6 = 0.016666668f;
+            PlanetFactory planetFactory = skillSystem.astroFactories[_this.astroId];
+            EnemyData[] enemyPool = planetFactory.enemyPool;
+            EnemyUnitComponent[] buffer = planetFactory.enemySystem.units.buffer;
+            int[] consumeRegister = null;
+            int num7 = 0;
+            TurretComponent[] array = null;
+            int num8 = 0;
+            int num9 = 0;
+            bool flag = _this.caster.type == ETargetType.None && planetFactory.entityPool[_this.caster.id].turretId > 0;
+            if (flag)
+            {
+                num7 = planetFactory.entityPool[_this.caster.id].turretId;
+                array = planetFactory.defenseSystem.turrets.buffer;
+                VSLayerMask vslayerMask = array[num7].vsCaps & array[num7].vsSettings;
+                num8 = (int)(vslayerMask & VSLayerMask.GroundHigh);
+                num9 = (int)((int)(vslayerMask & VSLayerMask.AirHigh) >> 2);
+                consumeRegister = GameMain.statistics.production.factoryStatPool[planetFactory.index].consumeRegister;
+            }
+            Vector3 normalized = _this.center.normalized;
+            float num10 = _this.diffusionMaxRadius;
+            if (flag)
+            {
+                ref TurretComponent ptr = ref array[num7];
+                HashSystem hashSystemDynamic = planetFactory.hashSystemDynamic;
+                int[] hashPool = hashSystemDynamic.hashPool;
+                int[] bucketOffsets = hashSystemDynamic.bucketOffsets;
+                int[] bucketCursors = hashSystemDynamic.bucketCursors;
+                TurretSearchPair[] turretSearchPairs = planetFactory.defenseSystem.turretSearchPairs;
+                int num11 = ptr.searchPairBeginIndex + ptr.searchPairCount;
+                for (int i = ptr.searchPairBeginIndex; i < num11; i++)
+                {
+                    if (turretSearchPairs[i].searchType == ESearchType.HashBlock)
+                    {
+                        int searchId = turretSearchPairs[i].searchId;
+                        int num12 = bucketOffsets[searchId];
+                        int num13 = bucketCursors[searchId];
+                        for (int j = 0; j < num13; j++)
+                        {
+                            int num14 = num12 + j;
+                            int num15 = hashPool[num14];
+                            if (num15 != 0)
+                            {
+                                int num16 = num15 >> 28;
+                                if ((1 << num16 & (int)_this.mask) != 0)
+                                {
+                                    int num17 = num15 & 268435455;
+                                    if (num16 == 4)
+                                    {
+                                        ref EnemyData ptr2 = ref enemyPool[num17];
+                                        if (ptr2.id == num17 && !ptr2.isInvincible && ptr2.unitId != 0)
+                                        {
+                                            Vector3 vector = (Vector3)ptr2.pos - _this.center;
+                                            Vector3 vector2 = Vector3.Dot(normalized, vector) * normalized - vector;
+                                            float num18 = vector2.x * vector2.x + vector2.y * vector2.y + vector2.z * vector2.z;
+                                            if (num18 >= num4 && num18 <= num5)
+                                            {
+                                                ref EnemyUnitComponent ptr3 = ref buffer[ptr2.unitId];
+                                                float num19 = (2f - Mathf.Sqrt(num18) / _this.diffusionMaxRadius) * 0.5f * _this.disturbStrength;
+                                                if (ptr3.disturbValue < num19)
+                                                {
+                                                    bool flag2 = true;
+                                                    if (ptr.IsAirEnemy((int)ptr2.protoId))
+                                                    {
+                                                        if (num9 == 0)
+                                                        {
+                                                            flag2 = false;
+                                                        }
+                                                    }
+                                                    else if (num8 == 0)
+                                                    {
+                                                        flag2 = false;
+                                                    }
+                                                    if (ptr3.disturbValue + num6 < num19)
+                                                    {
+                                                        if (flag2 && ptr.bulletCount == 0)
+                                                        {
+                                                            if (ptr.itemCount > 0)
+                                                            {
+                                                                ptr.LoadAmmo(consumeRegister);
+                                                            }
+                                                            else
+                                                            {
+                                                                flag2 = false;
+                                                            }
+                                                        }
+                                                        if (flag2)
+                                                        {
+                                                            ref TurretComponent ptr4 = ref ptr;
+                                                            ptr4.bulletCount -= 1;
+                                                        }
+                                                    }
+                                                    if (flag2)
+                                                    {
+                                                        // 造成伤害
+                                                        int realDamage = ptr.itemId == 1612 ? Relic.disturbDamage1612 : Relic.disturbDamage1613;
+                                                        realDamage = (int)(realDamage * 1.0 * GameMain.history.magneticDamageScale);
+                                                        realDamage = Relic.BonusDamage(realDamage, 1);
+                                                        SkillTargetLocal skillTargetLocal = default(SkillTargetLocal);
+                                                        skillTargetLocal.type = ETargetType.Enemy;
+                                                        skillTargetLocal.id = ptr2.id;
+                                                        skillSystem.DamageGroundObjectByLocalCaster(planetFactory, realDamage, 1, ref skillTargetLocal, ref _this.caster);
+                                                        // 原逻辑
+                                                        ptr3.disturbValue = num19;
+                                                        DFGBaseComponent dfgbaseComponent = planetFactory.enemySystem.bases[(int)ptr2.owner];
+                                                        if (dfgbaseComponent != null && dfgbaseComponent.id == (int)ptr2.owner)
+                                                        {
+                                                            skillSystem.AddGroundEnemyHatred(dfgbaseComponent, ref ptr2, _this.caster.type, _this.caster.id, (int)(num19 * 800f + 0.5f));
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+
+        /// <summary>
+        /// 所有免费建造随机巨构的效果结算
+        /// </summary>
+        public static void AutoBuildMega()
+        {
+            if(Relic.autoConstructMegaStructurePPoint >= 1000)
+            {
+                Relic.autoConstructMegaStructureCountDown += Relic.autoConstructMegaStructurePPoint / 1000;
+                Relic.autoConstructMegaStructurePPoint = Relic.autoConstructMegaStructurePPoint % 1000;
+            }
+            if (Relic.autoConstructMegaStructureCountDown > 0)
+            {
                 Relic.AutoBuildMegaStructure(-1, 120);
+                Relic.autoConstructMegaStructureCountDown--;
             }
         }
 
@@ -827,12 +1146,12 @@ namespace DSP_Battle
                     if (Relic.HaveRelic(2, 5) && Relic.Verify(0.08))
                     {
                         GameMain.mainPlayer.TryAddItemToPackage(9500, 1, 0, true);
-                        Utils.UIItemUp(9500, 1, 180);
+                        Utils.UIItemUp(9500, 1, 200);
                     }
                     if (Relic.HaveRelic(3, 10) && Relic.Verify(0.03))
                     {
                         GameMain.mainPlayer.TryAddItemToPackage(9500, 1, 0, true);
-                        Utils.UIItemUp(9500, 1, 180);
+                        Utils.UIItemUp(9500, 1, 200);
                     }
 
                     Relic.playerLastPos = new Vector3(pos.x, pos.y, pos.z);

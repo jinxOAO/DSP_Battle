@@ -16,7 +16,7 @@ namespace DSP_Battle
         public static int rank = 0;
         public static int exp = 0;
 
-        public static int autoConstructMegaStructureCountDown = 0; // relic3-17 逐渐推进巨构建造的剩余帧数倒数，无需存档，读档时设置为0
+         // relic3-17 逐渐推进巨构建造的剩余帧数倒数，无需存档，读档时设置为0
 
         public static void InitRank()
         {
@@ -42,11 +42,7 @@ namespace DSP_Battle
                     Relic.AutoBuildMegaStructure();
                 }
             }
-            if (autoConstructMegaStructureCountDown > 0) // relic3-17 荣誉晋升每次提升功勋阶级显著推荐巨构建造进度
-            {
-                Relic.AutoBuildMegaStructure(-1, 120);
-                autoConstructMegaStructureCountDown--;
-            }
+            
         }
 
         public static void AddExp(int num)
@@ -75,8 +71,8 @@ namespace DSP_Battle
                     GameMain.history.miningCostRate *= 0.625f;
                 }
             }
-            if (Relic.HaveRelic(3, 17))
-                autoConstructMegaStructureCountDown = 120;
+            if (Relic.HaveRelic(2, 1))
+                Relic.autoConstructMegaStructureCountDown = rank * rank * rank * 60;
             UIRank.ForceRefreshAll();
             UIRank.UIPromotionNotify();
         }
@@ -100,7 +96,6 @@ namespace DSP_Battle
             {
                 InitRank();
             }
-            autoConstructMegaStructureCountDown = 0;
             UIRank.InitUI();
         }
 
@@ -108,7 +103,6 @@ namespace DSP_Battle
         {
             rank = 0;
             exp = 0;
-            autoConstructMegaStructureCountDown = 0;
             UIRank.InitUI();
         }
 

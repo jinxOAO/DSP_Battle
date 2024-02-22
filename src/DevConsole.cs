@@ -8,6 +8,7 @@ using UnityEngine;
 using System.IO;
 using MoreMegaStructure;
 using System.Threading;
+using System.Runtime.ConstrainedExecution;
 
 namespace DSP_Battle
 {
@@ -35,6 +36,12 @@ namespace DSP_Battle
         public static int num = 0;
         public static int password = 1597531;
         public static int shortpassword = 1597531;
+
+        public static StrNode cur = null;
+        public static StrNode last = null;
+        public static StrNode root = null;
+        public static int lineCount = 0;
+        public static int maxLineCount = 100;
 
         public static void InitAll()
         {
@@ -90,6 +97,7 @@ namespace DSP_Battle
 
         public static void ExecuteCommand(string cmd)
         {
+            RegNewLine(cmd);
             Print("<color=#ffffff>>>" + cmd + "</color>");
             string[] param = cmd.Split(' '); // 已确定cmd必定不为空
             try
@@ -115,42 +123,6 @@ namespace DSP_Battle
                         int pid = GameMain.data.localPlanet != null ? GameMain.data.localPlanet.id : -1;
                         Print($"StarIndex = {sidx}, StarId = {(sidx >= 0 ? sidx + 1 : sidx)}, PlanetId = {pid}");
                         break;
-                    case "settime":
-                        if (Configs.nextWaveState == 0)
-                        {
-                            Configs.nextWaveFrameIndex = GameMain.instance.timei - 60 * 60;
-                            Print($"Now generate next wave.");
-                        }
-                        else
-                        {
-                            Configs.nextWaveFrameIndex = (long)(60 * 60 * Convert.ToDouble(param[1])) + GameMain.instance.timei;
-                            Print($"Next wave begins in {param[1]} minute(s).");
-                        }
-                        break;
-                    case "setstar":
-                        Configs.nextWaveStarIndex = Convert.ToInt32(param[1]);
-                        Print($"Next wave starIndex set to {param[1]}.");
-                        break;
-                    case "setelite":
-                        Configs.nextWaveElite = 1;
-                        Print("Next wave is now elite wave.");
-                        break;
-                    case "nsetelite":
-                        Configs.nextWaveElite = 0;
-                        Print("Next wave is now normal wave.");
-                        break;
-                    case "seteasy":
-                        Configs.difficulty = -1;
-                        Print("Easy mode.");
-                        break;
-                    case "setnorm":
-                        Configs.difficulty = 0;
-                        Print("Normal mode.");
-                        break;
-                    case "sethard":
-                        Configs.difficulty = 1;
-                        Print("Hard mode.");
-                        break;
                     case "setmega":
                         int idx = Convert.ToInt32(param[1]);
                         int type = Convert.ToInt32(param[2]);
@@ -167,7 +139,6 @@ namespace DSP_Battle
                         Configs.wavePerStar[idx2] = num2;
                         Print($"Wave count of starIndex {idx2} is set to {num2}.");
                         break;
-                    
                     case "setrank":
                         Rank.rank = Math.Min(Math.Max(Convert.ToInt32(param[1]), 0), 10);
                         Interlocked.Exchange(ref Rank.exp, 0);
@@ -198,7 +169,7 @@ namespace DSP_Battle
                         break;
                     case "lsrelic":
                         string allRelicNames = "";
-                        for (int i = 0; i < 4; i++)
+                        for (int i = 0; i < 5; i++)
                         {
                             if (i == 0)
                                 allRelicNames += "<color=#ffa03d>";
@@ -208,23 +179,17 @@ namespace DSP_Battle
                                 allRelicNames += "<color=#20c0ff>";
                             else if (i == 3)
                                 allRelicNames += "<color=#30ff30>";
+                            else if (i == 4)
+                                allRelicNames += "<color=#00c560>";
                             for (int j = 0; j < Relic.relicNumByType[i]; j++)
                             {
                                 allRelicNames += $"{i}-{j}:{($"遗物名称{i}-{j}").Translate().Split('\n')[0]}    ";
                             }
                             allRelicNames += "</color>";
-                            if (i < 3)
+                            if (i < 4)
                                 allRelicNames += "\n";
                         }
                         Print(allRelicNames, 10);
-                        break;
-                    case "kill":
-                    case "killall":
-                        
-                        break;
-                    case "am":
-                        GameMain.mainPlayer.TryAddItemToPackage(8032, Convert.ToInt32(param[1]), 0, true);
-                        Print($"Add {param[1]} alien matrixes to mecha storage.");
                         break;
                     case "give":
                         GameMain.mainPlayer.TryAddItemToPackage(Convert.ToInt32(param[1]), Convert.ToInt32(param[2]), 0, true);
@@ -248,6 +213,14 @@ namespace DSP_Battle
                         Relic.relic0_2CanActivate = 1;
                         UIRelic.RefreshTearOfGoddessSlotTips();
                         break;
+                    case "es":
+                        EventSystem.SetEvent(Convert.ToInt32(param[1]));
+                        Print($"Set event id to {param[1]}.");
+                        break;
+                    case "est":
+                        EventSystem.TransferTo(Convert.ToInt32(param[1]));
+                        Print($"Transfer event to {param[1]}.");
+                        break;
                     default:
                         Print($"未知的命令：{param[0]}，输入 \"help\" 查看所有命令说明。", 1, true);
                         break;
@@ -263,6 +236,77 @@ namespace DSP_Battle
         public static void Print(string msg, int forceLineCount = 1, bool err = false)
         {
             UIDevConsole.Print(msg, forceLineCount, err);
+        }
+        public static void RegNewLine(string command)
+        {
+            if (root == null)
+            {
+                root = new StrNode(command);
+                last = root;
+                lineCount = 1;
+            }
+            else if (last == null)
+            {
+                Utils.Log("Dev console err with lastNode is null. Now ReInit");
+                root = new StrNode(command);
+                last = root;
+                lineCount = 1;
+            }
+            else
+            {
+                last.next = new StrNode(command, last);
+                last = last.next;
+                lineCount++;
+            }
+            cur = null;
+
+            if (lineCount > maxLineCount)
+            {
+                root = root.next;
+                root.prev = null;
+                lineCount--;
+                GC.Collect();
+            }
+        }
+
+        public static void PrevCommand()
+        {
+            if (cur == null)
+            {
+                if (last == null)
+                    return;
+                cur = last;
+            }
+            else if (UIDevConsole.consoleInputField.text == "")
+            { 
+                // 不做任何事
+            }
+            else if (cur.prev != null)
+                cur = cur.prev;
+            else
+                return;
+
+            UIDevConsole.consoleInputField.text = cur.cmd;
+            UIDevConsole.consoleInputField.caretPosition = UIDevConsole.consoleInputField.text.Length;
+        }
+
+        public static void NextCommand()
+        {
+            if (cur == null)
+                return;
+            else if (cur.next == null)
+            {
+                if (UIDevConsole.consoleInputField.text == cur.cmd)
+                {
+                    UIDevConsole.consoleInputField.text = "";
+                    UIDevConsole.consoleInputField.caretPosition = UIDevConsole.consoleInputField.text.Length;
+                }
+                return;
+            }
+            cur = cur.next;
+
+            UIDevConsole.consoleInputField.text = cur.cmd;
+            UIDevConsole.consoleInputField.caretPosition = UIDevConsole.consoleInputField.text.Length;
         }
 
         public static void Export(BinaryWriter w)
@@ -290,7 +334,6 @@ namespace DSP_Battle
         public static int maxOutputClearCount = 25;
         public static void InitAll()
         {
-            return;
             if (consoleObj == null)
             {
                 GameObject oriBlueprintPanelObj = GameObject.Find("UI Root/Overlay Canvas/In Game/Windows/Blueprint Browser");
@@ -328,6 +371,8 @@ namespace DSP_Battle
                 inputBgObj.transform.localPosition = new Vector3(0, -278, 0);
 
                 GameObject oriInputFieldObj = GameObject.Find("UI Root/Overlay Canvas/In Game/Windows/Blueprint Browser/inspector-group/group-1/input-desc-text");
+                if (oriInputFieldObj == null)
+                    oriInputFieldObj = GameObject.Find("UI Root/Overlay Canvas/In Game/Windows/Blueprint Browser/inspector-group/BP-panel-scroll(Clone)/Viewport/pane/group-1/input-desc-text");
                 GameObject inputFieldObj = GameObject.Instantiate(oriInputFieldObj, consoleObj.transform);
                 inputFieldObj.name = "inputfield";
                 inputFieldObj.GetComponent<UIButton>().tips.tipTitle = "Command";
@@ -373,7 +418,6 @@ namespace DSP_Battle
 
         public static void Show()
         {
-            return;
             if (consoleObj != null)
             {
                 consoleObj.SetActive(true);
@@ -387,6 +431,23 @@ namespace DSP_Battle
                 consoleObj.SetActive(false);
         }
 
+        public static bool EscLogic()
+        {
+            if (consoleObj == null)
+                return false;
+            if (consoleObj.activeSelf)
+            {
+                bool flag = !VFInput._godModeMechaMove;
+                bool flag2 = VFInput.rtsCancel.onDown || VFInput.escKey.onDown || VFInput.escape || VFInput.delayedEscape;
+                if (flag && flag2)
+                {
+                    VFInput.UseEscape();
+                    Hide();
+                    return true;
+                }
+            }
+            return false;
+        }
         public static void ClearInputField()
         {
             consoleInputField.text = "";
@@ -430,27 +491,19 @@ namespace DSP_Battle
                 "<color=#ffffff>h</color>或<color=#ffffff>help</color> 输出所有可用命令" + "\n" +
                 "<color=#ffffff>c</color>或<color=#ffffff>clear</color> 清空输出缓存" + "\n" +
                 "<color=#ffffff>cur</color> 输出伊卡洛斯所在星系的starId和starIndex，并输出伊卡洛斯所在行星的planetId" + "\n" +
-                "<color=#ffffff>settime [param1]</color> 设定下次进攻时间为[param1]分钟后开始，若尚未有下次进攻，则立刻生成下次进攻但保留默认进攻的预留时间" + "\n" +
-                "<color=#ffffff>setstar [param1]</color> 更改下次进攻的恒星系为starIndex=[param1]的恒星，若尚未有下次进攻则命令无效" + "\n" +
-                "<color=#ffffff>setelite</color>或<color=#ffffff>nsetelite</color> 设定下次进攻为或不为精英波次" + "\n" +
-                "<color=#ffffff>setstg [param1]</color> 设定下次进攻强度为[param1]" + "\n" +
-                "<color=#ffffff>seteasy</color>或<color=#ffffff>setnorm</color>或<color=#ffffff>sethard</color> 设定游戏难度为简单、普通或困难" + "\n" +
-                "<color=#ffffff>setshield [param1] [param2]</color> 将planetId为[param1]的星球的护盾值设置为[param2]" + "\n" +
                 "<color=#ffffff>setmega [param1] [param2]</color> 立刻将星系index为[param1]的巨构类型设置为[param2]" + "\n" +
-                "<color=#ffffff>setwavenum [param1] [param2]</color> 立刻将星系index为[param1]的恒星进攻波次计数设定为非负整数[param2]" + "\n" +
-                "<color=#ffffff>setsf [param1] [param2] [param3]</color>  立刻将星系index为[param1]的恒星要塞第[param2]个模块已建成数量设置为[param3]" + "\n" +
                 "<color=#ffffff>setrank [param1]</color> 将功勋等级设置为[param1]，改变等级后还会使经验降低至0" + "\n" +
                 "<color=#ffffff>addexp [param1]</color> 增加[param1]经验，可升级，也可为负但不会降级" + "\n" +
                 "<color=#ffffff>newrelic</color> 立刻随机并打开选择圣物窗口" + "\n" +
                 "<color=#ffffff>addrelic [param1] [param2]</color> 立刻获得第[param1]类型第[param2]号圣物" + "\n" +
                 "<color=#ffffff>rmrelic [param1] [param2]</color> 立刻删除第[param1]类型第[param2]号圣物（如果已经拥有）" + "\n" +
                 "<color=#ffffff>lsrelic</color> 展示所有圣物名称" + "\n" +
-                "<color=#ffffff>kill</color> 如果在战斗中，立刻击杀所有敌舰" + "\n" +
-                "<color=#ffffff>am [param1]</color> 立刻给予[param1]个异星矩阵" + "\n" +
                 "<color=#ffffff>give [param1] [param2]</color> 立刻给予[param2]个itemId为[param1]的物品" + "\n" +
                 "<color=#ffffff>cool</color> 恒星炮立即冷却完毕" + "\n" +
+                "<color=#ffffff>es [param1]</color> 设定当前事件链为[param1]" + "\n" +
+                "<color=#ffffff>est [param1]</color> 当前事件链转移至[param1]" + "\n" +
                 "---------------------- help ----------------------";
-            Print(allCmds,23, false); // 这个forceLineCount传值取决于allCmds的行数
+            Print(allCmds,16, false); // 这个forceLineCount传值取决于allCmds的行数
         }
 
         public static void ClearOutputField()

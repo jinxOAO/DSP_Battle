@@ -22,8 +22,21 @@ namespace DSP_Battle
         public static void AddProtos()
         {
             AddTutorialProtos();
+            AddTechProtos();
         }
 
+        public static void AddTechProtos()
+        {
+            int recipeIdBias = MoreMegaStructure.MoreMegaStructure.GenesisCompatibility ? -200 : 0;
+            int techPosXBias = MoreMegaStructure.MoreMegaStructure.GenesisCompatibility ? -8 : 0;
+            TechProto techDrop = ProtoRegistry.RegisterTech(1919, "玻色子操控", "玻色子操控描述", "玻色子操控结论", "Assets/DSPBattle/bosontech", new int[] { }, new int[] { 5201 },
+                new int[] { 400 }, 72000, new int[] { 573 + recipeIdBias, 567 + recipeIdBias, 568 + recipeIdBias, 569 + recipeIdBias, 566 + recipeIdBias  }, new Vector2(65 + techPosXBias, -7));
+            //ProtoRegistry.RegisterTech(1930, "水滴gm2", "水滴科技描述", "水滴科技结论", "Assets/DSPBattle/bosontech", new int[] { 1919 }, new int[] { 6001, 6002, 6003, 6004, 6005 },
+            //    new int[] { 24, 24, 24, 24, 24 }, 375000, new int[] { 573 }, new Vector2(61, -43));
+            techDrop.PreTechsImplicit = new int[] { 1823 };
+            techDrop.IsHiddenTech = true;
+            techDrop.PreItem = new int[] { 5201 };
+        }
         public static void AddTranslate()
         {
             //官方星图界面 橙色高亮字体color=FD965EC0
@@ -772,7 +785,7 @@ namespace DSP_Battle
 
             RegisterString("事件链窗口标题", "Meta Drive Event Chain", "元驱动事件链");
             RegisterString("执行此决定你", "Choose this decision", "执行此决定");
-            RegisterString("需要gm", "<color=#61d8ffb4>Need:</color>", "<color=#61d8ffb4>需要:</color>");
+            RegisterString("需要gm", "<color=#61d8ffb4>Prerequisite:</color>", "<color=#61d8ffb4>需要:</color>");
             RegisterString("功勋阶级", "Merit rank level", "功勋阶级");
             RegisterString("伊卡洛斯被摧毁次数", "Icarus destroyed time", "伊卡洛斯被摧毁次数");
             RegisterString("消灭地面黑雾", "Kill ground dark fog units", "消灭地面黑雾单位");
@@ -787,21 +800,21 @@ namespace DSP_Battle
             RegisterString("数量未知gm", "unknown, please land on every planet in that star system at least once", "未知，请先降落该恒星系的所有行星至少一次");
             RegisterString("数量未知gm2", "unknown, please land on the planet at least once", "未知，请先降落该行星至少一次");
             RegisterString("点击以导航", " (click to navigate)", "(点击以导航)");
-            RegisterString("消灭恒星系地面单位", "Kill ground enemy in {0}:  {1}/{2}{3}", "消灭恒星系{0}的地面单位  {1}/{2}{3}");
+            RegisterString("消灭恒星系地面单位", "Kill ground enemy in {0}:  {1}/{2} {3}", "消灭恒星系{0}的地面单位  {1}/{2} {3}");
             RegisterString("消灭恒星系全部太空单位", "Kill all space enemy in {0}{1}\n    remaining:{2}", "消灭恒星系{0}的全部太空单位{1}\n    剩余 {2}");
-            RegisterString("消灭恒星系太空单位", "Kill space enemy in {0}:  {1}/{2}{3}", "消灭恒星系{0}的太空单位  {1}/{2}{3}");
-            RegisterString("提升恒星系威胁等级", "Raise any DF space hive's threat level in {0}  {1}/{2}{3}", "提升恒星系{0}的任意一个太空黑雾巢穴的威胁等级  {1}/{2}{3}");
+            RegisterString("消灭恒星系太空单位", "Kill space enemy in {0}:  {1}/{2} {3}", "消灭恒星系{0}的太空单位  {1}/{2} {3}");
+            RegisterString("提升恒星系威胁等级", "Raise any DF space hive's threat level in {0}  {1}/{2} {3}", "提升恒星系{0}的任意一个太空黑雾巢穴的威胁等级  {1}/{2} {3}");
             RegisterString("肃清恒星系", "Kill all enemies in {0}{1}\n    remaining:{2}", "清理恒星系{0}的全部黑雾单位{1}\n    剩余 {2}");
-            RegisterString("提升巨构能量水平", "In {0} star system, build megastructure with energy level  {1}/{2}GW {3}", "提升{0}恒星系的巨构能量水平  {1}/{2}GW {3}");
+            RegisterString("提升巨构能量水平", "In {0} star system, build megastructure with energy level  {1}/{2} GW {3}", "提升{0}恒星系的巨构能量水平  {1}/{2} GW {3}");
             RegisterString("任意gm", "any", "任意");
-            RegisterString("提升太空黑雾巢穴等级", "Any DF space hive in {0} reaches level  {1}/{2}{3}", "使{0}中任意一个太空黑雾巢穴等级达到  {1}/{2}{3}");
-            RegisterString("消灭太空黑雾巢穴的所有单位", "Kill all enemies of {1} in {0}  {2} remaining{3}", "消灭{0}中{1}的所有单位  剩余{2}{3}");
+            RegisterString("提升太空黑雾巢穴等级", "Any DF space hive in {0} reaches level  {1}/{2} {3}", "使{0}中任意一个太空黑雾巢穴等级达到  {1}/{2} {3}");
+            RegisterString("消灭太空黑雾巢穴的所有单位", "Kill all enemies of {1} in {0}  remaining:{2} {3}", "消灭{0}中{1}的所有单位  剩余{2} {3}");
             RegisterString("消灭行星全部黑雾单位", "Kill all DF ground enemies on {0}{1}\n    remaining:{2}", "消灭行星{0}上的全部地面黑雾单位{1}\n    剩余 {2}");
-            RegisterString("消灭行星黑雾单位", "Kill DF ground enemies on {0}  {1}/{2}{3}", "消灭行星{0}上的地面黑雾单位  {1}/{2}{3}");
+            RegisterString("消灭行星黑雾单位", "Kill DF ground enemies on {0}  {1}/{2} {3}", "消灭行星{0}上的地面黑雾单位  {1}/{2} {3}");
             RegisterString("消灭行星全部黑雾单位", "Kill all DF ground bases on {0}{1}\n    remaining:{2}", "消灭行星{0}上的全部地面黑雾巢穴{1}\n    剩余 {2}");
-            RegisterString("到达行星gm", "Land planet {0}  {1}", "到达行星{0}  {1}");
+            RegisterString("到达行星gm", "Arrive on planet {0}  {1}", "到达行星{0}  {1}");
             RegisterString("已到达gm", "accomplished", "已完成");
-            RegisterString("这将终止序列", "End this event chain", "此事件链将终止");
+            RegisterString("这将终止序列", "<color=#cc2020c0>End this event chain</color>", "<color=#cc2020c0>此事件链将终止</color>");
             RegisterString("未知后果", "Unknow consequences", "未知后果");
             RegisterString("解译元驱动", "Interpret meta drive", "解译元驱动");
             RegisterString("获得功勋点数", "Obtain merit points ", "获得功勋点数 ");
@@ -816,10 +829,15 @@ namespace DSP_Battle
             RegisterString("本次圣物解译被诅咒的概率", "Cursed decode-tracks appearing probability this time ", "本次解译出被诅咒的解码轨的概率 ");
             RegisterString("免费随机次数", "Decode-track free re-roll ", "本次解码轨免费随机次数 ");
             RegisterString("获得物品", "Obtain ", "获得 ");
-            RegisterString("此选项将导致", "<color=#FD965EC0>This decision will lead to:</color>", "<color=#FD965EC0>此选项将导致：</color>");
+            RegisterString("此选项将导致", "<color=#FD965EC0>Result in:</color>", "<color=#FD965EC0>将导致：</color>");
             RegisterString("打开解译事件链", "Open meta drive interpretation event chain", "打开元驱动解译事件链");
-            RegisterString("aaa", "aaa", "aaa");
-            RegisterString("aaa", "aaa", "aaa");
+            RegisterString("预计剩余解译时间", "Estimated time of finishing", "预计剩余");
+            RegisterString("decodeType21Title", "Analyzing Log File", "正在分析日志");
+            RegisterString("decodeType22Title", "Trying to repair", "正在尝试修复");
+            RegisterString("decodeType23Title", "Repairing and Analyzing Log File", "正在修复并分析日志");
+            RegisterString("decodeType24Title", "Interpreting Meta Drive", "正在解译元驱动");
+            RegisterString("decodeType25Title", "Repairing and Interpreting Meta Drive", "正在修复并解译元驱动");
+            //RegisterString("aaa", "aaa", "aaa");
 
         }
 
@@ -1264,6 +1282,7 @@ namespace DSP_Battle
         public static void InitEventProtos()
         {
             EventSystem.protos = new Dictionary<int, EventProto>();
+            EventSystem.alterProtos = new Dictionary<int, List<int>>();
             // 1 接入点
             {
                 int id = 1001; // 没有任何圣物时，获得圣物必定为此事件

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using HarmonyLib;
+using System.Security.Cryptography;
 
 namespace DSP_Battle
 {
@@ -170,6 +171,8 @@ namespace DSP_Battle
                 return;
             if (animationTime != 0)
                 return;
+            if (EventSystem.recorder == null || EventSystem.recorder.protoId <= 0)
+                return;
             eventWindowObj.transform.localScale = new Vector3(1, 1, 1);
             eventWindowObj.transform.localPosition = new Vector3(0, 0, 0);
             eventWindowObj.SetActive(true);
@@ -193,6 +196,26 @@ namespace DSP_Battle
             }
         }
 
+        public static bool EscLogic()
+        {
+            if (eventWindowObj == null)
+                return false;
+            if(eventWindowObj.activeSelf)
+            {
+                bool flag = !VFInput._godModeMechaMove;
+                bool flag2 = VFInput.rtsCancel.onDown || VFInput.escKey.onDown || VFInput.escape || VFInput.delayedEscape;
+                if (flag && flag2)
+                {
+                    VFInput.UseEscape();
+                    OnClose();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
+
         public static void OnUpdate()
         {
             if (eventButtonObj == null)
@@ -214,10 +237,54 @@ namespace DSP_Battle
             if(EventSystem.recorder != null && EventSystem.recorder.protoId > 0)
             {
                 ESButtonImage.sprite = Resources.Load<Sprite>("Assets/DSPBattle/alienmatrix");
-                if (true)
-                    ESButtonHighlighting = true;
-                else
-                    ESButtonHighlighting = false;
+                ESButtonHighlighting = false;
+                if (EventSystem.protos.ContainsKey(EventSystem.recorder.protoId)) // 至少有一个非结束事件链的decision的所有request被满足时，highlight
+                {
+                    EventProto proto = EventSystem.protos[EventSystem.recorder.protoId];
+                    int[][] decisionReqNeed = proto.decisionRequestNeed;
+                    for (int i = 0; i < proto.decisionLen; i++)
+                    {
+                        bool allSatisfied = true;
+                        int[] reqs = decisionReqNeed[i];
+                        if (reqs != null && reqs.Length > 0)
+                        {
+                            for (int j = 0; j < reqs.Length; j++)
+                            {
+                                int reqIndex = reqs[j];
+                                if (reqIndex < EventSystem.recorder.requestCount.Length)
+                                {
+                                    if (EventSystem.recorder.requestMeet[reqIndex] < EventSystem.recorder.requestCount[reqIndex])
+                                    {
+                                        allSatisfied = false;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        if (allSatisfied)
+                        {
+                            int[] decisionResults = proto.decisionResultId[i];
+                            if(decisionResults == null)
+                            {
+                                allSatisfied = false;
+                                continue;
+                            }
+                            for (int j = 0;j < decisionResults.Length; j++)
+                            {
+                                if (decisionResults[j] == -1) // 结束事件链一般都是无需前置条件的，所以不参与事件按钮是否高亮的决定
+                                {
+                                    allSatisfied = false;
+                                    break;
+                                }
+                            }
+                        }
+                        if(allSatisfied && (EventSystem.recorder.decodeType == 0 || EventSystem.recorder.decodeTimeSpend >= EventSystem.recorder.decodeTimeNeed))
+                        {
+                            ESButtonHighlighting = true;
+                            break;
+                        }
+                    }
+                }
             }
             else
             {
@@ -281,268 +348,318 @@ namespace DSP_Battle
             if(EventSystem.recorder != null && EventSystem.recorder.protoId > 0)
             {
                 ref EventRecorder recorder = ref EventSystem.recorder;
-                eventSubTitleText.text = ($"ept{recorder.protoId}").Translate();
-                eventDescText.text = ($"epd{recorder.protoId}").Translate();
-                EventProto proto = EventSystem.protos[recorder.protoId];
-                int decisionLen = proto.decisionLen;
-                decisionLen = decisionLen > 4 ? 4 : decisionLen;
-                for (int i = 0; i < decisionLen; i++)
+                if (recorder.decodeType != 0 && recorder.decodeTimeSpend < recorder.decodeTimeNeed && recorder.decodeTimeNeed != 0)
                 {
-                    decisionButtonObjs[i].SetActive(true);
-                    decisionTexts[i].text = ($"epdt{proto.id}-{i}").Translate();
-                    string tipTitle = "执行此决定你".Translate();
-                    string tipTextNeed = "";
-                    bool enabled = true;
-                    if(proto.decisionRequestNeed[i].Length > 0)
-                    {
-                        for (int j = 0; j < proto.decisionRequestNeed[i].Length; j++)
-                        {
-                            int requestIndex = proto.decisionRequestNeed[i][j];
-                            int code = recorder.requestId[requestIndex];
-                            if (code == 0) continue;
-                            bool finished = recorder.requestMeet[requestIndex] >= recorder.requestCount[requestIndex];
-                            if (!finished)
-                                enabled = false;
-                            if (code == 9995)
-                                tipTextNeed += "\n    " + "功勋阶级达到".Translate() + $"  {recorder.requestMeet[requestIndex]}/{recorder.requestCount[requestIndex]}";
-                            else if (code == 9996)
-                                tipTextNeed += "\n    " + "伊卡洛斯被摧毁次数".Translate() + $"  {recorder.requestMeet[requestIndex]}/{recorder.requestCount[requestIndex]}";
-                            else if (code == 9997)
-                                tipTextNeed += "\n    " + "消灭地面黑雾".Translate() + $"  {recorder.requestMeet[requestIndex]}/{recorder.requestCount[requestIndex]}";
-                            else if (code == 9998)
-                                tipTextNeed += "\n    " + "消灭太空黑雾".Translate() + $"  {recorder.requestMeet[requestIndex]}/{recorder.requestCount[requestIndex]}";
-                            else if (code == 9999)
-                                tipTextNeed += "\n    " + "消灭任意黑雾".Translate() + $"  {recorder.requestMeet[requestIndex]}/{recorder.requestCount[requestIndex]}";
-                            else if (code >= 10000 && code < 20000)
-                                tipTextNeed += "\n    " + "提供物品".Translate() + $"{LDB.ItemName(recorder.requestId[requestIndex] - 10000)}  {recorder.requestMeet[requestIndex]}/{recorder.requestCount[requestIndex]}";
-                            else if (code >= 20000 && code < 30000)
-                                tipTextNeed += "\n    " + "物品产量".Translate() + $"{LDB.ItemName(recorder.requestId[requestIndex] - 10000)}  {recorder.requestMeet[requestIndex]}/{recorder.requestCount[requestIndex]} /min";
-                            else if (code == 30000)
-                                tipTextNeed += "\n    " + "解锁任意科技".Translate() + $"  {recorder.requestMeet[requestIndex]}/{recorder.requestCount[requestIndex]}";
-                            else if (code > 30000 && code < 40000)
-                                tipTextNeed += "\n    " + "解锁gm".Translate() + LDB.techs.Select(code - 30000).name + "至等级".Translate() + $"  {recorder.requestMeet[requestIndex]}/{recorder.requestCount[requestIndex]}";
-                            else if (code >= 40000 && code < 50000)
-                            {
-                                int starId = code - 40000 + 1;
-                                if (recorder.requestCount[requestIndex] == 0)
-                                {
-                                    if (recorder.requestMeet[requestIndex] == int.MinValue)
-                                        tipTextNeed += "\n    "
-                                            + string.Format("消灭恒星系全部地面单位".Translate(), GameMain.galaxy.StarById(starId)?.name, finished ? "" : "点击以导航".Translate(), "数量未知gm".Translate());
-                                    else
-                                        tipTextNeed += "\n    "
-                                            + string.Format("消灭恒星系全部地面单位".Translate(), GameMain.galaxy.StarById(starId)?.name, finished ? "" : "点击以导航".Translate(), -recorder.requestMeet[requestIndex]);
-                                }
-                                else
-                                    tipTextNeed += "\n    "
-                                        + string.Format("消灭恒星系地面单位".Translate(), GameMain.galaxy.StarById(starId)?.name, recorder.requestMeet[requestIndex], recorder.requestCount[requestIndex], finished ? "" : "点击以导航".Translate());
-                            }
-                            else if (code >= 50000 && code < 60000)
-                            {
-                                int starId = code - 50000 + 1;
-                                if (recorder.requestCount[requestIndex] == 0)
-                                {
-                                    tipTextNeed += "\n    "
-                                        + string.Format("消灭恒星系全部太空单位".Translate(), GameMain.galaxy.StarById(starId)?.name, finished ? "" : "点击以导航".Translate(), -recorder.requestMeet[requestIndex]);
-                                }
-                                else
-                                    tipTextNeed += "\n    "
-                                        + string.Format("消灭恒星系太空单位".Translate(), GameMain.galaxy.StarById(starId)?.name, recorder.requestMeet[requestIndex], recorder.requestCount[requestIndex], finished ? "" : "点击以导航".Translate());
-                            }
-                            else if (code >= 60000 && code < 70000)
-                            {
-                                int starId = code - 60000 + 1;
-                                tipTextNeed += "\n    " + string.Format("提升恒星系威胁等级".Translate(), GameMain.galaxy.StarById(starId)?.name, recorder.requestMeet[requestIndex], recorder.requestCount[requestIndex], finished ? "" : "点击以导航".Translate());
-                            }
-                            else if (code >= 70000 && code < 80000)
-                            {
-                                int starId = code - 70000 + 1;
-                                if(recorder.requestMeet[requestIndex] == int.MinValue)
-                                    tipTextNeed += "\n    " + string.Format("肃清恒星系".Translate(), GameMain.galaxy.StarById(starId)?.name, finished ? "" : "点击以导航".Translate(), "数量未知gm".Translate());
-                                else
-                                    tipTextNeed += "\n    " + string.Format("肃清恒星系".Translate(), GameMain.galaxy.StarById(starId)?.name, finished ? "" : "点击以导航".Translate(), -recorder.requestMeet[requestIndex]);
-                            }
-                            else if (code >= 80000 && code < 90000)
-                            {
-                                int starId = code - 80000 + 1;
-                                string starName = code == 89999 ? "任意gm".Translate() : GameMain.galaxy.StarById(starId)?.name;
-                                tipTextNeed += "\n    " + string.Format("提升巨构能量水平".Translate(), starName, recorder.requestMeet[requestIndex]/1000, recorder.requestCount[requestIndex]/1000, finished || code == 89999 ? "" : "点击以导航".Translate());
-                            }
-                            else if (code >= 90000 && code < 100000)
-                            {
-                                int starId = code - 90000 + 1;
-                                string starName = GameMain.galaxy.StarById(starId)?.name;
-                                tipTextNeed += "\n    " + string.Format("提升太空黑雾巢穴等级".Translate(), starName, recorder.requestMeet[requestIndex], recorder.requestCount[requestIndex], finished ? "" : "点击以导航".Translate());
-                            }
-                            else if (code >= 1000000 && code < 2000000)
-                            {
-                                EnemyDFHiveSystem[] dfHivesByAstro = GameMain.data.spaceSector.dfHivesByAstro;
-                                EnemyDFHiveSystem hive = dfHivesByAstro[code - 1000000];
-                                if (hive != null)
-                                {
-                                    string starName = hive.starData.name;
-                                    string hiveName = hive.hiveCode;
-                                    tipTextNeed += "\n    " + string.Format("消灭太空黑雾巢穴的所有单位".Translate(), starName,hiveName, -recorder.requestMeet[requestIndex], finished ? "" : "点击以导航".Translate());
-                                }
-                            }
-                            else if (code >= 2000000 && code < 3000000)
-                            {
-                                int planetId = code - 2000000;
-                                string planetName = GameMain.galaxy.PlanetById(planetId)?.name;
-                                if (planetName != null)
-                                {
-                                    if (recorder.requestCount[requestIndex] == 0)
-                                    {
-                                        if (recorder.requestMeet[requestIndex] == int.MinValue)
-                                            tipTextNeed += "\n    " + string.Format("消灭行星全部黑雾单位".Translate(), planetName, finished ? "" : "点击以导航".Translate(), "数量未知gm2".Translate() );
-                                        else
-                                            tipTextNeed += "\n    " + string.Format("消灭行星全部黑雾单位".Translate(), planetName, finished ? "" : "点击以导航".Translate(), -recorder.requestMeet[requestIndex]);
-
-                                    }
-                                    else
-                                        tipTextNeed += "\n    " + string.Format("消灭行星黑雾单位".Translate(), planetName, recorder.requestMeet[requestIndex], recorder.requestCount[requestIndex], finished ? "" : "点击以导航".Translate());
-                                }
-                            }
-                            else if (code >= 3000000 && code < 4000000)
-                            {
-                                int planetId = code - 3000000;
-                                string planetName = GameMain.galaxy.PlanetById(planetId)?.name;
-                                if (planetName != null)
-                                {
-                                    if (recorder.requestMeet[requestIndex] == int.MinValue)
-                                        tipTextNeed += "\n    " + string.Format("消灭行星全部黑雾基地".Translate(), planetName, finished ? "" : "点击以导航".Translate(), "数量未知gm2".Translate());
-                                    else
-                                        tipTextNeed += "\n    " + string.Format("消灭行星全部黑雾基地".Translate(), planetName, finished ? "" : "点击以导航".Translate(), -recorder.requestMeet[requestIndex]);
-                                }
-                            }
-                            else if (code >= 4000000 && code < 5000000)
-                            {
-                                int planetId = code - 4000000;
-                                string planetName = GameMain.galaxy.PlanetById(planetId)?.name;
-                                if (planetName != null)
-                                {
-                                    tipTextNeed += "\n    " + string.Format("到达行星gm".Translate(), planetName, finished ? "已到达gm".Translate() : "点击以导航".Translate());
-                                }
-                            }
-                        }
-                    }
-                    if (tipTextNeed.Length > 0)
-                        tipTextNeed = "需要gm".Translate() + tipTextNeed;
-                    // 
-                    string tipTextResult = "";
-                    bool containsCancelResult = false;
-                    if(proto.decisionResultId[i].Length > 0)
-                    {
-                        for (int j = 0; j < proto.decisionResultId[i].Length; j++)
-                        {
-                            int code = proto.decisionResultId[i][j];
-                            if (code == -1)
-                            {
-                                containsCancelResult = true;
-                                tipTextResult += "\n    " + "这将终止序列".Translate();
-                            }
-                            else if (code == 0)
-                                tipTextResult += "\n    " + "解译元驱动".Translate();
-                            else if (code == 1)
-                            {
-                                if (proto.decisionResultCount[i][j] > 0)
-                                    tipTextResult += "\n    " + "获得功勋点数".Translate() + proto.decisionResultCount[i][j].ToString();
-                                else if (proto.decisionResultCount[i][j] < 0)
-                                    tipTextResult += "\n    " + "失去功勋点数".Translate() + (-proto.decisionResultCount[i][j]).ToString();
-                            }
-                            else if (code == 2)
-                            {
-                                if (proto.decisionResultCount[i][j] > 0)
-                                    tipTextResult += "\n    " + "提升功勋阶级".Translate() + proto.decisionResultCount[i][j].ToString();
-                                else if (proto.decisionResultCount[i][j] < 0)
-                                    tipTextResult += "\n    " + "降低功勋阶级".Translate() + (-proto.decisionResultCount[i][j]).ToString();
-                            }
-                            else if (code == 3)
-                                tipTextResult += "\n    " + "推进随机巨构".Translate();
-                            else if (code == 4)
-                                tipTextResult += "\n    " + "本次圣物解译普通概率".Translate() + (proto.decisionResultCount[i][j] >= 0 ? "+" : "") + proto.decisionResultCount[i][j].ToString() + "%";
-                            else if (code == 5)
-                                tipTextResult += "\n    " + "本次圣物解译稀有概率".Translate() + (proto.decisionResultCount[i][j] >= 0 ? "+" : "") + proto.decisionResultCount[i][j].ToString() + "%";
-                            else if (code == 6)
-                                tipTextResult += "\n    " + "本次圣物解译史诗概率".Translate() + (proto.decisionResultCount[i][j] >= 0 ? "+" : "") + proto.decisionResultCount[i][j].ToString() + "%";
-                            else if (code == 7)
-                                tipTextResult += "\n    " + "本次圣物解译传说概率".Translate() + (proto.decisionResultCount[i][j] >= 0 ? "+" : "") + proto.decisionResultCount[i][j].ToString() + "%";
-                            else if (code == 8)
-                                tipTextResult += "\n    " + "本次圣物解译被诅咒的概率".Translate() + (proto.decisionResultCount[i][j] >= 0 ? "+" : "") + proto.decisionResultCount[i][j].ToString() + "%";
-                            else if (code == 9)
-                            {
-                                tipTextResult += "\n    " + "免费随机次数".Translate() + (proto.decisionResultCount[i][j] >= 0 ? "+" : "") + proto.decisionResultCount[i][j].ToString();
-                            }
-                            else if (code >= 20000 && code <= 30000)
-                            {
-                                int itemId = code - 20000;
-                                tipTextResult += "\n    " + "获得物品".Translate() + proto.decisionResultCount[i][j].ToString() + LDB.ItemName(itemId);
-                            }
-                            else if (code >= 100000000)
-                                tipTextResult += "\n    " + "未知后果".Translate();
-                        }
-                    }
-                    if (tipTextResult.Length > 0)
-                        tipTextResult = "此选项将导致".Translate() + tipTextResult;
-                    if(tipTextNeed.Length + tipTextResult.Length > 0)
-                    {
-                        decisionUIButtons[i].tips.tipTitle = tipTitle;
-                        string mid = tipTextNeed.Length > 0 && tipTextResult.Length > 0 ? "\n\n" : "";
-                        decisionUIButtons[i].tips.tipText = tipTextNeed + mid + tipTextResult;
-                        decisionUIButtons[i].tips.delay = 0.1f;
-                        decisionUIButtons[i].tips.offset = new Vector2(320, -40);
-                        decisionUIButtons[i].tips.width = 400;
-                    }
-                    else
-                    {
-                        decisionUIButtons[i].tips.tipTitle = "";
-                        decisionUIButtons[i].tips.tipText = "";
-                    }
-                    if(!enabled)
-                    {
-                        int transLen = decisionUIButtons[i].transitions.Length;
-                        for (int j = 0; j < transLen && j < 1; j++)
-                        {
-                            decisionUIButtons[i].transitions[j].normalColor = ButtonDisabledColorNorm;
-                            decisionUIButtons[i].transitions[j].mouseoverColor = ButtonDisabledColorHigh;
-                            decisionUIButtons[i].transitions[j].pressedColor = ButtonDisabledColorPressed;
-                            if(forceSetButtonColor)
-                                decisionButtonObjs[i].GetComponent<Image>().color = decisionUIButtons[i].transitions[0].normalColor;
-                        }
-                    }
-                    else if (containsCancelResult)
-                    {
-                        int transLen = decisionUIButtons[i].transitions.Length;
-                        for (int j = 0; j < transLen; j++)
-                        {
-                            decisionUIButtons[i].transitions[j].normalColor = ButtonWarnColorNorm;
-                            decisionUIButtons[i].transitions[j].mouseoverColor = ButtonWarnColorHigh;
-                            decisionUIButtons[i].transitions[j].pressedColor = ButtonWarnColorPressed;
-                            if (forceSetButtonColor)
-                                decisionButtonObjs[i].GetComponent<Image>().color = decisionUIButtons[i].transitions[0].normalColor;
-                        }
-                    }
-                    else
-                    {
-                        int transLen = decisionUIButtons[i].transitions.Length;
-                        for (int j = 0; j < transLen; j++)
-                        {
-                            decisionUIButtons[i].transitions[j].normalColor = ButtonEnabledColorNorm;
-                            decisionUIButtons[i].transitions[j].mouseoverColor = ButtonEnabledColorHigh;
-                            decisionUIButtons[i].transitions[j].pressedColor = ButtonEnabledColorPressed;
-                            if (forceSetButtonColor)
-                                decisionButtonObjs[i].GetComponent<Image>().color = decisionUIButtons[i].transitions[0].normalColor;
-                        }
-                    }
-                }
-                if (decisionLen < 4)
-                {
-                    for (int i = decisionLen; i < 4; i++)
+                    for (int i = 0; i < 4; i++)
                     {
                         decisionButtonObjs[i].SetActive(false);
                     }
-                }
+                    eventSubTitleText.text = ($"decodeType{recorder.decodeType}Title").Translate() + "\n" + string.Format("{0:0.0}%", 100.0 * recorder.decodeTimeSpend / recorder.decodeTimeNeed);
+                    int tickLeft = recorder.decodeTimeNeed - recorder.decodeTimeSpend;
 
+                    eventDescText.text = "\n\n\n" + "预计剩余解译时间".Translate() + string.Format(" {0:D2}:{1:D2}", tickLeft / 3600, tickLeft % 3600 / 60);
+                }
+                else
+                {
+                    eventSubTitleText.text = ($"ept{recorder.protoId}").Translate();
+                    eventDescText.text = ($"epd{recorder.protoId}").Translate();
+                    EventProto proto = EventSystem.protos[recorder.protoId];
+                    int decisionLen = proto.decisionLen;
+                    decisionLen = decisionLen > 4 ? 4 : decisionLen;
+                    for (int i = 0; i < decisionLen; i++)
+                    {
+                        decisionButtonObjs[i].SetActive(true);
+                        decisionTexts[i].text = ($"epdt{proto.id}-{i}").Translate();
+                        string tipTitle = "执行此决定你".Translate();
+                        string tipTextNeed = "";
+                        bool enabled = true;
+                        if (proto.decisionRequestNeed[i].Length > 0)
+                        {
+                            for (int j = 0; j < proto.decisionRequestNeed[i].Length; j++)
+                            {
+                                int requestIndex = proto.decisionRequestNeed[i][j];
+                                int code = recorder.requestId[requestIndex];
+                                if (code == 0) continue;
+                                bool finished = recorder.requestMeet[requestIndex] >= recorder.requestCount[requestIndex];
+                                if (!finished)
+                                    enabled = false;
+                                if (code == 9995)
+                                    tipTextNeed += "\n    " + "功勋阶级达到".Translate() + $"  {recorder.requestMeet[requestIndex]}/{recorder.requestCount[requestIndex]}";
+                                else if (code == 9996)
+                                    tipTextNeed += "\n    " + "伊卡洛斯被摧毁次数".Translate() + $"  {recorder.requestMeet[requestIndex]}/{recorder.requestCount[requestIndex]}";
+                                else if (code == 9997)
+                                    tipTextNeed += "\n    " + "消灭地面黑雾".Translate() + $"  {recorder.requestMeet[requestIndex]}/{recorder.requestCount[requestIndex]}";
+                                else if (code == 9998)
+                                    tipTextNeed += "\n    " + "消灭太空黑雾".Translate() + $"  {recorder.requestMeet[requestIndex]}/{recorder.requestCount[requestIndex]}";
+                                else if (code == 9999)
+                                    tipTextNeed += "\n    " + "消灭任意黑雾".Translate() + $"  {recorder.requestMeet[requestIndex]}/{recorder.requestCount[requestIndex]}";
+                                else if (code >= 10000 && code < 20000)
+                                    tipTextNeed += "\n    " + "提供物品".Translate() + $"{LDB.ItemName(recorder.requestId[requestIndex] - 10000)}  {recorder.requestMeet[requestIndex]}/{recorder.requestCount[requestIndex]}";
+                                else if (code >= 20000 && code < 30000)
+                                    tipTextNeed += "\n    " + "物品产量".Translate() + $"{LDB.ItemName(recorder.requestId[requestIndex] - 10000)}  {recorder.requestMeet[requestIndex]}/{recorder.requestCount[requestIndex]} /min";
+                                else if (code == 30000)
+                                    tipTextNeed += "\n    " + "解锁任意科技".Translate() + $"  {recorder.requestMeet[requestIndex]}/{recorder.requestCount[requestIndex]}";
+                                else if (code > 30000 && code < 40000)
+                                    tipTextNeed += "\n    " + "解锁gm".Translate() + LDB.techs.Select(code - 30000).name + "至等级".Translate() + $"  {recorder.requestMeet[requestIndex]}/{recorder.requestCount[requestIndex]}";
+                                else if (code >= 40000 && code < 50000)
+                                {
+                                    int starId = code - 40000 + 1;
+                                    if (recorder.requestCount[requestIndex] == 0)
+                                    {
+                                        if (recorder.requestMeet[requestIndex] == int.MinValue)
+                                            tipTextNeed += "\n    "
+                                                + string.Format("消灭恒星系全部地面单位".Translate(), GameMain.galaxy.StarById(starId)?.name, finished ? "" : "点击以导航".Translate(), "数量未知gm".Translate());
+                                        else
+                                            tipTextNeed += "\n    "
+                                                + string.Format("消灭恒星系全部地面单位".Translate(), GameMain.galaxy.StarById(starId)?.name, finished ? "" : "点击以导航".Translate(), -recorder.requestMeet[requestIndex]);
+                                    }
+                                    else
+                                        tipTextNeed += "\n    "
+                                            + string.Format("消灭恒星系地面单位".Translate(), GameMain.galaxy.StarById(starId)?.name, recorder.requestMeet[requestIndex], recorder.requestCount[requestIndex], finished ? "" : "点击以导航".Translate());
+                                }
+                                else if (code >= 50000 && code < 60000)
+                                {
+                                    int starId = code - 50000 + 1;
+                                    if (recorder.requestCount[requestIndex] == 0)
+                                    {
+                                        tipTextNeed += "\n    "
+                                            + string.Format("消灭恒星系全部太空单位".Translate(), GameMain.galaxy.StarById(starId)?.name, finished ? "" : "点击以导航".Translate(), -recorder.requestMeet[requestIndex]);
+                                    }
+                                    else
+                                        tipTextNeed += "\n    "
+                                            + string.Format("消灭恒星系太空单位".Translate(), GameMain.galaxy.StarById(starId)?.name, recorder.requestMeet[requestIndex], recorder.requestCount[requestIndex], finished ? "" : "点击以导航".Translate());
+                                }
+                                else if (code >= 60000 && code < 70000)
+                                {
+                                    int starId = code - 60000 + 1;
+                                    tipTextNeed += "\n    " + string.Format("提升恒星系威胁等级".Translate(), GameMain.galaxy.StarById(starId)?.name, recorder.requestMeet[requestIndex], recorder.requestCount[requestIndex], finished ? "" : "点击以导航".Translate());
+                                }
+                                else if (code >= 70000 && code < 80000)
+                                {
+                                    int starId = code - 70000 + 1;
+                                    if (recorder.requestMeet[requestIndex] == int.MinValue)
+                                        tipTextNeed += "\n    " + string.Format("肃清恒星系".Translate(), GameMain.galaxy.StarById(starId)?.name, finished ? "" : "点击以导航".Translate(), "数量未知gm".Translate());
+                                    else
+                                        tipTextNeed += "\n    " + string.Format("肃清恒星系".Translate(), GameMain.galaxy.StarById(starId)?.name, finished ? "" : "点击以导航".Translate(), -recorder.requestMeet[requestIndex]);
+                                }
+                                else if (code >= 80000 && code < 90000)
+                                {
+                                    int starId = code - 80000 + 1;
+                                    string starName = code == 89999 ? "任意gm".Translate() : GameMain.galaxy.StarById(starId)?.name;
+                                    tipTextNeed += "\n    " + string.Format("提升巨构能量水平".Translate(), starName, recorder.requestMeet[requestIndex] / 1000, recorder.requestCount[requestIndex] / 1000, finished || code == 89999 ? "" : "点击以导航".Translate());
+                                }
+                                else if (code >= 90000 && code < 100000)
+                                {
+                                    int starId = code - 90000 + 1;
+                                    string starName = GameMain.galaxy.StarById(starId)?.name;
+                                    tipTextNeed += "\n    " + string.Format("提升太空黑雾巢穴等级".Translate(), starName, recorder.requestMeet[requestIndex], recorder.requestCount[requestIndex], finished ? "" : "点击以导航".Translate());
+                                }
+                                else if (code >= 1000000 && code < 2000000)
+                                {
+                                    EnemyDFHiveSystem[] dfHivesByAstro = GameMain.data.spaceSector.dfHivesByAstro;
+                                    EnemyDFHiveSystem hive = dfHivesByAstro[code - 1000000];
+                                    if (hive != null)
+                                    {
+                                        string starName = hive.starData.name;
+                                        string hiveName = hive.hiveCode;
+                                        tipTextNeed += "\n    " + string.Format("消灭太空黑雾巢穴的所有单位".Translate(), starName, hiveName, -recorder.requestMeet[requestIndex], finished ? "" : "点击以导航".Translate());
+                                    }
+                                }
+                                else if (code >= 2000000 && code < 3000000)
+                                {
+                                    int planetId = code - 2000000;
+                                    string planetName = GameMain.galaxy.PlanetById(planetId)?.name;
+                                    if (planetName != null)
+                                    {
+                                        if (recorder.requestCount[requestIndex] == 0)
+                                        {
+                                            if (recorder.requestMeet[requestIndex] == int.MinValue)
+                                                tipTextNeed += "\n    " + string.Format("消灭行星全部黑雾单位".Translate(), planetName, finished ? "" : "点击以导航".Translate(), "数量未知gm2".Translate());
+                                            else
+                                                tipTextNeed += "\n    " + string.Format("消灭行星全部黑雾单位".Translate(), planetName, finished ? "" : "点击以导航".Translate(), -recorder.requestMeet[requestIndex]);
+
+                                        }
+                                        else
+                                            tipTextNeed += "\n    " + string.Format("消灭行星黑雾单位".Translate(), planetName, recorder.requestMeet[requestIndex], recorder.requestCount[requestIndex], finished ? "" : "点击以导航".Translate());
+                                    }
+                                }
+                                else if (code >= 3000000 && code < 4000000)
+                                {
+                                    int planetId = code - 3000000;
+                                    string planetName = GameMain.galaxy.PlanetById(planetId)?.name;
+                                    if (planetName != null)
+                                    {
+                                        if (recorder.requestMeet[requestIndex] == int.MinValue)
+                                            tipTextNeed += "\n    " + string.Format("消灭行星全部黑雾基地".Translate(), planetName, finished ? "" : "点击以导航".Translate(), "数量未知gm2".Translate());
+                                        else
+                                            tipTextNeed += "\n    " + string.Format("消灭行星全部黑雾基地".Translate(), planetName, finished ? "" : "点击以导航".Translate(), -recorder.requestMeet[requestIndex]);
+                                    }
+                                }
+                                else if (code >= 4000000 && code < 5000000)
+                                {
+                                    int planetId = code - 4000000;
+                                    string planetName = GameMain.galaxy.PlanetById(planetId)?.name;
+                                    if (planetName != null)
+                                    {
+                                        tipTextNeed += "\n    " + string.Format("到达行星gm".Translate(), planetName, finished ? "已到达gm".Translate() : "点击以导航".Translate());
+                                    }
+                                }
+                            }
+                        }
+                        if (tipTextNeed.Length > 0)
+                            tipTextNeed = "需要gm".Translate() + tipTextNeed;
+                        // 
+                        string tipTextResult = "";
+                        bool containsCancelResult = false;
+                        if (proto.decisionResultId[i].Length > 0)
+                        {
+                            for (int j = 0; j < proto.decisionResultId[i].Length; j++)
+                            {
+                                int code = proto.decisionResultId[i][j];
+                                if (code == -1)
+                                {
+                                    containsCancelResult = true;
+                                    tipTextResult += "\n    " + "这将终止序列".Translate();
+                                }
+                                else if (code == 0)
+                                    tipTextResult += "\n    " + "解译元驱动".Translate();
+                                else if (code == 1)
+                                {
+                                    if (proto.decisionResultCount[i][j] > 0)
+                                        tipTextResult += "\n    " + "获得功勋点数".Translate() + proto.decisionResultCount[i][j].ToString();
+                                    else if (proto.decisionResultCount[i][j] < 0)
+                                        tipTextResult += "\n    " + "失去功勋点数".Translate() + (-proto.decisionResultCount[i][j]).ToString();
+                                }
+                                else if (code == 2)
+                                {
+                                    if (proto.decisionResultCount[i][j] > 0)
+                                        tipTextResult += "\n    " + "提升功勋阶级".Translate() + proto.decisionResultCount[i][j].ToString();
+                                    else if (proto.decisionResultCount[i][j] < 0)
+                                        tipTextResult += "\n    " + "降低功勋阶级".Translate() + (-proto.decisionResultCount[i][j]).ToString();
+                                }
+                                else if (code == 3)
+                                    tipTextResult += "\n    " + "推进随机巨构".Translate();
+                                else if (code == 4)
+                                    tipTextResult += "\n    " + "本次圣物解译普通概率".Translate() + (proto.decisionResultCount[i][j] >= 0 ? "+" : "") + proto.decisionResultCount[i][j].ToString() + "%";
+                                else if (code == 5)
+                                    tipTextResult += "\n    " + "本次圣物解译稀有概率".Translate() + (proto.decisionResultCount[i][j] >= 0 ? "+" : "") + proto.decisionResultCount[i][j].ToString() + "%";
+                                else if (code == 6)
+                                    tipTextResult += "\n    " + "本次圣物解译史诗概率".Translate() + (proto.decisionResultCount[i][j] >= 0 ? "+" : "") + proto.decisionResultCount[i][j].ToString() + "%";
+                                else if (code == 7)
+                                    tipTextResult += "\n    " + "本次圣物解译传说概率".Translate() + (proto.decisionResultCount[i][j] >= 0 ? "+" : "") + proto.decisionResultCount[i][j].ToString() + "%";
+                                else if (code == 8)
+                                    tipTextResult += "\n    " + "本次圣物解译被诅咒的概率".Translate() + (proto.decisionResultCount[i][j] >= 0 ? "+" : "") + proto.decisionResultCount[i][j].ToString() + "%";
+                                else if (code == 9)
+                                {
+                                    tipTextResult += "\n    " + "免费随机次数".Translate() + (proto.decisionResultCount[i][j] >= 0 ? "+" : "") + proto.decisionResultCount[i][j].ToString();
+                                }
+                                else if (code >= 20000 && code <= 30000)
+                                {
+                                    int itemId = code - 20000;
+                                    tipTextResult += "\n    " + "获得物品".Translate() + proto.decisionResultCount[i][j].ToString() + LDB.ItemName(itemId);
+                                }
+                                else if (code >= 100000000)
+                                    tipTextResult += "\n    " + "未知后果".Translate();
+                            }
+                        }
+                        if (tipTextResult.Length > 0)
+                            tipTextResult = "此选项将导致".Translate() + tipTextResult;
+                        if (tipTextNeed.Length + tipTextResult.Length > 0)
+                        {
+                            decisionUIButtons[i].tips.tipTitle = tipTitle;
+                            string mid = tipTextNeed.Length > 0 && tipTextResult.Length > 0 ? "\n\n" : "";
+                            decisionUIButtons[i].tips.tipText = tipTextNeed + mid + tipTextResult;
+                            if (decisionUIButtons[i].tip != null)
+                            {
+                                UIButtonTip tip = decisionUIButtons[i].tip as UIButtonTip;
+                                if (tip?.titleComp != null && tip?.subTextComp != null)
+                                {
+                                    tip.titleComp.text = tipTitle;
+                                    tip.subTextComp.text = tipTextNeed + mid + tipTextResult;
+                                    int pHeight = (int)(tip.subTextComp.preferredHeight / 2f) * 2;
+                                    tip.trans.sizeDelta = new Vector2(tip.trans.sizeDelta.x, (float)(pHeight + 38));
+                                }
+                            }
+                            decisionUIButtons[i].tips.delay = 0.1f;
+                            decisionUIButtons[i].tips.offset = new Vector2(320, -40);
+                            decisionUIButtons[i].tips.width = 400;
+                        }
+                        else
+                        {
+                            decisionUIButtons[i].tips.tipTitle = "";
+                            decisionUIButtons[i].tips.tipText = "";
+                            if (decisionUIButtons[i].tip != null)
+                            {
+                                UIButtonTip tip = decisionUIButtons[i].tip as UIButtonTip;
+                                if (tip?.gameObject != null)
+                                {
+                                    tip.gameObject.SetActive(false);
+                                }
+                            }
+                        }
+                        if (!enabled)
+                        {
+                            int transLen = decisionUIButtons[i].transitions.Length;
+                            for (int j = 0; j < transLen && j < 1; j++)
+                            {
+                                float oldR = decisionUIButtons[i].transitions[j].normalColor.r;
+                                decisionUIButtons[i].transitions[j].normalColor = ButtonDisabledColorNorm;
+                                decisionUIButtons[i].transitions[j].mouseoverColor = ButtonDisabledColorHigh;
+                                decisionUIButtons[i].transitions[j].pressedColor = ButtonDisabledColorPressed;
+                                if (forceSetButtonColor || oldR != decisionUIButtons[i].transitions[j].normalColor.r)
+                                {
+                                    if (decisionUIButtons[i].isPointerEnter)
+                                        decisionButtonObjs[i].GetComponent<Image>().color = decisionUIButtons[i].transitions[0].mouseoverColor;
+                                    else
+                                        decisionButtonObjs[i].GetComponent<Image>().color = decisionUIButtons[i].transitions[0].normalColor;
+                                }
+                            }
+                        }
+                        else if (containsCancelResult)
+                        {
+                            int transLen = decisionUIButtons[i].transitions.Length;
+                            for (int j = 0; j < transLen && j < 1; j++)
+                            {
+                                float oldR = decisionUIButtons[i].transitions[j].normalColor.r;
+                                decisionUIButtons[i].transitions[j].normalColor = ButtonWarnColorNorm;
+                                decisionUIButtons[i].transitions[j].mouseoverColor = ButtonWarnColorHigh;
+                                decisionUIButtons[i].transitions[j].pressedColor = ButtonWarnColorPressed;
+                                if (forceSetButtonColor || oldR != decisionUIButtons[i].transitions[j].normalColor.r)
+                                {
+                                    if (decisionUIButtons[i].isPointerEnter)
+                                        decisionButtonObjs[i].GetComponent<Image>().color = decisionUIButtons[i].transitions[0].mouseoverColor;
+                                    else
+                                        decisionButtonObjs[i].GetComponent<Image>().color = decisionUIButtons[i].transitions[0].normalColor;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            int transLen = decisionUIButtons[i].transitions.Length;
+                            for (int j = 0; j < transLen && j < 1; j++)
+                            {
+                                float oldR = decisionUIButtons[i].transitions[j].normalColor.r;
+                                decisionUIButtons[i].transitions[j].normalColor = ButtonEnabledColorNorm;
+                                decisionUIButtons[i].transitions[j].mouseoverColor = ButtonEnabledColorHigh;
+                                decisionUIButtons[i].transitions[j].pressedColor = ButtonEnabledColorPressed;
+                                if (forceSetButtonColor || oldR != decisionUIButtons[i].transitions[j].normalColor.r)
+                                {
+                                    if (decisionUIButtons[i].isPointerEnter)
+                                        decisionButtonObjs[i].GetComponent<Image>().color = decisionUIButtons[i].transitions[0].mouseoverColor;
+                                    else
+                                        decisionButtonObjs[i].GetComponent<Image>().color = decisionUIButtons[i].transitions[0].normalColor;
+                                }
+                            }
+                        }
+                    }
+                    if (decisionLen < 4)
+                    {
+                        for (int i = decisionLen; i < 4; i++)
+                        {
+                            decisionButtonObjs[i].SetActive(false);
+                        }
+                    }
+                }
             }
             closeButtonText.text = "一";
         }

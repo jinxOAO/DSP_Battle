@@ -79,7 +79,7 @@ namespace DSP_Battle
          *  100000000+          隐藏对应的decisionResult，不在按钮Tip上显示
          */
 
-        public EventProto(int id)
+        public EventProto(int id, bool register = true)
         {
             this.id = id;
             this.title = "ept" + id.ToString();
@@ -101,8 +101,16 @@ namespace DSP_Battle
                 level = 0;
             if (level > 9) 
                 level = 9;
-            if (!EventSystem.protos.ContainsKey(id))
+            if (EventSystem.protos != null && !EventSystem.protos.ContainsKey(id))
                 protoCount[level]++;
+            if(EventSystem.alterProtos != null && register)
+            {
+                int fullLevel = id / 100;
+                if(!EventSystem.alterProtos.ContainsKey(fullLevel))
+                    EventSystem.alterProtos.Add(fullLevel, new List<int> { id });
+                else
+                    EventSystem.alterProtos[fullLevel].Add(id);
+            }
         }
         public void DescInsert(int[] insertId)
         {

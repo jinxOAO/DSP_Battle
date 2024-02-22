@@ -140,20 +140,15 @@ namespace DSP_Battle
                 isControlDown = false;
                 UIStarFortress.RefreshSetBtnText();
             }
-            if (Input.GetKeyDown(KeyCode.Minus) && isControlDown && !GameMain.isPaused && (Configs.nextWaveState == 1 || Configs.nextWaveState == 2))
+            if (Input.GetKeyDown(KeyCode.UpArrow) && UIDevConsole.consoleObj != null && UIDevConsole.consoleObj.activeSelf)
             {
-                Configs.nextWaveFrameIndex -= 60 * 60;
-                if (Configs.nextWaveFrameIndex < GameMain.instance.timei) Configs.nextWaveFrameIndex = GameMain.instance.timei; // 对于精英波次，如果一次回退超过了倒计时，会减少精英波次的持续时间
-                //由于强行使进攻提前到来，期望掉落的矩阵数减少10%，最少降低到无时间加成（即10min间隔）的对应波次基础期望的10%。
-                if (Relic.HaveRelic(3,4)) // relic 3-4 只减少5%
-                    Configs.nextWaveMatrixExpectation = (int)(Configs.nextWaveMatrixExpectation * 0.95f);
-                else
-                    Configs.nextWaveMatrixExpectation = (int)(Configs.nextWaveMatrixExpectation * 0.9f);
-
-                int minExpectation = (int)(Configs.expectationMatrices[Math.Min(Configs.expectationMatrices.Length - 1, Configs.wavePerStar[Configs.nextWaveStarIndex])] * 0.1f);
-                if (Configs.nextWaveMatrixExpectation < minExpectation) Configs.nextWaveMatrixExpectation = minExpectation;
+                DevConsole.PrevCommand();
             }
-            if(Configs.developerMode && isControlDown && Input.GetKeyDown(KeyCode.Z))
+            if (Input.GetKeyDown(KeyCode.DownArrow) && UIDevConsole.consoleObj != null && UIDevConsole.consoleObj.activeSelf)
+            {
+                DevConsole.NextCommand();
+            }
+            if (Configs.developerMode && isControlDown && Input.GetKeyDown(KeyCode.Z))
             {
                 Relic.PrepareNewRelic();
                 int planetId = 103;
@@ -179,6 +174,8 @@ namespace DSP_Battle
             //BattleBGMController.BGMLogicUpdate();
             DevConsole.Update();
         }
+
+
         [HarmonyPostfix]
         [HarmonyPatch(typeof(GameMain), "OnDestroy")]
         public static void GameMain_onDestroy()
@@ -216,6 +213,16 @@ namespace DSP_Battle
         public static void UpdateGameOption_Apply()
         {
             UpdateLogo();
+        }
+
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(GameMain), "LateUpdate")]
+        public static bool EscLogicBlocker()
+        {
+            UIDevConsole.EscLogic();
+            UIEventSystem.EscLogic();
+            return true;
         }
 
         public static void UpdateLogo()

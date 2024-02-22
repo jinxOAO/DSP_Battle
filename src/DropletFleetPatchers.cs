@@ -94,7 +94,7 @@ namespace DSP_Battle
 		{
 			var _this = __instance;
 			int num = _this.mecha.groundCombatModule.moduleFleets.Length;
-			if (_this.fleetConfigIndex >= num && _this.fleetConfigIndex < num + 8) // 防止某些mod增加的额外的太空舰队栏位也能选择水滴
+			if (_this.fleetConfigIndex >= num && _this.fleetConfigIndex < num + 8 && GameMain.data.history.TechUnlocked(1919)) // 防止某些mod增加的额外的太空舰队栏位也能选择水滴
 			{
 				UIButton uibutton = UnityEngine.Object.Instantiate<UIButton>(_this.spaceFleetTypeButton, _this.spaceFleetTypeButton.transform.parent);
 				int i = 4;

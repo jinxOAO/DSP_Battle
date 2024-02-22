@@ -124,7 +124,10 @@ namespace DSP_Battle
 
             //计算当前机甲能量可支持的最大运行状态的水滴数
             double mechaCurEnergy = GameMain.mainPlayer.mecha.coreEnergy;
-            int maxWorkingDropletsNew = (int)((long)mechaCurEnergy / 100000000);
+            long energyThreshold = 100000000;
+            if (Relic.HaveRelic(0, 5))
+                energyThreshold /= 4;
+            int maxWorkingDropletsNew = (int)((long)mechaCurEnergy / energyThreshold);
 
             //每个水滴update
             for (int i = 0; i < dropletArrayLength; i++)
@@ -672,10 +675,13 @@ namespace DSP_Battle
             }
             if (state >= 2 && state <= 3 && working) //只有不是飞出、返航过程，才会消耗能量
             {
+                double ratio = 1.0;
+                if (Relic.HaveRelic(0, 5))
+                    ratio *= 0.25;
                 if(validTargetEnemy)
-                    Droplets.ForceConsumeMechaEnergy(Droplets.energyConsumptionPerTick);
+                    Droplets.ForceConsumeMechaEnergy(Droplets.energyConsumptionPerTick * ratio);
                 else
-                    Droplets.ForceConsumeMechaEnergy(Droplets.energyConsumptionPerTick / 100);
+                    Droplets.ForceConsumeMechaEnergy(Droplets.energyConsumptionPerTick * ratio / 100);
             }
 
             if (state >= 2 && state <= 3 && !working) //如果因为机甲能量水平不够，水滴会停在原地，但是如果战斗状态结束了，那么水滴会无视能量限制继续正常Update（正常Update会在战斗结束后让水滴立刻进入4阶段回机甲）
@@ -764,7 +770,7 @@ namespace DSP_Battle
                         int damage = Configs.dropletAtk;
                         if (Rank.rank >= 10) damage = 5 * Configs.dropletAtk;
                         if (Relic.HaveRelic(0, 10))
-                            damage = damage + (Relic.BonusDamage(Droplets.bonusDamage, 1) - Droplets.bonusDamage);
+                            damage = damage + Relic.BonusDamage(Droplets.bonusDamage, 1);
                         Attack(damage); 
                         newEnd = (enemyUPos - newBegin).normalized * exceedDis * RandExceedDisRatio() + enemyUPos;
                         state = 3; //击中后继续冲过目标，准备转向的阶段

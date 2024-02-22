@@ -498,7 +498,7 @@ namespace DSP_Battle
             relic3Desc.color = norm;
             relicSelectionWindowObj.GetComponent<RectTransform>().sizeDelta = new Vector2(1000, 600);
 
-            RollNewAlternateRelics(); // 重随并刷新
+            RollNewAlternateRelics(true); // 重随并刷新
         }
 
 
@@ -769,7 +769,9 @@ namespace DSP_Battle
             if (CheckEnoughMatrixToRoll())
             {
                 if (Relic.rollCount <= 0)
-                    rollCostText.text = "免费".Translate();
+                {
+                    rollCostText.text = "免费".Translate() + $"({1 - Relic.rollCount})";
+                }
                 else
                 {
                     int need = Relic.basicMatrixCost << Relic.rollCount;
@@ -863,9 +865,8 @@ namespace DSP_Battle
         }
 
        
-
         // 随机3个新的relic 并刷新显示
-        public static void RollNewAlternateRelics()
+        public static void RollNewAlternateRelics(bool firstRoll = false)
         {
             if (!CheckEnoughMatrixToRoll()) return;
             Relic.alternateRelics[0] = -1; // 三个备选遗物
@@ -908,17 +909,31 @@ namespace DSP_Battle
                 for (int i = 0; i < 3; i++)
                 {
                     double rand = Utils.RandDouble();
-                    double[] prob = Relic.HaveRelic(0, 9) ? Relic.relicTypeProbability : Relic.relicTypeProbabilityBuffed;
+                    double[] probWeight = Relic.HaveRelic(0, 9) ? Relic.relicTypeProbability : Relic.relicTypeProbabilityBuffed;
                     // relic0-9 五叶草 可以让更高稀有度的遗物刷新概率提高
+                    double[] realWeight = new double[] { 0, 0, 0, 0, 0 };
                     for (int type = 0; type < 5; type++)
                     {
-                        if (rand <= prob[type] || (i == 0 && type == 2 && rand < Relic.firstRelicIsRare) || (i==1 && type == 0 && Relic.HaveRelic(4,1) && Relic.rollCount == -1)) // 后面的判别条件是，第一个遗物至少是稀有以上的概率为独立的较大的一个概率，第三个判别条件是relic 4-1的效果 第一次必在中间位置刷一个传说
+                        realWeight[type] = probWeight[type] * (1 + 0.01 * Relic.modifierByEvent[type]);
+                        if (realWeight[type] < 0)
+                            realWeight[type] = 0;
+                    }
+                    double[] prob = new double[] { 0, 0, 0, 0, 0 };
+                    double weightSum = realWeight.Sum();
+                    for (int type = 0; type < 5; type++)
+                    {
+                        prob[type] = (realWeight[type] + prob.Sum()) / weightSum;
+                    }
+
+                    for (int type = 0; type < 5; type++)
+                    {
+                        if (rand <= prob[type] || (i == 0 && type == 2 && rand < Relic.firstRelicIsRare) || (i == 1 && type == 0 && Relic.HaveRelic(4, 1) && firstRoll)) // 后面的判别条件是，第一个遗物至少是稀有以上的概率为独立的较大的一个概率，第三个判别条件是relic 4-1的效果 第一次必在中间位置刷一个传说
                         {
                             List<int> relicNotHave = new List<int>();
                             for (int num = 0; num < Relic.relicNumByType[type]; num++)
                             {
                                 if (Configs.developerMode) relicNotHave.Add(num);
-                                if (!Relic.HaveRelic(type, num) && !Relic.alternateRelics.Contains(type * 100 + num)) relicNotHave.Add(num); 
+                                if (!Relic.HaveRelic(type, num) && !Relic.alternateRelics.Contains(type * 100 + num)) relicNotHave.Add(num);
                             }
                             if (relicNotHave.Count > 0)
                             {
