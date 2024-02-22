@@ -1810,68 +1810,76 @@ namespace DSP_Battle
             altItem0.Add(new Tuple<int, int>(1301, 50));
             EventSystem.alterItems.Add(altItem0);
 
-            List<Tuple<int, int>> altItem1 = new List<Tuple<int, int>>();
-            altItem1.Add(new Tuple<int, int>(1107, 200));
-            altItem1.Add(new Tuple<int, int>(1119, 100));
-            altItem1.Add(new Tuple<int, int>(1204, 200));
-            altItem1.Add(new Tuple<int, int>(1205, 100));
-            altItem1.Add(new Tuple<int, int>(1206, 100));
-            altItem1.Add(new Tuple<int, int>(1303, 100));
-            altItem1.Add(new Tuple<int, int>(1401, 50));
+            List<Tuple<int, int>> altItem1 = new List<Tuple<int, int>>
+            {
+                new Tuple<int, int>(1107, 200),
+                new Tuple<int, int>(1119, 100),
+                new Tuple<int, int>(1204, 200),
+                new Tuple<int, int>(1205, 100),
+                new Tuple<int, int>(1206, 100),
+                new Tuple<int, int>(1303, 100),
+                new Tuple<int, int>(1401, 50)
+            };
             EventSystem.alterItems.Add(altItem1);
 
-            List<Tuple<int, int>> altItem2 = new List<Tuple<int, int>>();
-            altItem1.Add(new Tuple<int, int>(1107, 300));
-            altItem1.Add(new Tuple<int, int>(1119, 200));
-            altItem1.Add(new Tuple<int, int>(1124, 400));
-            altItem1.Add(new Tuple<int, int>(1125, 100));
-            altItem1.Add(new Tuple<int, int>(1205, 200));
-            altItem1.Add(new Tuple<int, int>(1206, 200));
-            altItem1.Add(new Tuple<int, int>(1303, 200));
-            altItem1.Add(new Tuple<int, int>(1304, 100));
-            altItem1.Add(new Tuple<int, int>(1305, 40));
+            List<Tuple<int, int>> altItem2 = new List<Tuple<int, int>>
+            {
+                new Tuple<int, int>(1107, 300),
+                new Tuple<int, int>(1119, 200),
+                new Tuple<int, int>(1124, 400),
+                new Tuple<int, int>(1125, 100),
+                new Tuple<int, int>(1205, 200),
+                new Tuple<int, int>(1206, 200),
+                new Tuple<int, int>(1303, 200),
+                new Tuple<int, int>(1304, 100),
+                new Tuple<int, int>(1305, 40)
+            };
             EventSystem.alterItems.Add(altItem2);
 
-            List<Tuple<int, int>> altItem3 = new List<Tuple<int, int>>();
-            altItem1.Add(new Tuple<int, int>(1124, 500));
-            altItem1.Add(new Tuple<int, int>(1125, 200));
-            altItem1.Add(new Tuple<int, int>(1126, 200));
-            altItem1.Add(new Tuple<int, int>(1127, 100));
-            altItem1.Add(new Tuple<int, int>(1205, 400));
-            altItem1.Add(new Tuple<int, int>(1206, 400));
-            altItem1.Add(new Tuple<int, int>(1209, 50));
-            altItem1.Add(new Tuple<int, int>(1304, 300));
-            altItem1.Add(new Tuple<int, int>(1305, 100));
-            altItem1.Add(new Tuple<int, int>(1402, 200));
-            altItem1.Add(new Tuple<int, int>(1403, 200));
-            altItem1.Add(new Tuple<int, int>(1803, 30));
-            altItem1.Add(new Tuple<int, int>(9481, 50));
-            altItem1.Add(new Tuple<int, int>(9484, 80));
-            altItem1.Add(new Tuple<int, int>(6005, 100));
+            List<Tuple<int, int>> altItem3 = new List<Tuple<int, int>>
+            {
+                new Tuple<int, int>(1124, 500),
+                new Tuple<int, int>(1125, 200),
+                new Tuple<int, int>(1126, 200),
+                new Tuple<int, int>(1127, 100),
+                new Tuple<int, int>(1205, 400),
+                new Tuple<int, int>(1206, 400),
+                new Tuple<int, int>(1209, 50),
+                new Tuple<int, int>(1304, 300),
+                new Tuple<int, int>(1305, 100),
+                new Tuple<int, int>(1402, 200),
+                new Tuple<int, int>(1403, 200),
+                new Tuple<int, int>(1803, 30),
+                new Tuple<int, int>(9481, 50),
+                new Tuple<int, int>(9484, 80),
+                new Tuple<int, int>(6005, 100)
+            };
             EventSystem.alterItems.Add(altItem3);
 
 
-            List<Tuple<int, int>> altItem4 = new List<Tuple<int, int>>();
-            altItem1.Add(new Tuple<int, int>(1126, 300));
-            altItem1.Add(new Tuple<int, int>(1127, 200));
-            altItem1.Add(new Tuple<int, int>(1205, 600));
-            altItem1.Add(new Tuple<int, int>(1206, 600));
-            altItem1.Add(new Tuple<int, int>(1209, 100));
-            altItem1.Add(new Tuple<int, int>(1210, 300));
-            altItem1.Add(new Tuple<int, int>(1304, 400));
-            altItem1.Add(new Tuple<int, int>(1305, 200));
-            altItem1.Add(new Tuple<int, int>(1402, 400));
-            altItem1.Add(new Tuple<int, int>(1403, 400));
-            altItem1.Add(new Tuple<int, int>(1804, 30));
-            altItem1.Add(new Tuple<int, int>(9481, 120));
-            altItem1.Add(new Tuple<int, int>(9484, 150));
-            altItem1.Add(new Tuple<int, int>(9486, 50));
-            altItem1.Add(new Tuple<int, int>(6005, 200));
-            altItem1.Add(new Tuple<int, int>(6006, 150));
-            altItem1.Add(new Tuple<int, int>(5202, 300));
-            altItem1.Add(new Tuple<int, int>(5203, 200));
-            altItem1.Add(new Tuple<int, int>(5204, 300));
-            altItem1.Add(new Tuple<int, int>(5205, 50));
+            List<Tuple<int, int>> altItem4 = new List<Tuple<int, int>>
+            {
+                new Tuple<int, int>(1126, 300),
+                new Tuple<int, int>(1127, 200),
+                new Tuple<int, int>(1205, 600),
+                new Tuple<int, int>(1206, 600),
+                new Tuple<int, int>(1209, 100),
+                new Tuple<int, int>(1210, 300),
+                new Tuple<int, int>(1304, 400),
+                new Tuple<int, int>(1305, 200),
+                new Tuple<int, int>(1402, 400),
+                new Tuple<int, int>(1403, 400),
+                new Tuple<int, int>(1804, 30),
+                new Tuple<int, int>(9481, 120),
+                new Tuple<int, int>(9484, 150),
+                new Tuple<int, int>(9486, 50),
+                new Tuple<int, int>(6005, 200),
+                new Tuple<int, int>(6006, 150),
+                new Tuple<int, int>(5202, 300),
+                new Tuple<int, int>(5203, 200),
+                new Tuple<int, int>(5204, 300),
+                new Tuple<int, int>(5205, 50)
+            };
             EventSystem.alterItems.Add(altItem4);
 
         }

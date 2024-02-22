@@ -94,24 +94,25 @@ namespace DSP_Battle
 		{
 			var _this = __instance;
 			int num = _this.mecha.groundCombatModule.moduleFleets.Length;
-			if (_this.fleetConfigIndex >= num && _this.fleetConfigIndex < num + 8 && GameMain.data.history.TechUnlocked(1919)) // 防止某些mod增加的额外的太空舰队栏位也能选择水滴
+			// 为防止某些mod增加的额外的太空舰队栏位也能选择水滴，限制index为num+8以内
+            if (_this.fleetConfigIndex >= num && _this.fleetConfigIndex < num + 8 && GameMain.data.history.TechUnlocked(1919)) 
 			{
-				UIButton uibutton = UnityEngine.Object.Instantiate<UIButton>(_this.spaceFleetTypeButton, _this.spaceFleetTypeButton.transform.parent);
-				int i = 4;
-				uibutton.data = i;
-				RectTransform rectTransform = uibutton.transform as RectTransform;
-				rectTransform.anchoredPosition = new Vector2(rectTransform.anchoredPosition.x + (float)(i % 2 * 65), rectTransform.anchoredPosition.y - (float)(i / 2 * 20));
-				uibutton.gameObject.SetActive(true);
-				uibutton.onClick += OnDropletFleetTypeButtonClick;
-				dropletFleetTypeButtons[0] = uibutton;
-				if (true)
+				int maxNum = Relic.HaveRelic(4, 2) ? 6 : 5;
+				for (int i = 4; i < maxNum; i++)
 				{
-					Sprite iconSprite = Resources.Load<Sprite>("Assets/DSPBattle/dropletInFleetConfig");
-					Image image = uibutton.GetComponentsInChildren<Image>()[1];
-					image.sprite = iconSprite;
-					image.enabled = (iconSprite != null);
-				}
-				_this.fleetConfigGroupRectTrans.sizeDelta = new Vector2(194, 73); // 194,54
+                    UIButton uibutton = UnityEngine.Object.Instantiate<UIButton>(_this.spaceFleetTypeButton, _this.spaceFleetTypeButton.transform.parent);
+                    uibutton.data = i;
+                    RectTransform rectTransform = uibutton.transform as RectTransform;
+                    rectTransform.anchoredPosition = new Vector2(rectTransform.anchoredPosition.x + (float)(i % 2 * 65), rectTransform.anchoredPosition.y - (float)(i / 2 * 20));
+                    uibutton.gameObject.SetActive(true);
+                    uibutton.onClick += OnDropletFleetTypeButtonClick;
+					dropletFleetTypeButtons[i - 4] = uibutton;
+					Sprite iconSprite = Resources.Load<Sprite>("Assets/DSPBattle/dropletInFleetConfig" + (i == 4 ? "" : "3"));
+                    Image image = uibutton.GetComponentsInChildren<Image>()[1];
+                    image.sprite = iconSprite;
+                    image.enabled = (iconSprite != null);
+                }
+                _this.fleetConfigGroupRectTrans.sizeDelta = new Vector2(194, 73); // 194,54
 			}
 			else
             {
@@ -149,8 +150,11 @@ namespace DSP_Battle
 			var _this = UIRoot.instance.uiGame.mechaWindow;
 			if (_this.fleetTabIndex == 1)
 			{
-				ChangeFleetConfigToDroplet(ref _this.mecha.spaceCombatModule, _this.fleetConfigIndex - _this.mecha.groundCombatModule.moduleFleets.Length, fleetConfigId1, _this.mecha.fighterStorage, _this.mecha.player);
-			}
+				if (obj == 4)
+					ChangeFleetConfigToDroplet(ref _this.mecha.spaceCombatModule, _this.fleetConfigIndex - _this.mecha.groundCombatModule.moduleFleets.Length, fleetConfigId1, _this.mecha.fighterStorage, _this.mecha.player);
+				else
+					ChangeFleetConfigToDroplet(ref _this.mecha.spaceCombatModule, _this.fleetConfigIndex - _this.mecha.groundCombatModule.moduleFleets.Length, fleetConfigId2, _this.mecha.fighterStorage, _this.mecha.player);
+            }
 			_this.fleetConfigIndex = -1;
 		}
 
@@ -161,6 +165,7 @@ namespace DSP_Battle
 				ref ModuleFleet ptr = ref _this.moduleFleets[fleetIndex];
 				if (ptr.protoId != newConfigId)
 				{
+					bool reserveIndex0 = false;
 					for (int i = 0; i < ptr.fighters.Length; i++)
 					{
 						if (ptr.fighters[i].count > 0)
@@ -175,19 +180,22 @@ namespace DSP_Battle
 								num2 -= num3;
 								if (num2 > 0 && _this.entityId <= 0 && _this.entityId == 0)
 								{
-									player.TryAddItemToPackage(num, num2, 0, true, 0, false);
+									if (num == dropletId && i == 0 && newConfigId >= fleetConfigId1 && newConfigId <= fleetConfigId2) // 水滴队形互相切换时，保留第0号位的水滴
+										reserveIndex0 = true;
+									else
+										player.TryAddItemToPackage(num, num2, 0, true, 0, false);
 								}
 							}
 						}
 					}
-					ptr = CreateDropletModuleFleet(newConfigId);
+					ptr = CreateDropletModuleFleet(newConfigId, reserveIndex0);
 					//ptr.SetItemId(-1, dropletId, dropletSize); // 由于在CreateDropletModuleFleet里面已经对fighter的itemId赋值了，这个可能就不需要了。
 					return;
 				}
 			}
 		}
 
-		public static ModuleFleet CreateDropletModuleFleet(int newConfigId)
+		public static ModuleFleet CreateDropletModuleFleet(int newConfigId, bool reserveIndex0 = false)
         {
 			FleetProto fleetProto = LDB.fleets.Select(5);
 			if (fleetProto == null)
@@ -195,26 +203,29 @@ namespace DSP_Battle
 				return default(ModuleFleet);
 			}
 			PrefabDesc prefabDesc = fleetProto.prefabDesc;
-			FleetPortDesc[] fleetPorts2 = prefabDesc.fleetPorts;
-			FleetPortDesc fleetPortDesc = fleetPorts2[1];
+			FleetPortDesc[] fleetPortsOri = prefabDesc.fleetPorts;
 			//Utils.Log($"{fleetPortDesc.rowInUI}/{fleetPortDesc.colInUI}. pos x y z {fleetPortDesc.pose.position.x}/{fleetPortDesc.pose.position.y}/{fleetPortDesc.pose.position.z}. rot {fleetPortDesc.pose.rotation}");
 
+			int count = newConfigId == 10 ? 3 : 1;
 			ModuleFleet moduleFleet;
 			moduleFleet.fleetAstroId = 0;
 			moduleFleet.fleetId = 0;
 			moduleFleet.protoId = newConfigId;
 			moduleFleet.inCommand = false;
 			moduleFleet.fleetEnabled = true;
-			moduleFleet.fighters = new ModuleFighter[1];
-			for (int i = 0; i < 1; i++)
+			moduleFleet.fighters = new ModuleFighter[count];
+			for (int i = 0; i < count; i++)
 			{
+				int copyFrom = count == 1 ? 1 : i;
 				ModuleFighter[] array = moduleFleet.fighters;
 				array[i].itemId = dropletId;
 				array[i].size = dropletSize; // 需要patch一些东西，为什么不直接用large呢？因为如果是large，放入不是水滴的舰队时，AddFighterToPort返回false，不仅会在其patch里触发只能放入水滴的提示，还会在返回后错误地触发只能放入中型舰的提示。
-				array[i].rowInUI = fleetPortDesc.rowInUI;
-				array[i].colInUI = fleetPortDesc.colInUI;
-				array[i].formDesc.formPos = fleetPortDesc.pose.position;
-				array[i].formDesc.formRot = fleetPortDesc.pose.rotation;
+				array[i].rowInUI = fleetPortsOri[copyFrom].rowInUI;
+				array[i].colInUI = fleetPortsOri[copyFrom].colInUI;
+				array[i].formDesc.formPos = fleetPortsOri[copyFrom].pose.position;
+				array[i].formDesc.formRot = fleetPortsOri[copyFrom].pose.rotation;
+				if (reserveIndex0 && i == 0)
+					array[i].count = 1;
 			}
 			return moduleFleet;
 		}

@@ -146,6 +146,7 @@ namespace DSP_Battle
 
     public class EventRecorder
     {
+        public static int[] levelByRelicCount = new int[] {0,1,2,3,3,4,4,4,4,4,4,4,4 };
         public int protoId;
         public int lockedStarIndex;
         public int lockedPlanetId;
@@ -170,7 +171,12 @@ namespace DSP_Battle
                 lockedPlanetId = -1;
                 lockedOriAstroId = -1;
                 if (level < 0)
-                    level = Relic.GetRelicCount() + (Relic.recordRelics == null ? 0 : Relic.recordRelics.Count);
+                {
+                    int relicCount = Relic.GetRelicCount() + (Relic.recordRelics == null ? 0 : Relic.recordRelics.Count);
+                    if (relicCount > levelByRelicCount.Length) 
+                        relicCount = levelByRelicCount.Length;
+                    level = levelByRelicCount[relicCount];
+                }
                 if (proto.requestLen > 0)
                 {
                     requestLen = proto.requestLen;
@@ -226,7 +232,7 @@ namespace DSP_Battle
             for (int i = 0; i < requestLen; i++)
             {
                 int code = requestId[i];
-                if(code < 1000)
+                if (code < 1000)
                 {
                     int actual = code * 10000;
                     int realLevel = Math.Min(Math.Max(0, level), 4);

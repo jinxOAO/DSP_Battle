@@ -835,7 +835,7 @@ namespace DSP_Battle
                 uibt.tips.tipText = uibt.tips.tipText + "\n\n<color=#61d8ffb4>" + "已充能gm".Translate() + "  " + Relic.relic0_2Charge + " / " + Relic.relic0_2MaxCharge + "</color>";   
             }
             if (type == 0 && num == 10)
-                uibt.tips.tipText = uibt.tips.tipText + "\n\n<color=#61d8ffb4>" + "当前加成gm".Translate() + "  " + Droplets.bonusDamage + " / " + Droplets.bonusDamageLimit + "</color>";
+                uibt.tips.tipText = uibt.tips.tipText + "\n\n<color=#61d8ffb4>" + "当前加成gm".Translate() + "  " + Droplets.bonusDamage / 100 + " / " + Droplets.bonusDamageLimit / 100 + "</color>";
         }
 
         // 检查背包里的矩阵是否足够随机，现在不打算每帧检查来刷新按钮和文本的显示以防突然增加矩阵，可能性不大，即使存在这种可能也不影响实际按下按钮触发功能，只是显示灰色按钮这样
@@ -909,7 +909,7 @@ namespace DSP_Battle
                 for (int i = 0; i < 3; i++)
                 {
                     double rand = Utils.RandDouble();
-                    double[] probWeight = Relic.HaveRelic(0, 9) ? Relic.relicTypeProbability : Relic.relicTypeProbabilityBuffed;
+                    double[] probWeight = Relic.HaveRelic(0, 9) ? Relic.relicTypeProbabilityBuffed : Relic.relicTypeProbability;
                     // relic0-9 五叶草 可以让更高稀有度的遗物刷新概率提高
                     double[] realWeight = new double[] { 0, 0, 0, 0, 0 };
                     for (int type = 0; type < 5; type++)
@@ -922,7 +922,7 @@ namespace DSP_Battle
                     double weightSum = realWeight.Sum();
                     for (int type = 0; type < 5; type++)
                     {
-                        prob[type] = (realWeight[type] + prob.Sum()) / weightSum;
+                        prob[type] = realWeight[type] / weightSum + (type > 0 ? prob[type - 1] : 0);
                     }
 
                     for (int type = 0; type < 5; type++)

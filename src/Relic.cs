@@ -41,8 +41,9 @@ namespace DSP_Battle
         public static List<int> starsWithMegaStructureUnfinished = new List<int>(); // 每秒更新，具有巨构且未完成建造的星系.
         public static Vector3 playerLastPos = new VectorLF3(0, 0, 0); // 上一秒玩家的位置
         public static bool alreadyRecalcDysonStarLumin = false; // 不需要存档，如果需要置false则会在读档时以及选择特定遗物时自动完成
-        public static int dropletDamageGrowth = 10; // relic0-10每次水滴击杀的伤害成长
-        public static int dropletDamageLimitGrowth = 400; // relic0-10每次消耗水滴提供的伤害成长上限的成长
+        public static int dropletDamageGrowth = 1000; // relic0-10每次水滴击杀的伤害成长
+        public static int dropletDamageLimitGrowth = 20000; // relic0-10每次消耗水滴提供的伤害成长上限的成长
+        public static int dropletEnergyRestore = 2000000; // relic0-10每次击杀回复的机甲能量
         public static int relic0_2MaxCharge = 1000; // 新版女神泪充能上限
         public static int disturbDamage1612 = 2000; // relic0-8胶囊伤害
         public static int disturbDamage1613 = 3000; // relic0-8胶囊伤害
@@ -486,8 +487,8 @@ namespace DSP_Battle
         {
             if (time % 60 == 8)
                 CheckMegaStructureAttack();
-            else if (time % 60 == 9)
-                AutoChargeShieldByMegaStructure();
+            //else if (time % 60 == 9)
+            //    AutoChargeShieldByMegaStructure();
             else if (time % 60 == 10)
                 CheckPlayerHasaki();
 
@@ -1089,12 +1090,81 @@ namespace DSP_Battle
             }
         }
 
+
+        /// <summary>
+        /// relic 1-0
+        /// </summary>
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(GameHistoryData), "NotifyTechUnlock")]
+        public static void AutoConstructMegaWhenTechUnlock()
+        {
+            if (Relic.HaveRelic(1, 0))
+                Relic.autoConstructMegaStructureCountDown += 10 * 60;
+        }
+
+        /// <summary>
+        /// relic 1-1
+        /// </summary>
+        /// <param name="__instance"></param>
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(TurretComponent), "InternalUpdate")]
+        public static void TurrentComponentPostPatch(ref TurretComponent __instance)
+        {
+            ref var _this = ref __instance;
+            // relic 1-1
+            if(Relic.HaveRelic(1,1))
+            {
+                if (_this.supernovaStrength == 30f)
+                {
+                    _this.supernovaTick = 1501;
+                }
+                if (_this.supernovaTick >= 900)
+                {
+                    _this.supernovaStrength = 29.46f;
+                }
+            }
+
+        }
+
         /// <summary>
         /// relic1-2
         /// </summary>
-        public static void AutoChargeShieldByMegaStructure()
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(FieldGeneratorComponent), "InternalUpdate")]
+        public static void AutoChargeShieldByMegaStructure(ref FieldGeneratorComponent __instance, PlanetFactory factory, double power, ref PowerConsumerComponent pc)
         {
-            
+            if(Relic.HaveRelic(1,2))
+            {
+                long num = (long)((double)pc.requiredEnergy * power);
+                double num2 = __instance.fieldHolding;
+                if (num2 < 1E-05)
+                {
+                    num2 = 0.0;
+                }
+                if (num2 > 0.0)
+                {
+                    num2 = num2 * 0.7 + 0.3;
+                }
+                else if (num2 > 0.99999)
+                {
+                    num2 = 1.0;
+                }
+                double num3 = __instance.fieldHolding * 0.9 + 0.1;
+                if (num3 > 1.0)
+                {
+                    num3 = 1.0;
+                }
+                __instance.energy += 10 * num;
+                __instance.energy -= (long)((double)pc.idleEnergyPerTick * num3 + 0.5);
+                if (__instance.energy > __instance.energyCapacity)
+                {
+                    __instance.energy = __instance.energyCapacity;
+                }
+                if (__instance.energy < 0L)
+                {
+                    __instance.energy = 0L;
+                }
+            }
         }
 
         /// <summary>

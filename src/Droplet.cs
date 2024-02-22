@@ -175,6 +175,13 @@ namespace DSP_Battle
                 return false;
         }
 
+        public static void RestoreMechaEnergy(double energy)
+        {
+            GameMain.mainPlayer.mecha.coreEnergy += energy;
+            if (GameMain.mainPlayer.mecha.coreEnergy > GameMain.mainPlayer.mecha.coreEnergyCap)
+                GameMain.mainPlayer.mecha.coreEnergy = GameMain.mainPlayer.mecha.coreEnergyCap;
+        }
+
         public static void ForceConsumeMechaEnergy(double energy)
         {
             if (Relic.HaveRelic(1, 4)) energy *= 0.5; // relic1-4 水滴减耗
@@ -205,7 +212,7 @@ namespace DSP_Battle
                         slotNum++;
                 }
                 if (slotNum >= 8) return;
-                UIRelic.relicSlotUIBtns[slotNum].tips.tipText = "遗物描述0-10".Translate() + "\n" + "relicTipText0-10".Translate() + "\n\n<color=#61d8ffb4>" + "当前加成gm".Translate() + "  " + Droplets.bonusDamage + " / " + Droplets.bonusDamageLimit + "</color>";
+                UIRelic.relicSlotUIBtns[slotNum].tips.tipText = "遗物描述0-10".Translate() + "\n" + "relicTipText0-10".Translate() + "\n\n<color=#61d8ffb4>" + "当前加成gm".Translate() + "  " + Droplets.bonusDamage / 100 + " / " + Droplets.bonusDamageLimit / 100 + "</color>";
                 if (UIRelic.relicSlotUIBtns[slotNum].tipShowing)
                 {
                     UIRelic.relicSlotUIBtns[slotNum].OnPointerExit(null);
@@ -214,8 +221,8 @@ namespace DSP_Battle
                 }
                 try
                 {
-                    int width = (int)Math.Log10(bonusDamage) * 12 + 200;
-                    Utils.UIItemUp(8035, Relic.dropletDamageGrowth, width, bonusDamage);
+                    int width = (int)Math.Log10(bonusDamage / 100) * 12 + 200;
+                    Utils.UIItemUp(8035, Relic.dropletDamageGrowth / 100, width, bonusDamage / 100);
                 }
                 catch (Exception)
                 { }
@@ -819,7 +826,12 @@ namespace DSP_Battle
                 caster.id = 1;
                 caster.type = ETargetType.Player;
                 caster.astroId = 0;
-                sector.skillSystem.DamageObject(damage, 1,ref target,ref caster);
+                ref CombatStat stat = ref sector.skillSystem.DamageObject(damage, 1,ref target,ref caster);
+                if (stat.hp <= 0 && Relic.HaveRelic(0, 10))
+                {
+                    Droplets.DamageGrow();
+                    Droplets.RestoreMechaEnergy(Relic.dropletEnergyRestore);
+                }
             }
             return damage;
         }
@@ -933,6 +945,7 @@ namespace DSP_Battle
 
             VectorLF3 uBegin = newUBegin + (newUBegin-newUEnd).normalized * speed * newBeginT;
             VectorLF3 uEnd = newUEnd;
+            VectorLF3 uEndVel = (newUBegin - newUEnd).normalized * speed;
 
             float newMaxt = 1;
             if (speed > 0)
@@ -948,6 +961,7 @@ namespace DSP_Battle
             swarm.bulletPool[bulletIds[0]].maxt = newMaxt + newBeginT;
             swarm.bulletPool[bulletIds[0]].uBegin = uBegin;
             swarm.bulletPool[bulletIds[0]].uEnd = uEnd;
+            swarm.bulletPool[bulletIds[0]].uEndVel = uEndVel;
 
             for (int i = 1; i < bulletNum; i++)
             {
@@ -956,6 +970,7 @@ namespace DSP_Battle
                 swarm.bulletPool[bulletIds[i]].maxt = newMaxt + newBeginT;
                 swarm.bulletPool[bulletIds[i]].uBegin = newUBegin + Utils.RandPosDelta(ref randSeed) * randomBeginRatio; //uBegin + Utils.RandPosDelta(randSeed + i + 100) * randomBeginRatio;
                 swarm.bulletPool[bulletIds[i]].uEnd = uEnd + Utils.RandPosDelta(ref randSeed) * randomEndRatio;
+                swarm.bulletPool[bulletIds[i]].uEndVel = uEndVel;
             }
 
         }

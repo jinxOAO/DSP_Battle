@@ -95,11 +95,11 @@ namespace DSP_Battle
         [HarmonyPatch(typeof(UIDysonEditor), "DrawDysonSphereMapPost")]
         public static void DrawPatch3(UIDysonEditor __instance)
         {
-            if (dropletSpheres.Count <= 0) return;
-            if (GameMain.localStar != null && __instance.selection.viewDysonSphere != null && DysonSphere.renderPlace == ERenderPlace.Dysonmap)
-            {
-                dropletSpheres[GameMain.localStar.index].DrawPost();
-            }
+            //if (dropletSpheres.Count <= 0) return;
+            //if (GameMain.localStar != null && __instance.selection.viewDysonSphere != null && DysonSphere.renderPlace == ERenderPlace.Dysonmap)
+            //{
+            //    dropletSpheres[GameMain.localStar.index].DrawPost();
+            //}
         }
 
 
@@ -107,11 +107,11 @@ namespace DSP_Battle
         [HarmonyPatch(typeof(UIDysonEditor), "DrawDysonSphereMapPost")]
         public static void DrawPatch4(UIDysonEditor __instance)
         {
-            if (dropletSpheres.Count <= 0) return;
-            if (GameMain.localStar != null && __instance.selection?.viewDysonSphere != null && DysonSphere.renderPlace == ERenderPlace.Dysonmap)
-            {
-                dropletSpheres[GameMain.localStar.index].DrawPost();
-            }
+            //if (dropletSpheres.Count <= 0) return;
+            //if (GameMain.localStar != null && __instance.selection?.viewDysonSphere != null && DysonSphere.renderPlace == ERenderPlace.Dysonmap)
+            //{
+            //    dropletSpheres[GameMain.localStar.index].DrawPost();
+            //}
         }
 
 
