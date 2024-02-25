@@ -48,6 +48,8 @@ namespace DSP_Battle
         public static int disturbDamage1612 = 2000; // relic0-8胶囊伤害
         public static int disturbDamage1613 = 3000; // relic0-8胶囊伤害
         public static int energyPerMegaDamage = 10; // tickEnergy开根号后除以此项得到伤害
+        public static double ThornmailDamageRatio = 0.2; // relic0-5反伤比例
+        public static double ThornmailFieldDamageRatio = 0.2; // relic0-5行星护盾反伤比例
 
         public static int starIndexWithMaxLuminosity = 0; // 具有最大光度的恒星系的index， 读档时刷新
 
@@ -79,6 +81,7 @@ namespace DSP_Battle
             RelicFunctionPatcher.CheckSolarSailLife();
             Configs.eliteDurationFrames = 3600 * 3 + 60 * 20 * Relic.GetCursedRelicCount();
             RelicFunctionPatcher.CheckRerollCost();
+            RelicFunctionPatcher.RefreshCargoAccIncTable();
             UIEventSystem.InitAll();
             UIEventSystem.InitWhenLoad();
         }
@@ -103,18 +106,13 @@ namespace DSP_Battle
                 relics[type] |= 1 << num;
                 RelicFunctionPatcher.CheckAndModifyStarLuminosity(type*100+num);
             }
-            else if ((type == 0 && num == 5))
+            else if ((type == 1 && num == 4))
             {
                 relics[type] |= 1 << num;
-                GameMain.data.history.UnlockTechUnlimited(1918, false);
+                //GameMain.data.history.UnlockTechUnlimited(1918, false);
                 GameMain.data.history.UnlockTechUnlimited(1919, false);
                 GameMain.data.mainPlayer.TryAddItemToPackage(9511, 3, 0, true);
                 Utils.UIItemUp(9511, 3);
-            }
-            else if (type == 1 && num == 4)
-            {
-                GameMain.mainPlayer.TryAddItemToPackage(9511, 1, 0, true);
-                relics[type] |= 1 << num;
             }
             else if (type == 3 && num == 5)
             {
@@ -168,7 +166,7 @@ namespace DSP_Battle
             {
                 relics[type] |= 1 << num;
             }
-
+            RelicFunctionPatcher.RefreshCargoAccIncTable();
             RelicFunctionPatcher.CheckRerollCost();
             return 1;
         }
@@ -836,6 +834,148 @@ namespace DSP_Battle
         }
 
         /// <summary>
+        /// relic 0-5 虚空荆棘反弹伤害
+        /// </summary>
+        /// <param name="__instance"></param>
+        /// <param name="caster"></param>
+        /// <param name="damage"></param>
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(SkillSystem), "MechaEnergyShieldResist", new Type[] { typeof(SkillTarget), typeof(int) }, new ArgumentType[] { ArgumentType.Normal, ArgumentType.Ref})]
+        public static bool ThornmailAttackPreMarker(int damage, ref int __state)
+        {
+            __state = damage;
+            return true;
+        }
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(SkillSystem), "MechaEnergyShieldResist", new Type[] { typeof(SkillTargetLocal), typeof(int), typeof(int) }, new ArgumentType[] { ArgumentType.Normal, ArgumentType.Normal, ArgumentType.Ref })]
+        public static bool ThornmailLocalAttackPreMarker(int damage, ref int __state)
+        {
+            __state = damage;
+            return true;
+        }
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(SkillSystem), "MechaEnergyShieldResist", new Type[] { typeof(SkillTarget), typeof(int) }, new ArgumentType[] { ArgumentType.Normal, ArgumentType.Ref })]
+        public static void ThornmailAttackPostHandler(SkillTarget caster, int damage, ref int __state)
+        {
+            if (Relic.HaveRelic(0, 5))
+            {
+                SkillTarget casterPlayer;
+                casterPlayer.id = 1;
+                casterPlayer.type = ETargetType.Player;
+                casterPlayer.astroId = 0;
+                int realDamage = (int)((__state - damage) * GameMain.data.history.energyDamageScale * Relic.ThornmailDamageRatio);
+                GameMain.data.spaceSector.skillSystem.DamageObject(realDamage, 1, ref caster, ref casterPlayer);
+            }
+        }
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(SkillSystem), "MechaEnergyShieldResist", new Type[] { typeof(SkillTargetLocal), typeof(int), typeof(int) }, new ArgumentType[] { ArgumentType.Normal, ArgumentType.Normal, ArgumentType.Ref })]
+        public static void ThornmailAttackPostHandler(SkillTargetLocal caster, int astroId, int damage, ref int __state)
+        {
+            if (Relic.HaveRelic(0, 5))
+            {
+                SkillTarget target;
+                target.id = caster.id;
+                target.astroId = astroId;
+                target.type = caster.type;
+                SkillTarget casterPlayer;
+                casterPlayer.id = 1;
+                casterPlayer.type = ETargetType.Player;
+                casterPlayer.astroId = 0;
+                int realDamage = (int)((__state - damage) * GameMain.data.history.energyDamageScale * Relic.ThornmailDamageRatio);
+                GameMain.data.spaceSector.skillSystem.DamageObject(realDamage, 1, ref target, ref casterPlayer);
+            }
+        }
+
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(SkillSystem), "DeterminePlanetATFieldRaytestInStar")]
+        public static void ThornmailFieldAttckHandler(ref SkillSystem __instance, int starAstroId, ERayTestSkillType skillType, int skillId, int __result)
+        {
+            if(Relic.HaveRelic(0,5) && __result > 0 && skillId > 0)
+            {
+                ref var _this = ref __instance;
+                if (skillType == ERayTestSkillType.humpbackPlasma)
+                {
+                    int cursor = _this.humpbackProjectiles.cursor;
+                    GeneralExpImpProjectile[] buffer = _this.humpbackProjectiles.buffer;
+                    if (skillId < cursor)
+                    {
+                        ref GeneralExpImpProjectile ptr = ref buffer[skillId];
+                        if (ptr.id == skillId)
+                        {
+                            int realDamage = (int)(ptr.damage * Relic.ThornmailFieldDamageRatio * GameMain.data.history.energyDamageScale);
+                            __instance.DamageObject(realDamage, 1, ref ptr.caster, ref ptr.target);
+                        }
+                    }
+                }
+                else if (skillType == ERayTestSkillType.lancerSpacePlasma)
+                {
+                    int cursor = _this.lancerSpacePlasma.cursor;
+                    GeneralProjectile[] buffer = _this.lancerSpacePlasma.buffer;
+                    if (skillId < cursor)
+                    {
+                        ref GeneralProjectile ptr = ref buffer[skillId];
+                        if (ptr.id == skillId)
+                        {
+                            int realDamage = (int)(ptr.damage * Relic.ThornmailFieldDamageRatio * GameMain.data.history.energyDamageScale);
+                            __instance.DamageObject(realDamage, 1, ref ptr.caster, ref ptr.target);
+                        }
+                    }
+                }
+                else if (skillType == ERayTestSkillType.lancerLaserOneShot)
+                {
+                    int cursor = _this.lancerLaserOneShots.cursor;
+                    SpaceLaserOneShot[] buffer = _this.lancerLaserOneShots.buffer;
+                    if (skillId < cursor)
+                    {
+                        ref SpaceLaserOneShot ptr = ref buffer[skillId];
+                        if (ptr.id == skillId)
+                        {
+                            int realDamage = (int)(ptr.damage * Relic.ThornmailFieldDamageRatio * GameMain.data.history.energyDamageScale);
+                            __instance.DamageObject(realDamage, 1, ref ptr.caster, ref ptr.target);
+                        }
+                    }
+                }
+                else if (skillType == ERayTestSkillType.lancerLaserSweep)
+                {
+                    int cursor = _this.lancerLaserSweeps.cursor;
+                    SpaceLaserSweep[] buffer = _this.lancerLaserSweeps.buffer;
+                    if (skillId < cursor)
+                    {
+                        ref SpaceLaserSweep ptr = ref buffer[skillId];
+                        if (ptr.id == skillId && (ptr.lifemax - ptr.life) % ptr.damageInterval == 0)
+                        {
+                            int realDamage = (int)(ptr.damage * Relic.ThornmailFieldDamageRatio * GameMain.data.history.energyDamageScale);
+                            SkillTarget emptyCaster;
+                            emptyCaster.id = 0;
+                            emptyCaster.type = ETargetType.None;
+                            emptyCaster.astroId = starAstroId;
+                            __instance.DamageObject(realDamage, 1, ref ptr.caster, ref emptyCaster);
+                        }
+                    }
+                }
+                else if (skillType == ERayTestSkillType.spaceLaserSweep)
+                {
+                    int cursor = _this.spaceLaserSweeps.cursor;
+                    SpaceLaserSweep[] buffer = _this.spaceLaserSweeps.buffer;
+                    if (skillId < cursor)
+                    {
+                        ref SpaceLaserSweep ptr = ref buffer[skillId];
+                        if (ptr.id == skillId)
+                        {
+                            int realDamage = (int)(ptr.damage * Relic.ThornmailFieldDamageRatio * GameMain.data.history.energyDamageScale); 
+                            SkillTarget emptyCaster;
+                            emptyCaster.id = 0;
+                            emptyCaster.type = ETargetType.None;
+                            emptyCaster.astroId = starAstroId;
+                            __instance.DamageObject(realDamage, 1, ref ptr.caster, ref emptyCaster);
+                        }
+                    }
+                }
+            }
+        }
+
+
+        /// <summary>
         /// relic 0-6
         /// </summary>
         /// <param name="__instance"></param>
@@ -1129,43 +1269,29 @@ namespace DSP_Battle
         /// <summary>
         /// relic1-2
         /// </summary>
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(FieldGeneratorComponent), "InternalUpdate")]
-        public static void AutoChargeShieldByMegaStructure(ref FieldGeneratorComponent __instance, PlanetFactory factory, double power, ref PowerConsumerComponent pc)
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(PlanetATField), "BreakShield")]
+        public static bool BreakFieldPostPatch(ref PlanetATField __instance)
         {
-            if(Relic.HaveRelic(1,2))
+            if (__instance.recoverCD <= 0)
             {
-                long num = (long)((double)pc.requiredEnergy * power);
-                double num2 = __instance.fieldHolding;
-                if (num2 < 1E-05)
-                {
-                    num2 = 0.0;
-                }
-                if (num2 > 0.0)
-                {
-                    num2 = num2 * 0.7 + 0.3;
-                }
-                else if (num2 > 0.99999)
-                {
-                    num2 = 1.0;
-                }
-                double num3 = __instance.fieldHolding * 0.9 + 0.1;
-                if (num3 > 1.0)
-                {
-                    num3 = 1.0;
-                }
-                __instance.energy += 10 * num;
-                __instance.energy -= (long)((double)pc.idleEnergyPerTick * num3 + 0.5);
-                if (__instance.energy > __instance.energyCapacity)
-                {
-                    __instance.energy = __instance.energyCapacity;
-                }
-                if (__instance.energy < 0L)
-                {
-                    __instance.energy = 0L;
-                }
+                __instance.energy = __instance.energyMax;
+                __instance.recoverCD = 36000;
             }
+            else
+            {
+                __instance.energy = 0L;
+                if (__instance.rigidTime == 0)
+                {
+                    __instance.recoverCD = Math.Max(360, __instance.recoverCD);
+                }
+                __instance.ClearFieldResistHistory();
+            }
+            return false;
         }
+
+
 
         /// <summary>
         /// relic1-7 relic3-11
@@ -1430,6 +1556,26 @@ namespace DSP_Battle
             }
         }
 
+        /// <summary>
+        /// relic 4-3
+        /// </summary>
+        public static void RefreshCargoAccIncTable()
+        {
+            if (Relic.HaveRelic(4,3))
+            {
+                Cargo.accTable = new int[] { 0, 200, 350, 500, 750, 1000, 1250, 1500, 1750, 2000, 2250 };
+                Cargo.accTableMilli = new double[] { 0.0, 0.200, 0.350, 0.500, 0.750, 1.000, 1.250, 1.500, 1.750, 2.000, 2.250 };
+                Cargo.incTable = new int[] { 0, 225, 250, 275, 300, 325, 350, 375, 400, 425, 450 };
+                Cargo.incTableMilli = new double[] { 0.0, 0.225, 0.250, 0.275, 0.300, 0.325, 0.350, 0.375, 0.400, 0.425, 0.45 };
+            }
+            else
+            {
+                Cargo.accTable = new int[] { 0, 250, 500, 750, 1000, 1250, 1500, 1750, 2000, 2250, 2500 };
+                Cargo.accTableMilli = new double[] { 0.0, 0.250, 0.500, 0.750, 1.000, 1.250, 1.500, 1.750, 2.000, 2.250, 2.500 };
+                Cargo.incTable = new int[] { 0, 125, 200, 225, 250, 275, 300, 325, 350, 375, 400 };
+                Cargo.incTableMilli = new double[] { 0.0, 0.125, 0.200, 0.225, 0.250, 0.275, 0.300, 0.325, 0.350, 0.375, 0.400 };
+            }
+        }
 
         /// <summary>
         /// Relic 4-4 启迪回响自动建造恒星要塞，当巨构框架或节点被建造时
@@ -1458,10 +1604,10 @@ namespace DSP_Battle
 
         public static void CheckRerollCost()
         {
-            if (Relic.HaveRelic(4, 1))
-                Relic.basicMatrixCost = (int)(0.5 * Relic.defaultBasicMatrixCost);
-            else
-                Relic.basicMatrixCost = Relic.defaultBasicMatrixCost;
+            //if (Relic.HaveRelic(4, 1))
+            //    Relic.basicMatrixCost = (int)(0.5 * Relic.defaultBasicMatrixCost);
+            //else
+            //    Relic.basicMatrixCost = Relic.defaultBasicMatrixCost;
         }
     }
 }

@@ -125,8 +125,8 @@ namespace DSP_Battle
             //计算当前机甲能量可支持的最大运行状态的水滴数
             double mechaCurEnergy = GameMain.mainPlayer.mecha.coreEnergy;
             long energyThreshold = 100000000;
-            if (Relic.HaveRelic(0, 5))
-                energyThreshold /= 4;
+            if (Relic.HaveRelic(1, 4))
+                energyThreshold /= 2;
             int maxWorkingDropletsNew = (int)((long)mechaCurEnergy / energyThreshold);
 
             //每个水滴update
@@ -683,8 +683,8 @@ namespace DSP_Battle
             if (state >= 2 && state <= 3 && working) //只有不是飞出、返航过程，才会消耗能量
             {
                 double ratio = 1.0;
-                if (Relic.HaveRelic(0, 5))
-                    ratio *= 0.25;
+                if (Relic.HaveRelic(1, 4))
+                    ratio *= 0.5;
                 if(validTargetEnemy)
                     Droplets.ForceConsumeMechaEnergy(Droplets.energyConsumptionPerTick * ratio);
                 else
@@ -792,7 +792,11 @@ namespace DSP_Battle
                 VectorLF3 newBegin = GetCurrentUPos();
                 if (lastMaxt - lastT <= 0.035) //到头了，执行转向/重新索敌
                 {
-                    if (CheckOrSearchTarget())
+                    if(forceLaunchState == 0 && !DiscoverSpaceEnemy()) // 被动接敌模式且附近无敌人，返航
+                    {
+                        state = 4;
+                    }
+                    else if (CheckOrSearchTarget())
                     {
                         state = 2; //回到追敌攻击状态
                         VectorLF3 uEnd = swarm.bulletPool[bulletIds[0]].uEnd;
