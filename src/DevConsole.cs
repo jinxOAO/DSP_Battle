@@ -133,11 +133,21 @@ namespace DSP_Battle
                             StarAssembly.ResetInGameDataByStarIndex(idx);
                         Print($"Set megastructure type in starIndex {idx} to type {type}.");
                         break;
-                    case "setwavenum":
-                        int idx2 = Convert.ToInt32(param[1]);
-                        int num2 = Convert.ToInt32(param[2]);
-                        Configs.wavePerStar[idx2] = num2;
-                        Print($"Wave count of starIndex {idx2} is set to {num2}.");
+                    case "setsf":
+                        int idx3 = Convert.ToInt32(param[1]);
+                        int type3 = Convert.ToInt32(param[2]);
+                        //if (type3 < 0 || type3 > 3) type3 = 2;
+                        int num3 = Convert.ToInt32(param[3]);
+                        int cnum3 = num3 * StarFortress.compoPerModule[type3]; // 这里会因为越界或者负数的索引抛出异常，防止后面的字典加入无效的数据
+                        StarFortress.moduleComponentCount[idx3].AddOrUpdate(type3, cnum3, (x, y) => cnum3);
+                        StarFortress.moduleMaxCount[idx3][type3] = Math.Max(StarFortress.moduleMaxCount[idx3][type3], num3);
+                        if (StarFortress.CapacityRemaining(idx3) < 0)
+                        {
+                            int addModule2 = -StarFortress.CapacityRemaining(idx3);
+                            StarFortress.moduleComponentCount[idx3].AddOrUpdate(2, addModule2 * StarFortress.compoPerModule[2], (x, y) => y + addModule2 * StarFortress.compoPerModule[2]);
+                            StarFortress.moduleMaxCount[idx3][2] = Math.Max(StarFortress.moduleMaxCount[idx3][2], (StarFortress.moduleComponentCount[idx3].GetOrAdd(2, 0) + addModule2) / StarFortress.compoPerModule[2]);
+                        }
+                        Print($"Set starIndex {idx3} star fortress module{type3} built count to {num3}.");
                         break;
                     case "setrank":
                         Rank.rank = Math.Min(Math.Max(Convert.ToInt32(param[1]), 0), 10);
@@ -496,6 +506,7 @@ namespace DSP_Battle
                 "<color=#ffffff>c</color>或<color=#ffffff>clear</color> 清空输出缓存" + "\n" +
                 "<color=#ffffff>cur</color> 输出伊卡洛斯所在星系的starId和starIndex，并输出伊卡洛斯所在行星的planetId" + "\n" +
                 "<color=#ffffff>setmega [param1] [param2]</color> 立刻将星系index为[param1]的巨构类型设置为[param2]" + "\n" +
+                "<color=#ffffff>setsf [param1] [param2] [param3]</color>  立刻将星系index为[param1]的恒星要塞第[param2]个模块已建成数量设置为[param3]" + "\n" +
                 "<color=#ffffff>setrank [param1]</color> 将功勋等级设置为[param1]，改变等级后还会使经验降低至0" + "\n" +
                 "<color=#ffffff>addexp [param1]</color> 增加[param1]经验，可升级，也可为负但不会降级" + "\n" +
                 "<color=#ffffff>newrelic</color> 立刻随机并打开选择圣物窗口" + "\n" +
@@ -507,7 +518,7 @@ namespace DSP_Battle
                 "<color=#ffffff>es [param1]</color> 设定当前事件链为[param1]" + "\n" +
                 "<color=#ffffff>est [param1]</color> 当前事件链转移至[param1]" + "\n" +
                 "---------------------- help ----------------------";
-            Print(allCmds,16, false); // 这个forceLineCount传值取决于allCmds的行数
+            Print(allCmds,17, false); // 这个forceLineCount传值取决于allCmds的行数
         }
 
         public static void ClearOutputField()
