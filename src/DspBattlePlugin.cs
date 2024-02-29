@@ -112,7 +112,7 @@ namespace DSP_Battle
                 //Debug.Log("Z test log by TCFV");
                 //Debug.LogError("Z error log by TCFV");
                 //EnemyShips.TestDestoryStation();
-                Rank.AddExp(100000);
+                //Rank.AddExp(100000);
                 if (MoreMegaStructure.MoreMegaStructure.curStar != null)
                 {
                     int starIndex = MoreMegaStructure.MoreMegaStructure.curStar.index;
@@ -264,7 +264,7 @@ namespace DSP_Battle
             Rank.Export(w);
             Relic.Export(w);
             EventSystem.Exprot(w);
-            //StarFortress.Export(w);
+            StarFortress.Export(w);
             //DevConsole.Export(w);
         }
 
@@ -275,7 +275,7 @@ namespace DSP_Battle
             Rank.Import(r);
             Relic.Import(r);
             EventSystem.Import(r);
-            //StarFortress.Import(r);
+            StarFortress.Import(r);
             //DevConsole.Import(r);
 
             BattleProtos.ReCheckTechUnlockRecipes();
@@ -288,8 +288,6 @@ namespace DSP_Battle
         public void IntoOtherSave()
         {
             Configs.IntoOtherSave();
-            //EnemyShips.IntoOtherSave();
-            //MissileSilo.IntoOtherSave();
             Droplets.IntoOtherSave();
             Rank.IntoOtherSave();
             Relic.IntoOtherSave();
@@ -298,8 +296,6 @@ namespace DSP_Battle
 
             DevConsole.IntoOtherSave();
 
-            //EnemyShipUIRenderer.Init();
-            //EnemyShipRenderer.Init();
             BattleProtos.ReCheckTechUnlockRecipes();
             BattleProtos.UnlockTutorials();
             //BattleBGMController.InitWhenLoad();

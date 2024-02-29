@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -22,6 +23,7 @@ namespace DSP_Battle
         public static List<int> recordRelics = new List<int>(); // 被Relic4-6保存的圣物
         public static int autoConstructMegaStructureCountDown = 0;
         public static int autoConstructMegaStructurePPoint = 0;
+        public static int trueDamageActive = 0;
 
         //不存档的设定参数
         public static int relicHoldMax = 8; // 最多可以持有的遗物数
@@ -69,7 +71,7 @@ namespace DSP_Battle
             return (int)Math.Pow(2, num);
         }
 
-        public static void InitAll()
+        public static void InitAllAfterLoad()
         {
             starsWithMegaStructure.Clear();
             starsWithMegaStructureUnfinished.Clear();
@@ -80,10 +82,17 @@ namespace DSP_Battle
             Configs.relic2_17Activated = 0;
             RelicFunctionPatcher.CheckSolarSailLife();
             Configs.eliteDurationFrames = 3600 * 3 + 60 * 20 * Relic.GetCursedRelicCount();
-            RelicFunctionPatcher.CheckRerollCost();
-            RelicFunctionPatcher.RefreshCargoAccIncTable();
+            RefreshConfigs();
             UIEventSystem.InitAll();
             UIEventSystem.InitWhenLoad();
+        }
+
+        public static void RefreshConfigs()
+        {
+            RelicFunctionPatcher.RefreshRerollCost();
+            RelicFunctionPatcher.RefreshCargoAccIncTable();
+            RelicFunctionPatcher.RefreshDisturbPrefabDesc();
+            RelicFunctionPatcher.RefreshBlueBuffStarAssemblyEffect();
         }
 
         public static int AddRelic(int type, int num)
@@ -93,7 +102,7 @@ namespace DSP_Battle
             if ((relics[type] & 1 << num) > 0) return 0; // 已有
             if (GetRelicCount() >= relicHoldMax) return -3; // 超上限
 
-            // 下面是一些特殊的Relic在选择时不是简单地改一个拥有状态就行，需要单独对待
+            // 下面是一些特殊的Relic在选择时不是简单地改一个拥有状态就行，需要单独对待if (type == 0 && num == 2)
             if (type == 0 && num == 2)
             {
                 relics[type] |= 1 << num;
@@ -113,6 +122,10 @@ namespace DSP_Battle
                 GameMain.data.history.UnlockTechUnlimited(1919, false);
                 GameMain.data.mainPlayer.TryAddItemToPackage(9511, 3, 0, true);
                 Utils.UIItemUp(9511, 3);
+            }
+            else if (type == 1 && num == 10)
+            {
+                trueDamageActive = 1;
             }
             else if (type == 3 && num == 5)
             {
@@ -166,8 +179,7 @@ namespace DSP_Battle
             {
                 relics[type] |= 1 << num;
             }
-            RelicFunctionPatcher.RefreshCargoAccIncTable();
-            RelicFunctionPatcher.CheckRerollCost();
+            RefreshConfigs();
             return 1;
         }
 
@@ -188,14 +200,23 @@ namespace DSP_Battle
             UIMessageBox.Show("删除遗物确认标题".Translate(), String.Format( "删除遗物确认警告".Translate(), ("遗物名称" + removeType.ToString() + "-" + removeNum.ToString()).Translate().Split('\n')[0]),
             "否".Translate(), "是".Translate(), 1, new UIMessageBox.Response(RegretRemoveRelic), new UIMessageBox.Response(() =>
             {
-                relics[removeType] = relics[removeType] ^ 1 << removeNum;
+                RemoveRelic(removeType, removeNum);
 
                 //UIMessageBox.Show("成功移除！".Translate(), "已移除遗物描述".Translate() + ("遗物名称" + removeType.ToString() + "-" + removeNum.ToString()).Translate().Split('\n')[0], "确定".Translate(), 1);
 
                 UIRelic.CloseSelectionWindow();
-                UIRelic.RefreshSlotsWindowUI();
                 UIRelic.HideSlots();
             }));
+        }
+
+        public static void RemoveRelic(int removeType, int removeNum)
+        {
+            if (Relic.HaveRelic(removeType, removeNum))
+            {
+                relics[removeType] = relics[removeType] ^ 1 << removeNum;
+                UIRelic.RefreshSlotsWindowUI();
+                RefreshConfigs();
+            }
         }
 
         public static void RegretRemoveRelic()
@@ -410,6 +431,7 @@ namespace DSP_Battle
             }
             w.Write(autoConstructMegaStructureCountDown);
             w.Write(autoConstructMegaStructurePPoint);
+            w.Write(trueDamageActive);
         }
 
         public static void Import(BinaryReader r)
@@ -459,7 +481,8 @@ namespace DSP_Battle
             }
             autoConstructMegaStructureCountDown = r.ReadInt32();
             autoConstructMegaStructurePPoint = r.ReadInt32();
-            InitAll();
+            trueDamageActive = r.ReadInt32();
+            InitAllAfterLoad();
         }
 
         public static void IntoOtherSave()
@@ -472,13 +495,19 @@ namespace DSP_Battle
             recordRelics.Clear();
             autoConstructMegaStructureCountDown = 0;
             autoConstructMegaStructurePPoint = 0;
-            InitAll();
+            trueDamageActive = 0;
+            InitAllAfterLoad();
         }
     }
 
 
     public class RelicFunctionPatcher
     {
+        public static float r0 = 50;
+        public static float r1 = 1;
+        public static float r2 = 1;
+        public static float r3 = 1;
+
         [HarmonyPostfix]
         [HarmonyPatch(typeof(GameData), "GameTick")]
         public static void RelicFunctionGameTick(long time)
@@ -729,6 +758,15 @@ namespace DSP_Battle
             return true;
         }
 
+        public static void RefreshBlueBuffStarAssemblyEffect()
+        {
+            if (Relic.HaveRelic(0, 1))
+                MoreMegaStructure.StarAssembly.blueBuffByTCFV = 1;
+            else
+                MoreMegaStructure.StarAssembly.blueBuffByTCFV = 0;
+        }
+
+
         /// <summary>
         /// relic0-2
         /// </summary>
@@ -834,7 +872,7 @@ namespace DSP_Battle
         }
 
         /// <summary>
-        /// relic 0-5 虚空荆棘反弹伤害
+        /// relic 0-5 2-16 3-12 虚空荆棘反弹伤害，各种护盾伤害减免和规避
         /// </summary>
         /// <param name="__instance"></param>
         /// <param name="caster"></param>
@@ -1062,9 +1100,6 @@ namespace DSP_Battle
         [HarmonyPatch(typeof(LocalDisturbingWave), "TickSkillLogic")]
         public static bool DisturbingDamagePatch(ref LocalDisturbingWave __instance, ref SkillSystem skillSystem)
         {
-            if (!Relic.HaveRelic(0, 8))
-                return true;
-
             ref var _this = ref __instance;
             if (_this.life <= 0)
             {
@@ -1098,7 +1133,7 @@ namespace DSP_Battle
             TurretComponent[] array = null;
             int num8 = 0;
             int num9 = 0;
-            bool flag = _this.caster.type == ETargetType.None && planetFactory.entityPool[_this.caster.id].turretId > 0;
+            bool flag = (_this.caster.type == ETargetType.None || _this.caster.type == ETargetType.Ruin) && planetFactory.entityPool[_this.caster.id].turretId > 0; // 判断条件额外增加了ruin是自己设定的
             if (flag)
             {
                 num7 = planetFactory.entityPool[_this.caster.id].turretId;
@@ -1175,7 +1210,7 @@ namespace DSP_Battle
                                                                 flag2 = false;
                                                             }
                                                         }
-                                                        if (flag2)
+                                                        if (flag2 && _this.caster.type == ETargetType.None) // 由relic1-11发射的额外波，设置为casterType是ruin，不消耗额外弹药
                                                         {
                                                             ref TurretComponent ptr4 = ref ptr;
                                                             ptr4.bulletCount -= 1;
@@ -1184,19 +1219,22 @@ namespace DSP_Battle
                                                     if (flag2)
                                                     {
                                                         // 造成伤害
-                                                        int realDamage = ptr.itemId == 1612 ? Relic.disturbDamage1612 : Relic.disturbDamage1613;
-                                                        realDamage = (int)(realDamage * 1.0 * GameMain.history.magneticDamageScale);
-                                                        realDamage = Relic.BonusDamage(realDamage, 1);
-                                                        SkillTargetLocal skillTargetLocal = default(SkillTargetLocal);
-                                                        skillTargetLocal.type = ETargetType.Enemy;
-                                                        skillTargetLocal.id = ptr2.id;
-                                                        skillSystem.DamageGroundObjectByLocalCaster(planetFactory, realDamage, 1, ref skillTargetLocal, ref _this.caster);
+                                                        if (Relic.HaveRelic(0, 8))
+                                                        {
+                                                            int realDamage = ptr.itemId == 1612 ? Relic.disturbDamage1612 : Relic.disturbDamage1613;
+                                                            realDamage = (int)(realDamage * 1.0 * GameMain.history.magneticDamageScale);
+                                                            realDamage = Relic.BonusDamage(realDamage, 1);
+                                                            SkillTargetLocal skillTargetLocal = default(SkillTargetLocal);
+                                                            skillTargetLocal.type = ETargetType.Enemy;
+                                                            skillTargetLocal.id = ptr2.id;
+                                                            skillSystem.DamageGroundObjectByLocalCaster(planetFactory, realDamage, 1, ref skillTargetLocal, ref _this.caster);
+                                                        }
                                                         // 原逻辑
                                                         ptr3.disturbValue = num19;
                                                         DFGBaseComponent dfgbaseComponent = planetFactory.enemySystem.bases[(int)ptr2.owner];
                                                         if (dfgbaseComponent != null && dfgbaseComponent.id == (int)ptr2.owner)
                                                         {
-                                                            skillSystem.AddGroundEnemyHatred(dfgbaseComponent, ref ptr2, _this.caster.type, _this.caster.id, (int)(num19 * 800f + 0.5f));
+                                                            skillSystem.AddGroundEnemyHatred(dfgbaseComponent, ref ptr2, ETargetType.None, _this.caster.id, (int)(num19 * 800f + 0.5f));
                                                         }
                                                     }
                                                 }
@@ -1269,7 +1307,6 @@ namespace DSP_Battle
         /// <summary>
         /// relic1-2
         /// </summary>
-
         [HarmonyPrefix]
         [HarmonyPatch(typeof(PlanetATField), "BreakShield")]
         public static bool BreakFieldPostPatch(ref PlanetATField __instance)
@@ -1292,6 +1329,173 @@ namespace DSP_Battle
         }
 
 
+        /// <summary>
+        /// relic 1-3 1-10 2-12
+        /// </summary>
+        /// <param name="__instance"></param>
+        /// <param name="damage"></param>
+        /// <param name="slice"></param>
+        /// <param name="target"></param>
+        /// <param name="caster"></param>
+        /// <returns></returns>
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(SkillSystem), "DamageObject")]
+        public static bool DamageObjectPrePatch(ref SkillSystem __instance, ref int damage, int slice, ref SkillTarget target, ref SkillTarget caster)
+        {
+            bool r0103 = Relic.HaveRelic(1, 3);
+            bool r0109 = Relic.HaveRelic(1, 9);
+            bool r0110 = Relic.trueDamageActive > 0;
+            bool r0212 = Relic.HaveRelic(2, 12);
+            if (r0103 || r0109 || r0110 || r0212)
+            {
+                ref var _this = ref __instance;
+                float factor = 1.0f;
+                int antiArmor = 0;
+                int astroId = target.astroId;
+                if (astroId > 1000000)
+                {
+                    if (target.type == ETargetType.Enemy)
+                    {
+                        EnemyDFHiveSystem enemyDFHiveSystem = _this.sector.dfHivesByAstro[astroId - 1000000];
+                        int starIndex = enemyDFHiveSystem?.starData?.index ?? -1;
+                        if (r0103 && starIndex >= 0 && starIndex < GameMain.data.dysonSpheres.Length)
+                        {
+                            DysonSphere sphere = GameMain.data.dysonSpheres[starIndex];
+                            if (sphere != null)
+                                factor += (float)(3 * (1.0 - sphere.energyDFHivesDebuffCoef));
+                        }
+                        if (r0110 && enemyDFHiveSystem != null)
+                        {
+                            int level = enemyDFHiveSystem.evolve.level;
+                            int num2 = 100 / slice;
+                            int num3 = level * num2 / 2;
+                            antiArmor = num3;
+                        }
+                    }
+                    else if (target.type == ETargetType.Craft && r0109)
+                    {
+                        ///////////////////////////////////////////////////////////////////////////////////////
+                    }
+                }
+                else if (astroId > 100 && astroId <= 204899 && astroId % 100 > 0)
+                {
+                    if (caster.astroId == astroId)
+                    {
+                        return true; // 交由DamageGroundObjectByLocalCaster的prePatch自行处理，因为这个DamageGroundObjectByLocalCaster不止被DamageObject调用，还被各种skill的TickSkillLogic调用
+                    }
+                    else
+                    {
+                        return true; // 也交由DamageGroundObjectByRemoteCaster的prePatch自行处理
+                    }
+                }
+                else if (astroId % 100 == 0 && target.type == ETargetType.Craft)
+                {
+
+                }
+                damage = Relic.BonusedDamage(damage, factor) + antiArmor;
+            }
+            return true;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(SkillSystem), "DamageGroundObjectByLocalCaster")]
+        public static bool DamageGroundObjectByLocalCasterPrePatch(ref SkillSystem __instance, PlanetFactory factory, ref int damage, int slice, ref SkillTargetLocal target)
+        {
+            if (target.id <= 0)
+            {
+                return true;
+            }
+            bool r0109 = Relic.HaveRelic(1, 9);
+            bool r0110 = Relic.trueDamageActive > 0;
+            bool r0212 = Relic.HaveRelic(2, 12);
+            if (r0109 || r0110 || r0212)
+            {
+                ref var _this = ref __instance;
+                float factor = 1.0f;
+                int antiArmor = 0;
+                if (target.type == ETargetType.Enemy)
+                {
+                    ref EnemyData ptr2 = ref factory.enemyPool[target.id];
+                    if (ptr2.id != target.id || ptr2.isInvincible)
+                    {
+                        return true;
+                    }
+                    DFGBaseComponent dfgbaseComponent = null;
+                    if (ptr2.owner > 0)
+                    {
+                        dfgbaseComponent = factory.enemySystem.bases[(int)ptr2.owner];
+                        if (dfgbaseComponent.id != (int)ptr2.owner)
+                        {
+                            dfgbaseComponent = null;
+                        }
+                    }
+                    if (dfgbaseComponent != null)
+                    {
+                        int level = dfgbaseComponent.evolve.level;
+                        int num2 = 100 / slice;
+                        int num3 = level * num2 / 5;
+                        antiArmor = num3;
+                    }
+                }
+                else if (target.type == ETargetType.Craft)
+                {
+
+                }
+
+                damage = Relic.BonusedDamage(damage, factor) + antiArmor;
+            }
+            return true;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(SkillSystem), "DamageGroundObjectByRemoteCaster")]
+        public static bool DamageGroundObjectByRemoteCastPrePatch(ref SkillSystem __instance, PlanetFactory factory, ref int damage, int slice, ref SkillTargetLocal target)
+        {
+            if (target.id <= 0)
+            {
+                return true;
+            }
+            bool r0109 = Relic.HaveRelic(1, 9);
+            bool r0110 = Relic.trueDamageActive > 0;
+            bool r0212 = Relic.HaveRelic(2, 12);
+            if (r0109 || r0110 || r0212)
+            {
+                ref var _this = ref __instance;
+                float factor = 1.0f;
+                int antiArmor = 0;
+                if (target.type == ETargetType.Enemy)
+                {
+                    ref EnemyData ptr2 = ref factory.enemyPool[target.id];
+                    if (ptr2.id != target.id || ptr2.isInvincible)
+                    {
+                        return true;
+                    }
+                    DFGBaseComponent dfgbaseComponent = null;
+                    if (ptr2.owner > 0)
+                    {
+                        dfgbaseComponent = factory.enemySystem.bases[(int)ptr2.owner];
+                        if (dfgbaseComponent.id != (int)ptr2.owner)
+                        {
+                            dfgbaseComponent = null;
+                        }
+                    }
+                    if (dfgbaseComponent != null)
+                    {
+                        int level = dfgbaseComponent.evolve.level;
+                        int num2 = 100 / slice;
+                        int num3 = level * num2 / 5;
+                        antiArmor = num3;
+                    }
+                }
+                else if (target.type == ETargetType.Craft)
+                {
+
+                }
+
+                damage = Relic.BonusedDamage(damage, factor) + antiArmor;
+            }
+            return true;
+        }
 
         /// <summary>
         /// relic1-7 relic3-11
@@ -1328,6 +1532,75 @@ namespace DSP_Battle
                 }
             }
         }
+
+        /// <summary>
+        /// relic 1-11
+        /// </summary>
+        /// <param name="__instance"></param>
+        /// <param name="factory"></param>
+        /// <param name="pdesc"></param>
+        /// <param name="power"></param>
+        /// <param name="gameTick"></param>
+        /// <param name="combatUpgradeData"></param>
+        /// <returns></returns>
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(TurretComponent), "Shoot_Disturb")]
+        public static bool ShootDisturbPostPatch(ref TurretComponent __instance, PlanetFactory factory, PrefabDesc pdesc, float power, long gameTick, ref CombatUpgradeData combatUpgradeData)
+        {
+            if (power < 0.1f || (__instance.bulletCount == 0 && __instance.itemCount == 0))
+            {
+                return false;
+            }
+            int num = __instance.phasePos;
+            int num2 = pdesc.turretRoundInterval / pdesc.turretROF;
+            int flag = 0;
+            if (num % num2 == (int)(gameTick % (long)num2))
+            {
+                flag = 1;
+            }
+            else if (Relic.HaveRelic(1, 11))
+            {
+                if (num % num2 == (int)((gameTick - 30) % (long)num2))
+                    flag = 2;
+                else if (num % num2 == (int)((gameTick - 60) % (long)num2))
+                    flag = 2;
+            }
+            if (flag > 0)
+            {
+                ref LocalDisturbingWave ptr = ref GameMain.data.spaceSector.skillSystem.turretDisturbingWave.Add();
+                ptr.astroId = factory.planetId;
+                ptr.protoId = (int)__instance.itemId;
+                ptr.center = factory.entityPool[__instance.entityId].pos;
+                ptr.rot = factory.entityPool[__instance.entityId].rot;
+                ptr.mask = ETargetTypeMask.Enemy;
+                ptr.caster.type = flag == 1 ? ETargetType.None : ETargetType.Ruin;
+                ptr.caster.id = __instance.entityId;
+                ptr.disturbStrength = (float)__instance.bulletDamage * pdesc.turretDamageScale * combatUpgradeData.magneticDamageScale * power * 0.01f * flag;
+                ptr.thickness = 2.5f;
+                ptr.diffusionSpeed = 45f;
+                ptr.diffusionMaxRadius = pdesc.turretMaxAttackRange;
+                ptr.StartToDiffuse();
+            }      
+            return false;
+        }
+
+        /// <summary>
+        /// trlic 1-11
+        /// </summary>
+        public static void RefreshDisturbPrefabDesc()
+        {
+            if(Relic.HaveRelic(1, 11))
+            {
+                PlanetFactory.PrefabDescByModelIndex[422].turretMaxAttackRange = 80;
+                PlanetFactory.PrefabDescByModelIndex[422].turretDamageScale = 2;
+            }
+            else
+            {
+                PlanetFactory.PrefabDescByModelIndex[422].turretMaxAttackRange = 40;
+                PlanetFactory.PrefabDescByModelIndex[422].turretDamageScale = 1;
+            }
+        }
+
 
         /// <summary>
         /// relic2-5 3-10
@@ -1602,7 +1875,7 @@ namespace DSP_Battle
             }
         }
 
-        public static void CheckRerollCost()
+        public static void RefreshRerollCost()
         {
             //if (Relic.HaveRelic(4, 1))
             //    Relic.basicMatrixCost = (int)(0.5 * Relic.defaultBasicMatrixCost);

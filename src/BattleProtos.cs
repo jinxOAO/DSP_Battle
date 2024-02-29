@@ -1391,7 +1391,7 @@ namespace DSP_Battle
                 ep.SetDecision(1, new int[] { 0 }, new int[] { 14 }, new int[] { 0 });
                 EventSystem.protos.Add(id, ep);
                 RegisterString("ept" + id.ToString(), "", "分析日志");
-                RegisterString("epd" + id.ToString(), "", "分析模块完成了对日志的破坏性分析，数据指示元驱动的物理实体被分散保存在某行星上的地面黑雾基地中。摧毁该行星上的全部巢穴就可以取回驱动实体，以便进行下一步的解译了。");
+                RegisterString("epd" + id.ToString(), "", "分析模块完成了对日志的破坏性分析，数据指示元驱动的物理实体被分散保存在某行星上的地面黑雾基地中。摧毁并填埋该行星上的全部巢穴就可以取回驱动实体，以便进行下一步的解译了。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort", "放弃搜寻");
                 RegisterString("epdt" + id.ToString() + "-1", "Retrieve meta drive", "取回元驱动");
             }
@@ -1766,7 +1766,7 @@ namespace DSP_Battle
                 ep.SetDecision(0, new int[] { }, new int[] { 0 }, new int[] { 0 });
                 EventSystem.protos.Add(id, ep);
                 RegisterString("ept" + id.ToString(), "", "元驱动解译");
-                RegisterString("epd" + id.ToString(), "", "元驱动的信息被部分地解译了出来，但是分成了多条解码轨道，目前一些解码轨道是接近稳定的。你可以直接从中选择一条，将其从其他轨道中分离出来，这将明确并启用它的实际功效，使我们未来可以直接调用该API来规避或重写一些低阶的宇宙法则，但这也会摧毁提取其他解码轨的可能性。你也可以使用黑雾矩阵的友元信息重新编译所有轨道，并重新解译以试图找出其他亚稳态的解码轨。但注意，每次你进行重新编译-解译过程，都会使得圣物变得不稳定，从而增加下一次编译的难度，并加倍黑雾矩阵的花费。");
+                RegisterString("epd" + id.ToString(), "", "元驱动的信息被部分地解译了出来，但是分成了多条解码轨道，目前一些解码轨道是接近稳定的。你可以直接从中选择一条，将其从其他轨道中分离出来，这将明确并启用它的实际功效，使我们未来可以直接调用该API来规避或重写一些低阶的宇宙法则，但这也会摧毁提取其他解码轨的可能性。你也可以使用黑雾矩阵的友元信息重新编译所有轨道，并重新解译以试图找出其他亚稳态的解码轨。但注意，每次你进行重新编译-解译过程，都会使得元驱动变得不稳定，从而增加下一次编译的难度，并加倍黑雾矩阵的花费。");
                 RegisterString("epdt" + id.ToString() + "-0", "OK", "好的");
             }
             {

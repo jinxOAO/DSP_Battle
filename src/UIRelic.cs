@@ -933,7 +933,12 @@ namespace DSP_Battle
                             for (int num = 0; num < Relic.relicNumByType[type]; num++)
                             {
                                 if (Configs.developerMode) relicNotHave.Add(num);
-                                if (!Relic.HaveRelic(type, num) && !Relic.alternateRelics.Contains(type * 100 + num)) relicNotHave.Add(num);
+                                if (!Relic.HaveRelic(type, num) && !Relic.alternateRelics.Contains(type * 100 + num))
+                                {
+                                    if (type == 1 && num == 10 && Relic.trueDamageActive > 0) // 真实伤害不占用槽位，但是一旦获取后也不会再占用刷新栏
+                                        continue;
+                                    relicNotHave.Add(num);
+                                }
                             }
                             if (relicNotHave.Count > 0)
                             {

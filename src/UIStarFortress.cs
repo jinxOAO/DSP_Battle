@@ -9,6 +9,7 @@ using UnityEngine.UI;
 
 namespace DSP_Battle
 {
+    // 因为暂停此功能，已在InitAll()最后隐藏了UI
     public class UIStarFortress
     {
         public static GameObject StarFortressUIObj = null; // UI总面板
@@ -157,6 +158,9 @@ namespace DSP_Battle
                 CreateTipButton(expandModuleObj.transform, -60, 20, "平台扩展模块", "平台扩展模块说明");
                 CreateSetButtons(expandModuleObj.transform, 2);
 
+                // 目前取消恒星要塞的开发，隐藏所有ui
+                StarFortressUIObj.SetActive(false);
+
             }
 
             starFortressTitleText.text = "恒星要塞".Translate();
@@ -260,7 +264,8 @@ namespace DSP_Battle
 
             for (int i = 0; i < moduleCountText.Count; i++)
             {
-                moduleCountText[i].text = StarFortress.CalcModuleBuilt(starIndex)[i].ToString() + "/" + StarFortress.moduleMaxCount[starIndex][i].ToString();
+                StarFortress.CalcModuleBuilt(starIndex);
+                moduleCountText[i].text = StarFortress.moduleBuiltCount[starIndex][i].ToString() + "/" + StarFortress.moduleMaxCount[starIndex][i].ToString();
                 componentCountText[i].text = StarFortress.moduleComponentCount[starIndex][i].ToString() + "/" + (StarFortress.moduleMaxCount[starIndex][i] * StarFortress.compoPerModule[i]).ToString();
             }
 
@@ -338,12 +343,12 @@ namespace DSP_Battle
             else
             {
                 int resultCount = Math.Max(0, StarFortress.moduleMaxCount[starIndex][index] + delta);
-                int alreadyBuilt = StarFortress.CalcModuleBuilt(starIndex)[index];
+                int alreadyBuilt = StarFortress.moduleBuiltCount[starIndex][index];
                 if (alreadyBuilt > resultCount || (alreadyBuilt == resultCount && StarFortress.moduleComponentCount[starIndex][index] % StarFortress.compoPerModule[index] != 0)) // 说明降低之后即将拆除部分已建成的
                 {
                     if (index == 2) // 已建造好的扩展模块无法被拆除，所以上限不会减小到已建造好的数量之下
                     {
-                        resultCount = StarFortress.CalcModuleBuilt(starIndex)[index];
+                        resultCount = StarFortress.moduleBuiltCount[starIndex][index];
                         //if (StarFortress.moduleComponentCount[starIndex][index] % StarFortress.compoPerModule[index] != 0) // 这部分原本是为了防止已建成的部分组件点数浪费但是我觉得没必要
                         //    resultCount += 1;
 

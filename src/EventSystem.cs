@@ -492,11 +492,13 @@ namespace DSP_Battle
                                 {
                                     int remaining = 0;
                                     EnemyData[] gPool = factory.enemyPool;
-                                    for (int j = 0; j < factory.enemyCursor; i++)
+                                    for (int j = 0; j < factory.enemyCursor; j++)
                                     {
                                         ref EnemyData ptr = ref gPool[j];
-                                        if (ptr.id > 0)
-                                            remaining++;
+                                        if (ptr.id > 0 && ptr.dfGBaseId == 0)
+                                        {
+                                                remaining++;
+                                        }
                                     }
                                     recorder.requestMeet[i] = -remaining;
                                 }
@@ -522,7 +524,7 @@ namespace DSP_Battle
                                 {
                                     int remaining = 0;
                                     EnemyData[] gPool = factory.enemyPool;
-                                    for (int j = 0; j < factory.enemyCursor; i++)
+                                    for (int j = 0; j < factory.enemyCursor; j++)
                                     {
                                         ref EnemyData ptr = ref gPool[j];
                                         if (ptr.id > 0 && ptr.dfGBaseId > 0)

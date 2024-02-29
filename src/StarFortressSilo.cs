@@ -23,6 +23,7 @@ namespace DSP_Battle
             }
         }
 
+
         public static bool SiloSubPatch(ref SiloComponent __instance, float power, DysonSphere sphere, AnimData[] animPool, int[] consumeRegister, ref uint __result)
         {
             if (__instance.needs == null)
