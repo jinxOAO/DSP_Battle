@@ -16,7 +16,6 @@ namespace DSP_Battle
         public static int rank = 0;
         public static int exp = 0;
 
-         // relic3-17 逐渐推进巨构建造的剩余帧数倒数，无需存档，读档时设置为0
 
         public static void InitRank()
         {
@@ -33,22 +32,20 @@ namespace DSP_Battle
             {
                 Promotion();
             }
-            int inc;
-            if(GameMain.mainPlayer.package.TakeItem(8033, 1, out inc)>0)
-            {
-                AddExp(Configs.expPerAlienMeta);
-                if (time % 60 == 10 && Relic.HaveRelic(2,1)) // relic2-1 互惠互利 上传元数据的时候建造巨构，每60帧建造12个点数。由于异星元数据很多，一般会连续上传数十秒，因此不怕判定点不在第10帧的微小损失
-                {
-                    Relic.AutoBuildMegaStructure();
-                }
-            }
+            //int inc;
+            //if(GameMain.mainPlayer.package.TakeItem(8033, 1, out inc)>0)
+            //{
+            //    AddExp(Configs.expPerAlienMeta);
+            //}
             
         }
 
         public static void AddExp(int num)
         {
             if (rank >= 10) return;
-            int realExp = (int)(num * Configs.expRatioByDifficulty[Configs.difficulty + 1]);
+            int realExp = num;
+            if (Relic.HaveRelic(3, 17)) // relic 3-17
+                realExp = (int)(realExp * 1.25);
             Interlocked.Add(ref exp, realExp);
         }
 
@@ -71,12 +68,22 @@ namespace DSP_Battle
                     GameMain.history.miningCostRate *= 0.625f;
                 }
             }
-            if (Relic.HaveRelic(2, 1))
-                Relic.autoConstructMegaStructureCountDown = rank * rank * rank * 60;
+            if (Relic.HaveRelic(2, 1)) // relic 2-1
+                Interlocked.Add(ref Relic.autoConstructMegaStructureCountDown, rank * rank * rank * 60);
             UIRank.ForceRefreshAll();
             UIRank.UIPromotionNotify();
         }
 
+        public static void DownGrade(bool clearExp = true)
+        {
+            if(clearExp)
+                Interlocked.Exchange(ref exp, 0);
+            if(rank > 0)
+            {
+                rank -= 1;
+                UIRank.ForceRefreshAll();
+            }
+        }
 
 
         public static void Export(BinaryWriter w)

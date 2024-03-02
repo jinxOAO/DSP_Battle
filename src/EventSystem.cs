@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using HarmonyLib;
 using Steamworks;
@@ -165,7 +166,7 @@ namespace DSP_Battle
                 }
                 else if (code == 3)
                 {
-                    Relic.autoConstructMegaStructureCountDown += amount / 120;
+                    Interlocked.Add(ref Relic.autoConstructMegaStructureCountDown, amount / 120);
                 }
                 else if (code == 4)
                     recorder.modifier[3] += amount;
@@ -211,6 +212,10 @@ namespace DSP_Battle
                     recorder.decodeType = code;
                     recorder.decodeTimeNeed = amount;
                     recorder.decodeTimeSpend = 0;
+                    if(Relic.HaveRelic(4, 6) && (code == 24 || code == 25)) // relic 4-6 负面效果 解译时间增加
+                    {
+                        recorder.decodeTimeNeed = amount + 3600 * 15;
+                    }
                 }
                 else if (code > 10000 && code < 20000)
                 {
@@ -552,6 +557,13 @@ namespace DSP_Battle
             }
         }
 
+        /// <summary>
+        /// 一些击杀效果 以及 relic 2-2 2-14 3-9 4-4
+        /// </summary>
+        /// <param name="__instance"></param>
+        /// <param name="gameData"></param>
+        /// <param name="skillSystem"></param>
+        /// <returns></returns>
         [HarmonyPrefix]
         [HarmonyPatch(typeof(CombatStat), "HandleZeroHp")]
         public static bool ZeroHpInceptor(ref CombatStat __instance, GameData gameData, SkillSystem skillSystem)
@@ -598,8 +610,18 @@ namespace DSP_Battle
 
                             if (Relic.HaveRelic(0, 0))
                             {
-                                Relic.autoConstructMegaStructurePPoint += 20 * (level / 15 + 1);
+                                Interlocked.Add(ref Relic.autoConstructMegaStructurePPoint, 20 * (level / 15 + 1));
                             }
+                            if (Relic.HaveRelic(2, 14) && Relic.Verify(Relic.kleptomancyProbability)) // relic 2-14
+                            {
+                                int itemId = Utils.RandDouble() < 0.5 ? 1803 : 1210;
+                                if (Relic.HaveRelic(0, 9)) // 金铲铲隐藏效果，给黄棒
+                                    itemId = Utils.RandDouble() < 0.3 ? 1804 : 1210;
+                                GameMain.mainPlayer.TryAddItemToPackage(itemId, 1, 0, true);
+                                Utils.UIItemUp(itemId, 1, 300);
+                            }
+                            if (Relic.HaveRelic(4, 4)) // relic 4-4 击杀时进行研究
+                                RelicFunctionPatcher.AddNotDFTechHash(Relic.hashGainBySpaceEnemy);
                         }
                     }
                 }
@@ -623,31 +645,73 @@ namespace DSP_Battle
                                     else if (code >= 40000 && code < 50000 && recorder.requestCount[i] > recorder.requestMeet[i])
                                     {
                                         int starIndex = code - 40000;
-                                        if(ptr3.originAstroId/100 - 1 == starIndex)
+                                        if (ptr3.originAstroId / 100 - 1 == starIndex)
                                             recorder.requestMeet[i]++;
                                     }
-                                    else if(code >= 2000000 && code < 3000000 && recorder.requestCount[i] > recorder.requestMeet[i] && recorder.requestCount[i] > 0)
+                                    else if (code >= 2000000 && code < 3000000 && recorder.requestCount[i] > recorder.requestMeet[i] && recorder.requestCount[i] > 0)
                                     {
                                         int planetId = code - 2000000;
-                                        if(ptr3.originAstroId == planetId)
+                                        if (ptr3.originAstroId == planetId)
                                             recorder.requestMeet[i]++;
                                     }
                                 }
                                 int level = 0;
-                                if(ptr3.owner > 0)
+                                if (ptr3.owner > 0)
                                 {
                                     DFGBaseComponent dfgbase = planetFactory.enemySystem.bases[ptr3.owner];
                                     level = dfgbase?.evolve.level ?? 0;
                                 }
-                                if (ptr3.dfGConnectorId + ptr3.dfGReplicatorId + ptr3.dfGShieldId + ptr3.dfGTurretId > 0)
-                                    Rank.AddExp(10 * (level + 1));
-                                else if (ptr3.dfGBaseId > 0)
-                                    Rank.AddExp(200 * (level + 1));
-                                else
-                                    Rank.AddExp(level + 1);
+                                if (!Relic.HaveRelic(4, 5)) // relic 4-5 阻止从地面单位获得经验值
+                                {
+                                    if (ptr3.dfGConnectorId + ptr3.dfGReplicatorId + ptr3.dfGShieldId + ptr3.dfGTurretId > 0)
+                                        Rank.AddExp(10 * (level + 1));
+                                    else if (ptr3.dfGBaseId > 0)
+                                        Rank.AddExp(200 * (level + 1));
+                                    else
+                                        Rank.AddExp(level + 1);
+                                }
 
                                 if (Relic.HaveRelic(0, 0))
-                                    Relic.autoConstructMegaStructurePPoint += (level + 10) / 10;
+                                    Interlocked.Add(ref Relic.autoConstructMegaStructurePPoint, (level + 10) / 10);
+
+                                if (Relic.HaveRelic(4, 4)) // relic 4-4 击杀时进行研究
+                                    RelicFunctionPatcher.AddNotDFTechHash(Relic.hashGainByGroundEnemy);
+                            }
+                        }
+                        else if ((Relic.HaveRelic(2, 2) || Relic.HaveRelic(3, 9)) && _this.objectType == 0) // relic 2-2 获得经验 // 妈的我总感觉这个能用来刷经验，但是也可以吧
+                        {
+                            ref EntityData ptr4 = ref planetFactory.entityPool[_this.objectId];
+                            if (ptr4.id > 0)
+                            {
+                                int protoId = ptr4.protoId;
+                                if (protoId == 2001 || protoId == 2011 || protoId == 2012 || protoId == 2101 || protoId == 2102 || protoId == 2201) // 低级传送带、低级分拣器和低级电线杆给的经验很少
+                                {
+                                    if(Relic.HaveRelic(2,2))
+                                        Rank.AddExp(1);
+                                    if (Relic.HaveRelic(3, 9))
+                                        Interlocked.Add(ref Relic.autoConstructMegaStructurePPoint, 1); // 每1000个点数大约相当于120个太阳帆或24个火箭
+                                }
+                                else if (protoId == 2104 || protoId == 2105 || protoId == 2210 || protoId == 2902 || protoId == 2318 || protoId == 2319) // 昂贵的建筑，小太阳、火箭发射井、大物流塔和黑雾建筑等
+                                {
+                                    if (Relic.HaveRelic(2, 2))
+                                        Rank.AddExp(100); 
+                                    if (Relic.HaveRelic(3, 9))
+                                        Interlocked.Add(ref Relic.autoConstructMegaStructurePPoint, 100);
+                                }
+                                else if ((protoId >= 6257 && protoId <= 6260) || protoId == 6264 || protoId == 6265) // 创世之书巨建
+                                {
+                                    if (Relic.HaveRelic(2, 2))
+                                        Rank.AddExp(200);
+                                    if (Relic.HaveRelic(3, 9))
+                                        Interlocked.Add(ref Relic.autoConstructMegaStructurePPoint, 200);
+                                }
+                                else
+                                {
+                                    if (Relic.HaveRelic(2, 2))
+                                        Rank.AddExp(10);
+                                    if (Relic.HaveRelic(3, 9))
+                                        Interlocked.Add(ref Relic.autoConstructMegaStructurePPoint, 10);
+                                }
                             }
                         }
                     }

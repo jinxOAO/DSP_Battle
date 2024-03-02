@@ -256,22 +256,6 @@ namespace DSP_Battle
                         Relic.ThornmailFieldDamageRatio = Convert.ToDouble(param[1]);
                         Print($"Set ThornmailFieldAttck's factor to {param[1]}.");
                         break;
-                    case "r0":
-                        RelicFunctionPatcher.r0 = (float)Convert.ToDouble(param[1]);
-                        Print($"Set RelicFunctionPatcher's factor.");
-                        break;
-                    case "r1":
-                        RelicFunctionPatcher.r1 = (float)Convert.ToDouble(param[1]);
-                        Print($"Set RelicFunctionPatcher's factor.");
-                        break;
-                    case "r2":
-                        RelicFunctionPatcher.r2 = (float)Convert.ToDouble(param[1]);
-                        Print($"Set RelicFunctionPatcher's factor.");
-                        break;
-                    case "r3":
-                        RelicFunctionPatcher.r3 = (float)Convert.ToDouble(param[1]);
-                        Print($"Set RelicFunctionPatcher's factor.");
-                        break;
                     default:
                         Print($"未知的命令：{param[0]}，输入 \"help\" 查看所有命令说明。", 1, true);
                         break;

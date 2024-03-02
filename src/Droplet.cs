@@ -167,8 +167,12 @@ namespace DSP_Battle
             if (Relic.HaveRelic(2, 6)) energy *= 0.6; // relic2-6 水滴减耗
             if (GameMain.mainPlayer.mecha.coreEnergy >= energy)
             {
-                GameMain.mainPlayer.mecha.coreEnergy -= energy;
-                GameMain.mainPlayer.mecha.MarkEnergyChange(13, -energy);
+                Mecha obj = GameMain.mainPlayer.mecha;
+                lock (obj)
+                {
+                    GameMain.mainPlayer.mecha.coreEnergy -= energy;
+                    GameMain.mainPlayer.mecha.MarkEnergyChange(13, -energy);
+                }
                 return true;
             }
             else
@@ -177,19 +181,27 @@ namespace DSP_Battle
 
         public static void RestoreMechaEnergy(double energy)
         {
-            GameMain.mainPlayer.mecha.coreEnergy += energy;
-            if (GameMain.mainPlayer.mecha.coreEnergy > GameMain.mainPlayer.mecha.coreEnergyCap)
-                GameMain.mainPlayer.mecha.coreEnergy = GameMain.mainPlayer.mecha.coreEnergyCap;
+            Mecha obj = GameMain.mainPlayer.mecha;
+            lock (obj)
+            {
+                GameMain.mainPlayer.mecha.coreEnergy += energy;
+                if (GameMain.mainPlayer.mecha.coreEnergy > GameMain.mainPlayer.mecha.coreEnergyCap)
+                    GameMain.mainPlayer.mecha.coreEnergy = GameMain.mainPlayer.mecha.coreEnergyCap;
+            }
         }
 
         public static void ForceConsumeMechaEnergy(double energy)
         {
             if (Relic.HaveRelic(1, 4)) energy *= 0.5; // relic1-4 水滴减耗
             if (Relic.HaveRelic(2, 6)) energy *= 0.6; // relic2-6 水滴减耗
-            double curEnergy = GameMain.mainPlayer.mecha.coreEnergy;
-            energy = energy < curEnergy ? energy : curEnergy;
-            GameMain.mainPlayer.mecha.coreEnergy -= energy;
-            GameMain.mainPlayer.mecha.MarkEnergyChange(13, -energy);
+            Mecha obj = GameMain.mainPlayer.mecha;
+            lock (obj)
+            {
+                double curEnergy = GameMain.mainPlayer.mecha.coreEnergy;
+                energy = energy < curEnergy ? energy : curEnergy;
+                GameMain.mainPlayer.mecha.coreEnergy -= energy;
+                GameMain.mainPlayer.mecha.MarkEnergyChange(13, -energy);
+            }
         }
 
         public static void DamageGrow()

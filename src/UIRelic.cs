@@ -67,6 +67,7 @@ namespace DSP_Battle
         public static Text abortBtnText;
         public static Image rollBtnImg;
 
+        public static List<int> relicInSlots = new List<int>();
 
         //static string colorLegendLeft = "<color=#d2853d>";
         //static string colorEpicLeft = "<color=#9040d0>";
@@ -104,6 +105,7 @@ namespace DSP_Battle
         static Color btnAbleColor = new Color(0f, 0.499f, 0.824f, 1f);
         public static void InitAll()
         {
+            relicInSlots = new List<int> { -1, -1, -1, -1, -1, -1, -1, -1, -1 };
             closingCountDown = -1;
             openingCountDown = -1;
             selectedRelicInUI = -1;
@@ -425,6 +427,8 @@ namespace DSP_Battle
             relic1SelectButtonObj.transform.Find("Text").GetComponent<Text>().text = "".Translate();
             relic2SelectButtonObj.transform.Find("Text").GetComponent<Text>().text = "".Translate();
             relic3SelectButtonObj.transform.Find("Text").GetComponent<Text>().text = "".Translate();
+
+            
         }
 
         // 准备进行关闭选择遗物窗口的动画
@@ -508,7 +512,6 @@ namespace DSP_Battle
             relicSelectWindowTitle.text = "发现异星圣物".Translate();
             relicSelectionNoticeText.text = "解译异星圣物提示".Translate();
             rollBtnText.text = "重新随机".Translate();
-            abortBtnText.text = "放弃解译".Translate() + "500";
             Color white = new Color(1, 1, 1);
 
             relic1SelectButtonObj.transform.Find("Text").GetComponent<Text>().text = "".Translate();
@@ -785,15 +788,22 @@ namespace DSP_Battle
                 rollCostText.text = "<color=#b02020>-" + need.ToString() + "</color>";
                 rollBtnImg.color = btnDisableColor;
             }
-
+            if (Relic.HaveRelic(4, 4)) // relic 4-4 负面效果
+            {
+                abortBtnText.text = "放弃解译居中".Translate();
+                matrixIcon2.SetActive(false);
+            }
+            else
+            {
+                abortBtnText.text = "放弃解译".Translate() + Relic.AbortReward.ToString();
+                matrixIcon2.SetActive(true);
+            }
             relicSelectionWindowObj.SetActive(true); // 显示窗口
         }
 
 
         public static void AddTipText(int type, int num, UIButton uibt, bool isLeftSlot = false)
         {
-            if(Relic.HaveRelic(0, 2) && Relic.relic0_2Version == 0 && type == 0 && num == 2)
-            { return; }
             //if ((type == 0 && num == 2 && !(Relic.HaveRelic(0, 2) && Relic.relic0_2Version == 0)) || (type == 0 && num == 7) || (type == 0 && num == 10))
             if($"relicTipText{type}-{num}".Translate() != $"relicTipText{type}-{num}" && type != 4)
             {
@@ -830,12 +840,20 @@ namespace DSP_Battle
 
         public static void AddTipVarData(int type, int num, UIButton uibt)
         {
-            if (type == 0 && num == 2 && Relic.relic0_2Version == 1)
-            {
-                uibt.tips.tipText = uibt.tips.tipText + "\n\n<color=#61d8ffb4>" + "已充能gm".Translate() + "  " + Relic.relic0_2Charge + " / " + Relic.relic0_2MaxCharge + "</color>";   
-            }
             if (type == 0 && num == 10)
                 uibt.tips.tipText = uibt.tips.tipText + "\n\n<color=#61d8ffb4>" + "当前加成gm".Translate() + "  " + Droplets.bonusDamage / 100 + " / " + Droplets.bonusDamageLimit / 100 + "</color>";
+            else if (type == 1 && num == 8)
+                uibt.tips.tipText = uibt.tips.tipText + "\n\n<color=#61d8ffb4>" + "当前倍率".Translate() + "  " + Relic.bansheesVeilFactor + "</color>";
+            else if (type == 2 && num == 17)
+            {
+                if (Relic.aegisOfTheImmortalCooldown <= 0)
+                    uibt.tips.tipText = uibt.tips.tipText + "\n\n<color=#61d8ffb4>" + "冷却完毕gm".Translate() + "</color>";
+                else
+                {
+                    int timeLeft = Relic.aegisOfTheImmortalCooldown;
+                    uibt.tips.tipText = uibt.tips.tipText + "\n\n<color=#61d8ffb4>" + "剩余冷却时间gm".Translate() + "  " + string.Format("{0:D2}:{1:D2}", timeLeft / 3600, timeLeft / 60 % 60) + "</color>";
+                }
+            }
         }
 
         // 检查背包里的矩阵是否足够随机，现在不打算每帧检查来刷新按钮和文本的显示以防突然增加矩阵，可能性不大，即使存在这种可能也不影响实际按下按钮触发功能，只是显示灰色按钮这样
@@ -902,6 +920,9 @@ namespace DSP_Battle
                 {
                     Relic.alternateRelics[2] = 305; // 复活币
                 }
+                // 新增，元驱动满了之后中间的格子会刷新一次性元驱动，而非移除的
+                List<int> oncePickRelicsWithWeight = new List<int> { 110, 207, 207, 215, 215, 306, 306, 307, 307, 308, 305 };
+                Relic.alternateRelics[1] = oncePickRelicsWithWeight[Utils.RandInt(Relic.trueDamageActive > 0 ? 1 : 0, (Relic.resurrectCoinCount < Relic.resurrectCoinMaxCount ? oncePickRelicsWithWeight.Count : oncePickRelicsWithWeight.Count - 1))]; // 根据真实伤害是否已经获取过，以及复活币是否已经获取到上限，决定能不能刷新到
             }
             else
             {
@@ -936,6 +957,8 @@ namespace DSP_Battle
                                 if (!Relic.HaveRelic(type, num) && !Relic.alternateRelics.Contains(type * 100 + num))
                                 {
                                     if (type == 1 && num == 10 && Relic.trueDamageActive > 0) // 真实伤害不占用槽位，但是一旦获取后也不会再占用刷新栏
+                                        continue;
+                                    else if (type == 3 && num == 5 && Relic.resurrectCoinCount >= Relic.resurrectCoinMaxCount) // 复活币不占用槽位，但是已持有超过上限则不再能刷新到
                                         continue;
                                     relicNotHave.Add(num);
                                 }
@@ -1011,8 +1034,11 @@ namespace DSP_Battle
             selectedRelicInUI = -1;
             int addCount = Relic.AbortReward;
             int matrixId = 5201;
-            GameMain.mainPlayer.TryAddItemToPackage(matrixId, addCount, 0, true);
-            Utils.UIItemUp(matrixId, addCount, 180);
+            if (!Relic.HaveRelic(4, 4)) // relic 4-4 负面效果，放弃解译不会获得黑雾矩阵
+            {
+                GameMain.mainPlayer.TryAddItemToPackage(matrixId, addCount, 0, true);
+                Utils.UIItemUp(matrixId, addCount, 180);
+            }
 
             CloseSelectionWindow();
             RefreshSlotsWindowUI();
@@ -1108,6 +1134,8 @@ namespace DSP_Battle
                         }
                         if (slotNum < relicSlotImgs.Count)
                         {
+                            if(slotNum < relicInSlots.Count)
+                                relicInSlots[slotNum] = type * 100 + num;
                             relicSlotImgs[slotNum].sprite = Resources.Load<Sprite>("Assets/DSPBattle/r" + type.ToString() + "-" + num.ToString());
                             relicSlotUIBtns[slotNum].tips.tipTitle = ("遗物名称带颜色" + type.ToString() + "-" + num.ToString()).Translate();
                             relicSlotUIBtns[slotNum].tips.tipText = ("遗物描述" + type.ToString() + "-" + num.ToString()).Translate();
@@ -1151,6 +1179,7 @@ namespace DSP_Battle
                 relicSlotUIBtns[slotNum].tips.tipText = ("未获取遗物描述").Translate();
                 relicSlotUIBtns[slotNum].tips.offset = new Vector2(160, 70);
                 relicSlotUIBtns[slotNum].tips.delay = 0.05f;
+                relicInSlots[slotNum] = -1;
             }
         }
 

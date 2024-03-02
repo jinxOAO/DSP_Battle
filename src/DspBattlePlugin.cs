@@ -11,6 +11,7 @@ using System.IO;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
+using WinAPI;
 using xiaoye97;
 
 namespace DSP_Battle
@@ -154,6 +155,14 @@ namespace DSP_Battle
                 int planetId = 103;
                 if (GameMain.localPlanet != null)
                     planetId = GameMain.localPlanet.id;
+            }
+            if(Configs.developerMode && isControlDown && Input.GetKeyDown(KeyCode.M))
+            {
+                DSPGame.propertySystem.SetItemProduction(GameMain.data.GetClusterSeedKey(), 6001, 90000000);
+            }
+            if (Configs.developerMode && isControlDown && Input.GetKeyDown(KeyCode.K))
+            {
+                GameMain.mainPlayer.Kill();
             }
             if (Configs.developerMode && isControlDown && Input.GetKeyDown(KeyCode.G))
             {
