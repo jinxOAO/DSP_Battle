@@ -97,7 +97,7 @@ namespace DSP_Battle
 
         public void Start()
         {
-            //BattleBGMController.InitAudioSources();
+            BattleBGMController.InitAudioSources();
 
         }
 
@@ -289,7 +289,7 @@ namespace DSP_Battle
 
             BattleProtos.ReCheckTechUnlockRecipes();
             BattleProtos.UnlockTutorials();
-            //BattleBGMController.InitWhenLoad();
+            BattleBGMController.InitWhenLoad();
 
             InitStaticDataWhenLoad();
         }
@@ -307,7 +307,7 @@ namespace DSP_Battle
 
             BattleProtos.ReCheckTechUnlockRecipes();
             BattleProtos.UnlockTutorials();
-            //BattleBGMController.InitWhenLoad();
+            BattleBGMController.InitWhenLoad();
 
             InitStaticDataWhenLoad();
         }

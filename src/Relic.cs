@@ -995,6 +995,7 @@ namespace DSP_Battle
                 int realDamage = Relic.BonusDamage(__state, 1);
                 GameMain.data.spaceSector.skillSystem.DamageObject(realDamage, 1, ref caster, ref casterPlayer);
             }
+            BattleBGMController.PlayerTakeDamage();
         }
         [HarmonyPostfix]
         [HarmonyPatch(typeof(SkillSystem), "MechaEnergyShieldResist", new Type[] { typeof(SkillTargetLocal), typeof(int), typeof(int) }, new ArgumentType[] { ArgumentType.Normal, ArgumentType.Normal, ArgumentType.Ref })]
@@ -1013,6 +1014,7 @@ namespace DSP_Battle
                 int realDamage = Relic.BonusDamage(__state, 1);
                 GameMain.data.spaceSector.skillSystem.DamageObject(realDamage, 1, ref target, ref casterPlayer);
             }
+            BattleBGMController.PlayerTakeDamage();
         }
 
 

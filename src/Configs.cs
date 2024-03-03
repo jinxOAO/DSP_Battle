@@ -109,7 +109,7 @@ namespace DSP_Battle
         // --- 战斗信息
         public static long nextWaveFrameIndex = -1;
         public static int nextWaveStarIndex = -1;
-        public static int nextWaveState = 0; // 0: not generated; 1: wave generated; 2: wormhole generated; 3: in battle
+        public static int combatState = 0; // 0: not generated; 1: wave generated; 2: wormhole generated; 3: in battle
 
         public static long nextWaveDelay = 0;
         public static long extraSpeedFrame = -1;
@@ -307,7 +307,7 @@ namespace DSP_Battle
 
             w.Write(nextWaveFrameIndex);
             w.Write(nextWaveStarIndex);
-            w.Write(nextWaveState);
+            w.Write(combatState);
             w.Write(nextWaveDelay);
 
             w.Write(extraSpeedFrame);
@@ -339,7 +339,7 @@ namespace DSP_Battle
 
             nextWaveFrameIndex = r.ReadInt64();
             nextWaveStarIndex = r.ReadInt32();
-            nextWaveState = r.ReadInt32();
+            combatState = r.ReadInt32();
             nextWaveDelay = r.ReadInt64();
 
             extraSpeedFrame = r.ReadInt64();
@@ -371,7 +371,7 @@ namespace DSP_Battle
             else
             {
                 nextWaveMatrixExpectation = expectationMatrices[0];
-                if(nextWaveState>0 && nextWaveStarIndex>=0)
+                if(combatState>0 && nextWaveStarIndex>=0)
                 {
                     nextWaveMatrixExpectation = expectationMatrices[Math.Min(expectationMatrices.Length-1, wavePerStar[nextWaveStarIndex])];
                 }
@@ -398,7 +398,7 @@ namespace DSP_Battle
 
             nextWaveFrameIndex = -1;
             nextWaveStarIndex = -1;
-            nextWaveState = 0;
+            combatState = 0;
             nextWaveDelay = 0;
 
             extraSpeedFrame = -1;
