@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -160,6 +161,71 @@ namespace DSP_Battle
         public int decodeType;
         public int decodeTimeNeed;
         public int decodeTimeSpend;
+
+        public void Export(BinaryWriter w)
+        {
+            w.Write(protoId);
+            w.Write(lockedStarIndex);
+            w.Write(lockedPlanetId);
+            w.Write(lockedOriAstroId);
+            w.Write(level);
+            w.Write(requestLen);
+            for (int i = 0; i < requestLen; i++)
+            {
+                w.Write(requestId[i]);
+            }
+            for (int i = 0; i < requestLen; i++)
+            {
+                w.Write(requestCount[i]);
+            }
+            for (int i = 0; i < requestLen; i++)
+            {
+                w.Write(requestMeet[i]);
+            }
+            w.Write(modifier.Length);
+            for (int i = 0; i < modifier.Length; i++)
+            {
+                w.Write(modifier[i]);
+            }
+            w.Write(decodeType); 
+            w.Write(decodeTimeNeed);
+            w.Write(decodeTimeSpend);
+        }
+
+        public void Import(BinaryReader r)
+        {
+            protoId = r.ReadInt32();
+            lockedStarIndex = r.ReadInt32();
+            lockedPlanetId = r.ReadInt32();
+            lockedOriAstroId = r.ReadInt32();
+            level = r.ReadInt32();
+            requestLen = r.ReadInt32();
+            requestId = new int[requestLen];
+            for (int i = 0; i < requestLen; i++)
+            {
+                requestId[i] = r.ReadInt32();
+            }
+            requestCount = new int[requestLen];
+            for(int i = 0;i < requestLen; i++)
+            {
+                requestCount[i] = r.ReadInt32();
+            }
+            requestMeet = new int[requestLen];
+            for (int i = 0; i < requestLen; i++)
+            {
+                requestMeet[i] = r.ReadInt32();
+            }
+            int modifierLen = r.ReadInt32();
+            modifier = new int[modifierLen];
+            for (int i = 0; i < modifierLen; i++)
+            {
+                modifier[i] = r.ReadInt32();
+            }
+            decodeType = r.ReadInt32();
+            decodeTimeNeed = r.ReadInt32();
+            decodeTimeSpend = r.ReadInt32();
+        }
+
         public EventRecorder(int protoId, int[] prevModifier = null, int forceLevel = -1)
         {
             if(EventSystem.protos.ContainsKey(protoId))

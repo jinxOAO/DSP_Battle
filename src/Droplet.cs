@@ -769,7 +769,7 @@ namespace DSP_Battle
                     VectorLF3 newEnd = (enemyUPos - newBegin).normalized * exceedDis + enemyUPos;
                     float newMaxt = (float)((newEnd - newBegin).magnitude / Configs.dropletSpd);
                     double realSpd = Configs.dropletSpd;
-                    if (Rank.rank >= 8 || Configs.developerMode) // 水滴快速接近
+                    if (Rank.rank >= 6 || Configs.developerMode) // 水滴快速接近
                     {
                         double warpRushDist = (enemyUPos - newBegin).magnitude - exceedDis;
                         if (warpRushDist > Droplets.warpRushDistThr && Droplets.warpRushCharge[dropletIndex] >= Droplets.warpRushNeed)
@@ -787,7 +787,7 @@ namespace DSP_Battle
                     if ((newBegin - enemyUPos).magnitude < 500 || newMaxt <= exceedDis * 1.0 / Configs.dropletSpd + 0.035f)
                     {
                         int damage = Configs.dropletAtk;
-                        if (Rank.rank >= 10) damage = 5 * Configs.dropletAtk;
+                        if (Rank.rank >= 9) damage = 2 * Configs.dropletAtk;
                         if (Relic.HaveRelic(0, 10))
                             damage = damage + Relic.BonusDamage(Droplets.bonusDamage, 1);
                         Attack(damage); 

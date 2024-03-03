@@ -8,6 +8,7 @@ using System.IO;
 using UnityEngine;
 using HarmonyLib;
 using System.Reflection;
+using UnityEngine.Profiling;
 
 namespace DSP_Battle
 {
@@ -53,21 +54,42 @@ namespace DSP_Battle
         {
             Interlocked.Add(ref exp, -Configs.expToNextRank[rank]);
             rank += 1;
-            if (Configs.extraSpeedEnabled) //如果正处在奖励中升级，则刷新一下新增的奖励内容，防止奖励结束时计算出错
+            
+            if (rank == 3)
             {
-                if (rank == 3)
+                GameMain.data.mainPlayer.mecha.walkSpeed += 4;
+            }
+            else if (rank == 4)
+            {
+                GameMain.history.miningCostRate *= 0.8f;
+                if (EventSystem.recorder == null || EventSystem.recorder.protoId == 0) // 第一次升到四级固定获取元驱动
                 {
-                    GameMain.history.miningCostRate *= 0.8f;
-                }
-                else if (rank == 5)
-                {
-
-                }
-                else if (rank == 7)
-                {
-                    GameMain.history.miningCostRate *= 0.625f;
+                    if(EventSystem.neverStartTheFirstEvent > 0)
+                        EventSystem.InitNewEvent();
                 }
             }
+            else if (rank == 5)
+            {
+                GameMain.history.magneticDamageScale += 0.2f;
+            }
+            else if (rank == 7)
+            {
+                GameMain.history.miningCostRate /= 0.8f;
+                GameMain.history.miningCostRate *= 0.6f;
+            }
+            else if (rank == 10)
+            {
+                GameMain.history.miningCostRate /= 0.6f;
+                GameMain.history.miningCostRate *= 0.2f;
+            }
+            if(rank > 8 && Utils.RandDouble() < 0.3)
+            {
+                if(EventSystem.recorder == null || EventSystem.recorder.protoId == 0)
+                {
+                    EventSystem.InitNewEvent();
+                }
+            }
+
             if (Relic.HaveRelic(2, 1)) // relic 2-1
                 Interlocked.Add(ref Relic.autoConstructMegaStructureCountDown, rank * rank * rank * 60);
             UIRank.ForceRefreshAll();
@@ -80,6 +102,28 @@ namespace DSP_Battle
                 Interlocked.Exchange(ref exp, 0);
             if(rank > 0)
             {
+                if (rank == 3)
+                {
+                    GameMain.data.mainPlayer.mecha.walkSpeed -= 4;
+                }
+                else if (rank == 4)
+                {
+                    GameMain.history.miningCostRate /= 0.8f;
+                }
+                else if (rank == 5)
+                {
+                    GameMain.history.magneticDamageScale -= 0.2f;
+                }
+                else if (rank == 7)
+                {
+                    GameMain.history.miningCostRate /= 0.6f;
+                    GameMain.history.miningCostRate *= 0.8f;
+                }
+                else if (rank == 10)
+                {
+                    GameMain.history.miningCostRate /= 0.2f;
+                    GameMain.history.miningCostRate *= 0.6f;
+                }
                 rank -= 1;
                 UIRank.ForceRefreshAll();
             }

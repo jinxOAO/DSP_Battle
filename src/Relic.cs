@@ -29,7 +29,7 @@ namespace DSP_Battle
         public static int autoConstructMegaStructureCountDown = 0;
         public static int autoConstructMegaStructurePPoint = 0;
         public static int trueDamageActive = 0;
-        public static int bansheesVeilFactor = 5;
+        public static int bansheesVeilFactor = 2;
         public static int bansheesVeilIncreaseCountdown = 0; // relic 1-8 女妖面纱 短时间内反复触发的时间倒数，倒数值过大时会增加消耗系数
         public static int aegisOfTheImmortalCooldown = 0; // 不朽之守护冷却时间
         public static int resurrectCoinCount = 0; // 复活币持有个数，要在rank的UI里面显示
@@ -63,7 +63,7 @@ namespace DSP_Battle
         public static double ThornmailFieldDamageRatio = 0.2; // relic0-5行星护盾反伤比例
         public static int higherResistFactorDivisor = 100; // relic2-18触发更高级减免的前提：单次伤害超出了护盾量的1/higherResistFactorDivisor
         public const int bansheesVeilBasicFactor = 2; // 女妖面纱消耗能量的基础系数，如果短时间内多次触发则系数增大
-        public const int bansheesVeilMaxFactor = 10; // 最大系数
+        public const int bansheesVeilMaxFactor = 20; // 最大系数
         public const int bansheesVeilMaxCountdown = 3600; // 最大倒数
         public const double kleptomancyProbability = 0.03; // 行窃预兆偷窃概率
         public const int resurrectCoinMaxCount = 10; // 复活币最大持有数量
@@ -332,7 +332,8 @@ namespace DSP_Battle
             rollCount = -1 - bonusRollCount; // 从-1开始是因为每次准备给玩家新的relic都要重新随机一次
             canSelectNewRelic = true;
 
-            
+            EventSystem.tickFromLastRelic = 0;
+            EventSystem.probabilityForNewEvent = 0;
             UIRelic.OpenSelectionWindow();
             UIRelic.ShowSlots(); // 打开已有遗物栏
 
@@ -954,6 +955,8 @@ namespace DSP_Battle
                 else
                     factor *= 0.8f;
             }
+            if (Rank.rank >= 2)
+                factor *= 0.75f;
             __state = (int)(damage * (1 - factor));
             damage = (int)(damage * factor);
             return true;
@@ -973,6 +976,8 @@ namespace DSP_Battle
                 else
                     factor *= 0.8f;
             }
+            if (Rank.rank >= 2)
+                factor *= 0.75f;
             __state = (int)(damage * (1 - factor));
             damage = (int)(damage * factor);
             return true;
@@ -1831,14 +1836,10 @@ namespace DSP_Battle
                                     int needCount = (int)(needEnergy / heat);
                                     int inc = 0;
                                     inc = __instance.reactorStorage.split_inc(ref __instance.reactorStorage.grids[i].count, ref __instance.reactorStorage.grids[i].inc, needCount);
-                                    //__instance.reactorStorage.grids[i].count = Math.Max(0, __instance.reactorStorage.grids[i].count - needCount);
-                                    //__instance.reactorStorage.grids[i].inc = Math.Max(0, __instance.reactorStorage.grids[i].inc - inc);
                                     needEnergy -= heat * needCount;
                                     if(needEnergy > 0)
                                     {
                                         inc = __instance.reactorStorage.split_inc(ref __instance.reactorStorage.grids[i].count, ref __instance.reactorStorage.grids[i].inc, 1);
-                                        //__instance.reactorStorage.grids[i].count = Math.Max(0, __instance.reactorStorage.grids[i].count - 1);
-                                        //__instance.reactorStorage.grids[i].inc = Math.Max(0, __instance.reactorStorage.grids[i].inc - inc);
                                         long energyLeft = Math.Max(0, heat - needEnergy);
                                         __instance.reactorItemId = itemId;
                                         __instance.reactorItemInc = inc;
@@ -1868,6 +1869,8 @@ namespace DSP_Battle
                 if(Relic.bansheesVeilIncreaseCountdown > 0)
                 {
                     Relic.bansheesVeilFactor *= 2;
+                    if (Relic.bansheesVeilFactor > Relic.bansheesVeilMaxFactor)
+                        Relic.bansheesVeilFactor = Relic.bansheesVeilMaxFactor;
                 }
                 Relic.bansheesVeilIncreaseCountdown = Relic.bansheesVeilMaxCountdown;
             }
@@ -1882,19 +1885,59 @@ namespace DSP_Battle
                 lock (__instance)
                 {
                     long maxShieldEnergy = __instance.energyShieldCapacity;
-                    long needEnergy = maxShieldEnergy * Relic.bansheesVeilFactor;
+                    long totalNeedEnergy = maxShieldEnergy * Relic.bansheesVeilFactor;
+                    long needEnergy = totalNeedEnergy;
                     if (needEnergy > __instance.reactorEnergy)
                     {
-                        needEnergy = (long)__instance.reactorEnergy;
+                        needEnergy -= (long)__instance.reactorEnergy;
+                        __instance.reactorEnergy = 0;
+                        for (int i = __instance.reactorStorage.size - 1; i >= 0; i--)
+                        {
+                            int itemId = __instance.reactorStorage.grids[i].itemId;
+                            if (itemId > 0 && __instance.reactorStorage.grids[i].count > 0)
+                            {
+                                long heat = LDB.items.Select(itemId)?.HeatValue ?? 0;
+                                long totalHeat = heat * __instance.reactorStorage.grids[i].count;
+                                if (totalHeat > needEnergy)
+                                {
+                                    int needCount = (int)(needEnergy / heat);
+                                    int inc = 0;
+                                    inc = __instance.reactorStorage.split_inc(ref __instance.reactorStorage.grids[i].count, ref __instance.reactorStorage.grids[i].inc, needCount);
+                                    needEnergy -= heat * needCount;
+                                    if (needEnergy > 0)
+                                    {
+                                        inc = __instance.reactorStorage.split_inc(ref __instance.reactorStorage.grids[i].count, ref __instance.reactorStorage.grids[i].inc, 1);
+                                        long energyLeft = Math.Max(0, heat - needEnergy);
+                                        __instance.reactorItemId = itemId;
+                                        __instance.reactorItemInc = inc;
+                                        __instance.reactorEnergy = energyLeft;
+                                    }
+                                    break;
+                                }
+                                else
+                                {
+                                    needEnergy -= totalHeat;
+                                    __instance.reactorStorage.grids[i].count = 0;
+                                    __instance.reactorStorage.grids[i].itemId = __instance.reactorStorage.grids[i].filter;
+                                    __instance.reactorStorage.grids[i].inc = 0;
+                                }
+                            }
+                        }
+                        long realShieldEnergyRestored = (totalNeedEnergy - needEnergy) / Relic.bansheesVeilFactor;
+                        __instance.energyShieldEnergy = realShieldEnergyRestored;
+                        __instance.reactorStorage.NotifyStorageChange();
                     }
-                    long realShieldEnergyRestored = needEnergy / Relic.bansheesVeilFactor;
-                    needEnergy = realShieldEnergyRestored * Relic.bansheesVeilFactor;
-                    __instance.energyShieldEnergy = realShieldEnergyRestored;
-                    __instance.reactorEnergy -= needEnergy;
+                    else
+                    {
+                        __instance.energyShieldEnergy = __instance.energyShieldCapacity;
+                        __instance.reactorEnergy -= needEnergy;
+                    }
                 }
                 if (Relic.bansheesVeilIncreaseCountdown > 0)
                 {
                     Relic.bansheesVeilFactor *= 2;
+                    if (Relic.bansheesVeilFactor > Relic.bansheesVeilMaxFactor)
+                        Relic.bansheesVeilFactor = Relic.bansheesVeilMaxFactor;
                 }
                 Relic.bansheesVeilIncreaseCountdown = Relic.bansheesVeilMaxCountdown;
             }
@@ -1909,9 +1952,9 @@ namespace DSP_Battle
                 Relic.bansheesVeilIncreaseCountdown--;
             else if (Relic.bansheesVeilIncreaseCountdown <= 0 && time % 60 == 1)
             {
-                if (Relic.bansheesVeilFactor > Relic.bansheesVeilMaxFactor)
+                if (Relic.bansheesVeilFactor > Relic.bansheesVeilBasicFactor)
                     Relic.bansheesVeilFactor /= 2;
-                if (Relic.bansheesVeilFactor < Relic.bansheesVeilBasicFactor)
+                else if (Relic.bansheesVeilFactor < Relic.bansheesVeilBasicFactor)
                     Relic.bansheesVeilFactor = Relic.bansheesVeilBasicFactor;
             }
         }
@@ -2074,6 +2117,8 @@ namespace DSP_Battle
                 chargeSpeedFactor += 0.5f;
             if (Relic.HaveRelic(3, 13))
                 chargeSpeedFactor += 0.25f;
+            if (Rank.rank >= 8)
+                chargeSpeedFactor += 0.5f;
             MoreMegaStructure.StarCannon.chargeSpeedFactorByTCFV = chargeSpeedFactor;
 
             float damageFactor = 1.0f;
@@ -2129,7 +2174,19 @@ namespace DSP_Battle
             {
                 for (int slotNum = 0; slotNum < UIRelic.relicSlotUIBtns.Count; slotNum++)
                 {
-                    if (UIRelic.relicInSlots[slotNum] == 217)
+                    if (UIRelic.relicInSlots[slotNum] == 108)
+                    {
+                        UIRelic.relicSlotUIBtns[slotNum].tips.tipText = "遗物描述1-8".Translate();
+                        UIRelic.AddTipText(1, 8, UIRelic.relicSlotUIBtns[slotNum], true); // 对于一些原本描述较短的，还要将更详细的描述加入
+                        UIRelic.AddTipVarData(1, 8, UIRelic.relicSlotUIBtns[slotNum]); // 对于部分需要展示实时数据的，还需要加入数据
+                        if (UIRelic.relicSlotUIBtns[slotNum].tipShowing)
+                        {
+                            UIRelic.relicSlotUIBtns[slotNum].OnPointerExit(null);
+                            UIRelic.relicSlotUIBtns[slotNum].OnPointerEnter(null);
+                            UIRelic.relicSlotUIBtns[slotNum].enterTime = 1;
+                        }
+                    }
+                    else if (UIRelic.relicInSlots[slotNum] == 217)
                     {
                         UIRelic.relicSlotUIBtns[slotNum].tips.tipText = "遗物描述2-17".Translate();
                         UIRelic.AddTipText(2, 17, UIRelic.relicSlotUIBtns[slotNum], true); // 对于一些原本描述较短的，还要将更详细的描述加入
@@ -2308,7 +2365,14 @@ namespace DSP_Battle
             {
                 double change = __instance.reactorPowerGen * 0.5 / 60;
                 __instance.coreEnergy += change;
-                GameMain.mainPlayer.mecha.MarkEnergyChange(0, change); // 算在燃烧室发电
+                GameMain.mainPlayer.mecha.MarkEnergyChange(0, change); // 算在核心发电
+                if (__instance.coreEnergy > __instance.coreEnergyCap) __instance.coreEnergy = __instance.coreEnergyCap;
+            }
+            if(Rank.rank >= 1)
+            {
+                double change = 1000000 / 60;
+                __instance.coreEnergy += change;
+                GameMain.mainPlayer.mecha.MarkEnergyChange(0, change); // 算在核心发电
                 if (__instance.coreEnergy > __instance.coreEnergyCap) __instance.coreEnergy = __instance.coreEnergyCap;
             }
         }

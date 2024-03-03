@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -192,5 +193,21 @@ namespace DSP_Battle
             _this.time = (flag ? 0f : 0.3f);
         }
 
+        public static double beginBasic = 0.0001;
+        public static double minBasic = 0.0001;
+        public static double dec = 0.9999;
+        public static void Test()
+        {
+            double total = 1;
+            double basic = beginBasic;
+            for (int i = 0; i < 10000; i++)
+            {
+                total *= 1 - basic;
+                basic *= dec;
+                if (basic < minBasic)
+                    basic = minBasic;
+                Log($"{i} cur prob is {basic}, total prob {1-total}");
+            }
+        }
     }
 }

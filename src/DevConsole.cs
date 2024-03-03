@@ -167,8 +167,21 @@ namespace DSP_Battle
                         Print($"Set starIndex {idx3} star fortress module{type3} built count to {num3}.");
                         break;
                     case "setrank":
-                        Rank.rank = Math.Min(Math.Max(Convert.ToInt32(param[1]), 0), 10);
-                        Interlocked.Exchange(ref Rank.exp, 0);
+                        int target = Math.Min(Math.Max(Convert.ToInt32(param[1]), 0), 10);
+                        if (target > Rank.rank)
+                        {
+                            for (int i = Rank.rank; i < target; i++)
+                            {
+                                Rank.AddExp(Configs.expToNextRank[i]);
+                            }
+                        }
+                        else
+                        {
+                            while(Rank.rank > target)
+                            {
+                                Rank.DownGrade();
+                            }
+                        }
                         Print($"Rank set to {Math.Min(Math.Max(Convert.ToInt32(param[1]), 0), 10)}");
                         break;
                     case "addexp":
@@ -241,8 +254,16 @@ namespace DSP_Battle
                         UIRelic.RefreshTearOfGoddessSlotTips();
                         break;
                     case "es":
-                        EventSystem.SetEvent(Convert.ToInt32(param[1]));
-                        Print($"Set event id to {param[1]}.");
+                        if (param.Length == 1)
+                        {
+                            EventSystem.InitNewEvent();
+                            Print($"Init new event.");
+                        }
+                        else
+                        {
+                            EventSystem.SetEvent(Convert.ToInt32(param[1]));
+                            Print($"Set event id to {param[1]}.");
+                        }
                         break;
                     case "est":
                         EventSystem.TransferTo(Convert.ToInt32(param[1]));
@@ -252,9 +273,15 @@ namespace DSP_Battle
                         EventSystem.recorder.decodeTimeSpend = EventSystem.recorder.decodeTimeNeed;
                         Print($"Event count down finished.");
                         break;
-                    case "r05f":
-                        Relic.ThornmailFieldDamageRatio = Convert.ToDouble(param[1]);
-                        Print($"Set ThornmailFieldAttck's factor to {param[1]}.");
+                    case "t":
+                        Utils.beginBasic = Convert.ToDouble(param[1]);
+                        Utils.minBasic = Convert.ToDouble(param[2]);
+                        Utils.dec = Convert.ToDouble(param[3]);
+                        Print($"ok.");
+                        break;
+                    case "probtick":
+                        EventSystem.tickFromLastRelic = Convert.ToInt32(param[1]);
+                        Print($"ok.");
                         break;
                     default:
                         Print($"未知的命令：{param[0]}，输入 \"help\" 查看所有命令说明。", 1, true);
@@ -536,7 +563,7 @@ namespace DSP_Battle
                 "<color=#ffffff>lsrelic</color> 展示所有圣物名称" + "\n" +
                 "<color=#ffffff>give [param1] [param2]</color> 立刻给予[param2]个itemId为[param1]的物品" + "\n" +
                 "<color=#ffffff>cool</color> 恒星炮立即冷却完毕" + "\n" +
-                "<color=#ffffff>es [param1]</color> 设定当前事件链为[param1]" + "\n" +
+                "<color=#ffffff>es [param1]</color> 设定当前事件链为[param1]，不提供参数则初始化合法的事件" + "\n" +
                 "<color=#ffffff>est [param1]</color> 当前事件链转移至[param1]" + "\n" +
                 "---------------------- help ----------------------";
             Print(allCmds,17, false); // 这个forceLineCount传值取决于allCmds的行数

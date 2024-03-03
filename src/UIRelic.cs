@@ -843,7 +843,12 @@ namespace DSP_Battle
             if (type == 0 && num == 10)
                 uibt.tips.tipText = uibt.tips.tipText + "\n\n<color=#61d8ffb4>" + "当前加成gm".Translate() + "  " + Droplets.bonusDamage / 100 + " / " + Droplets.bonusDamageLimit / 100 + "</color>";
             else if (type == 1 && num == 8)
+            {
+                int timeLeft = Relic.bansheesVeilIncreaseCountdown;
                 uibt.tips.tipText = uibt.tips.tipText + "\n\n<color=#61d8ffb4>" + "当前倍率".Translate() + "  " + Relic.bansheesVeilFactor + "</color>";
+                if(timeLeft > 0)
+                    uibt.tips.tipText = uibt.tips.tipText + "\n<color=#61d8ffb4>" + "消退于".Translate() + string.Format("  {0:D2}:{1:D2}", timeLeft / 3600, timeLeft / 60 % 60) + "</color>";
+            }
             else if (type == 2 && num == 17)
             {
                 if (Relic.aegisOfTheImmortalCooldown <= 0)
@@ -851,7 +856,7 @@ namespace DSP_Battle
                 else
                 {
                     int timeLeft = Relic.aegisOfTheImmortalCooldown;
-                    uibt.tips.tipText = uibt.tips.tipText + "\n\n<color=#61d8ffb4>" + "剩余冷却时间gm".Translate() + "  " + string.Format("{0:D2}:{1:D2}", timeLeft / 3600, timeLeft / 60 % 60) + "</color>";
+                    uibt.tips.tipText = uibt.tips.tipText + "\n\n<color=#61d8ffb4>" + "剩余冷却时间gm".Translate() + string.Format("  {0:D2}:{1:D2}", timeLeft / 3600, timeLeft / 60 % 60) + "</color>";
                 }
             }
         }

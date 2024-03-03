@@ -7,6 +7,7 @@ using UnityEngine;
 using HarmonyLib;
 using UnityEngine.UI;
 using System.IO;
+using System.Diagnostics.Eventing.Reader;
 
 namespace DSP_Battle
 {
@@ -190,25 +191,38 @@ namespace DSP_Battle
         {
             int rank = Rank.rank;
             string res = "";
-            if (rank > 0)
+            if (rank >= 0)
             {
                 res = "<color=#61d8ffb4>";
+                if(Relic.resurrectCoinCount > 0)
+                    res += "-  " + "剩余复活币".Translate() + $"  {Relic.resurrectCoinCount}\n";
                 if (rank >= 1)
                     res += "-  " + "gmRankReward1".Translate() + "\n";
-                if (rank >= 7)
-                    res += "-  " + "gmRankReward7".Translate() + "\n";
-                else if (rank >= 3)
+                if (rank >= 2)
+                    res += "-  " + "gmRankReward2".Translate() + "\n";
+                if (rank >= 3)
                     res += "-  " + "gmRankReward3".Translate() + "\n";
+                if (rank >= 4)
+                {
+                    if(rank >= 10)
+                        res += "-  " + "gmRankReward10".Translate() + "\n";
+                    else if (rank >= 7)
+                        res += "-  " + "gmRankReward7".Translate() + "\n";
+                    else
+                        res += "-  " + "gmRankReward4".Translate() + "\n";
+                }
                 if (rank >= 5)
                     res += "-  " + "gmRankReward5".Translate() + "\n";
-                if (rank >= 2)
-                    res += "-  " + "gmRankReward2".Translate() + (rank / 2 * 2).ToString() + "0%\n";
+                if (rank >= 6)
+                    res += "-  " + "gmRankReward6".Translate() + "\n";
                 if (rank >= 8)
                     res += "-  " + "gmRankReward8".Translate() + "\n";
                 if (rank >= 9)
-                    res += "-  " + "gmRankReward9".Translate() + "\n";
-                if (rank == 10)
-                    res += "-  " + "gmRankReward10".Translate();
+                    res += "-  " + "gmRankReward9".Translate();
+                if (Relic.trueDamageActive > 0)
+                {
+                    res += "\n- " + "真实伤害已启用".Translate();
+                }
                 res += "</color>";
             }
             int nextRank = rank + 1;
@@ -217,15 +231,7 @@ namespace DSP_Battle
             if (rank<10)
             {
                 res += "下一功勋等级解锁".Translate() + "\n<color=#61d8ffb4>-  ";
-                if (nextRank % 2 == 0)
-                    res += "gmRankReward2".Translate() + "20%";
-                else
-                    res += ("gmRankReward" + nextRank.ToString()).Translate();
-                if (nextRank == 10)
-                    res += "\n-  " + "gmRankReward10".Translate();
-                else if (nextRank == 8)
-                    res += "\n-  " + "gmRankReward8".Translate();
-
+                res += $"gmRankUnlockText{nextRank}".Translate();
                 res += "</color>";
             }
 

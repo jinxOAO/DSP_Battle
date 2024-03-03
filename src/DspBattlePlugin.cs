@@ -158,7 +158,7 @@ namespace DSP_Battle
             }
             if(Configs.developerMode && isControlDown && Input.GetKeyDown(KeyCode.M))
             {
-                DSPGame.propertySystem.SetItemProduction(GameMain.data.GetClusterSeedKey(), 6001, 90000000);
+                Utils.Test();
             }
             if (Configs.developerMode && isControlDown && Input.GetKeyDown(KeyCode.K))
             {
@@ -236,18 +236,18 @@ namespace DSP_Battle
 
         public static void UpdateLogo()
         {
-            var mainLogo = GameObject.Find("UI Root/Overlay Canvas/Main Menu/dsp-logo");
-            var escLogo = GameObject.Find("UI Root/Overlay Canvas/In Game/Esc Menu/logo");
+            //var mainLogo = GameObject.Find("UI Root/Overlay Canvas/Main Menu/dsp-logo");
+            //var escLogo = GameObject.Find("UI Root/Overlay Canvas/In Game/Esc Menu/logo");
 
-            var iconstr = DSPGame.globalOption.languageLCID == 2052
-                ? "Assets/DSPBattle/logocn"
-                : "Assets/DSPBattle/logoen";
-            var texture = Resources.Load<Sprite>(iconstr).texture;
+            //var iconstr = DSPGame.globalOption.languageLCID == 2052
+            //    ? "Assets/DSPBattle/logocn"
+            //    : "Assets/DSPBattle/logoen";
+            //var texture = Resources.Load<Sprite>(iconstr).texture;
 
-            mainLogo.GetComponent<RawImage>().texture = texture;
-            escLogo.GetComponent<RawImage>().texture = texture;
-            mainLogo.GetComponent<RectTransform>().sizeDelta = new Vector2(texture.width, texture.height);
-            escLogo.GetComponent<RectTransform>().sizeDelta = new Vector2(texture.width, texture.height);
+            //mainLogo.GetComponent<RawImage>().texture = texture;
+            //escLogo.GetComponent<RawImage>().texture = texture;
+            //mainLogo.GetComponent<RectTransform>().sizeDelta = new Vector2(texture.width, texture.height);
+            //escLogo.GetComponent<RectTransform>().sizeDelta = new Vector2(texture.width, texture.height);
         }
 
         [HarmonyPostfix]

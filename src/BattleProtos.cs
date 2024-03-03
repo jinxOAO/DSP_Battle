@@ -43,111 +43,111 @@ namespace DSP_Battle
             //增产效果的蓝色高亮字体 0.3821 0.8455 1 0.7059 : 61d8ffb4
 
             // 文本翻译
-            RegisterString("轨道防御", "Defense", "轨道防御");
+            RegisterString("轨道防御", "TCFV", "深空来敌");
 
-            RegisterString("子弹1", "Armor piercing bullet", "穿甲磁轨弹");
-            RegisterString("子弹1描述", "The pioneers who had never seen an enemy before flipped the ancestors' database 114514 times to patch together an armor-piercing bullet design. Since they couldn't find a gunpowder formula, they had to cast it into a solid cannonball and strengthen its structure. It only had single kinetic attack and limited lethality.", "从来没见过敌人的先驱者把老祖宗的数据库翻了114514遍，东拼西凑出来一个穿甲弹设计图。由于没找到火药配方，只好照着炮弹的样子铸造成实心炮弹并加强其结构。仅能进行单体动能打击，杀伤力有限。");
-            RegisterString("子弹1结论", "You have unlocked armor piercin bullet and can use kinetic energy for attack.", "你解锁了穿甲磁轨弹，可以利用动能进行攻击");
-            RegisterString("子弹2", "Acid bullet", "强酸磁轨弹");
-            RegisterString("子弹2描述", "After analyzing and studying the enemy, the pioneers boldly packaged <color=#c2853d>sulfuric acid</color> into a new cannonball. The explosion can produce corrosion on enemies, killing them more efficiently.", "在对敌人进行分析和研究后，先驱者大胆将<color=#c2853d>硫酸</color>封装后制成了一种新的炮弹。爆破后可以对范围内敌人产生酸蚀，更加高效地杀伤敌人。");
-            RegisterString("子弹2结论", "You have unlocked acid bullet and can use sulfuric acid to corrode the shell.", "你解锁了强酸磁轨弹，可以利用硫酸腐蚀外壳");
-            RegisterString("子弹3", "Deuterium nucleus bullet", "氘核爆破弹");
-            RegisterString("子弹3短", "D-nucleus", "氘核爆破弹");
-            RegisterString("子弹3描述", "The pioneers who created the <color=#c2853d>thermonuclear missile</color> wanted to make it smaller and faster, so they tried to miniaturize and package the nuclear bomb into a bullet. This weapon can cause a large number of injuries to enemies after hitting by undergoing fusion explosion.", "制造出<color=#c2853d>热核导弹</color>的先驱者想要让他更小更快，便试着把核弹微缩化封装进了子弹里。该武器可以在命中后发生聚变爆炸，对敌人造成大量伤害。");
-            RegisterString("子弹3结论", "You have unlocked deuterium nucleus and can use nuclear fusion to cause destruction.", "你解锁了氘核爆破弹，可以利用核聚变进行破坏");
-            RegisterString("脉冲", "Phase-cracking beam", "相位裂解光束");
-            RegisterString("脉冲短", "Cracking beam", "相位裂解光束");
-            RegisterString("脉冲描述", "This beam does not require production, it only needs enough electricity to be supplied to the <color=#c2853d>Phaser emitter</color> to fire unlimitedly.", "这种光束是不需要制作和提供的，只需给<color=#c2853d>相位裂解炮</color>提供足够电量即可无限发射。");
+            //RegisterString("子弹1", "Armor piercing bullet", "穿甲磁轨弹");
+            //RegisterString("子弹1描述", "The pioneers who had never seen an enemy before flipped the ancestors' database 114514 times to patch together an armor-piercing bullet design. Since they couldn't find a gunpowder formula, they had to cast it into a solid cannonball and strengthen its structure. It only had single kinetic attack and limited lethality.", "从来没见过敌人的先驱者把老祖宗的数据库翻了114514遍，东拼西凑出来一个穿甲弹设计图。由于没找到火药配方，只好照着炮弹的样子铸造成实心炮弹并加强其结构。仅能进行单体动能打击，杀伤力有限。");
+            //RegisterString("子弹1结论", "You have unlocked armor piercin bullet and can use kinetic energy for attack.", "你解锁了穿甲磁轨弹，可以利用动能进行攻击");
+            //RegisterString("子弹2", "Acid bullet", "强酸磁轨弹");
+            //RegisterString("子弹2描述", "After analyzing and studying the enemy, the pioneers boldly packaged <color=#c2853d>sulfuric acid</color> into a new cannonball. The explosion can produce corrosion on enemies, killing them more efficiently.", "在对敌人进行分析和研究后，先驱者大胆将<color=#c2853d>硫酸</color>封装后制成了一种新的炮弹。爆破后可以对范围内敌人产生酸蚀，更加高效地杀伤敌人。");
+            //RegisterString("子弹2结论", "You have unlocked acid bullet and can use sulfuric acid to corrode the shell.", "你解锁了强酸磁轨弹，可以利用硫酸腐蚀外壳");
+            //RegisterString("子弹3", "Deuterium nucleus bullet", "氘核爆破弹");
+            //RegisterString("子弹3短", "D-nucleus", "氘核爆破弹");
+            //RegisterString("子弹3描述", "The pioneers who created the <color=#c2853d>thermonuclear missile</color> wanted to make it smaller and faster, so they tried to miniaturize and package the nuclear bomb into a bullet. This weapon can cause a large number of injuries to enemies after hitting by undergoing fusion explosion.", "制造出<color=#c2853d>热核导弹</color>的先驱者想要让他更小更快，便试着把核弹微缩化封装进了子弹里。该武器可以在命中后发生聚变爆炸，对敌人造成大量伤害。");
+            //RegisterString("子弹3结论", "You have unlocked deuterium nucleus and can use nuclear fusion to cause destruction.", "你解锁了氘核爆破弹，可以利用核聚变进行破坏");
+            //RegisterString("脉冲", "Phase-cracking beam", "相位裂解光束");
+            //RegisterString("脉冲短", "Cracking beam", "相位裂解光束");
+            //RegisterString("脉冲描述", "This beam does not require production, it only needs enough electricity to be supplied to the <color=#c2853d>Phaser emitter</color> to fire unlimitedly.", "这种光束是不需要制作和提供的，只需给<color=#c2853d>相位裂解炮</color>提供足够电量即可无限发射。");
 
-            RegisterString("导弹1", "Thermonuclear missile", "热核导弹");
-            RegisterString("导弹1短", "Nuclear missile", "热核导弹");
-            RegisterString("导弹1描述", "One day, the bored pioneers were browsing Youtube and suddenly came across a video on \"How to Make a Nuke in Your Bedroom\", and so the missile was created. This is a heavyweight weapon that can cause a nuclear explosion when it reaches its target, causing massive damage.", "这天，百无聊赖的先驱者正在刷哔哩哔哩，突然刷到了一条《如何在卧室制造核弹》的视频，于是这种导弹便被制造了出来。这是一种重型武器，发射升空并命中敌人后产生核爆，造成大范围伤害。");
-            RegisterString("导弹1结论", "You have unlocked thermonuclear missile and it can automatically track down enemies.", "你解锁了热核导弹，可以自动追踪敌人");
+            //RegisterString("导弹1", "Thermonuclear missile", "热核导弹");
+            //RegisterString("导弹1短", "Nuclear missile", "热核导弹");
+            //RegisterString("导弹1描述", "One day, the bored pioneers were browsing Youtube and suddenly came across a video on \"How to Make a Nuke in Your Bedroom\", and so the missile was created. This is a heavyweight weapon that can cause a nuclear explosion when it reaches its target, causing massive damage.", "这天，百无聊赖的先驱者正在刷哔哩哔哩，突然刷到了一条《如何在卧室制造核弹》的视频，于是这种导弹便被制造了出来。这是一种重型武器，发射升空并命中敌人后产生核爆，造成大范围伤害。");
+            //RegisterString("导弹1结论", "You have unlocked thermonuclear missile and it can automatically track down enemies.", "你解锁了热核导弹，可以自动追踪敌人");
 
-            RegisterString("导弹2", "Antimatter missile", "反物质导弹");
-            RegisterString("导弹2短", "A-M missile", "反物质导弹");
-            RegisterString("导弹2描述", "Accidentally, the pioneers spilled some <color=#c2853d>antimatter</color> while transporting goods, which destroyed their hard-made production line. \"Why not let the enemy experience the same misery?\" he thought. And so this weapon was created, packaging antimatter into a missile to annihilate enemies upon impact.", "先驱者在一次搬运货物时不慎手滑造成微量<color=#c2853d>反物质</color>泄露，这导致他辛辛苦苦拉好的产线毁于一旦。“为什么不让敌人尝尝这种痛苦呢？”他想到。于是这种将<color=#c2853d>反物质</color>封装入导弹的武器被制造了出来，命中敌人后会发生湮灭，将敌人彻底抹杀。");
-            RegisterString("导弹2结论", "You have unlocked antimatter missile and it can automatically track down enemies.", "你解锁了反物质导弹，可以自动追踪敌人");
+            //RegisterString("导弹2", "Antimatter missile", "反物质导弹");
+            //RegisterString("导弹2短", "A-M missile", "反物质导弹");
+            //RegisterString("导弹2描述", "Accidentally, the pioneers spilled some <color=#c2853d>antimatter</color> while transporting goods, which destroyed their hard-made production line. \"Why not let the enemy experience the same misery?\" he thought. And so this weapon was created, packaging antimatter into a missile to annihilate enemies upon impact.", "先驱者在一次搬运货物时不慎手滑造成微量<color=#c2853d>反物质</color>泄露，这导致他辛辛苦苦拉好的产线毁于一旦。“为什么不让敌人尝尝这种痛苦呢？”他想到。于是这种将<color=#c2853d>反物质</color>封装入导弹的武器被制造了出来，命中敌人后会发生湮灭，将敌人彻底抹杀。");
+            //RegisterString("导弹2结论", "You have unlocked antimatter missile and it can automatically track down enemies.", "你解锁了反物质导弹，可以自动追踪敌人");
 
-            RegisterString("导弹3", "Gravitational collapse missile", "引力塌陷导弹");
-            RegisterString("导弹3短", "Grav-missile", "引力塌陷导弹");
-            RegisterString("导弹3描述", "Inventors of the <color=#c2853d>Gravitation Slingshot ejector</color> worked hard to package a mini black hole into the missile, creating this super weapon. It can temporarily generate a mini black hole after the explosion to gather enemies in range and wipe them out efficiently.", "发明出<color=#c2853d>引力弹射炮</color>的先驱者一鼓作气，将微型黑洞封装进导弹，制成了这种超级武器。它能在爆炸后短暂生成一个微型黑洞将范围内的敌人聚拢，简单高效。");
-            RegisterString("导弹3结论", "You have unlocked gravitational collapse missile and it can automatically track down enemies.", "你解锁了引力塌陷导弹，可以自动追踪敌人");
+            //RegisterString("导弹3", "Gravitational collapse missile", "引力塌陷导弹");
+            //RegisterString("导弹3短", "Grav-missile", "引力塌陷导弹");
+            //RegisterString("导弹3描述", "Inventors of the <color=#c2853d>Gravitation Slingshot ejector</color> worked hard to package a mini black hole into the missile, creating this super weapon. It can temporarily generate a mini black hole after the explosion to gather enemies in range and wipe them out efficiently.", "发明出<color=#c2853d>引力弹射炮</color>的先驱者一鼓作气，将微型黑洞封装进导弹，制成了这种超级武器。它能在爆炸后短暂生成一个微型黑洞将范围内的敌人聚拢，简单高效。");
+            //RegisterString("导弹3结论", "You have unlocked gravitational collapse missile and it can automatically track down enemies.", "你解锁了引力塌陷导弹，可以自动追踪敌人");
 
-            RegisterString("弹射器1", "Super railgun", "电磁轨道炮");
-            RegisterString("弹射器1描述", "The pioneers of creating <color=#c2853d>Armor piercing bullet</color> didn't know how to launch them until an accidental mistake set <color=#c2853d>solar sails</color> as ammunition. \"Perfect, now I have 'created' a weapon,\" the pioneers thought, \"But how can I distinguish them?\" Soon after, with a flash of inspiration, the pioneers added an orange atmosphere light to it. This weapon can be loaded with any type of bullets, however its range of attack is limited by the angle of elevation.", "制造出<color=#c2853d>穿甲磁轨弹</color>的先驱者不知道该如何把他们扔上天，直到他不小心把<color=#c2853d>太阳帆</color>误装成了炮弹。“好极了，现在我‘创造’了一种武器。”先驱者这样想着，“但是怎么区分他们呢？”。随后，先驱者默念着：“你指尖闪动的电光，是我此生不变的信仰……”给它装上了橙色氛围灯。该武器可以装入任何类型的子弹，且打击范围受到仰角限制。");
-            RegisterString("弹射器1结论", "You have unlocked super railgun and it can fire bullets to attack enemies.", "你解锁了电磁轨道炮，可以发射子弹攻击敌方");
+            //RegisterString("弹射器1", "Super railgun", "电磁轨道炮");
+            //RegisterString("弹射器1描述", "The pioneers of creating <color=#c2853d>Armor piercing bullet</color> didn't know how to launch them until an accidental mistake set <color=#c2853d>solar sails</color> as ammunition. \"Perfect, now I have 'created' a weapon,\" the pioneers thought, \"But how can I distinguish them?\" Soon after, with a flash of inspiration, the pioneers added an orange atmosphere light to it. This weapon can be loaded with any type of bullets, however its range of attack is limited by the angle of elevation.", "制造出<color=#c2853d>穿甲磁轨弹</color>的先驱者不知道该如何把他们扔上天，直到他不小心把<color=#c2853d>太阳帆</color>误装成了炮弹。“好极了，现在我‘创造’了一种武器。”先驱者这样想着，“但是怎么区分他们呢？”。随后，先驱者默念着：“你指尖闪动的电光，是我此生不变的信仰……”给它装上了橙色氛围灯。该武器可以装入任何类型的子弹，且打击范围受到仰角限制。");
+            //RegisterString("弹射器1结论", "You have unlocked super railgun and it can fire bullets to attack enemies.", "你解锁了电磁轨道炮，可以发射子弹攻击敌方");
 
-            RegisterString("弹射器2", "Gravitation Slingshot ejector", "引力弹射炮");
-            RegisterString("弹射器2描述", "After visiting a few times to the black hole, the pioneers gained a deeper understanding of gravity manipulation. They decided to develop their own weapon and so they dismantled the acceleration magnet of <color=#c2853d>Super railgun</color> and created a generator that could produce a gravity ejector using tiny blackholes. This allowed the ejector to fire bullets with much more kinetic energy than before. \"This time it's not just about changing the atmosphere light!\" The pioneers rejoiced. The weapon can fire any type of bullet with a much higher speed.", "在黑洞杀了个七进七出之后，先驱者对引力操控有了深入见解，他终于决定自己开发一种武器。于是他拆除了<color=#c2853d>电磁轨道炮</color>的加速磁场，制造了一种利用微型黑洞制造引力弹弓的发生器，这使得发射炮弹获得了数倍于之前的动能。“这回可不是换个氛围灯那么简单了！”先驱者自我陶醉着。该武器能以更高的射速发射任何类型的子弹。");
-            RegisterString("弹射器2结论", "You have unlocked Gravitation Slingshot ejector  and it can fire bullets to attack enemies.", "你解锁了引力弹射炮，可以发射子弹攻击敌方");
+            //RegisterString("弹射器2", "Gravitation Slingshot ejector", "引力弹射炮");
+            //RegisterString("弹射器2描述", "After visiting a few times to the black hole, the pioneers gained a deeper understanding of gravity manipulation. They decided to develop their own weapon and so they dismantled the acceleration magnet of <color=#c2853d>Super railgun</color> and created a generator that could produce a gravity ejector using tiny blackholes. This allowed the ejector to fire bullets with much more kinetic energy than before. \"This time it's not just about changing the atmosphere light!\" The pioneers rejoiced. The weapon can fire any type of bullet with a much higher speed.", "在黑洞杀了个七进七出之后，先驱者对引力操控有了深入见解，他终于决定自己开发一种武器。于是他拆除了<color=#c2853d>电磁轨道炮</color>的加速磁场，制造了一种利用微型黑洞制造引力弹弓的发生器，这使得发射炮弹获得了数倍于之前的动能。“这回可不是换个氛围灯那么简单了！”先驱者自我陶醉着。该武器能以更高的射速发射任何类型的子弹。");
+            //RegisterString("弹射器2结论", "You have unlocked Gravitation Slingshot ejector  and it can fire bullets to attack enemies.", "你解锁了引力弹射炮，可以发射子弹攻击敌方");
 
-            RegisterString("脉冲炮", "Phaser emitter", "相位裂解炮");
-            RegisterString("脉冲炮描述", "The pioneers who developed the super weapons were bored and tried to explore the universe, but their ambition was always hindered by a lack of ammunition. In a fit of rage, with inspiration from Stellaris they developed this weapon. Using high-energy particle streams to create a phase disruption chain reaction, it can kill enemies in a large area. The biggest advantage is, <color=#c2853d>Ammunition not required</color>! However, the damage from this weapon will attenuate when the distance increases.", "开发出超级武器的先驱者百般无聊，整日靠着当P社战犯度日，但是他灭绝寰宇的大业总是因为弹药短缺被打断，于是他一气之下依照《群星》的舰载武器开发了这种武器。利用发射的高能粒子流产生相位裂解链式反应，大范围杀伤敌人，最大的优点是，<color=#c2853d>无需弹药</color>！从此，先驱者在成为战犯的道路上越走越远。注意，此光束伤害将随着距离而衰减。");
-            RegisterString("脉冲炮结论", "You have unlocked Phaser emitter and can now attack the enemy using only electricity.", "你解锁了相位裂解炮，可以仅使用电力攻击敌方");
+            //RegisterString("脉冲炮", "Phaser emitter", "相位裂解炮");
+            //RegisterString("脉冲炮描述", "The pioneers who developed the super weapons were bored and tried to explore the universe, but their ambition was always hindered by a lack of ammunition. In a fit of rage, with inspiration from Stellaris they developed this weapon. Using high-energy particle streams to create a phase disruption chain reaction, it can kill enemies in a large area. The biggest advantage is, <color=#c2853d>Ammunition not required</color>! However, the damage from this weapon will attenuate when the distance increases.", "开发出超级武器的先驱者百般无聊，整日靠着当P社战犯度日，但是他灭绝寰宇的大业总是因为弹药短缺被打断，于是他一气之下依照《群星》的舰载武器开发了这种武器。利用发射的高能粒子流产生相位裂解链式反应，大范围杀伤敌人，最大的优点是，<color=#c2853d>无需弹药</color>！从此，先驱者在成为战犯的道路上越走越远。注意，此光束伤害将随着距离而衰减。");
+            //RegisterString("脉冲炮结论", "You have unlocked Phaser emitter and can now attack the enemy using only electricity.", "你解锁了相位裂解炮，可以仅使用电力攻击敌方");
 
-            RegisterString("发射器1", "Void missile launching silo", "深空导弹发射井");
-            RegisterString("发射器1描述", "The pioneers who created the <color=#c2853d>thermonuclear missiles</color> didn't know how to get them into the space until they saw the <color=#c2853d>Vertical launching silo</color>. \"Can't I just paint them red and have invented a weapon?\" The pioneer thought. This weapon can attack enemies from all directions.", "制造出<color=#c2853d>热核导弹</color>的先驱者并不知道如何把他们扔上天去，直到他看到了<color=#c2853d>垂直发射井</color>。“只要把它刷成红色我不就发明了一种武器吗？”先驱者这样想到。该武器可以对敌人进行全方位打击。");
-            RegisterString("发射器1结论", "You have unlocked void missile launching silo.", "你解锁了深空导弹发射井，可以发射导弹攻击敌方");
+            //RegisterString("发射器1", "Void missile launching silo", "深空导弹发射井");
+            //RegisterString("发射器1描述", "The pioneers who created the <color=#c2853d>thermonuclear missiles</color> didn't know how to get them into the space until they saw the <color=#c2853d>Vertical launching silo</color>. \"Can't I just paint them red and have invented a weapon?\" The pioneer thought. This weapon can attack enemies from all directions.", "制造出<color=#c2853d>热核导弹</color>的先驱者并不知道如何把他们扔上天去，直到他看到了<color=#c2853d>垂直发射井</color>。“只要把它刷成红色我不就发明了一种武器吗？”先驱者这样想到。该武器可以对敌人进行全方位打击。");
+            //RegisterString("发射器1结论", "You have unlocked void missile launching silo.", "你解锁了深空导弹发射井，可以发射导弹攻击敌方");
 
-            RegisterString("近地防卫系统", "Near Earth Def-system", "近地防卫系统");
-            RegisterString("近地防卫系统描述", "Manufacturing <color=#c2853d>Super railgun</color> to eject <color=#c2853d>Armor piercing</color> to bulid basal defensive system.", "制造<color=#c2853d>电磁轨道炮</color>发射<color=#c2853d>穿甲磁轨弹</color>进行基础防御。");
-            RegisterString("近地防卫系统结论", "You have unlocked Near Earth Def-system.", "你解锁了近地防卫系统");
-            RegisterString("深空防卫系统", "Deep Space Def-system", "深空防卫系统");
-            RegisterString("深空防卫系统描述", "Manufacturing <color=#c2853d>Void missile launching silo</color> to deploy <color=#c2853d>Thermonuclear missile</color> to bulid broader strike, filling the gap of near-earth-defense.", "制造<color=#c2853d>深空导弹发射井</color>部署<color=#c2853d>热核导弹</color>实现更大范围覆盖打击，填补近地防卫的空白。");
-            RegisterString("深空防卫系统结论", "You have unlocked Deep Space Def-system.", "你解锁了深空防卫系统");
-            RegisterString("引力操控技术", "Gravitation control", "引力操控技术");
-            RegisterString("引力操控技术描述", "Manufacturing <color=#c2853d>Gravitation Slingshot ejector</color> to level up near earth defense and <color=#c2853d>Gravitational collapse missile</color> to further strengthen deep space defense.", "制造<color=#c2853d>引力弹射炮</color>升级近地防卫系统，生产<color=#c2853d>引力塌陷导弹</color>进一步加强深空防御。");
-            RegisterString("引力操控技术结论", "You have unlocked Gravitation control.", "你解锁了引力操控技术");
-            RegisterString("相位裂解技术", "Phaser disintegration technology", "相位裂解技术");
-            RegisterString("相位裂解技术描述", "Manufacturing super weapon <color=#c2853d>Phaser emitter</color> to build ultimate near-earth-defense.", "这波<color=#c2853d>相位裂解炮</color>来全杀了。");
-            RegisterString("相位裂解技术结论", "You have unlocked Phaser disintegration technology.", "你解锁了相位裂解技术");
+            //RegisterString("近地防卫系统", "Near Earth Def-system", "近地防卫系统");
+            //RegisterString("近地防卫系统描述", "Manufacturing <color=#c2853d>Super railgun</color> to eject <color=#c2853d>Armor piercing</color> to bulid basal defensive system.", "制造<color=#c2853d>电磁轨道炮</color>发射<color=#c2853d>穿甲磁轨弹</color>进行基础防御。");
+            //RegisterString("近地防卫系统结论", "You have unlocked Near Earth Def-system.", "你解锁了近地防卫系统");
+            //RegisterString("深空防卫系统", "Deep Space Def-system", "深空防卫系统");
+            //RegisterString("深空防卫系统描述", "Manufacturing <color=#c2853d>Void missile launching silo</color> to deploy <color=#c2853d>Thermonuclear missile</color> to bulid broader strike, filling the gap of near-earth-defense.", "制造<color=#c2853d>深空导弹发射井</color>部署<color=#c2853d>热核导弹</color>实现更大范围覆盖打击，填补近地防卫的空白。");
+            //RegisterString("深空防卫系统结论", "You have unlocked Deep Space Def-system.", "你解锁了深空防卫系统");
+            //RegisterString("引力操控技术", "Gravitation control", "引力操控技术");
+            //RegisterString("引力操控技术描述", "Manufacturing <color=#c2853d>Gravitation Slingshot ejector</color> to level up near earth defense and <color=#c2853d>Gravitational collapse missile</color> to further strengthen deep space defense.", "制造<color=#c2853d>引力弹射炮</color>升级近地防卫系统，生产<color=#c2853d>引力塌陷导弹</color>进一步加强深空防御。");
+            //RegisterString("引力操控技术结论", "You have unlocked Gravitation control.", "你解锁了引力操控技术");
+            //RegisterString("相位裂解技术", "Phaser disintegration technology", "相位裂解技术");
+            //RegisterString("相位裂解技术描述", "Manufacturing super weapon <color=#c2853d>Phaser emitter</color> to build ultimate near-earth-defense.", "这波<color=#c2853d>相位裂解炮</color>来全杀了。");
+            //RegisterString("相位裂解技术结论", "You have unlocked Phaser disintegration technology.", "你解锁了相位裂解技术");
 
-            RegisterString("子弹2tech描述", "Manufacturing <color=#c2853d>Acid bullet</color> to strengthen near earth defensive system.", "制造<color=#c2853d>强酸磁轨弹</color>加强近地防御力。");
-            RegisterString("子弹3tech描述", "Manufacturing <color=#c2853d>Deuterium nucleus bullet</color> to further strengthen near earth defensive system.", "制造<color=#c2853d>氘核爆破弹</color>进一步加强近地防御力。");
-            RegisterString("导弹2tech描述", "Manufacturing <color=#c2853d>Antimatter missile</color> to strengthen deep space defensive system.", "制造<color=#c2853d>反物质导弹</color>加强深空防御力。");
+            //RegisterString("子弹2tech描述", "Manufacturing <color=#c2853d>Acid bullet</color> to strengthen near earth defensive system.", "制造<color=#c2853d>强酸磁轨弹</color>加强近地防御力。");
+            //RegisterString("子弹3tech描述", "Manufacturing <color=#c2853d>Deuterium nucleus bullet</color> to further strengthen near earth defensive system.", "制造<color=#c2853d>氘核爆破弹</color>进一步加强近地防御力。");
+            //RegisterString("导弹2tech描述", "Manufacturing <color=#c2853d>Antimatter missile</color> to strengthen deep space defensive system.", "制造<color=#c2853d>反物质导弹</color>加强深空防御力。");
 
-            RegisterString("定向爆破1", "Directional blasting", "定向爆破");
-            RegisterString("定向爆破2", "Directional blasting", "定向爆破");
-            RegisterString("定向爆破3", "Directional blasting", "定向爆破");
-            RegisterString("定向爆破4", "Directional blasting", "定向爆破");
-            RegisterString("定向爆破5", "Directional blasting", "定向爆破");
-            RegisterString("定向爆破6", "Directional blasting", "定向爆破");
-            RegisterString("定向爆破描述", "By precisely calculating the trajectory of bullets and missiles to predict the optimal detonation point before impact, so as to cause as much destruction to the enemy as possible.", "通过精确计算子弹和导弹的索敌路径，预测撞击前的最佳起爆点，以尽可能对敌人造成更大的破坏。");
-            RegisterString("定向爆破结论", "Increase damage for bullets and missiles.", "子弹、导弹伤害增加");
-            RegisterString("子弹伤害和导弹伤害+15%", "Damage of bullets and missiles +15%", "子弹伤害和导弹伤害+15%");
-            RegisterString("相位裂解光束伤害+30%", "Damage of Phaser-emitter beam +30%", "相位裂解光束伤害+30%");
+            //RegisterString("定向爆破1", "Directional blasting", "定向爆破");
+            //RegisterString("定向爆破2", "Directional blasting", "定向爆破");
+            //RegisterString("定向爆破3", "Directional blasting", "定向爆破");
+            //RegisterString("定向爆破4", "Directional blasting", "定向爆破");
+            //RegisterString("定向爆破5", "Directional blasting", "定向爆破");
+            //RegisterString("定向爆破6", "Directional blasting", "定向爆破");
+            //RegisterString("定向爆破描述", "By precisely calculating the trajectory of bullets and missiles to predict the optimal detonation point before impact, so as to cause as much destruction to the enemy as possible.", "通过精确计算子弹和导弹的索敌路径，预测撞击前的最佳起爆点，以尽可能对敌人造成更大的破坏。");
+            //RegisterString("定向爆破结论", "Increase damage for bullets and missiles.", "子弹、导弹伤害增加");
+            //RegisterString("子弹伤害和导弹伤害+15%", "Damage of bullets and missiles +15%", "子弹伤害和导弹伤害+15%");
+            //RegisterString("相位裂解光束伤害+30%", "Damage of Phaser-emitter beam +30%", "相位裂解光束伤害+30%");
 
-            RegisterString("引力波引导1", "Gravitational wave guidance", "引力波引导");
-            RegisterString("引力波引导2", "Gravitational wave guidance", "引力波引导");
-            RegisterString("引力波引导3", "Gravitational wave guidance", "引力波引导");
-            RegisterString("引力波引导4", "Gravitational wave guidance", "引力波引导");
-            RegisterString("引力波引导5", "Gravitational wave guidance", "引力波引导");
-            RegisterString("引力波引导6", "Gravitational wave guidance", "引力波引导");
-            RegisterString("引力波引导描述", "Utilizing gravitational waves to increase the speed of the bullet, enabling it to reach the enemy quicker.", "利用引力波提升子弹的飞行速度，使子弹能够更快地打到敌人。");
-            RegisterString("引力波引导结论", "Increase speed for bullets and missiles.", "子弹、导弹弹道速度增加");
-            RegisterString("子弹飞行速度+10%", "Bullet speed +10%", "子弹飞行速度+10%");
-            RegisterString("导弹飞行速度+5%", "Missile speed +5%", "导弹飞行速度+5%");
+            //RegisterString("引力波引导1", "Gravitational wave guidance", "引力波引导");
+            //RegisterString("引力波引导2", "Gravitational wave guidance", "引力波引导");
+            //RegisterString("引力波引导3", "Gravitational wave guidance", "引力波引导");
+            //RegisterString("引力波引导4", "Gravitational wave guidance", "引力波引导");
+            //RegisterString("引力波引导5", "Gravitational wave guidance", "引力波引导");
+            //RegisterString("引力波引导6", "Gravitational wave guidance", "引力波引导");
+            //RegisterString("引力波引导描述", "Utilizing gravitational waves to increase the speed of the bullet, enabling it to reach the enemy quicker.", "利用引力波提升子弹的飞行速度，使子弹能够更快地打到敌人。");
+            //RegisterString("引力波引导结论", "Increase speed for bullets and missiles.", "子弹、导弹弹道速度增加");
+            //RegisterString("子弹飞行速度+10%", "Bullet speed +10%", "子弹飞行速度+10%");
+            //RegisterString("导弹飞行速度+5%", "Missile speed +5%", "导弹飞行速度+5%");
 
-            RegisterString("相位干扰技术1", "Phase disturbance", "相位干扰技术");
-            RegisterString("相位干扰技术2", "Phase disturbance", "相位干扰技术");
-            RegisterString("相位干扰技术3", "Phase disturbance", "相位干扰技术");
-            RegisterString("相位干扰技术4", "Phase disturbance", "相位干扰技术");
-            RegisterString("相位干扰技术5", "Phase disturbance", "相位干扰技术");
-            RegisterString("相位干扰技术6", "Phase disturbance", "相位干扰技术");
-            RegisterString("相位干扰技术描述", "Increase enemy flight distance by using space interference to make wormhole spawn further.", "通过空间干扰让虫洞刷新的更远，增加敌人的飞行距离。");
-            RegisterString("相位干扰技术结论", "Expand wormhole spawns radius.", "虫洞生成距离增加");
-            RegisterString("虫洞生成最近范围扩大0.25AU", "Wormhole spawns radius expanded by 0.25AU", "虫洞生成最近范围扩大0.25AU");
+            //RegisterString("相位干扰技术1", "Phase disturbance", "相位干扰技术");
+            //RegisterString("相位干扰技术2", "Phase disturbance", "相位干扰技术");
+            //RegisterString("相位干扰技术3", "Phase disturbance", "相位干扰技术");
+            //RegisterString("相位干扰技术4", "Phase disturbance", "相位干扰技术");
+            //RegisterString("相位干扰技术5", "Phase disturbance", "相位干扰技术");
+            //RegisterString("相位干扰技术6", "Phase disturbance", "相位干扰技术");
+            //RegisterString("相位干扰技术描述", "Increase enemy flight distance by using space interference to make wormhole spawn further.", "通过空间干扰让虫洞刷新的更远，增加敌人的飞行距离。");
+            //RegisterString("相位干扰技术结论", "Expand wormhole spawns radius.", "虫洞生成距离增加");
+            //RegisterString("虫洞生成最近范围扩大0.25AU", "Wormhole spawns radius expanded by 0.25AU", "虫洞生成最近范围扩大0.25AU");
 
-            RegisterString("彩蛋1", "Pioneer Diary #1", "先驱者日记#1");
-            RegisterString("彩蛋2", "Pioneer Diary #2", "先驱者日记#2");
-            RegisterString("彩蛋3", "Pioneer Diary #3", "先驱者日记#3");
-            RegisterString("彩蛋4", "Pioneer Diary #4", "先驱者日记#4");
-            RegisterString("彩蛋5", "Pioneer Diary #5", "先驱者日记#5");
-            RegisterString("彩蛋6", "Pioneer Diary #6", "先驱者日记#6");
-            RegisterString("彩蛋7", "Pioneer Diary #7", "先驱者日记#7");
-            RegisterString("彩蛋8", "Pioneer Diary #8", "先驱者日记#8");
-            RegisterString("彩蛋9", "Pioneer Diary #9", "先驱者日记#9");
+            //RegisterString("彩蛋1", "Pioneer Diary #1", "先驱者日记#1");
+            //RegisterString("彩蛋2", "Pioneer Diary #2", "先驱者日记#2");
+            //RegisterString("彩蛋3", "Pioneer Diary #3", "先驱者日记#3");
+            //RegisterString("彩蛋4", "Pioneer Diary #4", "先驱者日记#4");
+            //RegisterString("彩蛋5", "Pioneer Diary #5", "先驱者日记#5");
+            //RegisterString("彩蛋6", "Pioneer Diary #6", "先驱者日记#6");
+            //RegisterString("彩蛋7", "Pioneer Diary #7", "先驱者日记#7");
+            //RegisterString("彩蛋8", "Pioneer Diary #8", "先驱者日记#8");
+            //RegisterString("彩蛋9", "Pioneer Diary #9", "先驱者日记#9");
 
             //RegisterString("行星力场护盾", "Planet shield", "行星力场护盾");
             RegisterString("恒星炮gm2", "Star cannon", "恒星炮");
@@ -156,200 +156,200 @@ namespace DSP_Battle
             RegisterString("恒星要塞", "Star Fortress", "恒星要塞");
             RegisterString("恒星要塞描述", "Plan additional defense modules on any mega structure to strengthen the defense capabilities of the star system, and the energy to support the star fortress comes entirely from the stars. This can also save a significant amount of planetary area.", "在任何巨构上规划额外的防御模块来强化星系的防御能力，支持恒星要塞的能量完全来自于恒星。这还能节约大量地表的可建造面积。");
             RegisterString("恒星要塞结论", "You have unlocked the star fortress.", "你解锁了武装巨构来构建恒星要塞的能力。");
-            RegisterString("尼科尔戴森光束", "Nicoll-Dyson beam", "尼科尔-戴森光束");
-            RegisterString("尼科尔戴森光束描述", "Decoding a method for building a Star Cannon from alien matrices, disintegrating wormholes with stellar energy.", "从异星矩阵中解码建造恒星炮的方法，利用恒星级能量瓦解虫洞。");
-            RegisterString("尼科尔戴森光束结论", "You have unlocked the star cannon.", "你解锁了建造恒星炮的能力。");
-            RegisterString("行星力场护盾", "Planetary force field shield", "行星力场护盾");
-            RegisterString("行星力场护盾描述", "Maintain force field shields around planets.", "在行星周围构建力场护盾。");
-            RegisterString("行星力场护盾结论", "You have unlocked the planet shield generator.", "你解锁了行星护盾生成器。");
+            //RegisterString("尼科尔戴森光束", "Nicoll-Dyson beam", "尼科尔-戴森光束");
+            //RegisterString("尼科尔戴森光束描述", "Decoding a method for building a Star Cannon from alien matrices, disintegrating wormholes with stellar energy.", "从异星矩阵中解码建造恒星炮的方法，利用恒星级能量瓦解虫洞。");
+            //RegisterString("尼科尔戴森光束结论", "You have unlocked the star cannon.", "你解锁了建造恒星炮的能力。");
+            //RegisterString("行星力场护盾", "Planetary force field shield", "行星力场护盾");
+            //RegisterString("行星力场护盾描述", "Maintain force field shields around planets.", "在行星周围构建力场护盾。");
+            //RegisterString("行星力场护盾结论", "You have unlocked the planet shield generator.", "你解锁了行星护盾生成器。");
             RegisterString("玻色子操控", "Boson control", "玻色子操控");
             RegisterString("玻色子操控描述", "Create powerful materials by manipulating various interacting forces.", "通过操控各种相互作用力来制造强大的材料。");
             RegisterString("玻色子操控结论", "You have unlocked the Boson control.", "你解锁了玻色子操控。");
             RegisterString("水滴科技描述", "A powerful Droplet controlled by the mecha.", "一个由机甲控制的强大水滴");
             RegisterString("水滴科技结论", "You have unlocked the Droplet.", "你解锁了水滴技术。");
-            RegisterString("超距信号处理1", "Stellar-range signal processing", "超距信号处理");
-            RegisterString("超距信号处理2", "Stellar-range signal processing", "超距信号处理");
-            RegisterString("超距信号处理3", "Stellar-range signal processing", "超距信号处理");
-            RegisterString("超距信号处理描述", "Enhance real-time control of droplets.", "强化对水滴的实时控制能力。");
-            RegisterString("超距信号处理结论", "Drop control limit is increased.", "可同时操控的水滴上限提升。");
-            RegisterString("水滴控制上限", "Droplet control limit", "水滴控制上限");
-            RegisterString("伤害衰减", "Damage attenuate", "伤害衰减");
+            //RegisterString("超距信号处理1", "Stellar-range signal processing", "超距信号处理");
+            //RegisterString("超距信号处理2", "Stellar-range signal processing", "超距信号处理");
+            //RegisterString("超距信号处理3", "Stellar-range signal processing", "超距信号处理");
+            //RegisterString("超距信号处理描述", "Enhance real-time control of droplets.", "强化对水滴的实时控制能力。");
+            //RegisterString("超距信号处理结论", "Drop control limit is increased.", "可同时操控的水滴上限提升。");
+            //RegisterString("水滴控制上限", "Droplet control limit", "水滴控制上限");
+            //RegisterString("伤害衰减", "Damage attenuate", "伤害衰减");
 
-            RegisterString("恒星炮未规划", "Star Cannon Unplanned", "恒星炮未规划");
-            RegisterString("恒星炮建设中", "Building In Progress", "恒星炮建设中");
-            RegisterString("恒星炮冷却中", "Cooling Down", "恒星炮冷却中");
-            RegisterString("恒星炮充能中", "Charging", "恒星炮充能中");
-            RegisterString("恒星炮开火", "Fire!", "恒星炮开火");
-            RegisterString("瞄准中", "Aiming", "瞄准中");
-            RegisterString("预热中", "Preheating", "预热中");
-            RegisterString("正在开火", "Firing", "正在开火");
-            RegisterString("没有规划的恒星炮", "No planned star cannon!", "没有规划的恒星炮");
-            RegisterString("恒星炮需要至少修建至第一阶段才能够开火！", "You have to finish at least stage 1 to fire star cannon!", "恒星炮需要至少修建至第一阶段才能够开火！");
-            RegisterString("恒星炮已经启动", "Star cannon has already launched!", "恒星炮已经启动。");
-            RegisterString("恒星炮冷却中！", "Star cannon is still cooling down!", "恒星炮冷却中！");
-            RegisterString("恒星炮充能中！", "Star cannon is still charging!", "恒星炮充能中！");
-            RegisterString("没有目标！", "No target!", "没有目标！");
-            RegisterString("超出射程！", "Out of range!", "超出射程！");
-            RegisterString("虫洞已完全稳定，无法被摧毁", "The wormholes are fully stabilized and cannot be destroyed.", "虫洞已完全稳定，无法被摧毁。");
-            RegisterString("恒星炮已启动", "Launching.", "恒星炮已启动。");
+            //RegisterString("恒星炮未规划", "Star Cannon Unplanned", "恒星炮未规划");
+            //RegisterString("恒星炮建设中", "Building In Progress", "恒星炮建设中");
+            //RegisterString("恒星炮冷却中", "Cooling Down", "恒星炮冷却中");
+            //RegisterString("恒星炮充能中", "Charging", "恒星炮充能中");
+            //RegisterString("恒星炮开火", "Fire!", "恒星炮开火");
+            //RegisterString("瞄准中", "Aiming", "瞄准中");
+            //RegisterString("预热中", "Preheating", "预热中");
+            //RegisterString("正在开火", "Firing", "正在开火");
+            //RegisterString("没有规划的恒星炮", "No planned star cannon!", "没有规划的恒星炮");
+            //RegisterString("恒星炮需要至少修建至第一阶段才能够开火！", "You have to finish at least stage 1 to fire star cannon!", "恒星炮需要至少修建至第一阶段才能够开火！");
+            //RegisterString("恒星炮已经启动", "Star cannon has already launched!", "恒星炮已经启动。");
+            //RegisterString("恒星炮冷却中！", "Star cannon is still cooling down!", "恒星炮冷却中！");
+            //RegisterString("恒星炮充能中！", "Star cannon is still charging!", "恒星炮充能中！");
+            //RegisterString("没有目标！", "No target!", "没有目标！");
+            //RegisterString("超出射程！", "Out of range!", "超出射程！");
+            //RegisterString("虫洞已完全稳定，无法被摧毁", "The wormholes are fully stabilized and cannot be destroyed.", "虫洞已完全稳定，无法被摧毁。");
+            //RegisterString("恒星炮已启动", "Launching.", "恒星炮已启动。");
 
 
-            RegisterString("彩蛋1描述", "Seems like these enemies are a kind of space insect. They live in deep space, feed on the tides of power without vision. " +
-                "The communication between interstellar logistic stations create regular ripples in space, making itself a beacon in a dark universe that can easily be captured and attacked by the insects. " +
-                "In other words, <color=#c2853d>they will randomly choose an interstellar logistic station, and attack its star system via wormholes. Stars with more interstellar logistic stations will have a higher probability of being selected, and stars without any interstellar logistic stations won't be attacked. </color>" +
-                "Obviously, I can't give up my interstellar logistic stations - I can transport Titanium manually but not everything right? Instead, I have to find a way to defend. Hope I still have time to think about 'The Answer to Life, the Universe, and Everything'.",
-                "这种生物似乎是一种虫类，靠进食宇宙中的各种能量潮汐为生，同时还具有虫洞制造能力，一旦发现食物就会直接在附近建立虫洞。" +
-                "星际物流塔产生的能量潮汐让它变成了宇宙中的一座灯塔，能被这些生物轻易捕捉并视作食物来源。" +
-                "换言之，<color=#c2853d>它们会随机选择全星区的任意一个星际物流塔，通过虫洞进攻该星系；物流塔越多的星系受到攻击概率越高，而只要不建设星际物流塔，那个星系就不会受到它们的侵扰。</color>" +
-                "但这显然行不通，不用星际物流塔将极大的延缓任务完成的速度，这是主脑不愿意看到的。看来我需要一些防御设施来保护星际物流塔。唉，本来还说抽空思考一下宇宙的终极答案的……");
-            RegisterString("彩蛋2描述", "Armor piercing rounds are still too inefficient, I have to find a better alternative. Anyway, they are real creatures, and acid erosion should do more damage to them.\n" +
-                "Besides, I found that <color=#c2853d>the wormholes will always establish when the warning timer reaches 5 minutes?</color> If my railgun can't destroy the invading enemies, maybe I can do something before then...",
-                "穿甲弹的效率还是太低了，我得试试找到强力的替代品，最好是能产生更大的伤害。就目前的情况来看，硫酸是个不错的选择，我可以试着直接把他们投射向敌人。" +
-                "再怎么说他们也是实体生物，酸蚀也够他们喝一壶的。还好它们不是异形，不然就是够我喝一壶的了。\n" +
-                "另外我发现，<color=#c2853d>虫洞永远在预警五分钟时才生成？</color>" +
-                "要是我的磁轨炮打不到入侵的敌人，也许我可以提前做点什么...");
-            RegisterString("彩蛋3描述", "They are more powerful than I thought. With the expansion of factories and interstellar logistic stations, their offensive has become more and more ferocious. " +
-                "The Near Earth Def-system had limited coverage and could no longer effectively resist them. Luckily I have learned to manufacture thermonuclear missiles on YouTube, and launching it will definitely solve this urgent need.\n" +
-                "In addition, I found that <color=#c2853d>every time they destroy an interstellar logistic station, the next wave will be delayed! </color>Maybe I can find a way to get more time for development?",
-                "我还是把他们想的太简单了。随着产线扩张，物流塔的建设，他们的攻势越来越凶猛。大炮的覆盖范围有限，已经无法有效抵挡他们了。好在我这几天在B站上学会了造热核弹，把它发射上去肯定能解燃眉之急。" +
-                "至于怎么发射上去，那还真得研究研究了，炮管子实在是太细了，放不进去。赶快结束这一切吧，我还想去梦里数电子羊呢。\n" +
-                "另外我发现，<color=#c2853d>虫子每破坏一座星际物流塔，下一次进攻就会被推迟！</color>也许可以想想办法获得更多的发展时间呢？");
-            RegisterString("彩蛋4描述", "The thermonuclear missiles are very powerful, but the launch is too slow. How can I create a miniature version and integrate with bullets, so they can both have lethality and speed? What a genius I am!\n" +
-                "Another thing I found is, <color=#c2853d>the intensity of the attack on different star system is independent. The first attack on a new star will start from the lowest intensity...</color> It seems I don't need to too worry about the safety of planets only for miners now.",
-                "热核导弹的杀伤力确实很大，但是发射也太慢了，我得研究研究怎么把热核导弹造成微缩版本塞进炮弹里面去，那不就既有杀伤力又有速度嘛。我可真是个天才！" +
-                "唉，你说我这天才为什么就不得伊卡拉姆妹妹的喜欢呢？我为她专门点亮了一片星系告白，但她居然说：“前天看到了小白兔，昨天是小鹿，今天是你。”这不是嘲讽我像个动物一样蠢吗。算了算了，不提了，女人只会影响我造戴森球的速度。\n" +
-                "另外我发现，<color=#c2853d>这些虫子攻击不同星系的强度是独立的啊，进攻全新星系的虫群似乎会重新从最低强度开始...</color> 看来暂时是不怎么需要担心矿星的安全性问题了。");
-            RegisterString("彩蛋5描述", "Damn it, a bit of antimatter leakage almost destroyed my pipelines, which took me a lot of time to repair. " +
-                "Wait, they can destroy my pipelines, why not insects? Good idea! Wait for me, fxxk insects, taste the antimatter and die!",
-                "倒霉透了，手滑泄露的那一点反物质差点把产线给扬了，害得我修复了好久。诶等等，能扬了我的产线为什么不能扬了那堆臭虫？思路打开了！" +
-                "死虫子你们给我等着，跟我轻型机甲拼你们有这个实力吗？我这就把反物质打上天，指定没有你们好果子吃！");
-            RegisterString("彩蛋6描述", "Jesus! Why did I limit myself to existing technologies? I'm Icarus, who can travel through black holes, make a hard landing with ultra-high speed, take a shower in lava and swim in a sulfuric acid lake. " +
-                "Why can't I develop some outrageous weapons? Damn insects, can't be avoided and keep slowing down my progress, let me teach you a lesson! Come on!",
-                "真是的，我为什么要局限于现有的武器技术啊。我可是伊卡洛斯啊，能穿越黑洞，能超高速硬着陆，能去岩浆里泡澡去硫酸里游泳，我为什么不能大胆开发点离谱的武器？" +
-                "反正也是闲着，不如给虫子看看我的真本事！TNND，杀又杀不完，躲也躲不掉，还一直拖慢我的进度，跟我玩阴的是吧？直接来吧！");
-            RegisterString("彩蛋7描述", "Sure enough, nothing will stop me if I really want something. I was too limited before, as I can build a Dyson sphere, why does the cannon need bullets? Just Phaser fission! " +
-                "Everything is good now, I don't need to be distracted by making bullets, so nice!\n" +
-                "By the way, I found <color=#c2853d>the intensity of attack has an upper limit. I really thought it would increase infinitely...</color> Now it's so easy for me to defend them! " +
-                "I don't know if uploading universe matrix or building Dyson sphere will change anything, let me find out.",
-                "果然只要我出手没什么办不到的，之前还是太局限了，戴森球都能造出来了为什么武器还需要弹药？直接相位裂解就完事了，要不是降维技术不可逆我都有心想丢二向箔过去。这下好啦，不用专门分心去造子弹了，我要继续去当第四天灾了。" +
-                "顺便说一句，这些虫子可比索林原虫差远了，虽然索林原虫也是渣渣~~日记。\n" +
-                "另外我发现，<color=#c2853d>强度攻击原来是有上限的啊，我还真以为是无限提升呢...</color> 现在已经游刃有余了嘿嘿... 不知道给主脑上传宇宙矩阵或者建成戴森球后会不会有什么额外影响，等到那一步再看吧。");
-            RegisterString("彩蛋8描述", "Young Icarus, no matter how you came here, you have proved your smarts and strength. Even facing unknown risks, you still light up the stars. " +
-                "Now you can proudly say, \"I've seen things that you absolutely can't believe, I've seen wormholes established in galaxies, I've seen fission rays flickering in swarms. All those moments will be lost in time, like tears in rain.\" " +
-                "Continue your journey now! No matter what difficulties you encounter, don't be afraid and face them with a smile! Remember, you are the mighty Icarus!",
-                "年轻的伊卡洛斯，不管你是用什么方法走到了这一步，都足以证明你的聪颖和强大。即使是面对未知的风险，你依旧为主脑点亮了繁星。" +
-                "现在，你可以骄傲的说：“我见过你们绝对无法置信的事物，我目睹了虫洞在星系内诞生，我看着裂解射线在虫群之中闪烁，所有这些时刻，终将随时间消逝，一如眼泪消失在雨中。”" +
-                "现在继续你的征途吧！无论遇到什么困难，都不要怕，微笑着面对他！因为，你是一个一个一个勇敢的伊卡洛斯哼哼，啊啊啊啊啊啊啊啊啊啊啊！");
-            RegisterString("彩蛋9描述", "<color=#c2853d>42</color>", "<color=#c2853d>42</color>");
+            //RegisterString("彩蛋1描述", "Seems like these enemies are a kind of space insect. They live in deep space, feed on the tides of power without vision. " +
+            //    "The communication between interstellar logistic stations create regular ripples in space, making itself a beacon in a dark universe that can easily be captured and attacked by the insects. " +
+            //    "In other words, <color=#c2853d>they will randomly choose an interstellar logistic station, and attack its star system via wormholes. Stars with more interstellar logistic stations will have a higher probability of being selected, and stars without any interstellar logistic stations won't be attacked. </color>" +
+            //    "Obviously, I can't give up my interstellar logistic stations - I can transport Titanium manually but not everything right? Instead, I have to find a way to defend. Hope I still have time to think about 'The Answer to Life, the Universe, and Everything'.",
+            //    "这种生物似乎是一种虫类，靠进食宇宙中的各种能量潮汐为生，同时还具有虫洞制造能力，一旦发现食物就会直接在附近建立虫洞。" +
+            //    "星际物流塔产生的能量潮汐让它变成了宇宙中的一座灯塔，能被这些生物轻易捕捉并视作食物来源。" +
+            //    "换言之，<color=#c2853d>它们会随机选择全星区的任意一个星际物流塔，通过虫洞进攻该星系；物流塔越多的星系受到攻击概率越高，而只要不建设星际物流塔，那个星系就不会受到它们的侵扰。</color>" +
+            //    "但这显然行不通，不用星际物流塔将极大的延缓任务完成的速度，这是主脑不愿意看到的。看来我需要一些防御设施来保护星际物流塔。唉，本来还说抽空思考一下宇宙的终极答案的……");
+            //RegisterString("彩蛋2描述", "Armor piercing rounds are still too inefficient, I have to find a better alternative. Anyway, they are real creatures, and acid erosion should do more damage to them.\n" +
+            //    "Besides, I found that <color=#c2853d>the wormholes will always establish when the warning timer reaches 5 minutes?</color> If my railgun can't destroy the invading enemies, maybe I can do something before then...",
+            //    "穿甲弹的效率还是太低了，我得试试找到强力的替代品，最好是能产生更大的伤害。就目前的情况来看，硫酸是个不错的选择，我可以试着直接把他们投射向敌人。" +
+            //    "再怎么说他们也是实体生物，酸蚀也够他们喝一壶的。还好它们不是异形，不然就是够我喝一壶的了。\n" +
+            //    "另外我发现，<color=#c2853d>虫洞永远在预警五分钟时才生成？</color>" +
+            //    "要是我的磁轨炮打不到入侵的敌人，也许我可以提前做点什么...");
+            //RegisterString("彩蛋3描述", "They are more powerful than I thought. With the expansion of factories and interstellar logistic stations, their offensive has become more and more ferocious. " +
+            //    "The Near Earth Def-system had limited coverage and could no longer effectively resist them. Luckily I have learned to manufacture thermonuclear missiles on YouTube, and launching it will definitely solve this urgent need.\n" +
+            //    "In addition, I found that <color=#c2853d>every time they destroy an interstellar logistic station, the next wave will be delayed! </color>Maybe I can find a way to get more time for development?",
+            //    "我还是把他们想的太简单了。随着产线扩张，物流塔的建设，他们的攻势越来越凶猛。大炮的覆盖范围有限，已经无法有效抵挡他们了。好在我这几天在B站上学会了造热核弹，把它发射上去肯定能解燃眉之急。" +
+            //    "至于怎么发射上去，那还真得研究研究了，炮管子实在是太细了，放不进去。赶快结束这一切吧，我还想去梦里数电子羊呢。\n" +
+            //    "另外我发现，<color=#c2853d>虫子每破坏一座星际物流塔，下一次进攻就会被推迟！</color>也许可以想想办法获得更多的发展时间呢？");
+            //RegisterString("彩蛋4描述", "The thermonuclear missiles are very powerful, but the launch is too slow. How can I create a miniature version and integrate with bullets, so they can both have lethality and speed? What a genius I am!\n" +
+            //    "Another thing I found is, <color=#c2853d>the intensity of the attack on different star system is independent. The first attack on a new star will start from the lowest intensity...</color> It seems I don't need to too worry about the safety of planets only for miners now.",
+            //    "热核导弹的杀伤力确实很大，但是发射也太慢了，我得研究研究怎么把热核导弹造成微缩版本塞进炮弹里面去，那不就既有杀伤力又有速度嘛。我可真是个天才！" +
+            //    "唉，你说我这天才为什么就不得伊卡拉姆妹妹的喜欢呢？我为她专门点亮了一片星系告白，但她居然说：“前天看到了小白兔，昨天是小鹿，今天是你。”这不是嘲讽我像个动物一样蠢吗。算了算了，不提了，女人只会影响我造戴森球的速度。\n" +
+            //    "另外我发现，<color=#c2853d>这些虫子攻击不同星系的强度是独立的啊，进攻全新星系的虫群似乎会重新从最低强度开始...</color> 看来暂时是不怎么需要担心矿星的安全性问题了。");
+            //RegisterString("彩蛋5描述", "Damn it, a bit of antimatter leakage almost destroyed my pipelines, which took me a lot of time to repair. " +
+            //    "Wait, they can destroy my pipelines, why not insects? Good idea! Wait for me, fxxk insects, taste the antimatter and die!",
+            //    "倒霉透了，手滑泄露的那一点反物质差点把产线给扬了，害得我修复了好久。诶等等，能扬了我的产线为什么不能扬了那堆臭虫？思路打开了！" +
+            //    "死虫子你们给我等着，跟我轻型机甲拼你们有这个实力吗？我这就把反物质打上天，指定没有你们好果子吃！");
+            //RegisterString("彩蛋6描述", "Jesus! Why did I limit myself to existing technologies? I'm Icarus, who can travel through black holes, make a hard landing with ultra-high speed, take a shower in lava and swim in a sulfuric acid lake. " +
+            //    "Why can't I develop some outrageous weapons? Damn insects, can't be avoided and keep slowing down my progress, let me teach you a lesson! Come on!",
+            //    "真是的，我为什么要局限于现有的武器技术啊。我可是伊卡洛斯啊，能穿越黑洞，能超高速硬着陆，能去岩浆里泡澡去硫酸里游泳，我为什么不能大胆开发点离谱的武器？" +
+            //    "反正也是闲着，不如给虫子看看我的真本事！TNND，杀又杀不完，躲也躲不掉，还一直拖慢我的进度，跟我玩阴的是吧？直接来吧！");
+            //RegisterString("彩蛋7描述", "Sure enough, nothing will stop me if I really want something. I was too limited before, as I can build a Dyson sphere, why does the cannon need bullets? Just Phaser fission! " +
+            //    "Everything is good now, I don't need to be distracted by making bullets, so nice!\n" +
+            //    "By the way, I found <color=#c2853d>the intensity of attack has an upper limit. I really thought it would increase infinitely...</color> Now it's so easy for me to defend them! " +
+            //    "I don't know if uploading universe matrix or building Dyson sphere will change anything, let me find out.",
+            //    "果然只要我出手没什么办不到的，之前还是太局限了，戴森球都能造出来了为什么武器还需要弹药？直接相位裂解就完事了，要不是降维技术不可逆我都有心想丢二向箔过去。这下好啦，不用专门分心去造子弹了，我要继续去当第四天灾了。" +
+            //    "顺便说一句，这些虫子可比索林原虫差远了，虽然索林原虫也是渣渣~~日记。\n" +
+            //    "另外我发现，<color=#c2853d>强度攻击原来是有上限的啊，我还真以为是无限提升呢...</color> 现在已经游刃有余了嘿嘿... 不知道给主脑上传宇宙矩阵或者建成戴森球后会不会有什么额外影响，等到那一步再看吧。");
+            //RegisterString("彩蛋8描述", "Young Icarus, no matter how you came here, you have proved your smarts and strength. Even facing unknown risks, you still light up the stars. " +
+            //    "Now you can proudly say, \"I've seen things that you absolutely can't believe, I've seen wormholes established in galaxies, I've seen fission rays flickering in swarms. All those moments will be lost in time, like tears in rain.\" " +
+            //    "Continue your journey now! No matter what difficulties you encounter, don't be afraid and face them with a smile! Remember, you are the mighty Icarus!",
+            //    "年轻的伊卡洛斯，不管你是用什么方法走到了这一步，都足以证明你的聪颖和强大。即使是面对未知的风险，你依旧为主脑点亮了繁星。" +
+            //    "现在，你可以骄傲的说：“我见过你们绝对无法置信的事物，我目睹了虫洞在星系内诞生，我看着裂解射线在虫群之中闪烁，所有这些时刻，终将随时间消逝，一如眼泪消失在雨中。”" +
+            //    "现在继续你的征途吧！无论遇到什么困难，都不要怕，微笑着面对他！因为，你是一个一个一个勇敢的伊卡洛斯哼哼，啊啊啊啊啊啊啊啊啊啊啊！");
+            //RegisterString("彩蛋9描述", "<color=#c2853d>42</color>", "<color=#c2853d>42</color>");
 
 
             RegisterString("UI快捷键提示", "Press Backspace to hide/open this window. Press \"Ctrl\" + \"-\" to advance the attack time by 1 min.", "按下退格键开启或关闭此窗口，按下Ctrl+减号键使敌军进攻时间提前1分钟");
 
-            RegisterString("简单难度提示", "Difficulty: Easy (Station won't be dismantled; Merit points *0.75)", "当前难度：简单（物流塔不会被破坏；功勋点数获得*0.75）");
-            RegisterString("普通难度提示", "Difficulty: Normal (Station attacked will turn to blueprint mode)", "当前难度：普通（物流塔被破坏会进入蓝图模式）");
-            RegisterString("困难难度提示", "Difficulty: Hard (Station will be dismantled; Enemy strength increase; Merit points *1.5)", "当前难度：困难（物流塔会被破坏拆除，敌人战斗力大幅提升；功勋点数获得*1.5）");
-            RegisterString("简单难度提示短", "Difficulty: Easy", "当前难度：简单");
-            RegisterString("普通难度提示短", "Difficulty: Normal", "当前难度：普通");
-            RegisterString("困难难度提示短", "Difficulty: Hard", "当前难度：困难");
-            RegisterString("奖励倒计时：", "Reward time left: ", "奖励剩余时间：");
+            //RegisterString("简单难度提示", "Difficulty: Easy (Station won't be dismantled; Merit points *0.75)", "当前难度：简单（物流塔不会被破坏；功勋点数获得*0.75）");
+            //RegisterString("普通难度提示", "Difficulty: Normal (Station attacked will turn to blueprint mode)", "当前难度：普通（物流塔被破坏会进入蓝图模式）");
+            //RegisterString("困难难度提示", "Difficulty: Hard (Station will be dismantled; Enemy strength increase; Merit points *1.5)", "当前难度：困难（物流塔会被破坏拆除，敌人战斗力大幅提升；功勋点数获得*1.5）");
+            //RegisterString("简单难度提示短", "Difficulty: Easy", "当前难度：简单");
+            //RegisterString("普通难度提示短", "Difficulty: Normal", "当前难度：普通");
+            //RegisterString("困难难度提示短", "Difficulty: Hard", "当前难度：困难");
+            //RegisterString("奖励倒计时：", "Reward time left: ", "奖励剩余时间：");
 
             RegisterString("快速开局", "Fast Start", "快速开局");
             RegisterString("mod版本信息", "Current version: " + Configs.versionString + "                Contact me in Discord: ckcz123#3576", "当前版本：" + Configs.versionString + "          欢迎加入mod交流群：" + Configs.qq);
-            RegisterString("未探测到威胁", "No threat detected", "未探测到威胁");
-            RegisterString("预估数量", "Estimated quantity", "预估数量");
-            RegisterString("预估强度", "Estimated strength", "预估强度");
-            RegisterString("虫洞数量", "Wormhole quantity", "虫洞数量");
-            RegisterString("剩余时间", "Time left", "剩余时间");
-            RegisterString("敌人正在入侵", "The enemies are invading ", "敌人正在入侵");
-            RegisterString("剩余敌人", "Remaining enemies", "剩余敌人");
-            RegisterString("剩余强度", "Remaining strength", "剩余强度");
-            RegisterString("已被摧毁", "Eliminated enemies", "已被摧毁");
-            RegisterString("入侵抵达提示", "The next wave will arrive in {0} on {1}", "下一次入侵预计于{0}后抵达{1}");
-            RegisterString("精英入侵抵达提示", "The next <color=#ffa800dd>strong wave</color> will arrive in {0} on {1}", "下一次<color=#ffa800dd>强大的入侵</color>预计于{0}后抵达{1}");
-            RegisterString("约gm", "", "约");
+            //RegisterString("未探测到威胁", "No threat detected", "未探测到威胁");
+            //RegisterString("预估数量", "Estimated quantity", "预估数量");
+            //RegisterString("预估强度", "Estimated strength", "预估强度");
+            //RegisterString("虫洞数量", "Wormhole quantity", "虫洞数量");
+            //RegisterString("剩余时间", "Time left", "剩余时间");
+            //RegisterString("敌人正在入侵", "The enemies are invading ", "敌人正在入侵");
+            //RegisterString("剩余敌人", "Remaining enemies", "剩余敌人");
+            //RegisterString("剩余强度", "Remaining strength", "剩余强度");
+            //RegisterString("已被摧毁", "Eliminated enemies", "已被摧毁");
+            //RegisterString("入侵抵达提示", "The next wave will arrive in {0} on {1}", "下一次入侵预计于{0}后抵达{1}");
+            //RegisterString("精英入侵抵达提示", "The next <color=#ffa800dd>strong wave</color> will arrive in {0} on {1}", "下一次<color=#ffa800dd>强大的入侵</color>预计于{0}后抵达{1}");
+            RegisterString("约gm", "about", "约");
             RegisterString("小时gm", "h", "小时");
             RegisterString("分gm", "m", "分");
             RegisterString("秒gm", "s", "秒");
 
-            RegisterString("伤害", "Damage", "伤害");
-            RegisterString("弹道速度", "Speed", "弹道速度");
-            RegisterString("伤害半径", "Damage range", "伤害半径");
-            RegisterString("射速", "Fire rate", "射速");
-            RegisterString("子弹伤害", "Bullet damage", "子弹伤害");
-            RegisterString("导弹伤害", "Missile damage", "导弹伤害");
-            RegisterString("相位裂解光束伤害", "Phase-cracking beam damage", "相位裂解光束伤害");
-            RegisterString("子弹相位伤害", "Bullet / Beam damage", "子弹/相位光束伤害");
-            RegisterString("伤害类型特殊", " (Special)", " (特殊)");
-            RegisterString("子弹速度", "Bullet speed", "子弹速度");
-            RegisterString("导弹速度", "Missile speed", "导弹速度");
-            RegisterString("子弹飞行速度", "Bullet speed", "子弹飞行速度");
-            RegisterString("导弹飞行速度", "Missile speed", "导弹飞行速度");
-            RegisterString("子弹导弹速度", "Bullet / Missile speed", "子弹/导弹速度");
-            RegisterString("虫洞干扰半径", "Wormhole interference radius", "虫洞干扰半径");
-            RegisterString("效率gm", "Efficiency", "弹药效率");
-            RegisterString("额外奖励gm", "★bonus ", "★奖励 ");
+            //RegisterString("伤害", "Damage", "伤害");
+            //RegisterString("弹道速度", "Speed", "弹道速度");
+            //RegisterString("伤害半径", "Damage range", "伤害半径");
+            //RegisterString("射速", "Fire rate", "射速");
+            //RegisterString("子弹伤害", "Bullet damage", "子弹伤害");
+            //RegisterString("导弹伤害", "Missile damage", "导弹伤害");
+            //RegisterString("相位裂解光束伤害", "Phase-cracking beam damage", "相位裂解光束伤害");
+            //RegisterString("子弹相位伤害", "Bullet / Beam damage", "子弹/相位光束伤害");
+            //RegisterString("伤害类型特殊", " (Special)", " (特殊)");
+            //RegisterString("子弹速度", "Bullet speed", "子弹速度");
+            //RegisterString("导弹速度", "Missile speed", "导弹速度");
+            //RegisterString("子弹飞行速度", "Bullet speed", "子弹飞行速度");
+            //RegisterString("导弹飞行速度", "Missile speed", "导弹飞行速度");
+            //RegisterString("子弹导弹速度", "Bullet / Missile speed", "子弹/导弹速度");
+            //RegisterString("虫洞干扰半径", "Wormhole interference radius", "虫洞干扰半径");
+            //RegisterString("效率gm", "Efficiency", "弹药效率");
+            //RegisterString("额外奖励gm", "★bonus ", "★奖励 ");
 
-            RegisterString("设定索敌最高优先级", "Set priority to eject", "设定索敌最高优先级");
-            RegisterString("最接近物流塔", "Nearest to station", "最接近物流塔");
-            RegisterString("最大威胁", "Highest threat", "最大威胁");
-            RegisterString("距自己最近", "Nearest to self", "距自己最近");
-            RegisterString("最低生命", "Lowest HP", "最低生命");
-            RegisterString("目标生命值", "Target HP", "目标生命值");
-            RegisterString("无攻击目标", "No target", "无攻击目标");
-            RegisterString("开火中gm", "Firing", "开火中");
-            RegisterString("下一波攻击即将到来！", "Next wave is coming!", "下一波攻击即将到来！");
-            RegisterString("做好防御提示", "Please prepare next wave in <color=#c2853d>{0}</color>!", "请为<color=#c2853d>{0}</color>做好防御准备。");
-            RegisterString("下一波精英攻击即将到来！", "Next ★elite wave★ is coming!", "下一波 ★精英攻击★ 即将到来！");
-            RegisterString("做好防御提示精英",
-                "Please prepare next wave in <color=#c2853d>{0}</color>!\nThe enemy's attack will keep in 3 minutes, and the ships will obtain different buff.\nFrigate: 90% chance to evade bullet damage\nCruiser: reduce 90% damage from any aoe effects, immune crowd control\nBattleship: reduce 80% damage from energy weapons, megastructures or shields",
-                "请为<color=#c2853d>{0}</color>做好防御准备！\n 敌人将在三分钟内持续进攻\n敌舰将获得额外的加成效果\n护卫舰：有90%概率闪避来自子弹的伤害\n巡洋舰：减免90%受到的范围伤害，免疫任何控制效果\n战列舰：对能量武器、来自护盾或来自巨构的伤害减少80%");
-            RegisterString("虫洞已生成！", "Wormhole generated!", "虫洞已生成！");
-            RegisterString("虫洞生成提示", "Use starmap or fly to <color=#c2853d>{0}</color> to view details.", "可通过星图或飞往<color=#c2853d>{0}</color>查看具体信息。");
-            RegisterString("战斗已结束！", "Wave ended!", "战斗已结束！");
-            RegisterString("战斗时间", "Battle duration", "战斗时间");
-            RegisterString("歼灭敌人", "Enemy eliminated", "歼灭敌人");
-            RegisterString("输出伤害", "Total damage", "输出伤害");
-            RegisterString("损失物流塔", "Station lost", "损失物流塔");
-            RegisterString("损失其他建筑", "Other buildings lost", "损失其他建筑");
-            RegisterString("损失资源", "Resource lost", "损失资源");
-            RegisterString("奖励提示0", "Got reward: mining speed * 2, tech speed * 2, vessel ship speed * 1.5, lasting for {0} seconds.", "获得奖励：采矿速率*2，研究速率*2，运输船速度*1.5，持续 {0} 秒。");
-            RegisterString("奖励提示3", "Got reward: ore consumption -20%, mining speed * 2, tech speed * 2, vessel ship speed * 1.5, lasting for {0} seconds.", "获得奖励：采矿消耗-20%，采矿速率*2，研究速率*2，运输船速度*1.5，持续 {0} 秒。");
-            RegisterString("奖励提示5", "Got reward: ore consumption -20%, mining speed * 2, tech speed * 2, vessel ship speed * 1.5, proliferator's efficiency has been improved, lasting for {0} seconds.", "获得奖励：采矿消耗-20%，采矿速率*2，研究速率*2，运输船速度*1.5，增产剂效能全面提升，持续 {0} 秒。");
-            RegisterString("奖励提示7", "Got reward: ore consumption -50%, mining speed * 2, tech speed * 2, vessel ship speed * 1.5, proliferator's efficiency has been improved, lasting for {0} seconds.", "获得奖励：采矿消耗-50%，采矿速率*2，研究速率*2，运输船速度*1.5，增产剂效能全面提升，持续 {0} 秒。");
+            //RegisterString("设定索敌最高优先级", "Set priority to eject", "设定索敌最高优先级");
+            //RegisterString("最接近物流塔", "Nearest to station", "最接近物流塔");
+            //RegisterString("最大威胁", "Highest threat", "最大威胁");
+            //RegisterString("距自己最近", "Nearest to self", "距自己最近");
+            //RegisterString("最低生命", "Lowest HP", "最低生命");
+            //RegisterString("目标生命值", "Target HP", "目标生命值");
+            //RegisterString("无攻击目标", "No target", "无攻击目标");
+            //RegisterString("开火中gm", "Firing", "开火中");
+            //RegisterString("下一波攻击即将到来！", "Next wave is coming!", "下一波攻击即将到来！");
+            //RegisterString("做好防御提示", "Please prepare next wave in <color=#c2853d>{0}</color>!", "请为<color=#c2853d>{0}</color>做好防御准备。");
+            //RegisterString("下一波精英攻击即将到来！", "Next ★elite wave★ is coming!", "下一波 ★精英攻击★ 即将到来！");
+            //RegisterString("做好防御提示精英",
+            //    "Please prepare next wave in <color=#c2853d>{0}</color>!\nThe enemy's attack will keep in 3 minutes, and the ships will obtain different buff.\nFrigate: 90% chance to evade bullet damage\nCruiser: reduce 90% damage from any aoe effects, immune crowd control\nBattleship: reduce 80% damage from energy weapons, megastructures or shields",
+            //    "请为<color=#c2853d>{0}</color>做好防御准备！\n 敌人将在三分钟内持续进攻\n敌舰将获得额外的加成效果\n护卫舰：有90%概率闪避来自子弹的伤害\n巡洋舰：减免90%受到的范围伤害，免疫任何控制效果\n战列舰：对能量武器、来自护盾或来自巨构的伤害减少80%");
+            //RegisterString("虫洞已生成！", "Wormhole generated!", "虫洞已生成！");
+            //RegisterString("虫洞生成提示", "Use starmap or fly to <color=#c2853d>{0}</color> to view details.", "可通过星图或飞往<color=#c2853d>{0}</color>查看具体信息。");
+            //RegisterString("战斗已结束！", "Wave ended!", "战斗已结束！");
+            //RegisterString("战斗时间", "Battle duration", "战斗时间");
+            //RegisterString("歼灭敌人", "Enemy eliminated", "歼灭敌人");
+            //RegisterString("输出伤害", "Total damage", "输出伤害");
+            //RegisterString("损失物流塔", "Station lost", "损失物流塔");
+            //RegisterString("损失其他建筑", "Other buildings lost", "损失其他建筑");
+            //RegisterString("损失资源", "Resource lost", "损失资源");
+            //RegisterString("奖励提示0", "Got reward: mining speed * 2, tech speed * 2, vessel ship speed * 1.5, lasting for {0} seconds.", "获得奖励：采矿速率*2，研究速率*2，运输船速度*1.5，持续 {0} 秒。");
+            //RegisterString("奖励提示3", "Got reward: ore consumption -20%, mining speed * 2, tech speed * 2, vessel ship speed * 1.5, lasting for {0} seconds.", "获得奖励：采矿消耗-20%，采矿速率*2，研究速率*2，运输船速度*1.5，持续 {0} 秒。");
+            //RegisterString("奖励提示5", "Got reward: ore consumption -20%, mining speed * 2, tech speed * 2, vessel ship speed * 1.5, proliferator's efficiency has been improved, lasting for {0} seconds.", "获得奖励：采矿消耗-20%，采矿速率*2，研究速率*2，运输船速度*1.5，增产剂效能全面提升，持续 {0} 秒。");
+            //RegisterString("奖励提示7", "Got reward: ore consumption -50%, mining speed * 2, tech speed * 2, vessel ship speed * 1.5, proliferator's efficiency has been improved, lasting for {0} seconds.", "获得奖励：采矿消耗-50%，采矿速率*2，研究速率*2，运输船速度*1.5，增产剂效能全面提升，持续 {0} 秒。");
 
-            RegisterString("查看更多战斗信息", "View more details of this wave in Statistics -> Battle Info", "在分析面板-战斗统计中，可以查看更为详细的战斗信息。");
-            RegisterString("火箭模式提示", "Current Mode: AUTO", "自动寻敌（无需设置）");
-            RegisterString("打开统计面板", "Open Statistics", "打开统计面板");
+            //RegisterString("查看更多战斗信息", "View more details of this wave in Statistics -> Battle Info", "在分析面板-战斗统计中，可以查看更为详细的战斗信息。");
+            //RegisterString("火箭模式提示", "Current Mode: AUTO", "自动寻敌（无需设置）");
+            //RegisterString("打开统计面板", "Open Statistics", "打开统计面板");
 
-            RegisterString("战斗简报", "Battle Info", "战斗简报");
-            RegisterString("战况概览", "Summary", "战况概览");
-            RegisterString("弹药信息", "Bullets", "弹药信息");
-            RegisterString("敌方信息", "Enemies", "敌方信息");
-            RegisterString("简单", "Easy", "简单");
-            RegisterString("普通", "Normal", "普通");
-            RegisterString("困难", "Hard", "困难");
-            RegisterString("调整难度提示", "Change difficulty to: (Only ONCE)", "调整难度为：（只可调整一次）");
-            RegisterString("调整难度标题", "Confirm to change difficulty?", "你确定想调整难度么？");
-            RegisterString("调整难度警告", "Do you want to change difficulty to <color=#c2853d>{0}</color>? This can only be done ONCE!", "你确定想调整难度为<color=#c2853d>{0}</color>吗？难度只能被调整一次！");
-            RegisterString("设置成功！", "Success!", "设置成功！");
-            RegisterString("难度设置成功", "Successfully change difficulty to <color=#c2853d>{0}</color>!", "成功设置难度为<color=#c2853d>{0}</color>！");
-            RegisterString("平均拦截距离", "Avg Intercept Distance", "平均拦截距离");
-            RegisterString("最小拦截距离", "Min Intercept Distance", "最小拦截距离");
-            RegisterString("数量总计", "Total Quantity", "数量总计");
-            RegisterString("伤害总计", "Total Damage", "伤害总计");
-            RegisterString("子弹数量", "Bullets Quantity", "子弹数量");
-            RegisterString("导弹数量", "Missiles Quantity", "导弹数量");
-            RegisterString("子弹伤害gm", "Bullets Damage", "子弹伤害");
-            RegisterString("导弹伤害gm", "Missiles Damage", "导弹伤害");
-            RegisterString("击中gm", "Hit", "击中");
-            RegisterString("发射gm", "Ejected", "发射");
-            RegisterString("总计gm", "Total", "总计");
-            RegisterString("侦查艇", "Corvette", "侦查艇");
-            RegisterString("护卫舰", "Frigate", "护卫舰");
-            RegisterString("驱逐舰", "Destroyer", "驱逐舰");
-            RegisterString("巡洋舰", "Cruiser", "巡洋舰");
-            RegisterString("重型巡洋舰", "B-Cruiser", "重型巡洋舰");
-            RegisterString("战列舰", "Battleship", "战列舰");
+            //RegisterString("战斗简报", "Battle Info", "战斗简报");
+            //RegisterString("战况概览", "Summary", "战况概览");
+            //RegisterString("弹药信息", "Bullets", "弹药信息");
+            //RegisterString("敌方信息", "Enemies", "敌方信息");
+            //RegisterString("简单", "Easy", "简单");
+            //RegisterString("普通", "Normal", "普通");
+            //RegisterString("困难", "Hard", "困难");
+            //RegisterString("调整难度提示", "Change difficulty to: (Only ONCE)", "调整难度为：（只可调整一次）");
+            //RegisterString("调整难度标题", "Confirm to change difficulty?", "你确定想调整难度么？");
+            //RegisterString("调整难度警告", "Do you want to change difficulty to <color=#c2853d>{0}</color>? This can only be done ONCE!", "你确定想调整难度为<color=#c2853d>{0}</color>吗？难度只能被调整一次！");
+            //RegisterString("设置成功！", "Success!", "设置成功！");
+            //RegisterString("难度设置成功", "Successfully change difficulty to <color=#c2853d>{0}</color>!", "成功设置难度为<color=#c2853d>{0}</color>！");
+            //RegisterString("平均拦截距离", "Avg Intercept Distance", "平均拦截距离");
+            //RegisterString("最小拦截距离", "Min Intercept Distance", "最小拦截距离");
+            //RegisterString("数量总计", "Total Quantity", "数量总计");
+            //RegisterString("伤害总计", "Total Damage", "伤害总计");
+            //RegisterString("子弹数量", "Bullets Quantity", "子弹数量");
+            //RegisterString("导弹数量", "Missiles Quantity", "导弹数量");
+            //RegisterString("子弹伤害gm", "Bullets Damage", "子弹伤害");
+            //RegisterString("导弹伤害gm", "Missiles Damage", "导弹伤害");
+            //RegisterString("击中gm", "Hit", "击中");
+            //RegisterString("发射gm", "Ejected", "发射");
+            //RegisterString("总计gm", "Total", "总计");
+            //RegisterString("侦查艇", "Corvette", "侦查艇");
+            //RegisterString("护卫舰", "Frigate", "护卫舰");
+            //RegisterString("驱逐舰", "Destroyer", "驱逐舰");
+            //RegisterString("巡洋舰", "Cruiser", "巡洋舰");
+            //RegisterString("重型巡洋舰", "B-Cruiser", "重型巡洋舰");
+            //RegisterString("战列舰", "Battleship", "战列舰");
             RegisterString("已歼灭gm", "Eliminated", "已歼灭");
             RegisterString("已产生gm", "Total", "已产生");
             RegisterString("占比gm", "Percentage", "占比");
@@ -378,49 +378,53 @@ namespace DSP_Battle
             RegisterString("gmRankNoColor9", "Conqueror III", "征服者 III");
             RegisterString("gmRankNoColor10", "Galaxy Guardian", "星河卫士");
             RegisterString("gmRankUnlockText0", "", "");
-            RegisterString("gmRankUnlockText1", "Wave reward: mining speed * 2, tech speed * 2, vessel ship speed * 1.5. Lasts up to 5 minutes", "战斗结束后给予采矿速率*2，研究速率*2，运输船速度*1.5的奖励，持续5分钟");
-            RegisterString("gmRankUnlockText2", "Wave reward duration +20%", "战斗奖励持续时间增加20%");
-            RegisterString("gmRankUnlockText3", "New wave reward: mining consumption -20%", "战斗结束后额外获得采矿消耗-20%的奖励");
-            RegisterString("gmRankUnlockText4", "Wave reward duration +20%", "战斗奖励持续时间增加20%");
-            RegisterString("gmRankUnlockText5", "New wave reward: proliferator's efficiency has been improved", "战斗结束后额外获得增产剂效果全面加强的奖励");
-            RegisterString("gmRankUnlockText6", "Wave reward duration +20%", "战斗奖励持续时间增加20%");
-            RegisterString("gmRankUnlockText7", "Wave reward: mining consumption -20% --> -50%", "采矿消耗降低的奖励强化为-50%消耗");
-            RegisterString("gmRankUnlockText8", "Droplets can quickly approach distant target. Wave reward duration +20%", "水滴能够快速接近远距离的目标，战斗奖励持续时间增加20%");
-            RegisterString("gmRankUnlockText9", "Star cannon charging speed +100%", "恒星炮充能速度增加100%");
-            RegisterString("gmRankUnlockText10", "Droplet base damage greatly increased. Wave reward duration +20%", "水滴基础伤害获得大幅度加强，战斗结束后的奖励持续时间增加20%");
-            RegisterString("gmRankReward1", "Wave reward unlocked", "战斗结束后给予战斗奖励");
-            RegisterString("gmRankReward7", "Additional wave reward: mining consumption -50%", "额外的战斗奖励：采矿消耗-50%");
-            RegisterString("gmRankReward3", "Additional wave reward: mining consumption -20%", "额外的战斗奖励：采矿消耗-20%");
-            RegisterString("gmRankReward5", "Additional wave reward: proliferator enhancement", "额外的战斗奖励：增产剂效果强化");
-            RegisterString("gmRankReward2", "Wave reward duration +", "战斗奖励持续时间+");
-            RegisterString("gmRankReward8", "Droplets can quickly approach distant target", "水滴能够快速接近远距离的目标");
-            RegisterString("gmRankReward9", "Star cannon charging speed +100%", "恒星炮充能速度+100%");
-            RegisterString("gmRankReward10", "Droplet damage +400%", "水滴伤害+400%");
+            RegisterString("gmRankUnlockText1", "Enhanced core energy generation", "获得额外的核心发电");
+            RegisterString("gmRankUnlockText2", "Energy shield gains 25% damage reduction", "能量盾获得25%伤害减免");
+            RegisterString("gmRankUnlockText3", "Walk speed increases", "步行移动速度增加");
+            RegisterString("gmRankUnlockText4", "Ore loss per mining operation -20%", "采矿消耗 -20%");
+            RegisterString("gmRankUnlockText5", "EM effect +20%", "电磁武器效果 +20%");
+            RegisterString("gmRankUnlockText6", "Droplets can quickly approach distant target", "水滴能够快速接近远距离的目标");
+            RegisterString("gmRankUnlockText7", "Ore loss per mining operation -20%", "采矿消耗 -20%");
+            RegisterString("gmRankUnlockText8", "Star cannon charging speed +50%", "恒星炮充能速度 +50%");
+            RegisterString("gmRankUnlockText9", "Droplet damage +100%", "水滴伤害 +100%");
+            RegisterString("gmRankUnlockText10", "Ore loss per mining operation -40%", "采矿消耗 -40%");
+            RegisterString("gmRankReward1", "Core power generation +1 MW", "核心发电 +1MW");
+            RegisterString("gmRankReward2", "Energy shield damage reduction +25%", "能量盾伤害减免 +25%");
+            RegisterString("gmRankReward3", "Walk speed +4 m/s", "步行移动速度 +4 m/s");
+            RegisterString("gmRankReward4", "Ore loss per mining operation -20%", "采矿消耗 -20%");
+            RegisterString("gmRankReward5", "EM effect +20%", "电磁武器效果 +20%");
+            RegisterString("gmRankReward6", "Droplets can quickly approach distant target", "水滴能够快速接近远距离的目标");
+            RegisterString("gmRankReward7", "Ore loss per mining operation -40%", "采矿消耗 -40%");
+            RegisterString("gmRankReward8", "Star cannon charging speed +50%", "恒星炮充能速度 +50%");
+            RegisterString("gmRankReward9", "Droplet damage +100%", "水滴伤害 +100%");
+            RegisterString("gmRankReward10", "Ore loss per mining operation  -80%", "采矿消耗 -80%");
             RegisterString("功勋阶级", "Merit Rank", "功勋阶级");
             RegisterString("当前阶级", "Current Rank", "当前等级");
             RegisterString("功勋点数", "Merit points", "功勋点数");
             RegisterString("已解锁gm", "Unlocked", "已解锁");
             RegisterString("下一功勋等级解锁", "Next rank unlocked", "下一功勋等级解锁");
+            RegisterString("剩余复活币", "Resurrection Coin", "剩余复活币");
+            RegisterString("真实伤害已启用", "❈ True damage activated", "❈真实伤害已启用");
 
-            RegisterString("行星护盾生成器", "Planet shield generator", "行星护盾生成器");
-            RegisterString("行星护盾生成器描述", "Using a large amount of energy to maintain a force field shield on the planet's surface, the encoding of the force field's resonant frequency allows allies to easily pass through the shield, while blocking the enemies. Multiple shield generators can speed up the shield recharge rate, and provide additional shield capacity. However, as the number of shield generators increases, each additional generator will provide less and less additional capacity.",
-                "使用大量能量在行星表面维持一个力场护盾，对力场谐振频率的编码能够使友方轻易穿过护盾，同时阻挡敌人的进入或攻击。多个护盾生成器能够加快护盾充能的速度，也能够提供额外的护盾容量上限。不过随着单个星球上护盾生成器数量的增加，每个生成器能够提供的额外护盾也将越来越少。");
-            RegisterString("力场护盾", "Planet shield", "力场护盾");
-            RegisterString("力场护盾短", "Shield", "力场护盾");
-            RegisterString("护盾容量", "Shield capacity", "护盾容量");
-            RegisterString("护盾容量短", "Max shield", "护盾容量");
-            RegisterString("当前护盾", "Current shield", "当前护盾");
-            RegisterString("护盾恢复", "Recharge speed", "护盾恢复");
-            RegisterString("护盾生成器总数", "Generator amount", "护盾生成器总数");
-            RegisterString("完全充能时间", "Fully recharged in", "完全充能时间");
-            RegisterString("充能gm", "Charged", "已充能");
-            RegisterString("关闭gm", "Shut down", "关闭");
-            RegisterString("启动gm", "Activate", "启动");
-            RegisterString("护盾生成器待机提示", "The Shield Generator will stop consuming energy, and will no longer provide shield capacity or recharge shields.", "护盾生成器将停止消耗能量，并不再提供最大护盾容量，也无法为护盾充能。");
-            RegisterString("护盾生成器启动提示", "Shield generators will provide shield capacity, and speed up shield recharging.", "护盾生成器将提供护盾容量，并加快护盾充能速度。");
-            RegisterString("耗电需求gm", "Consumption demand", "耗电需求");
-            RegisterString("耗电需求短gm", "Consumption", "耗电需求");
-            RegisterString("发电性能短gm", "Generation", "发电性能");
+            //RegisterString("行星护盾生成器", "Planet shield generator", "行星护盾生成器");
+            //RegisterString("行星护盾生成器描述", "Using a large amount of energy to maintain a force field shield on the planet's surface, the encoding of the force field's resonant frequency allows allies to easily pass through the shield, while blocking the enemies. Multiple shield generators can speed up the shield recharge rate, and provide additional shield capacity. However, as the number of shield generators increases, each additional generator will provide less and less additional capacity.",
+            //    "使用大量能量在行星表面维持一个力场护盾，对力场谐振频率的编码能够使友方轻易穿过护盾，同时阻挡敌人的进入或攻击。多个护盾生成器能够加快护盾充能的速度，也能够提供额外的护盾容量上限。不过随着单个星球上护盾生成器数量的增加，每个生成器能够提供的额外护盾也将越来越少。");
+            //RegisterString("力场护盾", "Planet shield", "力场护盾");
+            //RegisterString("力场护盾短", "Shield", "力场护盾");
+            //RegisterString("护盾容量", "Shield capacity", "护盾容量");
+            //RegisterString("护盾容量短", "Max shield", "护盾容量");
+            //RegisterString("当前护盾", "Current shield", "当前护盾");
+            //RegisterString("护盾恢复", "Recharge speed", "护盾恢复");
+            //RegisterString("护盾生成器总数", "Generator amount", "护盾生成器总数");
+            //RegisterString("完全充能时间", "Fully recharged in", "完全充能时间");
+            //RegisterString("充能gm", "Charged", "已充能");
+            //RegisterString("关闭gm", "Shut down", "关闭");
+            //RegisterString("启动gm", "Activate", "启动");
+            //RegisterString("护盾生成器待机提示", "The Shield Generator will stop consuming energy, and will no longer provide shield capacity or recharge shields.", "护盾生成器将停止消耗能量，并不再提供最大护盾容量，也无法为护盾充能。");
+            //RegisterString("护盾生成器启动提示", "Shield generators will provide shield capacity, and speed up shield recharging.", "护盾生成器将提供护盾容量，并加快护盾充能速度。");
+            //RegisterString("耗电需求gm", "Consumption demand", "耗电需求");
+            //RegisterString("耗电需求短gm", "Consumption", "耗电需求");
+            //RegisterString("发电性能短gm", "Generation", "发电性能");
 
             RegisterString("护盾承受伤害", "Shield damage taken", "护盾承受伤害");
             RegisterString("护盾造成伤害", "Shield damage dealed", "护盾造成伤害");
@@ -433,22 +437,22 @@ namespace DSP_Battle
             RegisterString("巨构伤害", "Megastructure damage", "巨构伤害");
             RegisterString("恒星要塞导弹伤害", "StarFortress Missile dmg.", "恒星要塞导弹伤害");
             RegisterString("恒星要塞光矛伤害", "StarFortress LightSpear dmg.", "恒星要塞光矛伤害");
-            RegisterString("女神之怒伤害", "Wrath of Goddess dmg.", "女神之怒伤害");
+            //RegisterString("女神之怒伤害", "Wrath of Goddess dmg.", "女神之怒伤害");
 
-            RegisterString("异星矩阵", "Alien matrix", "异星矩阵");
-            RegisterString("异星矩阵描述", "A matrix containing high-density data accidentally dropped by invading swarms. Can be analyzed by mechas and used to unlock more advanced alien technologies. The matrix itself also seems to have potentially high-dimensional spatiotemporal properties", "由入侵的虫群偶然掉落的载有高密度数据的矩阵，可以由机甲分析并用于解锁更高级的异星科技。矩阵本身似乎还具有潜在的高维时空特性。");
-            RegisterString("异星元数据", "Alien metadata", "异星元数据");
-            RegisterString("异星元数据描述", "Having fully decoded the Alien Matrix, Icarus can now quickly decompile the Alien Matrix and obtain the alien metadata, which does not require as much computation as initially decoding the megastructure data in the Alien Matrix. The decoded alien metadata in mech will be automatically uploaded to the CenterBrain and shared with other pioneers in the sector, which will provide Icarus with additional <color=#c2853d>merit points</color>. But this metadata cannot be shared across archives like other metadata.",
-                "在完成了对异星矩阵的全面解码后，伊卡洛斯现在可以快速对异星矩阵进行反编译并获得异星元数据，这不需要像最初解码异星矩阵中的巨构数据那样消耗大量算力。机甲中的异星元数据将自动上传给主脑并共享给星区的其他开拓者，这同时也会为伊卡洛斯提供大量的<color=#c2853d>功勋点数</color>。但该元数据无法像其他元数据一样在存档间共享。");
-            RegisterString("异星矩阵反编译", "Alien matrix decompile", "异星矩阵反编译");
-            RegisterString("异星矩阵反编译 x10", "Alien matrix decompile x10", "异星矩阵反编译 x10");
-            RegisterString("异星矩阵反编译 x100", "Alien matrix decompile x100", "异星矩阵反编译 x100");
-            RegisterString("量子增产剂", "Quantum proliferator", "量子增产剂");
-            RegisterString("量子增产剂描述", "Research has shown that matter with high-dimensional spatiotemporal properties can be used to produce more effective proliferators, but such matter does not seem to be directly accessible from the original universe.", "研究表明具有高维时空特性的物质可被用于生产更强效果的增产材料，但这类物质似乎无法从本源宇宙中直接获取。");
-            RegisterString("量子增产剂科技描述", "Exploring how to make more efficient proliferators.", "对制造更高效增产剂进行探索。");
-            RegisterString("量子增产剂科技结论", "You have unlocked quatum proliferator.", "你解锁了制作量子增产剂的技术。");
-            RegisterString("掉落的异星矩阵", "Alien matrices dropped by enemies", "敌舰掉落的异星矩阵");
-            RegisterString("异星矩阵自动转换提示", "The alien matrices dropped by enemies have been automatically decompiled into alien metadata", "敌舰掉落的异星矩阵已自动反编译为异星元数据");
+            //RegisterString("异星矩阵", "Alien matrix", "异星矩阵");
+            //RegisterString("异星矩阵描述", "A matrix containing high-density data accidentally dropped by invading swarms. Can be analyzed by mechas and used to unlock more advanced alien technologies. The matrix itself also seems to have potentially high-dimensional spatiotemporal properties", "由入侵的虫群偶然掉落的载有高密度数据的矩阵，可以由机甲分析并用于解锁更高级的异星科技。矩阵本身似乎还具有潜在的高维时空特性。");
+            //RegisterString("异星元数据", "Alien metadata", "异星元数据");
+            //RegisterString("异星元数据描述", "Having fully decoded the Alien Matrix, Icarus can now quickly decompile the Alien Matrix and obtain the alien metadata, which does not require as much computation as initially decoding the megastructure data in the Alien Matrix. The decoded alien metadata in mech will be automatically uploaded to the CenterBrain and shared with other pioneers in the sector, which will provide Icarus with additional <color=#c2853d>merit points</color>. But this metadata cannot be shared across archives like other metadata.",
+            //    "在完成了对异星矩阵的全面解码后，伊卡洛斯现在可以快速对异星矩阵进行反编译并获得异星元数据，这不需要像最初解码异星矩阵中的巨构数据那样消耗大量算力。机甲中的异星元数据将自动上传给主脑并共享给星区的其他开拓者，这同时也会为伊卡洛斯提供大量的<color=#c2853d>功勋点数</color>。但该元数据无法像其他元数据一样在存档间共享。");
+            //RegisterString("异星矩阵反编译", "Alien matrix decompile", "异星矩阵反编译");
+            //RegisterString("异星矩阵反编译 x10", "Alien matrix decompile x10", "异星矩阵反编译 x10");
+            //RegisterString("异星矩阵反编译 x100", "Alien matrix decompile x100", "异星矩阵反编译 x100");
+            //RegisterString("量子增产剂", "Quantum proliferator", "量子增产剂");
+            //RegisterString("量子增产剂描述", "Research has shown that matter with high-dimensional spatiotemporal properties can be used to produce more effective proliferators, but such matter does not seem to be directly accessible from the original universe.", "研究表明具有高维时空特性的物质可被用于生产更强效果的增产材料，但这类物质似乎无法从本源宇宙中直接获取。");
+            //RegisterString("量子增产剂科技描述", "Exploring how to make more efficient proliferators.", "对制造更高效增产剂进行探索。");
+            //RegisterString("量子增产剂科技结论", "You have unlocked quatum proliferator.", "你解锁了制作量子增产剂的技术。");
+            //RegisterString("掉落的异星矩阵", "Alien matrices dropped by enemies", "敌舰掉落的异星矩阵");
+            //RegisterString("异星矩阵自动转换提示", "The alien matrices dropped by enemies have been automatically decompiled into alien metadata", "敌舰掉落的异星矩阵已自动反编译为异星元数据");
 
             RegisterString("物质解压器科技描述", "Decoding a method from the alien matrices to build a Matter Decompressor.", "从异星矩阵中解码建造物质解压器的方法。");
             RegisterString("科学枢纽科技描述", "Decoding a method from the alien matrices to build a Science Nexus.", "从异星矩阵中解码建造科学枢纽的方法。");
@@ -472,7 +476,7 @@ namespace DSP_Battle
             RegisterString("重新随机", "Roll", "重新随机");
             RegisterString("免费", "free", "免费");
             RegisterString("移除遗物", "Remove", "移除");
-            RegisterString("放弃解译", "Abort Interpret         +", "放弃解译         +");
+            RegisterString("放弃解译", "   Abort This           +", "放弃解译         +");
             RegisterString("放弃解译居中", "Abort Interpret", "放弃解译");
             RegisterString("删除遗物名称", "Remove Meta Drive", "移除元驱动");
             RegisterString("删除遗物描述",
@@ -494,10 +498,10 @@ namespace DSP_Battle
             RegisterString("女神之怒充能中", "Wrath of Goddess Charging", "女神之怒充能中");
             RegisterString("女神之怒", "† Wrath of Goddess †", "† 女神之怒 †");
 
-            RegisterString("圣物稀有度0", "<color=#d2853d>Regular</color>", "<color=#d2853d>常规级</color>");
-            RegisterString("圣物稀有度1", "<color=#9040d0>Packaged</color>", "<color=#9040d0>封装级</color>");
-            RegisterString("圣物稀有度2", "<color=#2080d0>Framed</color>", "<color=#2080d0>框架级</color>");
-            RegisterString("圣物稀有度3", "<color=#30b530>Mensural</color>", "<color=#30b530>定律级</color>");
+            RegisterString("圣物稀有度0", "<color=#d2853d>Mensural</color>", "<color=#d2853d>定律级</color>");
+            RegisterString("圣物稀有度1", "<color=#9040d0>Framed</color>", "<color=#9040d0>框架级</color>");
+            RegisterString("圣物稀有度2", "<color=#2080d0>Packaged</color>", "<color=#2080d0>封装级</color>");
+            RegisterString("圣物稀有度3", "<color=#30b530>Regular</color>", "<color=#30b530>常规级</color>");
             RegisterString("圣物稀有度4", "<color=#00c560>Axiomatic</color>", "<color=#00c560>公理级</color>");
             RegisterString("诅咒", "Editing Universal Axioms", "编辑宇宙公理");
             RegisterString("诅咒描述", "Attempting to touch and edit Cosmological Axioms is extremely dangerous, every time you enable an axiomatic level meta-drive, the disrupted Cosmological Axioms will cause the Dark Fog units to gain 50% extra experience and 5% damage resistence.\nYou can not remove an axiomatic meta drive once you enable it.\n\nNegative effect: ", "尝试触碰并编辑宇宙公理是极其危险的，你每启用一个公理级的元驱动，被扰乱的宇宙公理会使黑雾单位获得的经验+50%，以及5%伤害抵抗。\n公理级元驱动无法被移除。\n\n负面效果：");
@@ -626,7 +630,7 @@ namespace DSP_Battle
             RegisterString("遗物名称带颜色3-2", "<color=#30b530>Ark Reactor  [Regular]</color>", "<color=#30b530>方舟反应堆  [常规级]</color>");
             RegisterString("遗物名称带颜色3-3", "<color=#30b530>Shepherd of souls  [Regular]</color>", "<color=#30b530>掘墓人  [常规级]</color>");
             RegisterString("遗物名称带颜色3-4", "<color=#30b530>Ctrl 6  [Regular]</color>", "<color=#30b530>装  [常规级]</color>");
-            RegisterString("遗物名称带颜色3-5", "<color=#30b530>Resurrect Coin  [Regular]</color>", "<color=#30b530>复活币  [常规级]</color>");
+            RegisterString("遗物名称带颜色3-5", "<color=#30b530>Resurrection Coin  [Regular]</color>", "<color=#30b530>复活币  [常规级]</color>");
             RegisterString("遗物名称带颜色3-6", "<color=#30b530>Upload  [Regular]</color>", "<color=#30b530>上传  [常规级]</color>");
             RegisterString("遗物名称带颜色3-7", "<color=#30b530>Void Refraction  [Regular]</color>", "<color=#30b530>虚空折射  [常规级]</color>");
             RegisterString("遗物名称带颜色3-8", "<color=#30b530>Matrix Rain  [Regular]</color>", "<color=#30b530>矩阵雨  [常规级]</color>");
@@ -658,7 +662,7 @@ namespace DSP_Battle
             RegisterString("遗物描述0-7", "The star system with a megastructure will deal <i>additional damage</i> to all enemy ships in the star system during the invasion, higher energy the megastucture generates, higher the damage it deals.", "拥有巨构的星系在战斗时每秒会对星系中所有敌舰造成<i>额外伤害</i>，伤害取决于巨构的能量水平");
             RegisterString("遗物描述0-8", "Jamming towers deal 20 <i>additional damage</i> to all hit targets when using jamming capsules, deal 30 if using suppresing capsules", "干扰塔使用干扰胶囊造成电磁干扰时，对所有命中目标造成20<i>额外伤害</i>，压制胶囊则转而造成30<i>额外伤害</i>");
             RegisterString("遗物描述0-9", "It must do something...", "它必须做点什么...");
-            RegisterString("遗物描述0-9实际", "You have a higher probability of getting rarer meta drivers. If the first judgment fails with any probability, it can be judged again. And the hidden effects...", "你有更高的概率获取更稀有的元驱动。任何概率初次判定失败时，可以再判定一次。以及隐藏效果...");
+            RegisterString("遗物描述0-9实际", "You have a higher probability of getting rarer meta drives. If the first judgment fails with any probability, it can be judged again. And the hidden effects...", "你有更高的概率获取更稀有的元驱动。任何概率初次判定失败时，可以再判定一次。以及隐藏效果...");
             RegisterString("遗物描述0-10", "Every time a droplet destroys an enemy, restores 2MJ power to the Mecha, and all droplets permanently obtain 10 <i>additional damage</i>. ", "水滴每击杀一个敌人，为机甲回复2MJ能量，且所有水滴永久获得+10的<i>额外伤害</i>。");
 
             RegisterString("遗物描述1-0", "Every time you unlock or upgrade a technology, random mega structures will be partially auto-constructed", "每解锁或升级一个科技，少量推进随机巨构的建造进度");
@@ -671,7 +675,7 @@ namespace DSP_Battle
             RegisterString("遗物描述1-7", "Solar sail absorption speed increases 300%, ejecting speed increases 100%", "巨构的太阳帆吸附速度提升300%，弹射器弹射太阳帆的速度提升100%");
             RegisterString("遗物描述1-8", "When Icarus' Energy shield is broken, depleting the Mech's fuel chamber to instantly restore up to 100% energy shield", "伊卡洛斯的能量盾被打破时，消耗机甲燃烧室储备立刻回复最多100%的能量盾");
             RegisterString("遗物描述1-9", "When an ally fleet unit is about to take damage, if Icarus' shield is charged above 50%, Icarus will take the damage instead", "我方舰队中的单位将要承受伤害时，如果伊卡洛斯的能量盾充能高于50%，则由其代为承担");
-            RegisterString("遗物描述1-10", "Ally damage will permanently ignore the armor of the dark fog unit. Won't occupy the meta driver slot", "友方伤害将永久无视黑雾单位的护甲，不占用元驱动槽位");
+            RegisterString("遗物描述1-10", "Ally damage will permanently ignore the armor of the dark fog unit. Won't occupy the meta drive slot", "友方伤害将永久无视黑雾单位的护甲，不占用元驱动槽位");
             RegisterString("遗物描述1-11", "Greatly enhanced jamming tower's effect", "大幅强化干扰塔的效果");
 
             RegisterString("遗物描述2-0", "Planetary Shields gain 50% additional charge energy", "行星护盾获得50%额外的充能量");
@@ -698,9 +702,9 @@ namespace DSP_Battle
             RegisterString("遗物描述3-2", "Icarus will generate additional energy without consuming fuel, which is equivalent to 50% of the base power of the fuel generation reactor", "伊卡洛斯会不消耗燃料地持续获得额外的能量回复，相当于反应堆基础功率的50%");
             RegisterString("遗物描述3-3", "Double the sand amount dropped by dark fog units", "黑雾单位掉落的沙土加倍");
             RegisterString("遗物描述3-4", "Dark fog gain +100% extra experience", "黑雾获得经验+100%");
-            RegisterString("遗物描述3-5", "When Icarus is destroyed, give you options to use resurrect coins to redeploy or reassemble for free. Won't occupy the meta drive slot", "伊卡洛斯被毁时，可以选择消耗复活币来无消耗地重新部署或原地重组，不占用元驱动槽位");
-            RegisterString("遗物描述3-6", "Gain some merit points based on your current rank level. Won't occupy the meta driver slot", "获得基于当前阶级的少量功勋点数，不占用元驱动槽位");
-            RegisterString("遗物描述3-7", "Energy weapon damage +10%. Won't occupy the meta driver slot", "能量武器伤害+10%，不占用元驱动槽位");
+            RegisterString("遗物描述3-5", "When Icarus is destroyed, give you options to use resurrection coins to redeploy or reassemble for free. Won't occupy the meta drive slot", "伊卡洛斯被毁时，可以选择消耗复活币来无消耗地重新部署或原地重组，不占用元驱动槽位");
+            RegisterString("遗物描述3-6", "Gain some merit points based on your current rank level. Won't occupy the meta drive slot", "获得基于当前阶级的少量功勋点数，不占用元驱动槽位");
+            RegisterString("遗物描述3-7", "Energy weapon damage +10%. Won't occupy the meta drive slot", "能量武器伤害+10%，不占用元驱动槽位");
             RegisterString("遗物描述3-8", "Based on the unlocked matrix technology, immediately give a large number of normal matrix (except the alien matrix and the universe matrix)", "基于已解锁的矩阵科技，立刻获得大量普通矩阵（异星矩阵和宇宙矩阵除外），不会占用圣物槽位");
             RegisterString("遗物描述3-9", "When a certain number of buildings are destroyed, random mega structure will be slightly auto-constructed", "一定数量的建筑被毁时，微量推进随机星系的巨构的建造进度");
             RegisterString("遗物描述3-10", "Every second, if Icaros is on the planet and have moved in the previous second, you have 3% chance to obtain a multi-functional integrated component", "每过一秒，如果伊卡洛斯处于行星上并且在上一秒进行过移动，就有3%的概率获得一个多功能集成组件");
@@ -759,6 +763,7 @@ namespace DSP_Battle
             RegisterString("当前倍率", "Current factor", "当前倍率");
             RegisterString("剩余冷却时间gm", "Cooling down", "冷却中");
             RegisterString("冷却完毕gm", "Ready", "已就绪");
+            RegisterString("消退于", "Fading in", "消退于");
 
             RegisterString("显示/隐藏", "Show/Hide", "显示/隐藏");
             RegisterString("模块容量", "Module Capacity", "模块容量");
@@ -782,12 +787,12 @@ namespace DSP_Battle
             RegisterString("即将拆除模块警告", "Since the module upper limit will be less than the number of completed modules, the overflowing completed modules will be immediately removed, and the module points will be wasted. Are you sure you want to remove them?", "由于模块上限被调整后将少于已建成的模块数，溢出的已建成的模块将被立刻拆除，模块点数将被浪费。是否确认拆除？");
             
             RegisterString("深空来敌介绍1标题", "They come from void player guide", "深空来敌玩法介绍");
-            RegisterString("深空来敌介绍1前字", "In TheyComeFromVoid, you will gradually face increasingly powerful enemy attacks. You need to build ground defense or research higher technology to deploy defense in space, resist enemy invasions, and prevent them from destroying your ground buildings and resources. \n\nOnly after you build the first <color=\"#FD965ECC\">interstellar logistics station</color> will the enemy begin preparing to invade. Carefully read the <color=\"#FD965ECC\">Pioneer Diary</color> for more game tips. The <color=\"#FD965ECC\">Pioneer Diary</color> will be gradually distributed as you unlock key technologies. \n\nThe real-time statistics of each battle can be viewed in the battle statistics panel (Press P).", "在深空来敌中，你将会逐渐面对越来越强大的敌人的进攻，你需要构建地面防御或研究更高的科技来在太空中部署防御，抵抗敌人的进攻，防止其摧毁你的地面建筑和资源。\n\n只有在你建造第一个<color=\"#FD965ECC\">星际物流塔</color>之后，敌人才会开始准备入侵。仔细阅读<color=\"#FD965ECC\">先驱者日记</color>来获得更多的游戏提示，<color=\"#FD965ECC\">先驱者日记</color>会在你解锁关键科技时逐步发放。\n\n每次战斗的实时统计均可在P键统计面板中的战斗统计中查看。");
+            RegisterString("深空来敌介绍1前字", "Nothing here for now. You can check the meta drive infomation below.", "这里暂时没有东西。你可以翻看下面的元驱动介绍。");
 
-            RegisterString("深空来敌介绍2前字", "By destroying invading enemy ships, you can gain experience points to promote your merit rank. Every time you reach the new merit rank, it will bring permanent bonus effects, some providing bonuses for your production line, while others strengthening your defense capabilities. You can view the bonus effect of the current rank, the experience requirements of the next level, and the bonus effect of the next level by hovering the mouse over the merit rank icon in the upper right corner.", "通过击毁入侵的敌舰，你可以获得经验点数来提升功勋阶级。每次提升功勋阶级都将带来永久的加成效果，有些为你的生产线提供加成，有些则强化你的防御能力。你可以通过将鼠标悬停在右上角的功勋阶级图标上来查看当前等级的加成效果，下一等级的经验需求和下一等级的加成效果。");
+            RegisterString("深空来敌介绍2前字", "By destroying dark fog units, you can gain experience points to promote your merit rank, and accumulate combat experience to strengthen yourself. Every time you reach the new merit rank, it will bring permanent bonus effects, some providing bonuses for your production line, while others strengthening your combat capabilities. You can view the bonus effect of the current rank, the experience requirements of the next level, and the bonus effect of the next level by hovering the mouse over the merit rank icon in the upper right corner.", "通过击毁黑雾单位，你可以获得经验点数来提升功勋阶级，并积累战斗经验来强化自身。每次提升功勋阶级都将带来永久的加成效果，有些为你的生产线提供加成，有些则强化你的战斗能力。你可以通过将鼠标悬停在右上角的功勋阶级图标上来查看当前等级的加成效果，下一等级的经验需求和下一等级的加成效果。");
 
            
-            RegisterString("深空来敌介绍5标题", "Regular Meta-Drive", "常规元驱动");
+            RegisterString("深空来敌介绍5标题", "Meta-Drive", "元驱动");
             RegisterString("深空来敌介绍6标题", "Axiomatic Meta-Drive", "公理级元驱动");
 
             ProtoRegistry.RegisterItem(8035, "水滴伤害增加", "", "Assets/DSPBattle/r0-10", 9999, 100, EItemType.Material);
@@ -851,12 +856,12 @@ namespace DSP_Battle
             RegisterString("不朽之守护启动", " † Aegis of the Immortal † ", " † 不朽之守护 † ");
             RegisterString("不朽之守护就绪", "Aegis of the immortal is ready.", "不朽之守护已就绪。");
             RegisterString("消耗复活币描述", "Use the resurrection coin to reassemble.", "这会消耗复活币，但不需要消耗任何元数据。");
-            RegisterString("使用复活币重新部署描述", "aaa", "使用复活币重新部署描述");
-            RegisterString("使用复活币立刻复活描述", "aaa", "使用复活币立刻复活描述");
-            RegisterString("下次重新部署消耗不会增加", "aaa", "下次重新部署消耗不会增加");
-            RegisterString("下次立刻复活消耗不会增加", "aaa", "下次立刻复活消耗不会增加");
-            RegisterString("使用元数据或复活币", "Use Metadata or Resurrect Coin", "使用元数据或复活币");
-            RegisterString("aaa", "aaa", "aaa");
+            RegisterString("使用复活币重新部署描述", "Use resurrection coin and redeploy Icarus to the initial planet?", "确认消耗复活币将伊卡洛斯重新部署至初始行星的降落点？");
+            RegisterString("使用复活币立刻复活描述", "Use resurrection coin to reassemble Icarus?", "确认消耗复活币将伊卡洛斯立刻原地重组？");
+            RegisterString("下次重新部署消耗不会增加", "Next redeployment cost won't increase.", "下次重新部署的消耗不会增加");
+            RegisterString("下次立刻复活消耗不会增加", "Next reassembling cost won't increase.", "下次原地重组的消耗不会增加");
+            RegisterString("使用元数据或复活币", "Use Metadata or Resurrect Coin", "使用 元数据 或 复活币");
+            //RegisterString("aaa", "aaa", "aaa");
             //RegisterString("aaa", "aaa", "aaa");
 
         }
@@ -1293,8 +1298,8 @@ namespace DSP_Battle
                 ep.SetDecision(0, new int[] { }, new int[] { -1 }, new int[] { 0 });
                 ep.SetDecision(1, new int[] { }, new int[] { 19997, 24 }, new int[] { 0, 600 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "What ...... is this?", "这是……什么？");
-                RegisterString("epd" + id.ToString(), "", "分析模块从黑雾基地的残骸中偶然发现了一个带有自解译系统的元驱动，这种驱动似乎载有高效利用宇宙底层物理逻辑的高维API，但目前还无法确定它的具体功能。幸运的是，它带有的自解译系统被保留得相当完好，只需要连接伊卡洛斯的研究中枢就可以直接对其进行解码。");
+                RegisterString("ept" + id.ToString(), "What ...... is This?", "这是……什么？");
+                RegisterString("epd" + id.ToString(), "The analysis module stumbled upon a meta-drive with a self-interpretive system from the wreckage of the dark fog units, which appears to contain a high-dimensional API that efficiently uses the underlying physical logic of the universe, but its specific function has not yet been confirmed. Fortunately, its self-interpreting system was preserved so well that it only needed to connect to Icarus' research hub to decode it directly.", "分析模块从黑雾基地的残骸中偶然发现了一个带有自解译系统的元驱动，这种驱动似乎载有高效利用宇宙底层物理逻辑的高维API，但目前还无法确定它的具体功能。幸运的是，它带有的自解译系统被保留得相当完好，只需要连接伊卡洛斯的研究中枢就可以直接对其进行解码。");
                 RegisterString("epdt" + id.ToString() + "-0", "Don't connect", "不要连接");
                 RegisterString("epdt" + id.ToString() + "-1", "Connect it!", "连接它！");
             }
@@ -1305,12 +1310,62 @@ namespace DSP_Battle
                 ep.SetDecision(0, new int[] { }, new int[] { -1, 25201 }, new int[] { 0, 100 });
                 ep.SetDecision(1, new int[] { }, new int[] { 12, 21 }, new int[] { 0, 1800 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "发现潜在的元驱动");
-                RegisterString("epd" + id.ToString(), "", "在黑雾残骸的日志文件中发现了高维API的调用痕迹，这可能预示着宇宙元驱动的存在。但记载日志文件的实体极其不稳定，分析日志文件将破坏其物理结构，使其不再可用。或者伊卡洛斯可以选择将这个载有高维信息的日志文件在其存储体中直接编译为实体黑雾矩阵。");
+                RegisterString("ept" + id.ToString(), "Discover Traces of Potential Meta-Drive", "发现潜在的元驱动");
+                RegisterString("epd" + id.ToString(), "Traces of high-dimensional API calls were found in the log files of the dark fog wreckage, which may indicate the existence of a cosmic meta-drive. But the entity that records the log file is extremely unstable, and analyzing the log file will destroy its physical structure and make it no longer usable. Or Icarus could choose to compile this log file with high-dimensional information directly into physical dark fog matrices in its storage.", "在黑雾残骸的日志文件中发现了高维API的调用痕迹，这可能预示着宇宙元驱动的存在。但记载日志文件的实体极其不稳定，分析日志文件将破坏其物理结构，使其不再可用。或者伊卡洛斯可以选择将这个载有高维信息的日志文件在其存储体中直接编译为实体黑雾矩阵。");
                 RegisterString("epdt" + id.ToString() + "-0", "Compile it directly into the matrix", "将日志文件直接编译为矩阵");
                 RegisterString("epdt" + id.ToString() + "-1", "Analyze log file", "分析日志文件");
             }
             // 2
+            {
+                int id = 2001;
+                var ep = new EventProto(id);
+                ep.SetRequest(new int[] { 1 }, new int[] { 300 });
+                ep.SetDecision(0, new int[] { }, new int[] { -1 }, new int[] { 0 });
+                ep.SetDecision(1, new int[] { 0 }, new int[] { 19999, 25 }, new int[] { 0, 3600 * 3 });
+                EventSystem.protos.Add(id, ep);
+                RegisterString("ept" + id.ToString(), "Log Analysis", "分析日志");
+                RegisterString("epd" + id.ToString(), "The analysis module completes the destructive analysis of the log and finds that the carrier itself is the meta-driven materialization matrix. Fortunately, with its remnant self-interpreting system, Icarus might be able to try to fix the meta-drive and make it interpretable, but this would need some necessary materials.", "分析模块完成了对日志的破坏性分析，发现其载体本身就是元驱动的实体化矩阵。幸运的是，借助其残存的自解译系统，伊卡洛斯或许可以尝试修复元驱动，使其变得可以被解译，但这将消耗一些必要的材料。");
+                RegisterString("epdt" + id.ToString() + "-0", "Abort repairing", "放弃修复");
+                RegisterString("epdt" + id.ToString() + "-1", "Attempt to repair", "尝试修复");
+            }
+            {
+                int id = 2002;
+                var ep = new EventProto(id);
+                ep.SetRequest(new int[] { 400 }, new int[] { 0 });
+                ep.SetDecision(0, new int[] { }, new int[] { -1 }, new int[] { 0 });
+                ep.SetDecision(1, new int[] { 0 }, new int[] { 18101 }, new int[] { 0 });
+                EventSystem.protos.Add(id, ep);
+                RegisterString("ept" + id.ToString(), "Log Analysis", "分析日志");
+                RegisterString("epd" + id.ToString(), "The analysis module completed a destructive analysis of the log, which vaguely pointed to a planet, perhaps probing that planet could find traces of the meta-drive.", "分析模块完成了对日志的破坏性分析，日志模糊地指向了一个行星，或许探测该行星可以找到元驱动的痕迹。");
+                RegisterString("epdt" + id.ToString() + "-0", "Abort searching", "放弃搜寻");
+                RegisterString("epdt" + id.ToString() + "-1", "Search on the planet", "在行星上搜寻"); // 需要到达：行星名称（点击标记）
+            }
+            {
+                int id = 2003;
+                var ep = new EventProto(id);
+                ep.SetRequest(new int[] { 9999 }, new int[] { 100 });
+                ep.SetDecision(0, new int[] { }, new int[] { -1 }, new int[] { 0 });
+                ep.SetDecision(1, new int[] { 0 }, new int[] { 19999, 24 }, new int[] { 0, 1800 });
+                EventSystem.protos.Add(id, ep);
+                RegisterString("ept" + id.ToString(), "Log Analysis", "分析日志");
+                RegisterString("epd" + id.ToString(), "The analysis module completed a destructive analysis of the log, which, strangely enough, indicates that the meta-drive appeared to be encoded in disembodied form on energy fluctuations throughout the sector and is reacted to the disintegration of the dark fog units. Every time a dark fog unit is destroyed, it will trigger regular fluctuations encoded in the entire star region, and the analysis module may be able to find a way to interpret the drive by learning a large amount of regular fluctuation data. Once the sample size is large enough, Icarus can start the interpretation procedure.", "分析模块完成了对日志的破坏性分析，奇怪的是，这个驱动似乎是以无实体的形式被编码在整个星区的能量波动上的，并且对黑雾单位的解体过程有反应。每当有黑雾单位被摧毁，都会激发整个星区编码的规律性波动，分析模块或许可以通过学习大量的规律性波动数据来寻找解译驱动的方法。一旦样本量足够，伊卡洛斯就可以启动解译程序。");
+                RegisterString("epdt" + id.ToString() + "-0", "Abort", "放弃解译");
+                RegisterString("epdt" + id.ToString() + "-1", "Run interpretation procedure", "执行解译程序");
+            }
+            {
+                int id = 2004;
+                var ep = new EventProto(id);
+                ep.SetRequest(new int[] { 11305, 30000 }, new int[] { 50, 1 });
+                ep.SetDecision(0, new int[] { }, new int[] { -1 }, new int[] { 0 });
+                ep.SetDecision(1, new int[] { 0 }, new int[] { 19999, 24 }, new int[] { 0, 3600 * 8 });
+                ep.SetDecision(2, new int[] { 1 }, new int[] { 19999, 24 }, new int[] { 0, 1200 });
+                EventSystem.protos.Add(id, ep);
+                RegisterString("ept" + id.ToString(), "Log Analysis", "分析日志");
+                RegisterString("epd" + id.ToString(), "The analysis module completed the destructive analysis of the logs and easily located the meta-drive interpretation site, which Icarus needed to synchronize the compiled physical rules with the understandable code structure during the research. Alternatively, quantum chips can be used directly to assist interpretation, but this will take a longer time.", "分析模块完成了对日志的破坏性分析，并轻松定位了元驱动的解译位点，伊卡洛斯需要在研究过程中将编译在内的物理规则与可理解的代码结构进行同步，来完成解译过程。或者，也可以直接使用量子芯片辅助解译，但这将花费较长的时间。");
+                RegisterString("epdt" + id.ToString() + "-0", "Abort interpretation", "放弃解译");
+                RegisterString("epdt" + id.ToString() + "-1", "Use quantum chip to support the interpretation", "使用量子芯片解译");
+                RegisterString("epdt" + id.ToString() + "-2", "Sync physical rules", "同步物理规则");
+            }
             {
                 int id = 2101;
                 var ep = new EventProto(id);
@@ -1318,8 +1373,8 @@ namespace DSP_Battle
                 ep.SetDecision(0, new int[] { }, new int[] { -1 }, new int[] { 0 });
                 ep.SetDecision(1, new int[] { 0 }, new int[] { 19999, 25 }, new int[] { 0, 3600 * 3 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "分析日志");
-                RegisterString("epd" + id.ToString(), "", "分析模块完成了对日志的破坏性分析，发现其载体本身就是元驱动的实体化矩阵。幸运的是，借助其残存的自解译系统，伊卡洛斯或许可以尝试修复元驱动，使其变得可以被解译，但这将消耗一些必要的材料。");
+                RegisterString("ept" + id.ToString(), "Log Analysis", "分析日志");
+                RegisterString("epd" + id.ToString(), "The analysis module completes the destructive analysis of the log and finds that the carrier itself is the meta-driven materialization matrix. Fortunately, with its remnant self-interpreting system, Icarus might be able to try to fix the meta-drive and make it interpretable, but this would need some necessary materials.", "分析模块完成了对日志的破坏性分析，发现其载体本身就是元驱动的实体化矩阵。幸运的是，借助其残存的自解译系统，伊卡洛斯或许可以尝试修复元驱动，使其变得可以被解译，但这将消耗一些必要的材料。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort repairing", "放弃修复");
                 RegisterString("epdt" + id.ToString() + "-1", "Attempt to repair", "尝试修复");
             }
@@ -1330,8 +1385,8 @@ namespace DSP_Battle
                 ep.SetDecision(0, new int[] { }, new int[] { -1 }, new int[] { 0 });
                 ep.SetDecision(1, new int[] { 0 }, new int[] { 18101 }, new int[] { 0 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "分析日志");
-                RegisterString("epd" + id.ToString(), "", "分析模块完成了对日志的破坏性分析，日志模糊地指向了一个行星，或许探测该行星可以找到元驱动的痕迹。");
+                RegisterString("ept" + id.ToString(), "Log Analysis", "分析日志");
+                RegisterString("epd" + id.ToString(), "The analysis module completed a destructive analysis of the log, which vaguely pointed to a planet, perhaps probing that planet could find traces of the meta-drive.", "分析模块完成了对日志的破坏性分析，日志模糊地指向了一个行星，或许探测该行星可以找到元驱动的痕迹。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort searching", "放弃搜寻");
                 RegisterString("epdt" + id.ToString() + "-1", "Search on the planet", "在行星上搜寻"); // 需要到达：行星名称（点击标记）
             }
@@ -1342,8 +1397,8 @@ namespace DSP_Battle
                 ep.SetDecision(0, new int[] { }, new int[] { -1 }, new int[] { 0 });
                 ep.SetDecision(1, new int[] { 0 }, new int[] { 19999, 24 }, new int[] { 0, 1800 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "分析日志");
-                RegisterString("epd" + id.ToString(), "", "分析模块完成了对日志的破坏性分析，奇怪的是，这个驱动是以无实体的形式被编码在整个星区的能量波动上的，并且对黑雾单位的解体过程有反应。每当有黑雾单位被摧毁，都会激发整个星区编码的规律性波动，分析模块或许可以通过学习大量的规律性波动数据来寻找解译驱动的方法。一旦样本量足够，伊卡洛斯就可以启动解译程序。");
+                RegisterString("ept" + id.ToString(), "Log Analysis", "分析日志");
+                RegisterString("epd" + id.ToString(), "The analysis module completed a destructive analysis of the log, which, strangely enough, indicates that the meta-drive appeared to be encoded in disembodied form on energy fluctuations throughout the sector and is reacted to the disintegration of the dark fog units. Every time a dark fog unit is destroyed, it will trigger regular fluctuations encoded in the entire star region, and the analysis module may be able to find a way to interpret the drive by learning a large amount of regular fluctuation data. Once the sample size is large enough, Icarus can start the interpretation procedure.", "分析模块完成了对日志的破坏性分析，奇怪的是，这个驱动似乎是以无实体的形式被编码在整个星区的能量波动上的，并且对黑雾单位的解体过程有反应。每当有黑雾单位被摧毁，都会激发整个星区编码的规律性波动，分析模块或许可以通过学习大量的规律性波动数据来寻找解译驱动的方法。一旦样本量足够，伊卡洛斯就可以启动解译程序。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort", "放弃解译");
                 RegisterString("epdt" + id.ToString() + "-1", "Run interpretation procedure", "执行解译程序");
             }
@@ -1355,8 +1410,8 @@ namespace DSP_Battle
                 ep.SetDecision(1, new int[] { 0 }, new int[] { 19999, 24 }, new int[] { 0, 3600 * 8 });
                 ep.SetDecision(2, new int[] { 1 }, new int[] { 19999, 24 }, new int[] { 0, 1200 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "分析日志");
-                RegisterString("epd" + id.ToString(), "", "分析模块完成了对日志的破坏性分析，并轻松定位了元驱动的解译位点，伊卡洛斯需要在研究过程中将编译在内的物理规则与可理解的代码结构进行同步，来完成解译过程。或者，也可以直接使用量子芯片辅助解译，但这将花费较长的时间。");
+                RegisterString("ept" + id.ToString(), "Log Analysis", "分析日志");
+                RegisterString("epd" + id.ToString(), "The analysis module completed the destructive analysis of the logs and easily located the meta-drive interpretation site, which Icarus needed to synchronize the compiled physical rules with the understandable code structure during the research. Alternatively, quantum chips can be used directly to assist interpretation, but this will take a longer time.", "分析模块完成了对日志的破坏性分析，并轻松定位了元驱动的解译位点，伊卡洛斯需要在研究过程中将编译在内的物理规则与可理解的代码结构进行同步，来完成解译过程。或者，也可以直接使用量子芯片辅助解译，但这将花费较长的时间。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort interpretation", "放弃解译");
                 RegisterString("epdt" + id.ToString() + "-1", "Use quantum chip to support the interpretation", "使用量子芯片解译");
                 RegisterString("epdt" + id.ToString() + "-2", "Sync physical rules", "同步物理规则");
@@ -1368,20 +1423,20 @@ namespace DSP_Battle
                 ep.SetDecision(0, new int[] { }, new int[] { -1 }, new int[] { 0 });
                 ep.SetDecision(1, new int[] { 0 }, new int[] { 13, 23 }, new int[] { 0, 3600 * 3 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "分析日志");
-                RegisterString("epd" + id.ToString(), "", "分析模块发现记载日志的物理存储结构已经受到了严重的损伤，不过该损伤似乎是可逆的。在执行分析之前，首先需要提供一些必要的材料来修复日志。");
+                RegisterString("ept" + id.ToString(), "Log Analysis", "分析日志");
+                RegisterString("epd" + id.ToString(), "The analysis module found that the physical storage structure where the logs were recorded had been severely damaged, but the damage appeared to be reversible. Before performing the analysis, you first need to provide some necessary materials to repair the log.", "分析模块发现记载日志的物理存储结构已经受到了严重的损伤，不过该损伤似乎是可逆的。在执行分析之前，首先需要提供一些必要的材料来修复日志。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort repairing", "放弃修复");
                 RegisterString("epdt" + id.ToString() + "-1", "Attempt to repair and analyze", "尝试修复并分析");
             }
             {
                 int id = 2202;
                 var ep = new EventProto(id);
-                ep.SetRequest(new int[] { 210 }, new int[] { 0 });
+                ep.SetRequest(new int[] { 300 }, new int[] { 0 });
                 ep.SetDecision(0, new int[] { }, new int[] { -1 }, new int[] { 0 });
                 ep.SetDecision(1, new int[] { 0 }, new int[] { 13, 21 }, new int[] { 0, 1800 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "分析日志");
-                RegisterString("epd" + id.ToString(), "", "分析模块发现了日志本身被高度加密了，加密的方式是通过在时间维度上快速改变密文实现的，显然，维持该加密需要能量的供给。伊卡洛斯轻易地定位到了这个能量来自于某个行星上的地面黑雾巢穴。如果摧毁了该行星上的全部黑雾基地，应该就可以执行日志的解密与分析程序了。");
+                RegisterString("ept" + id.ToString(), "Log Analysis", "分析日志");
+                RegisterString("epd" + id.ToString(), "The analysis module found that the log itself was highly encrypted by rapidly changing the ciphertext in the time dimension. Obviously, maintaining the encryption required energy supply. Icarus easily pinpointed the energy as coming from a dark fog base on the ground on a planet. If all the dark fog bases on the planet are destroyed and all the core drillers are removed, the decryption and analysis of logs should be performed.", "分析模块发现了日志本身被高度加密了，加密的方式是通过在时间维度上快速改变密文实现的，显然，维持该加密需要能量的供给。伊卡洛斯轻易地定位到了这个能量来自于某个行星上的地面黑雾巢穴。如果摧毁并填埋该行星上的全部黑雾基地，应该就可以执行日志的解密与分析程序了。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort decryption", "放弃解密");
                 RegisterString("epdt" + id.ToString() + "-1", "Decryption and analyze", "解密并分析"); // 需要消灭：行星名称上的黑雾基地（点击标记）
             }
@@ -1392,8 +1447,8 @@ namespace DSP_Battle
                 ep.SetDecision(0, new int[] { }, new int[] { -1 }, new int[] { 0 });
                 ep.SetDecision(1, new int[] { 0 }, new int[] { 14 }, new int[] { 0 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "分析日志");
-                RegisterString("epd" + id.ToString(), "", "分析模块完成了对日志的破坏性分析，数据指示元驱动的物理实体被分散保存在某行星上的地面黑雾基地中。摧毁并填埋该行星上的全部巢穴就可以取回驱动实体，以便进行下一步的解译了。");
+                RegisterString("ept" + id.ToString(), "Log Analysis", "分析日志");
+                RegisterString("epd" + id.ToString(), "The analysis module completes the destructive analysis of the logs, and the physical entities driven by the data indicators are scattered and stored in the ground dark fog base on a planet. Destroying all the dark fog bases and remove all the core drillers on the planet will retrieve the driving entities for further interpretation.", "分析模块完成了对日志的破坏性分析，数据指示元驱动的物理实体被分散保存在某行星上的地面黑雾基地中。摧毁并填埋该行星上的全部黑雾基地就可以取回驱动实体，以便进行下一步的解译了。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort", "放弃搜寻");
                 RegisterString("epdt" + id.ToString() + "-1", "Retrieve meta drive", "取回元驱动");
             }
@@ -1404,8 +1459,8 @@ namespace DSP_Battle
                 ep.SetDecision(0, new int[] { }, new int[] { -1 }, new int[] { 0 });
                 ep.SetDecision(1, new int[] { 0 }, new int[] { 13, 21 }, new int[] { 0, 1800 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "分析日志");
-                RegisterString("epd" + id.ToString(), "", "分析模块发现日志实体似乎被一股未知的能量密封在高维空间中，伊卡洛斯无法探查到任何信息。不过，借助恒星级别的能量或许能打破该能量屏障，这需要巨构的帮助。");
+                RegisterString("ept" + id.ToString(), "Log Analysis", "分析日志");
+                RegisterString("epd" + id.ToString(), "The analysis module found that the log entity appeared to be sealed in high dimensional space by an unknown energy, and Icarus was unable to detect any information. However, it may be possible to break this energy barrier with the help of stellar energies, which requires the help of mega structures.", "分析模块发现日志实体似乎被一股未知的能量密封在高维空间中，伊卡洛斯无法探查到任何信息。不过，借助恒星级别的能量或许能打破该能量屏障，这需要巨构的帮助。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort analyze", "放弃分析");
                 RegisterString("epdt" + id.ToString() + "-1", "Break the energy barrier and analyze", "打破能量屏障并分析");
             }
@@ -1416,8 +1471,8 @@ namespace DSP_Battle
                 ep.SetDecision(0, new int[] { }, new int[] { -1 }, new int[] { 0 });
                 ep.SetDecision(1, new int[] { 0 }, new int[] { 13, 23 }, new int[] { 0, 3600 * 3 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "分析日志");
-                RegisterString("epd" + id.ToString(), "", "分析模块发现记载日志的物理存储结构已经受到了严重的损伤，不过该损伤似乎是可逆的。在执行分析之前，首先需要提供一些必要的材料来修复日志。");
+                RegisterString("ept" + id.ToString(), "Log Analysis", "分析日志");
+                RegisterString("epd" + id.ToString(), "The analysis module found that the physical storage structure where the logs were recorded had been severely damaged, but the damage appeared to be reversible. Before performing the analysis, you first need to provide some necessary materials to repair the log.", "分析模块发现记载日志的物理存储结构已经受到了严重的损伤，不过该损伤似乎是可逆的。在执行分析之前，首先需要提供一些必要的材料来修复日志。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort repairing", "放弃修复");
                 RegisterString("epdt" + id.ToString() + "-1", "Attempt to repair and analyze", "尝试修复并分析");
             }
@@ -1428,8 +1483,8 @@ namespace DSP_Battle
                 ep.SetDecision(0, new int[] { }, new int[] { -1 }, new int[] { 0 });
                 ep.SetDecision(1, new int[] { 0 }, new int[] { 13, 21 }, new int[] { 0, 3600 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "分析日志");
-                RegisterString("epd" + id.ToString(), "", "分析模块发现了日志本身被高度加密了，加密的方式是通过在时间维度上快速改变密文实现的，显然，维持该加密需要能量的供给。伊卡洛斯轻易地定位到了这个能量来自于某个行星上的地面黑雾单位。如果摧毁了该行星上全部的地面黑雾单位，应该就可以执行日志的解密与分析程序了。");
+                RegisterString("ept" + id.ToString(), "Log Analysis", "分析日志");
+                RegisterString("epd" + id.ToString(), "The analysis module found that the log itself was highly encrypted by rapidly changing the ciphertext in the time dimension. Obviously, maintaining the encryption required energy supply. Icarus easily pinpointed the energy as coming from a ground-based dark fog unit on a planet. If all ground dark fog units on the planet are destroyed, log decryption and analysis should be performed.", "分析模块发现了日志本身被高度加密了，加密的方式是通过在时间维度上快速改变密文实现的，显然，维持该加密需要能量的供给。伊卡洛斯轻易地定位到了这个能量来自于某个行星上的地面黑雾单位。如果摧毁了该行星上全部的地面黑雾单位，应该就可以执行日志的解密与分析程序了。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort decryption", "放弃解密");
                 RegisterString("epdt" + id.ToString() + "-1", "Decryption and analyze", "解密并分析"); // 需要消灭：行星名称上的某个黑雾基地（点击标记）
             }
@@ -1440,8 +1495,8 @@ namespace DSP_Battle
                 ep.SetDecision(0, new int[] { }, new int[] { -1 }, new int[] { 0 });
                 ep.SetDecision(1, new int[] { 0 }, new int[] { 13, 21 }, new int[] { 0, 7200 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "分析日志");
-                RegisterString("epd" + id.ToString(), "", "分析模块发现，分析日志被一种高阶的机械活体密钥加密了，如果不获取完整的密钥，便无法解密并分析。不过，星区中的某个恒星附近发现了携带密钥片段的黑雾单位，若能摧毁足够多的太空黑雾单位，或许就能获取完整的机械活体密钥。");
+                RegisterString("ept" + id.ToString(), "Log Analysis", "分析日志");
+                RegisterString("epd" + id.ToString(), "The analysis module found that the analysis log was encrypted with a high-level mechanical live key, which could not be decrypted and analyzed without obtaining the full key. However, dark fog units carrying key fragments have been found near a star in the galaxy, and if enough space dark fog units are destroyed, a complete mechanical live key may be obtained.", "分析模块发现，分析日志被一种高阶的机械活体密钥加密了，如果不获取完整的密钥，便无法解密并分析。不过，星区中的某个恒星附近发现了携带密钥片段的黑雾单位，若能摧毁足够多的太空黑雾单位，或许就能获取完整的机械活体密钥。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort decryption", "放弃解密");
                 RegisterString("epdt" + id.ToString() + "-1", "Decryption and analyze", "解密并分析");
             }
@@ -1452,8 +1507,8 @@ namespace DSP_Battle
                 ep.SetDecision(0, new int[] { }, new int[] { -1 }, new int[] { 0 });
                 ep.SetDecision(1, new int[] { 0 }, new int[] { 13, 21 }, new int[] { 0, 3600 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "分析日志");
-                RegisterString("epd" + id.ToString(), "", "分析模块发现日志实体似乎被一股未知的能量密封在高维空间中，伊卡洛斯无法探查到任何信息。不过，借助恒星级别的能量或许能打破该能量屏障，这需要巨构的帮助。");
+                RegisterString("ept" + id.ToString(), "Log Analysis", "分析日志");
+                RegisterString("epd" + id.ToString(), "The analysis module found that the log entity appeared to be sealed in high dimensional space by an unknown energy, and Icarus was unable to detect any information. However, it may be possible to break this energy barrier with the help of stellar energies, which requires the help of mega structures.", "分析模块发现日志实体似乎被一股未知的能量密封在高维空间中，伊卡洛斯无法探查到任何信息。不过，借助恒星级别的能量或许能打破该能量屏障，这需要巨构的帮助。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort analyze", "放弃分析");
                 RegisterString("epdt" + id.ToString() + "-1", "Break the energy barrier and analyze", "打破能量屏障并分析");
             }
@@ -1465,8 +1520,8 @@ namespace DSP_Battle
                 ep.SetDecision(0, new int[] { }, new int[] { -1 }, new int[] { 0 });
                 ep.SetDecision(1, new int[] { 0 }, new int[] { 19999, 25 }, new int[] { 0, 3600 * 3 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "分析日志");
-                RegisterString("epd" + id.ToString(), "", "分析模块完成了对日志的破坏性分析，发现其载体本身就是元驱动的实体化矩阵。幸运的是，借助其残存的自解译系统，伊卡洛斯或许可以尝试修复元驱动，使其变得可以被解译，但这将消耗一些必要的材料。");
+                RegisterString("ept" + id.ToString(), "Log Analysis", "分析日志");
+                RegisterString("epd" + id.ToString(), "The analysis module completes the destructive analysis of the log and finds that the carrier itself is the meta-driven materialization matrix. Fortunately, with its remnant self-interpreting system, Icarus might be able to try to fix the meta-drive and make it interpretable, but this would need some necessary materials.", "分析模块完成了对日志的破坏性分析，发现其载体本身就是元驱动的实体化矩阵。幸运的是，借助其残存的自解译系统，伊卡洛斯或许可以尝试修复元驱动，使其变得可以被解译，但这将消耗一些必要的材料。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort repairing", "放弃修复");
                 RegisterString("epdt" + id.ToString() + "-1", "Attempt to repair", "尝试修复");
             }
@@ -1477,8 +1532,8 @@ namespace DSP_Battle
                 ep.SetDecision(0, new int[] { }, new int[] { -1 }, new int[] { 0 });
                 ep.SetDecision(1, new int[] { 0 }, new int[] { 18101 }, new int[] { 0 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "分析日志");
-                RegisterString("epd" + id.ToString(), "", "分析模块完成了对日志的破坏性分析，日志模糊地指向了一个行星，或许探测该行星可以找到元驱动的痕迹。");
+                RegisterString("ept" + id.ToString(), "Log Analysis", "分析日志");
+                RegisterString("epd" + id.ToString(), "The analysis module completed a destructive analysis of the log, which vaguely pointed to a planet, perhaps probing that planet could find traces of the meta-drive.", "分析模块完成了对日志的破坏性分析，日志模糊地指向了一个行星，或许探测该行星可以找到元驱动的痕迹。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort searching", "放弃搜寻");
                 RegisterString("epdt" + id.ToString() + "-1", "Search on the planet", "在行星上搜寻"); // 需要到达：行星名称（点击标记）
             }
@@ -1489,8 +1544,8 @@ namespace DSP_Battle
                 ep.SetDecision(0, new int[] { }, new int[] { -1 }, new int[] { 0 });
                 ep.SetDecision(1, new int[] { 0 }, new int[] { 19999, 24 }, new int[] { 0, 1800 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "分析日志");
-                RegisterString("epd" + id.ToString(), "", "分析模块完成了对日志的破坏性分析，这个驱动似乎是以无实体的形式被编码在整个星区的能量波动上的，并且对黑雾单位的解体过程有反应。每当有黑雾单位被摧毁，都会激发整个星区编码的规律性波动，分析模块或许可以通过学习大量的规律性波动数据来寻找解译驱动的方法。一旦样本量足够，伊卡洛斯就可以启动解译程序。");
+                RegisterString("ept" + id.ToString(), "Log Analysis", "分析日志");
+                RegisterString("epd" + id.ToString(), "The analysis module completed a destructive analysis of the log, which, strangely enough, indicates that the meta-drive appeared to be encoded in disembodied form on energy fluctuations throughout the sector and is reacted to the disintegration of the dark fog units. Every time a dark fog unit is destroyed, it will trigger regular fluctuations encoded in the entire star region, and the analysis module may be able to find a way to interpret the drive by learning a large amount of regular fluctuation data. Once the sample size is large enough, Icarus can start the interpretation procedure.", "分析模块完成了对日志的破坏性分析，这个驱动似乎是以无实体的形式被编码在整个星区的能量波动上的，并且对黑雾单位的解体过程有反应。每当有黑雾单位被摧毁，都会激发整个星区编码的规律性波动，分析模块或许可以通过学习大量的规律性波动数据来寻找解译驱动的方法。一旦样本量足够，伊卡洛斯就可以启动解译程序。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort", "放弃解译");
                 RegisterString("epdt" + id.ToString() + "-1", "Run interpretation procedure", "执行解译程序");
             }
@@ -1502,8 +1557,8 @@ namespace DSP_Battle
                 ep.SetDecision(1, new int[] { 0 }, new int[] { 19999, 24 }, new int[] { 0, 3600 * 8 });
                 ep.SetDecision(2, new int[] { 1 }, new int[] { 19999, 24 }, new int[] { 0, 1200 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "分析日志");
-                RegisterString("epd" + id.ToString(), "", "分析模块完成了对日志的破坏性分析，并轻松定位了元驱动的解译位点，伊卡洛斯需要在研究过程中将编译在内的物理规则与可理解的代码结构进行同步，来完成解译过程。或者，也可以直接使用量子芯片辅助解译，但这将花费较长的时间。");
+                RegisterString("ept" + id.ToString(), "Log Analysis", "分析日志");
+                RegisterString("epd" + id.ToString(), "The analysis module completed the destructive analysis of the logs and easily located the meta-drive interpretation site, which Icarus needed to synchronize the compiled physical rules with the understandable code structure during the research. Alternatively, quantum chips can be used directly to assist interpretation, but this will take a longer time.", "分析模块完成了对日志的破坏性分析，并轻松定位了元驱动的解译位点，伊卡洛斯需要在研究过程中将编译在内的物理规则与可理解的代码结构进行同步，来完成解译过程。或者，也可以直接使用量子芯片辅助解译，但这将花费较长的时间。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort interpretation", "放弃解译");
                 RegisterString("epdt" + id.ToString() + "-1", "Use quantum chip to support the interpretation", "使用量子芯片解译");
                 RegisterString("epdt" + id.ToString() + "-2", "Sync physical rules", "同步物理规则");
@@ -1516,8 +1571,8 @@ namespace DSP_Battle
                 ep.SetDecision(1, new int[] { 0 }, new int[] { 14, 6, 7 }, new int[] { 0, -25, -25 });
                 ep.SetDecision(2, new int[] { 1 }, new int[] { 14 }, new int[] { 0 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "分析日志");
-                RegisterString("epd" + id.ToString(), "", "分析模块完成了对日志的破坏性分析，发现元驱动的具体定位指向了一个太空黑雾巢穴，似乎元驱动的数据被分布式存储在了属于该太空黑雾巢穴的多个单位和节点中，如果想取回完整的元驱动，必须消灭该黑雾巢穴所有的单位和结构，包括中继站。或者，在伊卡洛斯获取了足够多的元驱动相关数据时立刻尝试进行解译，但不完整的数据会导致最终的解码轨分离得不够彻底，使得解码轨包含大量冗余代码，这会降低找到更高阶API的概率。");
+                RegisterString("ept" + id.ToString(), "Log Analysis", "分析日志");
+                RegisterString("epd" + id.ToString(), "The analysis module completed the destructive analysis of the log and found that the specific positioning of the meta drive pointed to a space dark fog hive. It seems that the meta drive's data was distributed stored in multiple units and nodes belonging to the space dark fog hive. If you want to retrieve the complete meta drive, all units and structures of the dark fog hive, including the relay station, must be destroyed. Alternatively, Icarus attempts to decode as soon as it has acquired enough meta-drive data, but incomplete data will cause the final decoding track to be insufficiently separated, resulting in a large amount of redundant code, which will reduce the probability of finding higher-level APIs.", "分析模块完成了对日志的破坏性分析，发现元驱动的具体定位指向了一个太空黑雾巢穴，似乎元驱动的数据被分布式存储在了属于该太空黑雾巢穴的多个单位和节点中，如果想取回完整的元驱动，必须消灭该黑雾巢穴所有的单位和结构，包括中继站。或者，在伊卡洛斯获取了足够多的元驱动相关数据时立刻尝试进行解译，但不完整的数据会导致最终的解码轨分离得不够彻底，使得解码轨包含大量冗余代码，这会降低找到更高阶API的概率。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort searching", "放弃搜寻");
                 RegisterString("epdt" + id.ToString() + "-1", "Retrieve partial meta drive", "取回部分元驱动");
                 RegisterString("epdt" + id.ToString() + "-2", "Retrieve meta drive", "取回元驱动");
@@ -1529,8 +1584,8 @@ namespace DSP_Battle
                 ep.SetDecision(0, new int[] { }, new int[] { -1 }, new int[] { 0 });
                 ep.SetDecision(1, new int[] { 0 }, new int[] { 14 }, new int[] { 0 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "分析日志");
-                RegisterString("epd" + id.ToString(), "", "分析模块完成了对日志的破坏性分析，日志提到了元驱动的数据会出现在某恒星系高阶单位中，如果能够提升该恒星系太空黑雾巢穴的等级，伊卡洛斯应该就能找到足够的元驱动数据。");
+                RegisterString("ept" + id.ToString(), "Log Analysis", "分析日志");
+                RegisterString("epd" + id.ToString(), "The analysis module completed a destructive analysis of the log, which mentioned that the meta drive data would appear in the higher order units of a star system, and if Icarus could increase the level of the dark fog hive in space of the star system, the analysis module should be able to find enough meta drive data.", "分析模块完成了对日志的破坏性分析，日志提到了元驱动的数据会出现在某恒星系高阶单位中，如果能够提升该恒星系太空黑雾巢穴的等级，伊卡洛斯应该就能找到足够的元驱动数据。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort searching", "放弃搜寻");
                 RegisterString("epdt" + id.ToString() + "-1", "Retrieve meta drive", "取回元驱动");
             }
@@ -1543,8 +1598,8 @@ namespace DSP_Battle
                 ep.SetDecision(2, new int[] { 1 }, new int[] { 14 }, new int[] { 0 });
                 ep.SetDecision(3, new int[] { 0 }, new int[] { 14 }, new int[] { 0 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "分析日志");
-                RegisterString("epd" + id.ToString(), "", "这个分析日志似乎拥有来自低阶生命的非机械的情感倾向，分析模块在对其进行破坏性分析的过程中，发现了类似于恐惧、同情、兴奋和好奇的生物情感。显然，单纯的日志文件没有承载复杂情感编码的需要。分析模块推测日志本身就携带着元驱动信息。但不幸的是，日志的人格牢牢地保护着自身的数据，分析模块无法直接读取。我们可以尝试杀死他的同类来让它恐惧，从而找到漏洞进行攻击性破译。或者利用它的同情降低它的戒备，还可以尝试使用大量的复杂物体引起它的好奇来试图转移其注意。如果放弃对它的入侵，它似乎愿意为我们提供一些感谢。");
+                RegisterString("ept" + id.ToString(), "Log Analysis", "分析日志");
+                RegisterString("epd" + id.ToString(), "The analysis log appears to have non-mechanical emotional tendencies from lower order life, and in the course of its destructive analysis, the analysis module finds biological emotions similar to fear, compassion, excitement, and curiosity. Obviously, pure log files do not carry the need for complex emotional coding. The analysis module supposes that the log itself carries meta drive information. Unfortunately, the personality of the log securely protects its own data, which cannot be read directly by the analysis module. We can try to kill its own kind to make it fear, so we can find a loophole for aggressive decryption. Or you can use its sympathy to lower its guard, or you can try to divert its attention by using lots of complex objects to arouse its curiosity. It seems willing to offer you some thanks if you give up this intrusion.", "这个分析日志似乎拥有来自低阶生命的非机械的情感倾向，分析模块在对其进行破坏性分析的过程中，发现了类似于恐惧、同情、兴奋和好奇的生物情感。显然，单纯的日志文件没有承载复杂情感编码的需要。分析模块推测日志本身就携带着元驱动信息。但不幸的是，日志的人格牢牢地保护着自身的数据，分析模块无法直接读取。我们可以尝试杀死他的同类来让它恐惧，从而找到漏洞进行攻击性破译。或者利用它的同情降低它的戒备，还可以尝试使用大量的复杂物体引起它的好奇来试图转移其注意。如果放弃对它的入侵，它似乎愿意为我们提供一些感谢。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort", "放弃");
                 RegisterString("epdt" + id.ToString() + "-1", "Distract it", "分散它的注意力");
                 RegisterString("epdt" + id.ToString() + "-2", "Arouse its sympathy", "引起它的同情");
@@ -1559,8 +1614,8 @@ namespace DSP_Battle
                 ep.SetDecision(2, new int[] { 1 }, new int[] { 14 }, new int[] { 0 });
                 ep.SetDecision(3, new int[] { }, new int[] { 14, 2 }, new int[] { 0, -1 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "分析日志");
-                RegisterString("epd" + id.ToString(), "", "你尝试利用高维宇宙物理法则的违规行为已被COSMO技术伦理委员会发现，他们警告你必须立刻终止相关行动。我们可以无视他们的警告，继续获取元驱动数据，但这可能会带来后果，或者停止违反宇宙公约的行为。");
+                RegisterString("ept" + id.ToString(), "Log Analysis", "分析日志");
+                RegisterString("epd" + id.ToString(), "Your attempt to exploit the laws of higher dimensional COSMO physics has been discovered by the COSMO Technology Ethics Committee, who have warned you that you must immediately terminate the relevant action. We can ignore their warnings and continue to acquire meta-drive data, but that could have consequences, or stop violating cosmic conventions.", "你尝试利用高维宇宙物理法则的违规行为已被COSMO技术伦理委员会发现，他们警告你必须立刻终止相关行动。我们可以无视他们的警告，继续获取元驱动数据，但这可能会带来后果，或者停止违反宇宙公约的行为。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort interpretation", "放弃解译");
                 RegisterString("epdt" + id.ToString() + "-1", "Warn the COSMO Technology Ethics Committee not to meddle", "警告COSMO技术伦理委员会不要多管闲事");
                 RegisterString("epdt" + id.ToString() + "-2", "Bribe the COSMO Technology Ethics Committee", "贿赂COSMO技术伦理委员会");
@@ -1573,8 +1628,8 @@ namespace DSP_Battle
                 ep.SetDecision(0, new int[] { }, new int[] { -1 }, new int[] { 0 });
                 ep.SetDecision(1, new int[] { 0 }, new int[] { 14 }, new int[] { 0 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "分析日志");
-                RegisterString("epd" + id.ToString(), "", "分析模块完成了对日志的破坏性分析，发现元驱动的具体定位指向了一个恒星系，似乎元驱动的数据被分布式存储在了属于该星系的所有太空黑雾单位和巢穴中，我们不得不消灭该星系的全部太空黑雾单位来获取完整的元驱动。");
+                RegisterString("ept" + id.ToString(), "Log Analysis", "分析日志");
+                RegisterString("epd" + id.ToString(), "The analysis module completed the destructive analysis of the log, and found that the specific positioning of the meta-drive pointed to a star system, and it seemed that the meta-drive data was distributed stored in all the space dark fog ships and hives belonging to that star system, and we had to destroy all the space dark fog units of the star system to obtain the complete meta-drive.", "分析模块完成了对日志的破坏性分析，发现元驱动的具体定位指向了一个恒星系，似乎元驱动的数据被分布式存储在了属于该星系的所有太空黑雾单位和巢穴中，我们不得不消灭该星系的全部太空黑雾单位来获取完整的元驱动。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort searching", "放弃搜寻");
                 RegisterString("epdt" + id.ToString() + "-1", "Retrieve meta drive", "取回元驱动");
             }
@@ -1585,8 +1640,8 @@ namespace DSP_Battle
                 ep.SetDecision(0, new int[] { }, new int[] { -1 }, new int[] { 0 });
                 ep.SetDecision(1, new int[] { 0 }, new int[] { 14 }, new int[] { 0 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "分析日志");
-                RegisterString("epd" + id.ToString(), "", "分析模块完成了对日志的破坏性分析，日志显示，元驱动居然被黑雾封闭在了恒星之中，尽管不知道他们是如何做到的，但是这种由机械生物进行的恒星级操作显然可以通过恒星级的能量破解。使用足够的恒星能量应该能够将元驱动以量子波涨落的形式从恒星中攫取出来。");
+                RegisterString("ept" + id.ToString(), "Log Analysis", "分析日志");
+                RegisterString("epd" + id.ToString(), "The analysis module completed a destructive analysis of the log, which showed that the meta-drive was actually enclosed in the star by the dark fog, although it is not known how they did it, but this stellar operation carried out by mechanical creatures can apparently be cracked by stellar energy. Using enough stellar energy should be able to snatch the meta drive out of the star in the form of quantum wave fluctuations.", "分析模块完成了对日志的破坏性分析，日志显示，元驱动居然被黑雾封闭在了恒星之中，尽管不知道他们是如何做到的，但是这种由机械生物进行的恒星级操作显然可以通过恒星级的能量破解。使用足够的恒星能量应该能够将元驱动以量子波涨落的形式从恒星中攫取出来。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort", "放弃搜寻");
                 RegisterString("epdt" + id.ToString() + "-1", "Retrieve meta drive", "取回元驱动");
             }
@@ -1599,8 +1654,8 @@ namespace DSP_Battle
                 ep.SetDecision(2, new int[] { 1 }, new int[] { 14 }, new int[] { 0 });
                 ep.SetDecision(3, new int[] { 0 }, new int[] { 14 }, new int[] { 0 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "分析日志");
-                RegisterString("epd" + id.ToString(), "", "这个分析日志似乎拥有来自低阶生命的非机械的情感倾向，分析模块在对其进行破坏性分析的过程中，发现了类似于恐惧、同情、兴奋和好奇的生物情感。显然，单纯的日志文件没有承载复杂情感编码的需要。分析模块推测日志本身就携带着元驱动信息。但不幸的是，日志的人格牢牢地保护着自身的数据，分析模块无法直接读取。我们可以尝试杀死他的同类来让它恐惧，从而找到漏洞进行攻击性破译。或者利用它的同情降低它的戒备，还可以尝试使用大量的复杂物体引起它的好奇来试图转移其注意。如果放弃对它的入侵，它似乎愿意为我们提供一些感谢。");
+                RegisterString("ept" + id.ToString(), "Log Analysis", "分析日志");
+                RegisterString("epd" + id.ToString(), "The analysis log appears to have non-mechanical emotional tendencies from lower order life, and in the course of its destructive analysis, the analysis module finds biological emotions similar to fear, compassion, excitement, and curiosity. Obviously, pure log files do not carry the need for complex emotional coding. The analysis module supposes that the log itself carries meta drive information. Unfortunately, the personality of the log securely protects its own data, which cannot be read directly by the analysis module. We can try to kill its own kind to make it fear, so we can find a loophole for aggressive decryption. Or you can use its sympathy to lower its guard, or you can try to divert its attention by using lots of complex objects to arouse its curiosity. It seems willing to offer you some thanks if you give up this intrusion.", "这个分析日志似乎拥有来自低阶生命的非机械的情感倾向，分析模块在对其进行破坏性分析的过程中，发现了类似于恐惧、同情、兴奋和好奇的生物情感。显然，单纯的日志文件没有承载复杂情感编码的需要。分析模块推测日志本身就携带着元驱动信息。但不幸的是，日志的人格牢牢地保护着自身的数据，分析模块无法直接读取。我们可以尝试杀死他的同类来让它恐惧，从而找到漏洞进行攻击性破译。或者利用它的同情降低它的戒备，还可以尝试使用大量的复杂物体引起它的好奇来试图转移其注意。如果放弃对它的入侵，它似乎愿意为我们提供一些感谢。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort", "放弃");
                 RegisterString("epdt" + id.ToString() + "-1", "Distract it", "分散它的注意力");
                 RegisterString("epdt" + id.ToString() + "-2", "Arouse its sympathy", "引起它的同情");
@@ -1615,8 +1670,8 @@ namespace DSP_Battle
                 ep.SetDecision(2, new int[] { 1 }, new int[] { 14 }, new int[] { 0 });
                 ep.SetDecision(3, new int[] { }, new int[] { 14, 2 }, new int[] { 0, -1 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "分析日志");
-                RegisterString("epd" + id.ToString(), "", "你尝试利用高维宇宙物理法则的违规行为已被COSMO技术伦理委员会发现，他们警告你必须立刻终止相关行动。我们可以无视他们的警告，继续获取元驱动数据，但这可能会带来后果，或者停止违反宇宙公约的行为。");
+                RegisterString("ept" + id.ToString(), "Log Analysis", "分析日志");
+                RegisterString("epd" + id.ToString(), "Your attempt to exploit the laws of higher dimensional COSMO physics has been discovered by the COSMO Technology Ethics Committee, who have warned you that you must immediately terminate the relevant action. We can ignore their warnings and continue to acquire meta-drive data, but that could have consequences, or stop violating cosmic conventions.", "你尝试利用高维宇宙物理法则的违规行为已被COSMO技术伦理委员会发现，他们警告你必须立刻终止相关行动。我们可以无视他们的警告，继续获取元驱动数据，但这可能会带来后果，或者停止违反宇宙公约的行为。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort interpretation", "放弃解译");
                 RegisterString("epdt" + id.ToString() + "-1", "Warn the COSMO Technology Ethics Committee not to meddle", "警告COSMO技术伦理委员会不要多管闲事");
                 RegisterString("epdt" + id.ToString() + "-2", "Bribe the COSMO Technology Ethics Committee", "贿赂COSMO技术伦理委员会");
@@ -1631,8 +1686,8 @@ namespace DSP_Battle
                 ep.SetDecision(1, new int[] { }, new int[] { 19999, 24, 6, 7 }, new int[] { 0, 3600 * 3, -25, -50 });
                 ep.SetDecision(2, new int[] { 0 }, new int[] { 19999, 24 }, new int[] { 0, 3600 * 10 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "搜寻元驱动");
-                RegisterString("epd" + id.ToString(), "", "元驱动被从黑雾巢穴的废墟中找到，不过已经部分损坏，伊卡洛斯现在可以直接对其进行解译，但可能导致最终的解码轨分离得不够彻底，使得解码轨包含大量冗余代码，这会降低找到更高阶API的概率。或者，伊卡洛斯可以借助量子计算机在解译的过程中预测缺失的源代码，这将规避这种潜在风险。");
+                RegisterString("ept" + id.ToString(), "Search for Meta-Drive", "搜寻元驱动");
+                RegisterString("epd" + id.ToString(), "The meta-drive was recovered from the wreckage of the dark fog units, but it was partially damaged, and Icarus could now interpret it directly, but it could cause the final decoding track to be insufficiently separated and contain a lot of redundant code, which would reduce the probability of finding higher-level APIs. Alternatively, Icarus could use a quantum computer to predict missing source code during interpretation, which would circumvent this potential risk.", "元驱动被从黑雾巢穴的废墟中找到，不过已经部分损坏，伊卡洛斯现在可以直接对其进行解译，但可能导致最终的解码轨分离得不够彻底，使得解码轨包含大量冗余代码，这会降低找到更高阶API的概率。或者，伊卡洛斯可以借助量子计算机在解译的过程中预测缺失的源代码，这将规避这种潜在风险。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort interpretation", "放弃解译");
                 RegisterString("epdt" + id.ToString() + "-1", "Run interpretation procedure directly", "直接解译");
                 RegisterString("epdt" + id.ToString() + "-2", "Use quantum computer to predict missing source codes", "使用量子计算机预测缺失的源代码");
@@ -1645,8 +1700,8 @@ namespace DSP_Battle
                 ep.SetDecision(1, new int[] { }, new int[] { 19998, 6, 7 }, new int[] { 0, -25, -50 });
                 ep.SetDecision(2, new int[] { 0 }, new int[] { 19998 }, new int[] { 0 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "寻回元驱动");
-                RegisterString("epd" + id.ToString(), "", "元驱动被成功获取，不过已经部分损坏，伊卡洛斯现在可以直接对其进行解译，但可能导致最终的解码轨分离得不够彻底，使得解码轨包含大量冗余代码，这会降低找到更高阶API的概率。或者，伊卡洛斯可以借助量子计算机在解译的过程中预测缺失的源代码，这将规避这种潜在风险。");
+                RegisterString("ept" + id.ToString(), "Retrieve Meta-Drive", "寻回元驱动");
+                RegisterString("epd" + id.ToString(), "The meta-drive was successfully retrieved, but it was partially damaged, and Icarus could now interpret it directly, but it could cause the final decoding track to be insufficiently separated and contain a lot of redundant code, which would reduce the probability of finding higher-level APIs. Alternatively, Icarus could use a quantum computer to predict missing source code during interpretation, which would circumvent this potential risk.", "元驱动被成功获取，不过已经部分损坏，伊卡洛斯现在可以直接对其进行解译，但可能导致最终的解码轨分离得不够彻底，使得解码轨包含大量冗余代码，这会降低找到更高阶API的概率。或者，伊卡洛斯可以借助量子计算机在解译的过程中预测缺失的源代码，这将规避这种潜在风险。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort interpretation", "放弃解译");
                 RegisterString("epdt" + id.ToString() + "-1", "Run interpretation procedure directly", "直接解译");
                 RegisterString("epdt" + id.ToString() + "-2", "Use quantum computer to predict missing source codes", "使用量子计算机预测缺失的源代码");
@@ -1658,8 +1713,8 @@ namespace DSP_Battle
                 ep.SetDecision(0, new int[] { }, new int[] { -1 }, new int[] { 0 });
                 ep.SetDecision(1, new int[] { 0 }, new int[] { 19998 }, new int[] { 0 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "寻回元驱动");
-                RegisterString("epd" + id.ToString(), "", "元驱动被成功获取，伊卡洛斯需要在研究过程中将编译在内的物理规则与可理解的代码结构进行同步，来完成解译过程。");
+                RegisterString("ept" + id.ToString(), "Retrieve Meta-Drive", "寻回元驱动");
+                RegisterString("epd" + id.ToString(), "The meta-drive was successfully acquired, and Icarus needed to synchronize the compiled physical rules with the understandable code structure during the reasearch to complete the interpretation process.", "元驱动被成功获取，伊卡洛斯需要在研究过程中将编译在内的物理规则与可理解的代码结构进行同步，来完成解译过程。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort interpretation", "放弃解译");
                 RegisterString("epdt" + id.ToString() + "-1", "Sync physical rules", "同步物理规则");
             }
@@ -1670,8 +1725,8 @@ namespace DSP_Battle
                 ep.SetDecision(0, new int[] { }, new int[] { -1 }, new int[] { 0 });
                 ep.SetDecision(1, new int[] { 0 }, new int[] { 19998 }, new int[] { 0 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "寻回元驱动");
-                RegisterString("epd" + id.ToString(), "", "元驱动被成功获取，这个驱动似乎对黑雾单位的解体过程有反应。每当有黑雾单位被摧毁，都会激发整个星区编码的规律性波动，分析模块或许可以通过学习大量的规律性波动数据来寻找解译驱动的方法。一旦样本量足够，伊卡洛斯就可以启动解译程序。");
+                RegisterString("ept" + id.ToString(), "Retrieve Meta-Drive", "寻回元驱动");
+                RegisterString("epd" + id.ToString(), "The meta drive was successfully obtained, and this drive appears to be reacted to the disintegration of the dark fog units. Every time a dark fog unit is destroyed, it will trigger regular fluctuations encoded in the entire star region, and the analysis module may be able to find a way to interpret the drive by learning a large amount of regular fluctuation data. Once the sample size is large enough, Icarus can start the interpretation procedure.", "元驱动被成功获取，这个驱动似乎对黑雾单位的解体过程有反应。每当有黑雾单位被摧毁，都会激发整个星区编码的规律性波动，分析模块或许可以通过学习大量的规律性波动数据来寻找解译驱动的方法。一旦样本量足够，伊卡洛斯就可以启动解译程序。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort", "放弃解译");
                 RegisterString("epdt" + id.ToString() + "-1", "Continue interpretation procedure", "继续解译程序");
             }
@@ -1682,8 +1737,8 @@ namespace DSP_Battle
                 ep.SetDecision(0, new int[] { }, new int[] { -1 }, new int[] { 0 });
                 ep.SetDecision(1, new int[] { 0 }, new int[] { 19998, 22 }, new int[] { 0, 3600 * 3 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "寻回元驱动");
-                RegisterString("epd" + id.ToString(), "", "元驱动被成功获取，但其物理实体已部分损坏，必须提供一些必要的资源来对其进行修复才能够继续解译进程。");
+                RegisterString("ept" + id.ToString(), "Retrieve Meta-Drive", "寻回元驱动");
+                RegisterString("epd" + id.ToString(), "The meta-drive is successfully obtained, but its physical entity is partially damaged, and some necessary resources must be provided to repair it before the interpretation process can continue.", "元驱动被成功获取，但其物理实体已部分损坏，必须提供一些必要的资源来对其进行修复才能够继续解译进程。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort interpretation", "放弃解译");
                 RegisterString("epdt" + id.ToString() + "-1", "Attempt to repair", "尝试修复");
             }
@@ -1695,8 +1750,8 @@ namespace DSP_Battle
                 ep.SetDecision(1, new int[] { }, new int[] { 19998, 6, 7 }, new int[] { 0, -25, -50 });
                 ep.SetDecision(2, new int[] { 0 }, new int[] { 19998 }, new int[] { 0 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "寻回元驱动");
-                RegisterString("epd" + id.ToString(), "", "元驱动被成功获取，不过已经部分损坏，伊卡洛斯现在可以直接对其进行解译，但可能导致最终的解码轨分离得不够彻底，使得解码轨包含大量冗余代码，这会降低找到更高阶API的概率。或者，伊卡洛斯可以借助量子计算机在解译的过程中预测缺失的源代码，这将规避这种潜在风险。");
+                RegisterString("ept" + id.ToString(), "Retrieve Meta-Drive", "寻回元驱动");
+                RegisterString("epd" + id.ToString(), "The meta-drive was successfully retrieved, but it was partially damaged, and Icarus could now interpret it directly, but it could cause the final decoding track to be insufficiently separated and contain a lot of redundant code, which would reduce the probability of finding higher-level APIs. Alternatively, Icarus could use a quantum computer to predict missing source code during interpretation, which would circumvent this potential risk.", "元驱动被成功获取，不过已经部分损坏，伊卡洛斯现在可以直接对其进行解译，但可能导致最终的解码轨分离得不够彻底，使得解码轨包含大量冗余代码，这会降低找到更高阶API的概率。或者，伊卡洛斯可以借助量子计算机在解译的过程中预测缺失的源代码，这将规避这种潜在风险。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort interpretation", "放弃解译");
                 RegisterString("epdt" + id.ToString() + "-1", "Run interpretation procedure directly", "直接解译");
                 RegisterString("epdt" + id.ToString() + "-2", "Use quantum computer to predict missing source codes", "使用量子计算机预测缺失的源代码");
@@ -1708,8 +1763,8 @@ namespace DSP_Battle
                 ep.SetDecision(0, new int[] { }, new int[] { -1 }, new int[] { 0 });
                 ep.SetDecision(1, new int[] { 0 }, new int[] { 19998 }, new int[] { 0 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "寻回元驱动");
-                RegisterString("epd" + id.ToString(), "", "元驱动被成功获取，伊卡洛斯需要在研究过程中将编译在内的物理规则与可理解的代码结构进行同步，来完成解译过程。");
+                RegisterString("ept" + id.ToString(), "Retrieve Meta-Drive", "寻回元驱动");
+                RegisterString("epd" + id.ToString(), "The meta-drive was successfully acquired, and Icarus needed to synchronize the compiled physical rules with the understandable code structure during the research to complete the interpretation process.", "元驱动被成功获取，伊卡洛斯需要在研究过程中将编译在内的物理规则与可理解的代码结构进行同步，来完成解译过程。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort interpretation", "放弃解译");
                 RegisterString("epdt" + id.ToString() + "-1", "Sync physical rules", "同步物理规则");
             }
@@ -1720,8 +1775,8 @@ namespace DSP_Battle
                 ep.SetDecision(0, new int[] { }, new int[] { -1 }, new int[] { 0 });
                 ep.SetDecision(1, new int[] { 0 }, new int[] { 19998 }, new int[] { 0 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "寻回元驱动");
-                RegisterString("epd" + id.ToString(), "", "元驱动被成功获取，这个驱动似乎对黑雾单位的解体过程有反应。每当有黑雾单位被摧毁，都会激发整个星区编码的规律性波动，分析模块或许可以通过学习大量的规律性波动数据来寻找解译驱动的方法。一旦样本量足够，伊卡洛斯就可以启动解译程序。");
+                RegisterString("ept" + id.ToString(), "Retrieve Meta-Drive", "寻回元驱动");
+                RegisterString("epd" + id.ToString(), "The meta drive was successfully obtained, and this drive appears to be reacted to the disintegration of the dark fog units. Every time a dark fog unit is destroyed, it will trigger regular fluctuations encoded in the entire star region, and the analysis module may be able to find a way to interpret the drive by learning a large amount of regular fluctuation data. Once the sample size is large enough, Icarus can start the interpretation procedure.", "元驱动被成功获取，这个驱动似乎对黑雾单位的解体过程有反应。每当有黑雾单位被摧毁，都会激发整个星区编码的规律性波动，分析模块或许可以通过学习大量的规律性波动数据来寻找解译驱动的方法。一旦样本量足够，伊卡洛斯就可以启动解译程序。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort", "放弃解译");
                 RegisterString("epdt" + id.ToString() + "-1", "Continue interpretation procedure", "继续解译程序");
             }
@@ -1732,8 +1787,8 @@ namespace DSP_Battle
                 ep.SetDecision(0, new int[] { }, new int[] { -1 }, new int[] { 0 });
                 ep.SetDecision(1, new int[] { 0 }, new int[] { 19998, 22 }, new int[] { 0, 3600 * 3 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "寻回元驱动");
-                RegisterString("epd" + id.ToString(), "", "元驱动被成功获取，但其物理实体已部分损坏，必须提供一些必要的资源来对其进行修复才能够继续解译进程。");
+                RegisterString("ept" + id.ToString(), "Retrieve Meta-Drive", "寻回元驱动");
+                RegisterString("epd" + id.ToString(), "The meta-drive is successfully obtained, but its physical entity is partially damaged, and some necessary resources must be provided to repair it before the interpretation process can continue.", "元驱动被成功获取，但其物理实体已部分损坏，必须提供一些必要的资源来对其进行修复才能够继续解译进程。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort interpretation", "放弃解译");
                 RegisterString("epdt" + id.ToString() + "-1", "Attempt to repair", "尝试修复");
             }
@@ -1744,8 +1799,8 @@ namespace DSP_Battle
                 ep.SetDecision(0, new int[] { }, new int[] { -1 }, new int[] { 0 });
                 ep.SetDecision(1, new int[] { 0 }, new int[] { 19998 }, new int[] { 0 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "寻回元驱动");
-                RegisterString("epd" + id.ToString(), "", "元驱动的一部分被成功获取，但其和某个星系的全部太空黑雾单位处于量子绑定的状态，元驱动的非实体编码在所有单位间以概率波的形式反复传递，却无法通过任何观察而坍缩。我们只有消灭了该星系的所有太空黑雾单位才能继续解译进程。");
+                RegisterString("ept" + id.ToString(), "Retrieve Meta-Drive", "寻回元驱动");
+                RegisterString("epd" + id.ToString(), "A portion of the meta-drive is successfully obtained, but it is quantum bound to all the space dark fog units of a star system, and the nonphysical code of the meta-drive is transmitted repeatedly between all the units in the form of probability waves. It cannot collapse through any observation so we can't continue the interpretation process until we've wiped out all the space dark fog units in that star system.", "元驱动的一部分被成功获取，但其和某个星系的全部太空黑雾单位处于量子绑定的状态，元驱动的非实体编码在所有单位间以概率波的形式反复传递，却无法通过任何观察而坍缩。我们只有消灭了该星系的所有太空黑雾单位才能继续解译进程。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort interpretation", "放弃解译");
                 RegisterString("epdt" + id.ToString() + "-1", "Continue interpretation procedure", "继续解译程序");
             }
@@ -1756,8 +1811,8 @@ namespace DSP_Battle
                 ep.SetRequest(new int[] { }, new int[] { });
                 ep.SetDecision(0, new int[] { }, new int[] { 19999, 24 }, new int[] { 0, 1200 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "搜寻元驱动");
-                RegisterString("epd" + id.ToString(), "", "元驱动的能量波动被成功定位，这个保存完好的元驱动可以直接连接伊卡洛斯以进行解译。");
+                RegisterString("ept" + id.ToString(), "Search for Meta-Drive", "搜寻元驱动");
+                RegisterString("epd" + id.ToString(), "The energy fluctuations of the meta-drive were successfully located, and the well-preserved meta-drive could be directly connected to Icarus for interpretation.", "元驱动的能量波动被成功定位，这个保存完好的元驱动可以直接连接伊卡洛斯以进行解译。");
                 RegisterString("epdt" + id.ToString() + "-0", "Run interpretation procedure", "进行解译");
             }
             // 9
@@ -1767,8 +1822,8 @@ namespace DSP_Battle
                 ep.SetRequest(new int[] { }, new int[] { });
                 ep.SetDecision(0, new int[] { }, new int[] { 0 }, new int[] { 0 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "元驱动解译");
-                RegisterString("epd" + id.ToString(), "", "元驱动的信息被部分地解译了出来，但是分成了多条解码轨道，目前一些解码轨道是接近稳定的。你可以直接从中选择一条，将其从其他轨道中分离出来，这将明确并启用它的实际功效，使我们未来可以直接调用该API来规避或重写一些低阶的宇宙法则，但这也会摧毁提取其他解码轨的可能性。你也可以使用黑雾矩阵的友元信息重新编译所有轨道，并重新解译以试图找出其他亚稳态的解码轨。但注意，每次你进行重新编译-解译过程，都会使得元驱动变得不稳定，从而增加下一次编译的难度，并加倍黑雾矩阵的花费。");
+                RegisterString("ept" + id.ToString(), "Interpret Meta-Drive", "元驱动解译");
+                RegisterString("epd" + id.ToString(), "The meta-drive information is partially interpreted, but divided into multiple decoding tracks, some of which are currently close to stable. You can directly select one of them and separate it from the other tracks, which will clarify and enable its actual utility, allowing us to directly call the API in the future to circumvent or override some lower-order cosmic laws, but it will also destroy the possibility of extracting other decoded tracks. You can also use the friend information of the dark fog matrix to recompile all tracks and reinterpret to try to find other metastable decoded tracks. Note, however, that every time you do the recompile-interpretation process, you make the meta-drive more unstable, which increases the difficulty of the next compilation and doubles the cost of the dark fog matrix.", "元驱动的信息被部分地解译了出来，但是分成了多条解码轨道，目前一些解码轨道是接近稳定的。你可以直接从中选择一条，将其从其他轨道中分离出来，这将明确并启用它的实际功效，使我们未来可以直接调用该API来规避或重写一些低阶的宇宙法则，但这也会摧毁提取其他解码轨的可能性。你也可以使用黑雾矩阵的友元信息重新编译所有轨道，并重新解译以试图找出其他亚稳态的解码轨。但注意，每次你进行重新编译-解译过程，都会使得元驱动变得不稳定，从而增加下一次编译的难度，并加倍黑雾矩阵的花费。");
                 RegisterString("epdt" + id.ToString() + "-0", "OK", "好的");
             }
             {
@@ -1780,8 +1835,8 @@ namespace DSP_Battle
                 ep.SetDecision(2, new int[] { 1 }, new int[] { 19999, 24, 8 }, new int[] { 0, 3600 * 5, 25 });
                 ep.SetDecision(3, new int[] { 2 }, new int[] { 19999, 24, 6, 7 }, new int[] { 0, 3600 * 5, 25, 25 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "元驱动解译");
-                RegisterString("epd" + id.ToString(), "", "在先前多次的解译进程中，分析模块发现了一些方法可以影响解译过程对解码轨的分离，从而影响最终可探知的高维API的概率分布。伊卡洛斯现在可以在解译进程开始前调整解译手段，从而获得某些调整效果，但只能选择其中一种。");
+                RegisterString("ept" + id.ToString(), "Interpret Meta-Drive", "元驱动解译");
+                RegisterString("epd" + id.ToString(), "In several previous interpretations, the analysis module found ways to influence the separation of the decoding tracks during the interpretation process and thus affect the probability distribution of the ultimately discoverable high-dimensional API. Icarus can now adjust the interpretation method before the interpretation process begins to obtain some adjustment effects, but only one of them can be chosen.", "在先前多次的解译进程中，分析模块发现了一些方法可以影响解译过程对解码轨的分离，从而影响最终可探知的高维API的概率分布。伊卡洛斯现在可以在解译进程开始前调整解译手段，从而获得某些调整效果，但只能选择其中一种。");
                 RegisterString("epdt" + id.ToString() + "-0", "OK", "直接解译");
                 RegisterString("epdt" + id.ToString() + "-1", "OK", "稳定元驱动");
                 RegisterString("epdt" + id.ToString() + "-2", "OK", "激发元驱动负熵波动");
@@ -1793,8 +1848,8 @@ namespace DSP_Battle
                 ep.SetRequest(new int[] { }, new int[] { });
                 ep.SetDecision(0, new int[] { }, new int[] { 0 }, new int[] { 0 });
                 EventSystem.protos.Add(id, ep);
-                RegisterString("ept" + id.ToString(), "", "元驱动解译");
-                RegisterString("epd" + id.ToString(), "", "元驱动的信息被部分地解译了出来，并分成了多条解码轨道，目前一些解码轨道是接近稳定的。你可以直接从中选择一条，将其从其他轨道中分离出来，然后继续完成剩余的解译工作，这将明确并启用它的实际功效，使我们未来可以直接调用该API来规避或重写一些低阶的宇宙法则，但这也会摧毁提取其他解码轨的可能性。你也可以使用黑雾矩阵的友元信息重新编译所有轨道，并重新解译以试图找出其他亚稳态的解码轨。但注意，每次你进行重新编译-解译过程，都会使得圣物变得不稳定，从而增加下一次编译的难度，并加倍黑雾矩阵的花费。");
+                RegisterString("ept" + id.ToString(), "Interprete Meta-Drive", "元驱动解译");
+                RegisterString("epd" + id.ToString(), "The meta-drive information is partially interpreted, and divided into multiple decoding tracks, some of which are currently close to stable. You can directly select one of them and separate it from the other tracks, then continue to complete the rest of the interpretation work, which will clarify and enable its actual utility, allowing us to directly call the API in the future to circumvent or override some lower-order cosmic laws, but it will also destroy the possibility of extracting other decoded tracks. You can also use the friend information of the dark fog matrix to recompile all tracks and reinterpret to try to find other metastable decoded tracks. Note, however, that every time you do the recompile-interpretation process, you make the meta-drive more unstable, which increases the difficulty of the next compilation and doubles the cost of the dark fog matrix.", "元驱动的信息被部分地解译了出来，并分成了多条解码轨道，目前一些解码轨道是接近稳定的。你可以直接从中选择一条，将其从其他轨道中分离出来，然后继续完成剩余的解译工作，这将明确并启用它的实际功效，使我们未来可以直接调用该API来规避或重写一些低阶的宇宙法则，但这也会摧毁提取其他解码轨的可能性。你也可以使用黑雾矩阵的友元信息重新编译所有轨道，并重新解译以试图找出其他亚稳态的解码轨。但注意，每次你进行重新编译-解译过程，都会使得元驱动变得不稳定，从而增加下一次编译的难度，并加倍黑雾矩阵的花费。");
                 RegisterString("epdt" + id.ToString() + "-0", "OK", "好的");
             }
 
@@ -1884,6 +1939,25 @@ namespace DSP_Battle
             };
             EventSystem.alterItems.Add(altItem4);
 
+            EventSystem.maxProbabilityBy10Minutes = new List<double>
+            {
+                0, // 0-10
+                0, // 10-20min
+                0.0001, // 20-30min
+                0.0002, // 30-40min
+                0.0005, // 40-50min
+                0.001, // 50-60min
+                0.002, // 60-70min
+                0.003, // 70-80min
+                0.004, // 80-90min
+                0.005, // 90-100min
+                0.006, // 100-110min
+                0.008, // 110-120min
+                0.01, // 120+min
+                0.01, // 120+min
+                0.01, // 120+min
+                0.01 // 120+min
+            };
         }
 
         [HarmonyPostfix]

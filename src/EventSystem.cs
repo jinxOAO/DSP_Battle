@@ -14,8 +14,16 @@ namespace DSP_Battle
     {
         public static Dictionary<int, EventProto> protos;
         public static List<List<Tuple<int, int>>> alterItems; // 用于上交的物品的id和数量，以等级分（alterItems[level][i])
-        public static EventRecorder recorder;
         public static Dictionary<int,List<int>> alterProtos;
+        public static List<double> maxProbabilityBy10Minutes; // 刚获取完元驱动，一定时间内的击杀获取概率上限
+        public static List<double> probabilityDecreaseByRelicCount = new List<double> { 1, 1, 1, 0.9, 0.8, 0.75, 0.6, 0.5, 0.5, 0.5, 0.5 }; // 已经拥有x个元驱动之后，开启新的event的概率系数降低
+        public static double probDecreaseByKill = 0.999; // 每次击杀有概率获取，但为了让曲线不被暴涨的击杀速度迅速拉高，每次击杀还会降低概率
+
+        // 以下需要存档
+        public static EventRecorder recorder;
+        public static int tickFromLastRelic = 0;
+        public static double probabilityForNewEvent = 0; // 每次击杀黑雾单位获取到元驱动事件的基本概率，之后再乘probabilityDecreaseByRelicCount[relicCountAlreadyHave]，太空单位*3，太空黑雾巢穴的核心*50
+        public static int neverStartTheFirstEvent = 1; // 只有第一次获取元驱动是直接白给的，无论拒绝与否，下次都不白给了
 
         public static void ClearBeforeLoad()
         {
@@ -26,13 +34,14 @@ namespace DSP_Battle
         {
             if (id == 0)
             {
-                if (Relic.GetRelicCount() == 0)
+                if (Relic.GetRelicCount() == 0 && neverStartTheFirstEvent > 0)
                     SetEvent(1001);
                 else
                     SetEvent(1002);
             }
             else
                 SetEvent(id);
+            neverStartTheFirstEvent = 0;
             UIEventSystem.OnOpen();
         }
 
@@ -239,6 +248,41 @@ namespace DSP_Battle
             UIEventSystem.RefreshESWindow(true);
         }
 
+        public static void RefreshProbability()
+        {
+            if(recorder!=null && recorder.protoId > 0)
+            {
+                tickFromLastRelic = 0;
+                probabilityForNewEvent = 0;
+            }
+            else
+            {
+                tickFromLastRelic++;
+                if (tickFromLastRelic > int.MaxValue - 10)
+                    tickFromLastRelic = 2000000000;
+                int minutes10 = (int)(tickFromLastRelic / 3600 / 10);
+                if (minutes10 > 12)
+                    minutes10 = 12;
+                if (minutes10 < 0)
+                {
+                    tickFromLastRelic = 0;
+                    minutes10 = 0;
+                }
+                double curMax = maxProbabilityBy10Minutes[minutes10];
+                double lastMax = minutes10 > 0 ? maxProbabilityBy10Minutes[minutes10 - 1] : 0;
+                if (tickFromLastRelic % 36000 == 0)
+                {
+                    probabilityForNewEvent = curMax;
+                }
+                if (probabilityForNewEvent < lastMax * 0.1)
+                    probabilityForNewEvent = lastMax * 0.1;
+                else if(probabilityForNewEvent > curMax)
+                    probabilityForNewEvent = curMax;
+
+                //if (tickFromLastRelic % 60 == 0)
+                //    Utils.Log($"cur prob {probabilityForNewEvent}");
+            }
+        }
 
         [HarmonyPostfix]
         [HarmonyPatch(typeof(GameData), "GameTick")]
@@ -256,22 +300,33 @@ namespace DSP_Battle
                 }
             }
             RefreshRequestMeetData();
+            RefreshProbability();
         }
 
 
         public static void Exprot(BinaryWriter w)
         {
-
+            recorder.Export(w);
+            w.Write(tickFromLastRelic);
+            w.Write(probabilityForNewEvent);
+            w.Write(neverStartTheFirstEvent);
         }
         public static void Import(BinaryReader r)
         {
             ClearBeforeLoad();
+            recorder.Import(r);
+            tickFromLastRelic = r.ReadInt32();
+            probabilityForNewEvent = r.ReadDouble();
+            neverStartTheFirstEvent = r.ReadInt32();
             UIEventSystem.RefreshAll();
         }
 
         public static void IntoOtherSave()
         {
             ClearBeforeLoad();
+            tickFromLastRelic = 0;
+            probabilityForNewEvent = 0;
+            neverStartTheFirstEvent = 1;
             UIEventSystem.RefreshAll();
         }
 
@@ -622,6 +677,16 @@ namespace DSP_Battle
                             }
                             if (Relic.HaveRelic(4, 4)) // relic 4-4 击杀时进行研究
                                 RelicFunctionPatcher.AddNotDFTechHash(Relic.hashGainBySpaceEnemy);
+
+                            // 获取元驱动事件可能性
+                            if (recorder == null || recorder.protoId == 0)
+                            {
+                                if (Utils.RandDouble() < probabilityForNewEvent * probabilityDecreaseByRelicCount[Relic.GetRelicCount()])
+                                {
+                                    InitNewEvent();
+                                }
+                                probabilityForNewEvent *= probDecreaseByKill;
+                            }
                         }
                     }
                 }
@@ -676,6 +741,16 @@ namespace DSP_Battle
 
                                 if (Relic.HaveRelic(4, 4)) // relic 4-4 击杀时进行研究
                                     RelicFunctionPatcher.AddNotDFTechHash(Relic.hashGainByGroundEnemy);
+
+                                // 获取元驱动事件可能性
+                                if (recorder == null || recorder.protoId == 0)
+                                {
+                                    if (Utils.RandDouble() < probabilityForNewEvent * probabilityDecreaseByRelicCount[Relic.GetRelicCount()])
+                                    {
+                                        InitNewEvent();
+                                    }
+                                    probabilityForNewEvent *= probDecreaseByKill;
+                                }
                             }
                         }
                         else if ((Relic.HaveRelic(2, 2) || Relic.HaveRelic(3, 9)) && _this.objectType == 0) // relic 2-2 获得经验 // 妈的我总感觉这个能用来刷经验，但是也可以吧
