@@ -29,10 +29,8 @@ namespace DSP_Battle
         {
             int recipeIdBias = MoreMegaStructure.MoreMegaStructure.GenesisCompatibility ? -200 : 0;
             int techPosXBias = MoreMegaStructure.MoreMegaStructure.GenesisCompatibility ? -8 : 0;
-            TechProto techDrop = ProtoRegistry.RegisterTech(1919, "玻色子操控", "玻色子操控描述", "玻色子操控结论", "Assets/DSPBattle/bosontech", new int[] { }, new int[] { 5201 },
+            TechProto techDrop = ProtoRegistry.RegisterTech(1999, "玻色子操控", "玻色子操控描述", "玻色子操控结论", "Assets/DSPBattle/bosontech", new int[] { }, new int[] { 5201 },
                 new int[] { 400 }, 72000, new int[] { 573 + recipeIdBias, 567 + recipeIdBias, 568 + recipeIdBias, 569 + recipeIdBias, 566 + recipeIdBias  }, new Vector2(65 + techPosXBias, -7));
-            //ProtoRegistry.RegisterTech(1930, "水滴gm2", "水滴科技描述", "水滴科技结论", "Assets/DSPBattle/bosontech", new int[] { 1919 }, new int[] { 6001, 6002, 6003, 6004, 6005 },
-            //    new int[] { 24, 24, 24, 24, 24 }, 375000, new int[] { 573 }, new Vector2(61, -43));
             techDrop.PreTechsImplicit = new int[] { 1823 };
             techDrop.IsHiddenTech = true;
             techDrop.PreItem = new int[] { 5201 };
@@ -912,7 +910,7 @@ namespace DSP_Battle
             tp1.Video = "";
             tp1.PreText = "深空来敌介绍1前字";
             tp1.PostText = "";
-            tp1.ID = 31;
+            tp1.ID = 41;
             LDBTool.PreAddProto(tp1);
 
             TutorialProto tp2 = LDB.tutorial.Select(1).Copy();
@@ -921,7 +919,7 @@ namespace DSP_Battle
             tp2.Video = "";
             tp2.PreText = "深空来敌介绍2前字";
             tp2.PostText = "";
-            tp2.ID = 32;
+            tp2.ID = 42;
             LDBTool.PreAddProto(tp2);
 
             TutorialProto tp5 = LDB.tutorial.Select(1).Copy();
@@ -930,7 +928,7 @@ namespace DSP_Battle
             tp5.Video = "";
             tp5.PreText = "深空来敌介绍5前字";
             tp5.PostText = "";
-            tp5.ID = 35;
+            tp5.ID = 43;
             LDBTool.PreAddProto(tp5);
 
             TutorialProto tp6 = LDB.tutorial.Select(1).Copy();
@@ -939,14 +937,14 @@ namespace DSP_Battle
             tp6.Video = "";
             tp6.PreText = "";
             tp6.PostText = "";
-            tp6.ID = 36;
+            tp6.ID = 44;
             LDBTool.PreAddProto(tp6);
         }
 
         public static void RewriteTutorialProtosWhenLoad()
         {
-            TutorialProto relicTutorial = LDB.tutorial.Select(35);
-            TutorialProto relicCursedTutorial = LDB.tutorial.Select(36);
+            TutorialProto relicTutorial = LDB.tutorial.Select(43);
+            TutorialProto relicCursedTutorial = LDB.tutorial.Select(44);
             if (relicTutorial != null)
             {
                 try
