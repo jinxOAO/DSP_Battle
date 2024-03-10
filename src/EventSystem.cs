@@ -274,8 +274,8 @@ namespace DSP_Battle
                 {
                     probabilityForNewEvent = curMax;
                 }
-                if (probabilityForNewEvent < lastMax * 0.1)
-                    probabilityForNewEvent = lastMax * 0.1;
+                if (probabilityForNewEvent < lastMax * 0.5)
+                    probabilityForNewEvent = lastMax * 0.5;
                 else if(probabilityForNewEvent > curMax)
                     probabilityForNewEvent = curMax;
 

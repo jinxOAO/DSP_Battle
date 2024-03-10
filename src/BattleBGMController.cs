@@ -87,13 +87,14 @@ namespace DSP_Battle
         public static void BGMLogicUpdate()
         {
             if (!Configs.enableBattleBGM) return;
+
             if(takeDamageCountdown > 30 * 60)
             {
                 Configs.combatState = 3;
             }
             else if(UIRoot.instance.uiGame.dfAssaultTip.assaulting_cluster.Count > 0)
             {
-                if(Configs.combatState == 3)
+                if (Configs.combatState == 3)
                 {
                     SetWaveFinished();
                 }
@@ -115,9 +116,15 @@ namespace DSP_Battle
                     if (currentGroup < 0 || currentMusic < 0)
                     {
                         nextPlayFinishMusic = false;
-                        nextMusic = name2IndexMap["fin_" + currentGroup.ToString()];
+                        lastMusic = -1;
+                        currentMusic = -1;
+                        nextMusic = -1;
+                        fadeOutTime = 0;
+                        fadeInTime = 0;
+                        isOverriding = false;
+                        BGMController.Playback(0, 1, 1);
                     }
-                    else if (atBarEnd(battleMusics[currentMusic].time, musicBPM[currentGroup])) // 尽可能在小节末尾衔接结束的bgm
+                    else if (atBarEnd(battleMusics[currentMusic].time, musicBPM[currentGroup]) && name2IndexMap.ContainsKey("fin_" + currentGroup.ToString())) // 尽可能在小节末尾衔接结束的bgm
                     {
                         nextPlayFinishMusic = false;
                         nextMusic = name2IndexMap["fin_" + currentGroup.ToString()];
@@ -131,6 +138,7 @@ namespace DSP_Battle
                     fadeOutTime = 0;
                     fadeInTime = 0;
                     isOverriding = false;
+                    currentGroup = Utils.RandInt(1, 7);
                     BGMController.Playback(0, 1, 1);
                 }
             }
@@ -144,7 +152,7 @@ namespace DSP_Battle
                 {
                     nextMusic = Utils.RandInt(beforeBattleBgmBeginNum, battleMusics.Count);
                 }
-                else if (battleMusics[currentMusic].time >= battleMusics[currentMusic].clip.length - 3f) // 如果在播放，且播放完了，换随机的下一首
+                else if (battleMusics[currentMusic].time >= battleMusics[currentMusic].clip.length - 0.05f) // 如果在播放，且播放完了，换随机的下一首
                 {
                     nextMusic = Utils.RandInt(beforeBattleBgmBeginNum, battleMusics.Count);
                     if (nextMusic == currentMusic)

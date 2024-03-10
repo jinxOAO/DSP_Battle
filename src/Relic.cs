@@ -37,8 +37,8 @@ namespace DSP_Battle
         //不存档的设定参数
         public static int relicHoldMax = 8; // 最多可以持有的遗物数
         public static int[] relicNumByType = { 11, 12, 18, 18, 7 }; // 当前版本各种类型的遗物各有多少种，每种类型均不能大于30
-        public static double[] relicTypeProbability = { 0.03, 0.06, 0.11, 0.76, 0.04 }; // 各类型遗物刷新的权重
-        public static double[] relicTypeProbabilityBuffed = { 0.045, 0.09, 0.165, 0.63, 0.07 }; // 五叶草buff后
+        public static double[] relicTypeProbability = { 0.03, 0.06, 0.13, 0.76, 0.02 }; // 各类型遗物刷新的权重
+        public static double[] relicTypeProbabilityBuffed = { 0.045, 0.09, 0.195, 0.63, 0.04 }; // 五叶草buff后
         public static int[] modifierByEvent = new int[] { 0, 0, 0, 0, 0, 0 };
         public static double[] relicRemoveProbabilityByRelicCount = { 0, 0, 0, 0, 0.05, 0.1, 0.12, 0.15, 1, 1, 1 }; // 拥有i个reilc时，第三个槽位刷新的是删除relic的概率
         public static double firstRelicIsRare = 0.5; // 第一个遗物至少是稀有的概率
@@ -140,7 +140,7 @@ namespace DSP_Battle
             {
                 relics[type] |= 1 << num;
                 //GameMain.data.history.UnlockTechUnlimited(1918, false);
-                GameMain.data.history.UnlockTechUnlimited(1919, false);
+                GameMain.data.history.UnlockTechUnlimited(1999, false);
                 GameMain.data.mainPlayer.TryAddItemToPackage(9511, 3, 0, true);
                 Utils.UIItemUp(9511, 3);
             }
@@ -604,7 +604,7 @@ namespace DSP_Battle
             if (power < 0.1f)
                 return true;
 
-            if (__instance.recipeType == ERecipeType.Assemble)
+            if (__instance.recipeType == ERecipeType.Assemble || (int)__instance.recipeType == 9 || (int)__instance.recipeType == 10 || (int)__instance.recipeType == 12)
             {
                 // relic1-6
                 if (Relic.HaveRelic(1, 6))
@@ -1598,7 +1598,6 @@ namespace DSP_Battle
                             factor += 1f;
                         }
                         damage = (int)(damage * (1 - 0.05f * cursedRelicCount));
-                        Utils.Log($"reduce {1 - 0.05f * cursedRelicCount}");
                     }
                     else if (target.type == ETargetType.Craft)
                     {
@@ -2755,7 +2754,7 @@ namespace DSP_Battle
             {
                 Cargo.accTable = new int[] { 0, 200, 350, 500, 750, 1000, 1250, 1500, 1750, 2000, 2250 };
                 Cargo.accTableMilli = new double[] { 0.0, 0.200, 0.350, 0.500, 0.750, 1.000, 1.250, 1.500, 1.750, 2.000, 2.250 };
-                Cargo.incTable = new int[] { 0, 225, 250, 275, 300, 325, 350, 375, 400, 425, 450 };
+                Cargo.incTable = new int[] { 0, 250, 300, 350, 400, 425, 450, 475, 500, 525, 550 };
                 Cargo.incTableMilli = new double[] { 0.0, 0.225, 0.250, 0.275, 0.300, 0.325, 0.350, 0.375, 0.400, 0.425, 0.45 };
             }
             else

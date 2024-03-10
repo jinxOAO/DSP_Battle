@@ -99,7 +99,7 @@ namespace DSP_Battle
         static Color colorTextEpic = new Color(0.563f, 0.25f, 0.813f, 1f);
         static Color colorTextRare = new Color(0.125f, 0.5f, 0.813f, 1f);
         static Color colorTextCommon = new Color(0.188f, 0.609f, 0.188f, 1f);
-        static Color colorTextCursed = new Color(0.8f, 0.4f, 0.7f, 1f);
+        static Color colorTextCursed = new Color(0f, 0.798f, 0.608f, 0.921f); // 0.252 1 0.568 0.760 // 0 0.798 0.608 0.921 // ori 0.8 0.4 0.7 1
         static Color colorTextDelete = new Color(0.5f, 0.5f, 0.5f, 1f);
         static Color btnDisableColor = new Color(0.4f, 0.4f, 0.4f, 1f);
         static Color btnAbleColor = new Color(0f, 0.499f, 0.824f, 1f);
@@ -1144,10 +1144,8 @@ namespace DSP_Battle
                             relicSlotImgs[slotNum].sprite = Resources.Load<Sprite>("Assets/DSPBattle/r" + type.ToString() + "-" + num.ToString());
                             relicSlotUIBtns[slotNum].tips.tipTitle = ("遗物名称带颜色" + type.ToString() + "-" + num.ToString()).Translate();
                             relicSlotUIBtns[slotNum].tips.tipText = ("遗物描述" + type.ToString() + "-" + num.ToString()).Translate();
-                            if (type == 0 && num == 2 && Relic.relic0_2Version == 0) // 老版女神泪
-                            {
-                                relicSlotUIBtns[slotNum].tips.tipText = ("遗物描述" + type.ToString() + "-" + num.ToString() + "old").Translate();
-                            }
+                            if(type == 0 && num == 9)
+                                relicSlotUIBtns[slotNum].tips.tipText = "遗物描述0-9实际".Translate();
                             AddTipText(type, num, relicSlotUIBtns[slotNum], true); // 对于一些原本描述较短的，还要将更详细的描述加入
                             AddTipVarData(type, num, relicSlotUIBtns[slotNum]); // 对于部分需要展示实时数据的，还需要加入数据
 

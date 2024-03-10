@@ -24,6 +24,12 @@ namespace DSP_Battle
         public static Text eventWindowTitleText;
         public static Text eventSubTitleText;
         public static Text eventDescText;
+        public static Text probabilityTextCursed;
+        public static Text probabilityTextLegend;
+        public static Text probabilityTextCommon;
+        public static Text probabilityTextRare;
+        public static Text probabilityTextEpic;
+        public static Text probabilityTextReroll;
 
         public static List<GameObject> decisionButtonObjs = new List<GameObject>();
         public static List<Text> decisionTexts = new List<Text>();
@@ -110,11 +116,79 @@ namespace DSP_Battle
             GameObject eventSubTitleTextObj = eventWindowContentObj.transform.Find("function-text").gameObject;
             eventSubTitleTextObj.transform.localPosition = new Vector3(0, 230, 0);
             eventSubTitleText = eventSubTitleTextObj.GetComponent<Text>();
-            eventSubTitleText.fontSize = 20;
+            eventSubTitleText.fontSize = 24;
             GameObject eventDescTextObj = eventWindowContentObj.transform.Find("conclusion").gameObject;
             eventDescText = eventDescTextObj.GetComponent<Text>();
-            eventDescText.fontSize = 16;
+            eventDescText.fontSize = 18;
             eventDescTextObj.GetComponent<RectTransform>().sizeDelta = new Vector2(900, 24);
+
+            // 概率文本
+            GameObject materialObj = GameObject.Find("UI Root/Overlay Canvas/In Game/Windows/Dyson Sphere Editor/screen/star-cannon-state-text");
+            GameObject probabilityObjCursed = GameObject.Instantiate(eventDescTextObj, eventWindowContentObj.transform);
+            probabilityObjCursed.name = "prob";
+            probabilityObjCursed.transform.localPosition = new Vector3(100, 265, 0);
+            probabilityObjCursed.GetComponent<RectTransform>().sizeDelta = new Vector2(100, 24);
+            probabilityTextCursed = probabilityObjCursed.GetComponent<Text>();
+            probabilityTextCursed.material = materialObj.GetComponent<Text>().material;
+            probabilityTextCursed.alignment = TextAnchor.MiddleLeft;
+            probabilityTextCursed.fontSize = 16;
+            probabilityTextCursed.text = "";
+            probabilityTextCursed.supportRichText = true;
+
+            GameObject probabilityObjLegend = GameObject.Instantiate(eventDescTextObj, eventWindowContentObj.transform);
+            probabilityObjLegend.name = "prob";
+            probabilityObjLegend.transform.localPosition = new Vector3(180, 265, 0);
+            probabilityObjLegend.GetComponent<RectTransform>().sizeDelta = new Vector2(100, 24);
+            probabilityTextLegend = probabilityObjLegend.GetComponent<Text>();
+            probabilityTextLegend.material = materialObj.GetComponent<Text>().material;
+            probabilityTextLegend.alignment = TextAnchor.MiddleLeft;
+            probabilityTextLegend.fontSize = 16;
+            probabilityTextLegend.text = "";
+            probabilityTextLegend.supportRichText = true;
+
+            GameObject probabilityObjEpic = GameObject.Instantiate(eventDescTextObj, eventWindowContentObj.transform);
+            probabilityObjEpic.name = "prob";
+            probabilityObjEpic.transform.localPosition = new Vector3(260, 265, 0);
+            probabilityObjEpic.GetComponent<RectTransform>().sizeDelta = new Vector2(100, 24);
+            probabilityTextEpic = probabilityObjEpic.GetComponent<Text>();
+            probabilityTextEpic.material = materialObj.GetComponent<Text>().material;
+            probabilityTextEpic.alignment = TextAnchor.MiddleLeft;
+            probabilityTextEpic.fontSize = 16;
+            probabilityTextEpic.text = "";
+            probabilityTextEpic.supportRichText = true;
+
+            GameObject probabilityObjRare = GameObject.Instantiate(eventDescTextObj, eventWindowContentObj.transform);
+            probabilityObjRare.name = "prob";
+            probabilityObjRare.transform.localPosition = new Vector3(340, 265, 0);
+            probabilityObjRare.GetComponent<RectTransform>().sizeDelta = new Vector2(100, 24);
+            probabilityTextRare = probabilityObjRare.GetComponent<Text>();
+            probabilityTextRare.material = materialObj.GetComponent<Text>().material;
+            probabilityTextRare.alignment = TextAnchor.MiddleLeft;
+            probabilityTextRare.fontSize = 16;
+            probabilityTextRare.text = "";
+            probabilityTextRare.supportRichText = true;
+
+            GameObject probabilityObjCommon = GameObject.Instantiate(eventDescTextObj, eventWindowContentObj.transform);
+            probabilityObjCommon.name = "prob";
+            probabilityObjCommon.transform.localPosition = new Vector3(420, 265, 0);
+            probabilityObjCommon.GetComponent<RectTransform>().sizeDelta = new Vector2(100, 24);
+            probabilityTextCommon = probabilityObjCommon.GetComponent<Text>();
+            probabilityTextCommon.material = materialObj.GetComponent<Text>().material;
+            probabilityTextCommon.alignment = TextAnchor.MiddleLeft;
+            probabilityTextCommon.fontSize = 16;
+            probabilityTextCommon.text = "";
+            probabilityTextCommon.supportRichText = true;
+
+            GameObject probabilityObjReroll = GameObject.Instantiate(eventDescTextObj, eventWindowContentObj.transform);
+            probabilityObjReroll.name = "prob";
+            probabilityObjReroll.transform.localPosition = new Vector3(500, 265, 0);
+            probabilityObjReroll.GetComponent<RectTransform>().sizeDelta = new Vector2(100, 24);
+            probabilityTextReroll = probabilityObjReroll.GetComponent<Text>();
+            probabilityTextReroll.material = materialObj.GetComponent<Text>().material;
+            probabilityTextReroll.alignment = TextAnchor.MiddleLeft;
+            probabilityTextReroll.fontSize = 16;
+            probabilityTextReroll.text = "";
+            probabilityTextReroll.supportRichText = true;
 
             GameObject oriButtonObj = GameObject.Find("UI Root/Overlay Canvas/In Game/Windows/Dyson Sphere Editor/Dyson Editor Control Panel/hierarchy/layers/buttons-group/buttons/add-button");
             decisionButtonObjs = new List<GameObject>();
@@ -659,6 +733,80 @@ namespace DSP_Battle
                             decisionButtonObjs[i].SetActive(false);
                         }
                     }
+                }
+
+                // 显示预计概率
+                int[] preview = new int[] { 0, 0, 0, 0, 0, 0 };
+                for (int i = 0; i < preview.Length; i++)
+                {
+                    preview[i] = recorder.modifier[i];
+                }
+                for (int i = 0; i < 4; i++)
+                {
+                    EventProto proto = EventSystem.protos[recorder.protoId];
+                    if (i >= proto.decisionLen)
+                        break;
+                    if(decisionUIButtons[i]!= null && decisionUIButtons[i].isPointerEnter)
+                    {
+                        int resultLen = proto.decisionResultId[i].Length;
+                        for (int j = 0; j < resultLen; j++)
+                        {
+                            int code = proto.decisionResultId[i][j];
+                            if(code >= 4 && code <= 9) // 说明是改动
+                            {
+                                int amount = proto.decisionResultCount[i][j];
+                                if (code == 4)
+                                    preview[3] += amount;
+                                else if (code == 5)
+                                    preview[2] += amount;
+                                else if (code == 6)
+                                    preview[1] += amount;
+                                else if (code == 7)
+                                    preview[0] += amount;
+                                else if (code == 8)
+                                    preview[4] += amount;
+                                else if (code == 9)
+                                    preview[5] += amount;
+                            }
+                        }
+                    }
+                }
+                if (Relic.GetRelicCount() >= 8)
+                {
+                    probabilityTextCursed.text = "<color=#00c280>◈ --</color>";
+                    probabilityTextLegend.text = "<color=#d2853d>◈ --</color>";
+                    probabilityTextEpic.text = "<color=#8040d0>◈ --</color>";
+                    probabilityTextRare.text = "<color=#2070d0>◈ --</color>";
+                    probabilityTextCommon.text = "<color=#30b330>◈ --</color>";
+                    probabilityTextReroll.text = $"<color=#00adffa8>↻  {preview[5] + 1}</color>";
+                }
+                else
+                {
+                    double rand = Utils.RandDouble();
+                    double[] probWeight = Relic.HaveRelic(0, 9) ? Relic.relicTypeProbabilityBuffed : Relic.relicTypeProbability;
+                    // relic0-9 五叶草 可以让更高稀有度的遗物刷新概率提高
+                    double[] realWeight = new double[] { 0, 0, 0, 0, 0 };
+                    for (int type = 0; type < 5; type++)
+                    {
+                        realWeight[type] = probWeight[type] * (1 + 0.01 * preview[type]);
+                        if (realWeight[type] < 0)
+                            realWeight[type] = 0;
+                    }
+                    double[] prob = new double[] { 0, 0, 0, 0, 0 };
+                    double weightSum = realWeight.Sum();
+                    for (int type = 0; type < 5; type++)
+                    {
+                        prob[type] = realWeight[type] / weightSum;
+                    }
+
+                    //probabilityText.text = string.Format("<color=#00c280>◈ {0:#.0}%</color>     <color=#d2853d>◈ {1:#.0}%</color>     <color=#8040d0>◈ {2:##}%</color>     <color=#2070d0>◈ {3:##}%</color>     <color=#30b330>◈ {4:##}%</color>     <color=#00adffa8>↻ {5:0}</color>", prob[4] * 100.0, prob[0] * 100.0, prob[1] * 100.0, prob[2] * 100.0, prob[3] * 100.0, preview[5] + 1);
+                    probabilityTextCursed.text = string.Format("<color=#00c280>◈ {0:#.0}%</color>", prob[4]*100);
+                    probabilityTextLegend.text = string.Format("<color=#d2853d>◈ {0:#.0}%</color>", prob[0] * 100);
+                    probabilityTextEpic.text = string.Format("<color=#8040d0>◈ {0:#.0}%</color>", prob[1] * 100);
+                    probabilityTextRare.text = string.Format("<color=#2070d0>◈ {0:##}%</color>", prob[2] * 100);
+                    probabilityTextCommon.text = string.Format("<color=#30b330>◈ {0:##}%</color>", prob[3] * 100);
+                    probabilityTextReroll.text = $"<color=#00adffa8>↻  {preview[5] + 1}</color>";
+
                 }
             }
             closeButtonText.text = "一";

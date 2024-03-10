@@ -7,6 +7,7 @@ using CommonAPI.Systems.ModLocalization;
 using crecheng.DSPModSave;
 using HarmonyLib;
 using System;
+using System.ComponentModel.Design;
 using System.IO;
 using System.Reflection;
 using UnityEngine;
@@ -16,7 +17,7 @@ using xiaoye97;
 
 namespace DSP_Battle
 {
-    [BepInPlugin("com.ckcz123.DSP_Battle", "DSP_Battle", "3.0.0")]
+    [BepInPlugin("com.ckcz123.DSP_Battle", "DSP_Battle", "3.0.4")]
     [BepInDependency(DSPModSavePlugin.MODGUID)]
     [BepInDependency(CommonAPIPlugin.GUID)]
     [BepInDependency(LDBToolPlugin.MODGUID)]
@@ -148,6 +149,13 @@ namespace DSP_Battle
             if (Input.GetKeyDown(KeyCode.DownArrow) && UIDevConsole.consoleObj != null && UIDevConsole.consoleObj.activeSelf)
             {
                 DevConsole.NextCommand();
+            }
+            if (Input.GetKeyDown(KeyCode.BackQuote))
+            {
+                if(MoreMegaStructure.MoreMegaStructure.GenesisCompatibility && isControlDown)
+                    UIEventSystem.OnEventButtonClick();   
+                else if (!MoreMegaStructure.MoreMegaStructure.GenesisCompatibility)
+                    UIEventSystem.OnEventButtonClick();
             }
             if (Configs.developerMode && isControlDown && Input.GetKeyDown(KeyCode.Z))
             {
@@ -292,6 +300,8 @@ namespace DSP_Battle
             BattleBGMController.InitWhenLoad();
 
             InitStaticDataWhenLoad();
+
+            if (RendererSphere.dropletSpheres.Count != GameMain.galaxy.starCount) RendererSphere.InitAll();
         }
 
         public void IntoOtherSave()
@@ -310,6 +320,8 @@ namespace DSP_Battle
             BattleBGMController.InitWhenLoad();
 
             InitStaticDataWhenLoad();
+
+            if (RendererSphere.dropletSpheres.Count != GameMain.galaxy.starCount) RendererSphere.InitAll();
         }
 
 

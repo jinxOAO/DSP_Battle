@@ -277,7 +277,6 @@ namespace DSP_Battle
             //RegisterString("导弹伤害", "Missile damage", "导弹伤害");
             //RegisterString("相位裂解光束伤害", "Phase-cracking beam damage", "相位裂解光束伤害");
             //RegisterString("子弹相位伤害", "Bullet / Beam damage", "子弹/相位光束伤害");
-            //RegisterString("伤害类型特殊", " (Special)", " (特殊)");
             //RegisterString("子弹速度", "Bullet speed", "子弹速度");
             //RegisterString("导弹速度", "Missile speed", "导弹速度");
             //RegisterString("子弹飞行速度", "Bullet speed", "子弹飞行速度");
@@ -403,6 +402,7 @@ namespace DSP_Battle
             RegisterString("下一功勋等级解锁", "Next rank unlocked", "下一功勋等级解锁");
             RegisterString("剩余复活币", "Resurrection Coin", "剩余复活币");
             RegisterString("真实伤害已启用", "❈ True damage activated", "❈真实伤害已启用");
+            RegisterString("伤害类型特殊", " (Special)", " (特殊)");
 
             //RegisterString("行星护盾生成器", "Planet shield generator", "行星护盾生成器");
             //RegisterString("行星护盾生成器描述", "Using a large amount of energy to maintain a force field shield on the planet's surface, the encoding of the force field's resonant frequency allows allies to easily pass through the shield, while blocking the enemies. Multiple shield generators can speed up the shield recharge rate, and provide additional shield capacity. However, as the number of shield generators increases, each additional generator will provide less and less additional capacity.",
@@ -467,19 +467,20 @@ namespace DSP_Battle
             RegisterString("被深空来敌mod禁止", "Banned by mod They Come From Void", "被深空来敌mod禁止");
 
             // 遗物
-            RegisterString("发现异星圣物", "Alien Relic Found", "发现异星圣物");
+            RegisterString("发现异星圣物", "Meta-drive Interpretation Complete", "元驱动解译完毕");
             RegisterString("解译异星圣物提示",
                 "Select one decoding track from the following three to finish the interpret procedure and enable the meta drive.\nYou can use dark fog matrix to seek new decoding track with different effects.",
                 "从以下三个亚稳态解码轨中选取一个，并完成解译的最后阶段，从而启用该元驱动。\n可以使用黑雾矩阵重随解码轨来发现新的可用效果。");
             RegisterString("重新随机", "Roll", "重新随机");
+            RegisterString("重新随机可以长", "Re-roll", "重新随机");
             RegisterString("免费", "free", "免费");
             RegisterString("移除遗物", "Remove", "移除");
             RegisterString("放弃解译", "   Abort This           +", "放弃解译         +");
             RegisterString("放弃解译居中", "Abort Interpret", "放弃解译");
             RegisterString("删除遗物名称", "Remove Meta Drive", "移除元驱动");
             RegisterString("删除遗物描述",
-                "Randomly remove a [common] relic, and return the slot occupied by the relic. \nIf there is no [common] relic, then randomly remove a [rare] relic.",
-                "随机移除一个已拥有的[普通]稀有度的圣物，并返还该圣物所占用的圣物槽位\n如果没有[普通]圣物，则随机移除一个已拥有的[稀有]圣物");
+                "Randomly remove a [common] meta-drive, and return the slot occupied by the meta-drive. \nIf there is no [common] meta-drive, then randomly remove a [rare] meta-drive.",
+                "随机移除一个已拥有的[普通]稀有度的元驱动，并返还该元驱动所占用的元驱动槽位\n如果没有[普通]元驱动，则随机移除一个已拥有的[稀有]元驱动");
             RegisterString("删除遗物确认标题", "Confirm Remove Meta Drive", "确认移除元驱动");
             RegisterString("删除遗物确认警告",
                 "This will remove {0} and return the slot occupied by the meta drive!",
@@ -487,7 +488,7 @@ namespace DSP_Battle
             RegisterString("成功移除！", "Meta drive removed", "成功移除元驱动");
             RegisterString("已移除遗物描述", "You've removed meta drive ", "你已移除");
             RegisterString("未能移除！", "No mate drive can be removed", "没有可移除的元驱动");
-            RegisterString("未能移除遗物描述", "No matched meta drive can be removed", "你没有稀有度匹配的圣物可供移除");
+            RegisterString("未能移除遗物描述", "No matched meta drive can be removed", "你没有稀有度匹配的元驱动可供移除");
             RegisterString("未获取遗物标题", "Unknown mata drive", "未知元驱动");
             RegisterString("未获取遗物描述", "This slot can place a decrypted meta drive", "此位置可供已解译的元驱动放置");
             RegisterString("水滴伤害增加", "Droplet Bonus Damage", "水滴额外伤害");
@@ -656,11 +657,11 @@ namespace DSP_Battle
             RegisterString("遗物描述0-3", "When calculating the energy level, the giant structure is regarded as a higher star luminosity", "巨构在计算能量水平时，视作拥有更高的恒星光度修正");
             RegisterString("遗物描述0-4", "The ray receiver does not need to consume the lens to achieve the maximum output efficiency, and it will no longer be blocked at night", "射线接受器无需消耗透镜即可达到最大输出效率，且不再因背向恒星影响接收效率");
             RegisterString("遗物描述0-5", "Planetary shield and Icarus' Energy Shield gain 10% damage reduction, and they return all reduced or avoided damage to the attacker as <i>additional damage</i>", "行星护盾和伊卡洛斯的能量盾获得10%伤害减免，且它们会将所有被减免或被规避的伤害全额回敬给攻击者作为<i>额外伤害</i>");
-            RegisterString("遗物描述0-6", "Each time a turret uses an ammo set to reload, immediately backfilled with an identical ammo set", "所有防御设施的弹药组每次被消耗时，立刻回填一组完全相同的弹药");
+            RegisterString("遗物描述0-6", "Each time a turret uses an ammo set to reload, do free reloading and prevent the ammo set consumption", "所有防御设施的每次消耗弹药组装填时，进行免费装填而阻止消耗弹药组");
             RegisterString("遗物描述0-7", "The star system with a megastructure will deal <i>additional damage</i> to all enemy ships in the star system during the invasion, higher energy the megastucture generates, higher the damage it deals.", "拥有巨构的星系在战斗时每秒会对星系中所有敌舰造成<i>额外伤害</i>，伤害取决于巨构的能量水平");
             RegisterString("遗物描述0-8", "Jamming towers deal 20 <i>additional damage</i> to all hit targets when using jamming capsules, deal 30 if using suppresing capsules", "干扰塔使用干扰胶囊造成电磁干扰时，对所有命中目标造成20<i>额外伤害</i>，压制胶囊则转而造成30<i>额外伤害</i>");
             RegisterString("遗物描述0-9", "It must do something...", "它必须做点什么...");
-            RegisterString("遗物描述0-9实际", "You have a higher probability of getting rarer meta drives. If the first judgment fails with any probability, it can be judged again. And the hidden effects...", "你有更高的概率获取更稀有的元驱动。任何概率初次判定失败时，可以再判定一次。以及隐藏效果...");
+            RegisterString("遗物描述0-9实际", "You have a higher probability of getting rarer meta drives. If the first judgment fails with any probability from other meta drives, it can be judged again. And the hidden effects...", "你有更高的概率获取更稀有的元驱动。任何概率初次判定失败时，可以再判定一次。以及隐藏效果...");
             RegisterString("遗物描述0-10", "Every time a droplet destroys an enemy, restores 2MJ power to the Mecha, and all droplets permanently obtain 10 <i>additional damage</i>. ", "水滴每击杀一个敌人，为机甲回复2MJ能量，且所有水滴永久获得+10的<i>额外伤害</i>。");
 
             RegisterString("遗物描述1-0", "Every time you unlock or upgrade a technology, random mega structures will be partially auto-constructed", "每解锁或升级一个科技，少量推进随机巨构的建造进度");
@@ -680,7 +681,7 @@ namespace DSP_Battle
             RegisterString("遗物描述2-1", "Each time your merit rank is promoted, random mega structures will be partly auto-constructed", "每次提升功勋阶级，显著推进各巨构的建造进度");
             RegisterString("遗物描述2-2", "Get merit points when allied buildings destroyed", "建筑被敌舰摧毁时，获得功勋点数");
             RegisterString("遗物描述2-3", "Each time a turret uses an ammo set to reload, there is 40% chance to restore an identical ammo set", "所有防御设施在装填时有40%概率回填一组弹药");
-            RegisterString("遗物描述2-4", "When producing fuel rods, each output will returne 5 materials in the second slot", "生产燃料棒时，每次产出会回填5个第2位置的原材料（氢、重氢）");
+            RegisterString("遗物描述2-4", "When producing normal fuel rods, each output will returne 5 materials in the second slot", "生产常规燃料棒时，每次产出会回填5个第2位置的原材料（氢、重氢）");
             RegisterString("遗物描述2-5", "Every second, if Icaros is on the planet and have moved in the previous second, you have 8% chance to obtain a multi-functional integrated component", "每过一秒，如果伊卡洛斯处于行星上并且在上一秒进行过移动，就有8%的概率获得一个多功能集成组件");
             RegisterString("遗物描述2-6", "All your fleets energy consumption -40%", "战斗无人机各项能量消耗-40%");
             RegisterString("遗物描述2-7", "Kinetic, energy and explosive damage +10%. Won't occupy the meta drive slot", "动能武器伤害、爆破武器伤害、能量武器伤害+10%，不占用元驱动槽位");
@@ -703,7 +704,7 @@ namespace DSP_Battle
             RegisterString("遗物描述3-5", "When Icarus is destroyed, give you options to use resurrection coins to redeploy or reassemble for free. Won't occupy the meta drive slot", "伊卡洛斯被毁时，可以选择消耗复活币来无消耗地重新部署或原地重组，不占用元驱动槽位");
             RegisterString("遗物描述3-6", "Gain some merit points based on your current rank level. Won't occupy the meta drive slot", "获得基于当前阶级的少量功勋点数，不占用元驱动槽位");
             RegisterString("遗物描述3-7", "Energy weapon damage +10%. Won't occupy the meta drive slot", "能量武器伤害+10%，不占用元驱动槽位");
-            RegisterString("遗物描述3-8", "Based on the unlocked matrix technology, immediately give a large number of normal matrix (except the alien matrix and the universe matrix)", "基于已解锁的矩阵科技，立刻获得大量普通矩阵（异星矩阵和宇宙矩阵除外），不会占用圣物槽位");
+            RegisterString("遗物描述3-8", "Based on the unlocked matrix technology, immediately give a large number of normal matrix. Won't occupy the meta drive slot", "基于已解锁的矩阵科技，立刻获得大量普通矩阵（异星矩阵和宇宙矩阵除外），不会占用元驱动槽位");
             RegisterString("遗物描述3-9", "When a certain number of buildings are destroyed, random mega structure will be slightly auto-constructed", "一定数量的建筑被毁时，微量推进随机星系的巨构的建造进度");
             RegisterString("遗物描述3-10", "Every second, if Icaros is on the planet and have moved in the previous second, you have 3% chance to obtain a multi-functional integrated component", "每过一秒，如果伊卡洛斯处于行星上并且在上一秒进行过移动，就有3%的概率获得一个多功能集成组件");
             RegisterString("遗物描述3-11", "Solar sial adsorption speed increases 100%", "巨构的太阳帆吸附速度提升100%");
@@ -787,9 +788,8 @@ namespace DSP_Battle
             RegisterString("深空来敌介绍1标题", "They come from void player guide", "深空来敌玩法介绍");
             RegisterString("深空来敌介绍1前字", "Nothing here for now. You can check the meta drive infomation below.", "这里暂时没有东西。你可以翻看下面的元驱动介绍。");
 
-            RegisterString("深空来敌介绍2前字", "By destroying dark fog units, you can gain experience points to promote your merit rank, and accumulate combat experience to strengthen yourself. Every time you reach the new merit rank, it will bring permanent bonus effects, some providing bonuses for your production line, while others strengthening your combat capabilities. You can view the bonus effect of the current rank, the experience requirements of the next level, and the bonus effect of the next level by hovering the mouse over the merit rank icon in the upper right corner.", "通过击毁黑雾单位，你可以获得经验点数来提升功勋阶级，并积累战斗经验来强化自身。每次提升功勋阶级都将带来永久的加成效果，有些为你的生产线提供加成，有些则强化你的战斗能力。你可以通过将鼠标悬停在右上角的功勋阶级图标上来查看当前等级的加成效果，下一等级的经验需求和下一等级的加成效果。");
+            RegisterString("深空来敌介绍2前字", "By destroying dark fog units, you can gain experience points to promote your merit rank, and accumulate combat experience to strengthen yourself. Every time you reach the new merit rank, it will bring permanent bonus effects, some providing bonuses for your production line, while others strengthening your combat capabilities. You can view the bonus effect of the current rank, the experience requirements of the next level, and the bonus effect of the next level by hovering the mouse over the merit rank icon in the upper right corner.\n\nExplorer I: Core power generation +1 MW\nExplorer II: Energy shield damage reduction +25%\nExplorer III: Walk speed +4 m/s\nPioneer I: Ore loss per mining operation -20%\nPioneer II: EM effect +20%\nPioneer III: Droplets can quickly approach distant target\nConqueror I: Ore loss per mining operation -20%\nConqueror II: Star cannon charging speed +50%\nConqueror III: Droplet damage +100%\nGalaxy Guardian: Ore loss per mining operation  -40%", "通过击毁黑雾单位，你可以获得经验点数来提升功勋阶级，并积累战斗经验来强化自身。每次提升功勋阶级都将带来永久的加成效果，有些为你的生产线提供加成，有些则强化你的战斗能力。你可以通过将鼠标悬停在右上角的功勋阶级图标上来查看当前等级的加成效果，下一等级的经验需求和下一等级的加成效果。\n\n探索者 I: 核心发电 +1MW\n探索者 II: 能量盾伤害减免 +25%\n探索者 III: 步行移动速度 +4 m/s\n开拓者 I: 采矿消耗 -20%\n开拓者 II: 电磁武器效果 +20%\n开拓者 III: 水滴能够快速接近远距离的目标\n征服者 I: 采矿消耗 -20%\n征服者 II: 恒星炮充能速度 +50%\n征服者 III: 水滴伤害 +100%\n星河卫士: 采矿消耗 -40%");
 
-           
             RegisterString("深空来敌介绍5标题", "Meta-Drive", "元驱动");
             RegisterString("深空来敌介绍6标题", "Axiomatic Meta-Drive", "公理级元驱动");
 
@@ -835,15 +835,19 @@ namespace DSP_Battle
             RegisterString("提升功勋阶级", "Upgrade merit rank ", "提升功勋阶级 ");
             RegisterString("降低功勋阶级", "Downgrade merit rank ", "降低功勋阶级 ");
             RegisterString("推进随机巨构", "Auto-constructed random megastructures construct points", "推进星区中随机巨构的建造进度");
-            RegisterString("本次圣物解译普通概率", "Regular decode-tracks appearing probability this time ", "本次解译出普通解码轨的概率 ");
-            RegisterString("本次圣物解译稀有概率", "Packaged decode-tracks appearing probability this time ", "本次解译出稀有解码轨的概率 ");
-            RegisterString("本次圣物解译史诗概率", "Framed decode-tracks appearing probability this time ", "本次解译出史诗解码轨的概率 ");
-            RegisterString("本次圣物解译传说概率", "Mensural decode-tracks appearing probability this time ", "本次解译出传说解码轨的概率 ");
-            RegisterString("本次圣物解译被诅咒的概率", "Axiomatic decode-tracks appearing probability this time ", "本次解译出被诅咒的解码轨的概率 ");
+            RegisterString("本次圣物解译普通概率", "Regular decode-tracks appearing probability this time ", "本次解译出常规级解码轨的概率 ");
+            RegisterString("本次圣物解译稀有概率", "Packaged decode-tracks appearing probability this time ", "本次解译出封装级解码轨的概率 ");
+            RegisterString("本次圣物解译史诗概率", "Framed decode-tracks appearing probability this time ", "本次解译出框架级解码轨的概率 ");
+            RegisterString("本次圣物解译传说概率", "Mensural decode-tracks appearing probability this time ", "本次解译出定律级解码轨的概率 ");
+            RegisterString("本次圣物解译被诅咒的概率", "Axiomatic decode-tracks appearing probability this time ", "本次解译出公理级解码轨的概率 ");
             RegisterString("免费随机次数", "Decode-track free re-roll ", "本次解码轨免费随机次数 ");
             RegisterString("获得物品", "Obtain ", "获得 ");
             RegisterString("此选项将导致", "<color=#FD965EC0>Result in:</color>", "<color=#FD965EC0>将导致：</color>");
-            RegisterString("打开解译事件链", "Open meta drive interpretation event chain", "打开元驱动解译事件链");
+            if(MoreMegaStructure.MoreMegaStructure.GenesisCompatibility)
+                RegisterString("打开解译事件链", "Open meta drive interpretation event chain ( Ctrl + ~ )", "打开元驱动解译事件链 ( Ctrl + ~ )");
+            else
+                RegisterString("打开解译事件链", "Open meta drive interpretation event chain ( ~ )", "打开元驱动解译事件链 ( ~ )");
+
             RegisterString("预计剩余解译时间", "Estimated time of finishing", "预计剩余");
             RegisterString("decodeType21Title", "Analyzing Log File", "正在分析日志");
             RegisterString("decodeType22Title", "Trying to repair", "正在尝试修复");
@@ -865,42 +869,6 @@ namespace DSP_Battle
         }
 
 
-        //private static ModelProto CopyModelProto(int oriId, int id, Color color)
-        //{
-        //    var oriModel = LDB.models.Select(oriId);
-        //    var model = oriModel.Copy();
-        //    model.name = id.ToString();
-        //    model.Name = id.ToString();//这俩至少有一个必须加，否则LDBTool报冲突导致后面null
-        //    model.ID = id;
-        //    PrefabDesc desc = oriModel.prefabDesc;
-        //    model.prefabDesc = new PrefabDesc(id, desc.prefab, desc.colliderPrefab);
-        //    for (int i = 0; i < model.prefabDesc.lodMaterials.Length; i++)
-        //    {
-        //        if (model.prefabDesc.lodMaterials[i] == null) continue;
-        //        for (int j = 0; j < model.prefabDesc.lodMaterials[i].Length; j++)
-        //        {
-        //            if (model.prefabDesc.lodMaterials[i][j] == null) continue;
-        //            model.prefabDesc.lodMaterials[i][j] = new Material(desc.lodMaterials[i][j]);
-        //        }
-        //    }
-        //    try
-        //    {
-        //        model.prefabDesc.lodMaterials[0][0].color = color;
-        //        model.prefabDesc.lodMaterials[1][0].color = color;
-        //        model.prefabDesc.lodMaterials[2][0].color = color;
-        //    }
-        //    catch (Exception)
-        //    {
-        //    }
-        //    model.prefabDesc.hasBuildCollider = true;
-        //    model.prefabDesc.colliders = desc.colliders;
-        //    model.prefabDesc.buildCollider = desc.buildCollider;
-        //    model.prefabDesc.buildColliders = desc.buildColliders;
-        //    model.prefabDesc.colliderPrefab = desc.colliderPrefab;
-        //    model.sid = "";
-        //    model.SID = "";
-        //    return model;
-        //}
 
         public static void AddTutorialProtos()
         {
@@ -1012,12 +980,14 @@ namespace DSP_Battle
             if (dropletItem == null)
                 return;
             dropletItem.DescFields = new int[] { 81, 82, 80, 59, 11, 1 };
-            dropletItem.AmmoType = EAmmoType.Bullet;
-            if (dropletItem.prefabDesc == null)
-                dropletItem.prefabDesc = new PrefabDesc();
-            dropletItem.prefabDesc.isCraftUnit = true;
-            dropletItem.prefabDesc.craftUnitMaxMovementSpeed = 30000;
-            dropletItem.prefabDesc.workEnergyPerTick = 500000;
+            //dropletItem.AmmoType = EAmmoType.Bullet;
+            dropletItem.prefabDesc = new PrefabDesc();
+            ref var desc = ref dropletItem.prefabDesc;
+            //desc.isCraftUnit = true;
+            desc.craftUnitMaxMovementSpeed = 30000;
+            desc.workEnergyPerTick = 500000;
+
+            StorageComponent.itemIsFighter[9511] = true;
         }
 
         // 在import末尾调用

@@ -751,9 +751,13 @@ namespace DSP_Battle
                         state = 2;
                     VectorLF3 newBegin = GetCurrentUPos();
                     VectorLF3 newEnd = GetIdleUPos();
-                    if ((newEnd - newBegin).magnitude <= Configs.dropletSpd * 0.034f || lastMaxt - lastT <= 0.034f)
+                    if ((newEnd - newBegin).magnitude <= Configs.dropletSpd * 0.05f * 0.034f || lastMaxt - lastT <= 0.034f)
                     {
                         SetStandby();
+                    }
+                    else if ((newEnd - newBegin).magnitude <= Configs.dropletSpd * 0.3f && GameMain.localPlanet == null)
+                    {
+                        RetargetAllBullet(newBegin, newEnd, bulletIds.Length, maxPosDelta, maxPosDelta, Configs.dropletSpd * 0.05f * (0.8 + 0.02 * dropletIndex));
                     }
                     else
                     {

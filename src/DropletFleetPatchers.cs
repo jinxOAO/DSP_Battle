@@ -95,7 +95,7 @@ namespace DSP_Battle
 			var _this = __instance;
 			int num = _this.mecha.groundCombatModule.moduleFleets.Length;
 			// 为防止某些mod增加的额外的太空舰队栏位也能选择水滴，限制index为num+8以内
-            if (_this.fleetConfigIndex >= num && _this.fleetConfigIndex < num + 8 && GameMain.data.history.TechUnlocked(1919)) 
+            if (_this.fleetConfigIndex >= num && _this.fleetConfigIndex < num + 8 && GameMain.data.history.TechUnlocked(1999)) 
 			{
 				int maxNum = Relic.HaveRelic(4, 2) ? 6 : 5;
 				for (int i = 4; i < maxNum; i++)
@@ -165,7 +165,6 @@ namespace DSP_Battle
 				ref ModuleFleet ptr = ref _this.moduleFleets[fleetIndex];
 				if (ptr.protoId != newConfigId)
 				{
-					bool reserveIndex0 = false;
 					for (int i = 0; i < ptr.fighters.Length; i++)
 					{
 						if (ptr.fighters[i].count > 0)
@@ -180,15 +179,12 @@ namespace DSP_Battle
 								num2 -= num3;
 								if (num2 > 0 && _this.entityId <= 0 && _this.entityId == 0)
 								{
-									if (num == dropletId && i == 0 && newConfigId >= fleetConfigId1 && newConfigId <= fleetConfigId2) // 水滴队形互相切换时，保留第0号位的水滴
-										reserveIndex0 = true;
-									else
-										player.TryAddItemToPackage(num, num2, 0, true, 0, false);
+									player.TryAddItemToPackage(num, num2, 0, true, 0, false);
 								}
 							}
 						}
 					}
-					ptr = CreateDropletModuleFleet(newConfigId, reserveIndex0);
+					ptr = CreateDropletModuleFleet(newConfigId);
 					//ptr.SetItemId(-1, dropletId, dropletSize); // 由于在CreateDropletModuleFleet里面已经对fighter的itemId赋值了，这个可能就不需要了。
 					return;
 				}
@@ -414,5 +410,22 @@ namespace DSP_Battle
 			}
 		}
 
-	}
+
+        // DEBUG
+        //      [HarmonyPrefix]
+        //      [HarmonyPatch(typeof(UIMechaWindow), "OpenConfigPanel")]
+        //public static bool OCPPrepatch(ref UIMechaWindow __instance)
+        //{
+        //	int total = ItemProto.kFighterGroundIds.Length;
+        //	Utils.Log($"total {total}");
+        //	for (int i = 0; i < total; i++)
+        //	{
+        //		Utils.Log($"{i} is {ItemProto.kFighterGroundIds[i]}");
+        //	}
+        //	Utils.Log($"while {__instance.fleetTypeButtons.Length}");
+
+        //          return true;
+        //}
+
+    }
 }
