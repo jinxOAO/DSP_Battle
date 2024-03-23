@@ -141,6 +141,7 @@
     <Compile Include="src\Relic.cs" />
     <Compile Include="src\PlanetEngine.cs" />
     <Compile Include="src\RendererSphere.cs" />
+    <Compile Include="src\SkillPoints.cs" />
     <Compile Include="src\StarFortress.cs" />
     <Compile Include="src\StarFortressSilo.cs" />
     <Compile Include="src\StationOrderFixPatch.cs" />
@@ -151,6 +152,7 @@
     <Compile Include="src\UIEventSystem.cs" />
     <Compile Include="src\UIRank.cs" />
     <Compile Include="src\UIRelic.cs" />
+    <Compile Include="src\UISkillPointsWindow.cs" />
     <Compile Include="src\UIStarFortress.cs" />
     <Compile Include="src\Utils.cs" />
   </ItemGroup>

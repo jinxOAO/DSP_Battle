@@ -3,6 +3,7 @@ using Steamworks;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -114,6 +115,8 @@ namespace DSP_Battle
             RelicFunctionPatcher.RefreshCargoAccIncTable();
             RelicFunctionPatcher.RefreshDisturbPrefabDesc();
             RelicFunctionPatcher.RefreshBlueBuffStarAssemblyEffect();
+            RelicFunctionPatcher.RefreshTearOfTheGoddessEffect();
+            RelicFunctionPatcher.RefreshEnergyBurstEffect();
             RelicFunctionPatcher.RefreshStarCannonBuffs();
         }
 
@@ -695,7 +698,9 @@ namespace DSP_Battle
                 else if ((__instance.products[0] == 1203 || __instance.products[0] == 1204) && Relic.HaveRelic(3, 14)) // relic3-14
                 {
                     int reloadNum = __instance.products[0] == 1203 ? 2 : 1;
-                    if (__instance.served[reloadNum] < 10 * __instance.requireCounts[reloadNum])
+                    if (MoreMegaStructure.MoreMegaStructure.GenesisCompatibility)
+                        reloadNum = __instance.produced[0] == 1203 ? 1 : -1;
+                    if (reloadNum >= 0 && __instance.served[reloadNum] < 10 * __instance.requireCounts[reloadNum] )
                     {
                         if (__instance.time >= __instance.timeSpend - 1 && __instance.produced[0] < 10 * __instance.productCounts[0])
                         {
@@ -821,12 +826,29 @@ namespace DSP_Battle
             return true;
         }
 
+        // relic 0-1
         public static void RefreshBlueBuffStarAssemblyEffect()
         {
             if (Relic.HaveRelic(0, 1))
                 MoreMegaStructure.StarAssembly.blueBuffByTCFV = 1;
             else
                 MoreMegaStructure.StarAssembly.blueBuffByTCFV = 0;
+        }
+        // relic 0-2
+        public static void RefreshTearOfTheGoddessEffect()
+        {
+            if (Relic.HaveRelic(0, 2))
+                MoreMegaStructure.StarAssembly.r002ByTCFV = 1;
+            else
+                MoreMegaStructure.StarAssembly.r002ByTCFV = 0;
+        }
+        // relic 1-6
+        public static void RefreshEnergyBurstEffect()
+        {
+            if (Relic.HaveRelic(1, 6))
+                MoreMegaStructure.StarAssembly.r106ByTCFV = 1;
+            else
+                MoreMegaStructure.StarAssembly.r106ByTCFV = 0;
         }
 
 
@@ -1344,11 +1366,21 @@ namespace DSP_Battle
             int num8 = 0;
             int num9 = 0;
             bool flag = (_this.caster.type == ETargetType.None || _this.caster.type == ETargetType.Ruin) && planetFactory.entityPool[_this.caster.id].turretId > 0; // 判断条件额外增加了ruin是自己设定的
+            bool flagEnemy = _this.caster.type == ETargetType.Enemy; // 来自于敌人死亡触发的
             if (flag)
             {
                 num7 = planetFactory.entityPool[_this.caster.id].turretId;
                 array = planetFactory.defenseSystem.turrets.buffer;
                 VSLayerMask vslayerMask = array[num7].vsCaps & array[num7].vsSettings;
+                num8 = (int)(vslayerMask & VSLayerMask.GroundHigh);
+                num9 = (int)((int)(vslayerMask & VSLayerMask.AirHigh) >> 2);
+                consumeRegister = GameMain.statistics.production.factoryStatPool[planetFactory.index].consumeRegister;
+            }
+            else if (flagEnemy)
+            {
+                num7 = 1;
+                array = planetFactory.defenseSystem.turrets?.buffer;
+                VSLayerMask vslayerMask = VSLayerMask.All;
                 num8 = (int)(vslayerMask & VSLayerMask.GroundHigh);
                 num9 = (int)((int)(vslayerMask & VSLayerMask.AirHigh) >> 2);
                 consumeRegister = GameMain.statistics.production.factoryStatPool[planetFactory.index].consumeRegister;
@@ -1392,7 +1424,7 @@ namespace DSP_Battle
                                             if (num18 >= num4 && num18 <= num5)
                                             {
                                                 ref EnemyUnitComponent ptr3 = ref buffer[ptr2.unitId];
-                                                float num19 = (2f - Mathf.Sqrt(num18) / _this.diffusionMaxRadius) * 0.5f * _this.disturbStrength;
+                                                float num19 = (2f - Mathf.Sqrt(num18) / _this.diffusionMaxRadius) * 0.5f * _this.disturbStrength * (Relic.HaveRelic(1, 11) ? 6 : 1); // relic 1-11 额外强度，为什么不在turret那里改呢？因为改strength会导致特效太浓，干扰玩家的视角
                                                 if (ptr3.disturbValue < num19)
                                                 {
                                                     bool flag2 = true;
@@ -1440,13 +1472,100 @@ namespace DSP_Battle
                                                             skillSystem.DamageGroundObjectByLocalCaster(planetFactory, realDamage, 1, ref skillTargetLocal, ref _this.caster);
                                                         }
                                                         // 原逻辑 外加relic 1-11 的强化效果
-                                                        ptr3.disturbValue = num19 * (Relic.HaveRelic(1, 11) ? 6 : 1); // relic 1-11 额外强度，为什么不在turret那里改呢？因为改strength会导致特效太浓，干扰玩家的视角
+                                                        ptr3.disturbValue = num19; 
                                                         DFGBaseComponent dfgbaseComponent = planetFactory.enemySystem.bases[(int)ptr2.owner];
                                                         if (dfgbaseComponent != null && dfgbaseComponent.id == (int)ptr2.owner)
                                                         {
                                                             skillSystem.AddGroundEnemyHatred(dfgbaseComponent, ref ptr2, ETargetType.None, _this.caster.id, (int)(num19 * 800f + 0.5f));
                                                         }
                                                     }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if (flagEnemy)
+            {
+                // 根据防御塔自身的SearchPair逻辑创建一个bucketIndexes用于寻敌
+                List<int> bucketIndexes = new List<int>();
+                HashSystem hashSystemDynamic = planetFactory.hashSystemDynamic;
+                int[] hashPool = hashSystemDynamic.hashPool;
+                int[] bucketOffsets = hashSystemDynamic.bucketOffsets;
+                Vector3 vector3 = _this.center;
+                float num55 = 100;
+                float cellSize = HashSystem.cellSize;
+                int num77 = 5;
+                HashSystem.Cell[] bucketMap = HashSystem.bucketMap;
+                int num88 = (int)((vector3.x + 270f) / cellSize);
+                int num99 = (int)((vector3.y + 270f) / cellSize);
+                int num1010 = (int)((vector3.z + 270f) / cellSize);
+                num88 = ((num88 < 99) ? ((num88 < 0) ? 0 : num88) : 99);
+                num99 = ((num99 < 99) ? ((num99 < 0) ? 0 : num99) : 99);
+                num1010 = ((num1010 < 99) ? ((num1010 < 0) ? 0 : num1010) : 99);
+                int num1111 = num1010 * 10000 + num99 * 100 + num88 << num77;
+                for (int k = 0; k < 32; k++)
+                {
+                    HashSystem.Cell cell = bucketMap[num1111 + k];
+                    if ((float)cell.dist > num55)
+                    {
+                        break;
+                    }
+                    bucketIndexes.Add(cell.bucketIndex);
+                }
+                //HashSystem hashSystemDynamic = planetFactory.hashSystemDynamic;
+                //int[] hashPool = hashSystemDynamic.hashPool;
+                //int[] bucketOffsets = hashSystemDynamic.bucketOffsets;
+                int[] bucketCursors = hashSystemDynamic.bucketCursors;
+                for (int si = 0; si < bucketIndexes.Count; si++)
+                {
+                    int searchId = bucketIndexes[si];
+                    int num12 = bucketOffsets[searchId];
+                    int num13 = bucketCursors[searchId];
+                    for (int j = 0; j < num13; j++)
+                    {
+                        int num14 = num12 + j;
+                        int num15 = hashPool[num14];
+                        if (num15 != 0)
+                        {
+                            int num16 = num15 >> 28;
+                            if ((1 << num16 & (int)_this.mask) != 0)
+                            {
+                                int num17 = num15 & 268435455;
+                                if (num16 == 4)
+                                {
+                                    ref EnemyData ptr2 = ref enemyPool[num17];
+                                    if (ptr2.id == num17 && !ptr2.isInvincible && ptr2.unitId != 0)
+                                    {
+                                        Vector3 vector = (Vector3)ptr2.pos - _this.center;
+                                        Vector3 vector2 = Vector3.Dot(normalized, vector) * normalized - vector;
+                                        float num18 = vector2.x * vector2.x + vector2.y * vector2.y + vector2.z * vector2.z;
+                                        if (num18 >= num4 && num18 <= num5)
+                                        {
+                                            ref EnemyUnitComponent ptr3 = ref buffer[ptr2.unitId];
+                                            float num19 = (2f - Mathf.Sqrt(num18) / _this.diffusionMaxRadius) * 0.5f * _this.disturbStrength * (Relic.HaveRelic(1, 11) ? 2 : 0.5f); // relic 1-11 额外强度，为什么不在turret那里改呢？因为改strength会导致特效太浓，干扰玩家的视角
+                                            if (ptr3.disturbValue < num19)
+                                            {
+                                                bool flag2 = true;
+                                                if (flag2)
+                                                {
+                                                    // 造成伤害
+                                                    if (Relic.HaveRelic(0, 8))
+                                                    {
+                                                        int realDamage = Relic.disturbDamage1613;
+                                                        realDamage = (int)(realDamage * GameMain.history.magneticDamageScale * 0.2f);
+                                                        realDamage = Relic.BonusDamage(realDamage, 1);
+                                                        SkillTargetLocal skillTargetLocal = default(SkillTargetLocal);
+                                                        skillTargetLocal.type = ETargetType.Enemy;
+                                                        skillTargetLocal.id = ptr2.id;
+                                                        skillSystem.DamageGroundObjectByLocalCaster(planetFactory, realDamage, 1, ref skillTargetLocal, ref _this.caster);
+                                                    }
+                                                    ptr3.disturbValue = num19;
+                                                    // 不加仇恨，因为caster的id不是原本意义
                                                 }
                                             }
                                         }
@@ -1801,6 +1920,37 @@ namespace DSP_Battle
                     if (dysonNode != null && dysonNode.id == i && dysonNode.id % 120 == num && dysonNode.sp == dysonNode.spMax)
                     {
                         dysonNode.OrderConstructCp(gameTick, swarm);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// relic 1-7 弹射器射速翻倍
+        /// </summary>
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(EjectorComponent), "InternalUpdate")]
+        public static void EjectorInternalUpdatePostFix(ref EjectorComponent __instance, float power)
+        {
+            if (Relic.HaveRelic(1, 7))
+            {
+                float num2 = (float)Cargo.accTableMilli[__instance.incLevel];
+                int num3 = (int)(power * 10000f * (1f + num2) + 0.1f);
+                if (__instance.orbitId != 0 && power >= 0.1f)
+                {
+                    if (__instance.direction == 1)
+                    {
+                        __instance.time += num3;
+                        if (__instance.time > __instance.chargeSpend)
+                            __instance.time = __instance.chargeSpend;
+                    }
+                    else if (__instance.direction == -1)
+                    {
+                        __instance.time -= num3;
+                        if (__instance.time <= 0)
+                        {
+                            __instance.time = 0;
+                        }
                     }
                 }
             }
@@ -2755,7 +2905,7 @@ namespace DSP_Battle
                 Cargo.accTable = new int[] { 0, 200, 350, 500, 750, 1000, 1250, 1500, 1750, 2000, 2250 };
                 Cargo.accTableMilli = new double[] { 0.0, 0.200, 0.350, 0.500, 0.750, 1.000, 1.250, 1.500, 1.750, 2.000, 2.250 };
                 Cargo.incTable = new int[] { 0, 250, 300, 350, 400, 425, 450, 475, 500, 525, 550 };
-                Cargo.incTableMilli = new double[] { 0.0, 0.225, 0.250, 0.275, 0.300, 0.325, 0.350, 0.375, 0.400, 0.425, 0.45 };
+                Cargo.incTableMilli = new double[] { 0.0, 0.250, 0.300, 0.350, 0.400, 0.425, 0.450, 0.475, 0.500, 0.525, 0.550 };
             }
             else
             {

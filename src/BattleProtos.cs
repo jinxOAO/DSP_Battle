@@ -22,10 +22,10 @@ namespace DSP_Battle
         public static void AddProtos()
         {
             AddTutorialProtos();
-            AddTechProtos();
+            AddNormalProtos();
         }
 
-        public static void AddTechProtos()
+        public static void AddNormalProtos()
         {
             int recipeIdBias = MoreMegaStructure.MoreMegaStructure.GenesisCompatibility ? -200 : 0;
             int techPosXBias = MoreMegaStructure.MoreMegaStructure.GenesisCompatibility ? -8 : 0;
@@ -34,6 +34,18 @@ namespace DSP_Battle
             techDrop.PreTechsImplicit = new int[] { 1823 };
             techDrop.IsHiddenTech = true;
             techDrop.PreItem = new int[] { 5201 };
+
+            TechProto techExp = ProtoRegistry.RegisterTech(1998, "提供算力名称", "提供算力描述", "提供算力结论", "Assets/DSPBattle/rank10", new int[] { }, new int[] { 6006 },
+                new int[] { 2 }, 2997924580, new int[] { }, new Vector2(65 + techPosXBias, -11)); // 299792458000
+            techExp.PreTechsImplicit = new int[] { };
+            techExp.IsHiddenTech = true;
+            techExp.PreItem = new int[] { 9513 };
+
+
+            ItemProto medal = ProtoRegistry.RegisterItem(9513, "星河卫士奖章", "星河卫士奖章描述", "Assets/DSPBattle/rank10", 9998, 1, EItemType.Decoration,
+                                       ProtoRegistry.GetDefaultIconDesc(Color.white, new Color(0.7f, 0.4f, 0.1f)));
+            medal.UnlockKey = -2;
+            ProtoRegistry.RegisterRecipe(382, ERecipeType.Smelt, 60, new int[] { 1104 }, new int[] { 2 }, new int[] { 9513 }, new int[] { 1 }, "星河卫视奖章描述", 0, 9998, "Assets/DSPBattle/rank10");
         }
         public static void AddTranslate()
         {
@@ -385,6 +397,7 @@ namespace DSP_Battle
             RegisterString("gmRankUnlockText8", "Star cannon charging speed +50%", "恒星炮充能速度 +50%");
             RegisterString("gmRankUnlockText9", "Droplet damage +100%", "水滴伤害 +100%");
             RegisterString("gmRankUnlockText10", "Ore loss per mining operation -40%", "采矿消耗 -40%");
+            RegisterString("gmRankUnlockText10Add", "You are allowed to provide computing power to the COSMO Technology Ethics Committee in exchange for merit points", "你被允许向COSMO技术伦理委员会提供算力以换取功勋点数");
             RegisterString("gmRankReward1", "Core power generation +1 MW", "核心发电 +1MW");
             RegisterString("gmRankReward2", "Energy shield damage reduction +25%", "能量盾伤害减免 +25%");
             RegisterString("gmRankReward3", "Walk speed +4 m/s", "步行移动速度 +4 m/s");
@@ -646,7 +659,7 @@ namespace DSP_Battle
             RegisterString("遗物名称带颜色4-0", "<color=#00c560>The Weaver  [Axiomatic]</color>", "<color=#00c560>编织者  [公理级]</color>");
             RegisterString("遗物名称带颜色4-1", "<color=#00c560>Contract of Misfortune [Axiomatic]</color>", "<color=#00c560>厄运契约  [公理级]</color>");
             RegisterString("遗物名称带颜色4-2", "<color=#00c560>Crown of Rule  [Axiomatic]</color>", "<color=#00c560>统治之冠  [公理级]</color>");
-            RegisterString("遗物名称带颜色4-3", "<color=#00c560>Fatal Echo  [Axiomatic]</color>", "<color=#00c560>致命回响  [公理级]</color>");
+            RegisterString("遗物名称带颜色4-3", "<color=#00c560>Fatal Echo  [Axiomatic]</color>", "<color=#00c560>精密回响  [公理级]</color>");
             RegisterString("遗物名称带颜色4-4", "<color=#00c560>Enlightenment Echo  [Axiomatic]</color>", "<color=#00c560>启迪回响  [公理级]</color>");
             RegisterString("遗物名称带颜色4-5", "<color=#00c560>Aftershock Echo  [Axiomatic]</color>", "<color=#00c560>余震回响  [公理级]</color>");
             RegisterString("遗物名称带颜色4-6", "<color=#00c560>Rune Book  [Axiomatic]</color>", "<color=#00c560>符文之书  [公理级]</color>");
@@ -658,8 +671,8 @@ namespace DSP_Battle
             RegisterString("遗物描述0-4", "The ray receiver does not need to consume the lens to achieve the maximum output efficiency, and it will no longer be blocked at night", "射线接受器无需消耗透镜即可达到最大输出效率，且不再因背向恒星影响接收效率");
             RegisterString("遗物描述0-5", "Planetary shield and Icarus' Energy Shield gain 10% damage reduction, and they return all reduced or avoided damage to the attacker as <i>additional damage</i>", "行星护盾和伊卡洛斯的能量盾获得10%伤害减免，且它们会将所有被减免或被规避的伤害全额回敬给攻击者作为<i>额外伤害</i>");
             RegisterString("遗物描述0-6", "Each time a turret uses an ammo set to reload, do free reloading and prevent the ammo set consumption", "所有防御设施的每次消耗弹药组装填时，进行免费装填而阻止消耗弹药组");
-            RegisterString("遗物描述0-7", "The star system with a megastructure will deal <i>additional damage</i> to all enemy ships in the star system during the invasion, higher energy the megastucture generates, higher the damage it deals.", "拥有巨构的星系在战斗时每秒会对星系中所有敌舰造成<i>额外伤害</i>，伤害取决于巨构的能量水平");
-            RegisterString("遗物描述0-8", "Jamming towers deal 20 <i>additional damage</i> to all hit targets when using jamming capsules, deal 30 if using suppresing capsules", "干扰塔使用干扰胶囊造成电磁干扰时，对所有命中目标造成20<i>额外伤害</i>，压制胶囊则转而造成30<i>额外伤害</i>");
+            RegisterString("遗物描述0-7", "The star system with a megastructure will deal <i>additional damage</i> to all activated dark fog space ships in the star system, higher energy the megastucture generates, higher the damage it deals.", "拥有巨构的星系在战斗时每秒会对星系中所有已激活的太空黑雾舰队造成<i>额外伤害</i>，伤害取决于巨构的能量水平");
+            RegisterString("遗物描述0-8", "Jamming towers deal 20 <i>additional damage</i> to all hit targets when using jamming capsules, deal 30 if using suppresing capsules", "干扰塔使用干扰胶囊造成电磁干扰时，对所有命中目标造成0<i>额外伤害</i>，压制胶囊则转而造成30<i>额外伤害</i>");
             RegisterString("遗物描述0-9", "It must do something...", "它必须做点什么...");
             RegisterString("遗物描述0-9实际", "You have a higher probability of getting rarer meta drives. If the first judgment fails with any probability from other meta drives, it can be judged again. And the hidden effects...", "你有更高的概率获取更稀有的元驱动。任何概率初次判定失败时，可以再判定一次。以及隐藏效果...");
             RegisterString("遗物描述0-10", "Every time a droplet destroys an enemy, restores 2MJ power to the Mecha, and all droplets permanently obtain 10 <i>additional damage</i>. ", "水滴每击杀一个敌人，为机甲回复2MJ能量，且所有水滴永久获得+10的<i>额外伤害</i>。");
@@ -679,7 +692,7 @@ namespace DSP_Battle
 
             RegisterString("遗物描述2-0", "Planetary Shields gain 50% additional charge energy", "行星护盾获得50%额外的充能量");
             RegisterString("遗物描述2-1", "Each time your merit rank is promoted, random mega structures will be partly auto-constructed", "每次提升功勋阶级，显著推进各巨构的建造进度");
-            RegisterString("遗物描述2-2", "Get merit points when allied buildings destroyed", "建筑被敌舰摧毁时，获得功勋点数");
+            RegisterString("遗物描述2-2", "Get merit points when allied buildings destroyed", "建筑被摧毁时，获得功勋点数");
             RegisterString("遗物描述2-3", "Each time a turret uses an ammo set to reload, there is 40% chance to restore an identical ammo set", "所有防御设施在装填时有40%概率回填一组弹药");
             RegisterString("遗物描述2-4", "When producing normal fuel rods, each output will returne 5 materials in the second slot", "生产常规燃料棒时，每次产出会回填5个第2位置的原材料（氢、重氢）");
             RegisterString("遗物描述2-5", "Every second, if Icaros is on the planet and have moved in the previous second, you have 8% chance to obtain a multi-functional integrated component", "每过一秒，如果伊卡洛斯处于行星上并且在上一秒进行过移动，就有8%的概率获得一个多功能集成组件");
@@ -689,9 +702,9 @@ namespace DSP_Battle
             RegisterString("遗物描述2-9", "Star cannon's recharging speed +50%", "恒星炮充能速度+50%");
             RegisterString("遗物描述2-10", "Turret supernova cooldown and charge time -50%", "防御塔的超新星冷却和蓄能时间-50%");
             RegisterString("遗物描述2-11", "Smelter have 30% chance to produce an additional product", "熔炉每次产出，有30%的概率额外产出一个产物");
-            RegisterString("遗物描述2-12", "You have 10% chance deal 100% <i>additional damage</i> to the enemy ship for any type of damage", "你对敌舰造成的任何伤害有10%的概率造成100%<i>额外伤害</i>");
-            RegisterString("遗物描述2-13", "Double any <i>additional damage</i> (except the bonus from technology)", "你对敌舰造成的任何<i>额外伤害翻倍</i>（来自科技的加成除外）");
-            RegisterString("遗物描述2-14", "Every time you destroy an enemy, you have chance to directly obtain an antimatter fuel rod or a space warper in the backpack", "每次击毁敌军单位，根据敌舰强度有概率在背包直接获取1个反物质燃料棒或翘曲器，无视科技解锁进度");
+            RegisterString("遗物描述2-12", "You have 10% chance deal 100% <i>additional damage</i> to the dark fog for any type of damage", "你对黑雾造成的任何伤害有10%的概率造成100%<i>额外伤害</i>");
+            RegisterString("遗物描述2-13", "Double any <i>additional damage</i> (except the bonus from technology)", "你对黑雾造成的任何<i>额外伤害翻倍</i>（来自科技的加成除外）");
+            RegisterString("遗物描述2-14", "Every time you destroy an enemy, you have chance to directly obtain an antimatter fuel rod or a space warper in the backpack", "每次击毁敌军单位，根据敌人强度有概率在背包直接获取1个反物质燃料棒或翘曲器，无视科技解锁进度");
             RegisterString("遗物描述2-15", "Explosive damage +10%. Won't occupy the meta drive slot", "爆破武器伤害+40%，不占用元驱动槽位");
             RegisterString("遗物描述2-16", "Planetary Shield and Icarus Shield gain 20% damage reduction", "行星护盾和伊卡洛斯的护盾获得20%伤害减免");
             RegisterString("遗物描述2-17", "When Icarus is about to be destroyed, restore all health and energy shields instead, and gains invincible for 30 seconds", "伊卡洛斯即将被摧毁时，转而立刻回复全部的生命值和能量盾，并获得30s的伤害免疫");
@@ -720,7 +733,7 @@ namespace DSP_Battle
             RegisterString("遗物描述4-2", "Each droplet fleet configuration can have 3 droplets", "每个水滴的舰队配置可放置3个水滴");
             RegisterString("遗物描述4-3", "Comprehensively improve the extra products effect of proliferators", "全面提升增产剂的增产效果");
             RegisterString("遗物描述4-4", "Every an enemy is destoryed, slightly advance the research progress of the current non-darkfog matrix technology for free", "每当击杀敌军单位时，无消耗地略微推进当前非黑雾矩阵科技的研究进度");
-            RegisterString("遗物描述4-5", "When a dark fog unit drops dark fog items, drop every other types of dark fog items (under current level) with half amount", "黑雾单位掉落黑雾专属物品时，额外掉落一半数量的所有其他类型的黑雾专属物品（无法越级掉落）");
+            RegisterString("遗物描述4-5", "When killing a ground dark fog unit, there is 10% chance of causing a weakened electromagnetic interference from it's place", "地面黑雾单位被击杀时，有10%概率在原地引发一次弱化的电磁干扰");
             RegisterString("遗物描述4-6", "When pick up this meta drive, permanently record the top three meta drives that you already have, retaining their effects but no longer occupying the slot", "获取此元驱动时，将左侧栏位最顶端的三个元驱动永久保存在符文之书中，保留他们的效果但是其不再占用栏位");
             
             
@@ -740,7 +753,7 @@ namespace DSP_Battle
             RegisterString("relicTipText4-2", "When Icarus is destroyed, downgrade your merit rank level by 1, and clear your merit points of current level", "死亡时，你降低一级功勋阶级并清空当前等级的功勋点数");
             RegisterString("relicTipText4-3", "Comprehensively reduce the production speedup effect of proliferators", "全面降低增产剂的加速效果");
             RegisterString("relicTipText4-4", "The amount of dark fog matrix drop is halved, and you won't obtain any dark fog matrix when you abort interpreting the decoding track\n(Hash gaining can be enhanced by the research speed technology)", "黑雾矩阵掉落减半，放弃解译元驱动的解码轨时不会获得黑雾矩阵\n(Hash点数获取量受研究速度科技加成)");
-            RegisterString("relicTipText4-5", "You will no longer get merit points by killing ground dark fog units", "击杀地面黑雾单位不再能够获得功勋点数");
+            RegisterString("relicTipText4-5", "You will get 90% less merit points by killing ground dark fog units", "击杀地面黑雾单位获得的功勋点数-90%");
             RegisterString("relicTipText4-6", "The required time to interpret a meta drive +15min", "解译元驱动的所需时间增加15分钟");
 
             RegisterString("relicTipTitle0-5", "Additional damage", "额外伤害");
@@ -788,7 +801,7 @@ namespace DSP_Battle
             RegisterString("深空来敌介绍1标题", "They come from void player guide", "深空来敌玩法介绍");
             RegisterString("深空来敌介绍1前字", "Nothing here for now. You can check the meta drive infomation below.", "这里暂时没有东西。你可以翻看下面的元驱动介绍。");
 
-            RegisterString("深空来敌介绍2前字", "By destroying dark fog units, you can gain experience points to promote your merit rank, and accumulate combat experience to strengthen yourself. Every time you reach the new merit rank, it will bring permanent bonus effects, some providing bonuses for your production line, while others strengthening your combat capabilities. You can view the bonus effect of the current rank, the experience requirements of the next level, and the bonus effect of the next level by hovering the mouse over the merit rank icon in the upper right corner.\n\nExplorer I: Core power generation +1 MW\nExplorer II: Energy shield damage reduction +25%\nExplorer III: Walk speed +4 m/s\nPioneer I: Ore loss per mining operation -20%\nPioneer II: EM effect +20%\nPioneer III: Droplets can quickly approach distant target\nConqueror I: Ore loss per mining operation -20%\nConqueror II: Star cannon charging speed +50%\nConqueror III: Droplet damage +100%\nGalaxy Guardian: Ore loss per mining operation  -40%", "通过击毁黑雾单位，你可以获得经验点数来提升功勋阶级，并积累战斗经验来强化自身。每次提升功勋阶级都将带来永久的加成效果，有些为你的生产线提供加成，有些则强化你的战斗能力。你可以通过将鼠标悬停在右上角的功勋阶级图标上来查看当前等级的加成效果，下一等级的经验需求和下一等级的加成效果。\n\n探索者 I: 核心发电 +1MW\n探索者 II: 能量盾伤害减免 +25%\n探索者 III: 步行移动速度 +4 m/s\n开拓者 I: 采矿消耗 -20%\n开拓者 II: 电磁武器效果 +20%\n开拓者 III: 水滴能够快速接近远距离的目标\n征服者 I: 采矿消耗 -20%\n征服者 II: 恒星炮充能速度 +50%\n征服者 III: 水滴伤害 +100%\n星河卫士: 采矿消耗 -40%");
+            RegisterString("深空来敌介绍2前字", "By destroying dark fog units, you can gain experience points to promote your merit rank, and accumulate combat experience to strengthen yourself. Every time you reach the new merit rank, you will not only receive authorization points award issued by the COSMO Technology Ethics Committee, but also permanent bonus effects. Authorization points can be assigned on demand by clicking on the merit rank icon in the upper right corner, some providing bonuses for your production line, while others strengthening your combat capabilities. You can also view the bonus effect of the current rank, the experience requirements of the next level, and the bonus effect of the next level by hovering the mouse over the merit rank icon in the upper right corner. After advancing to the final rank, you will still be able to continuously earn merit points to get authorization points from the COSMO Technology Ethics Committee.\n\nExplorer I: Core power generation +1 MW\nExplorer II: Energy shield damage reduction +25%\nExplorer III: Walk speed +4 m/s\nPioneer I: Ore loss per mining operation -20%\nPioneer II: EM effect +20%\nPioneer III: Droplets can quickly approach distant target\nConqueror I: Ore loss per mining operation -20%\nConqueror II: Star cannon charging speed +50%\nConqueror III: Droplet damage +100%\nGalaxy Guardian: Ore loss per mining operation  -40%", "通过击毁黑雾单位，你可以获得经验点数来提升功勋阶级，并积累战斗经验来强化自身。每次提升功勋阶级，你除了会收到由COSMO技术伦理委员会发放的授权点奖励外，还将获得固定的永久加成效果。授权点奖励可以通过点击右上角的功勋阶级图标进行按需分配，有些为你的生产线提供加成，有些则强化你的战斗能力。你也可以通过将鼠标悬停在右上角的功勋阶级图标上来查看当前等级的加成效果，下一等级的经验需求和下一等级的加成效果。在提升到最终等级后，你仍然可以不断获取功勋点数，以不断从COSMO技术伦理委员会处获取授权点奖励。\n\n探索者 I: 核心发电 +1MW\n探索者 II: 能量盾伤害减免 +25%\n探索者 III: 步行移动速度 +4 m/s\n开拓者 I: 采矿消耗 -20%\n开拓者 II: 电磁武器效果 +20%\n开拓者 III: 水滴能够快速接近远距离的目标\n征服者 I: 采矿消耗 -20%\n征服者 II: 恒星炮充能速度 +50%\n征服者 III: 水滴伤害 +100%\n星河卫士: 采矿消耗 -40%");
 
             RegisterString("深空来敌介绍5标题", "Meta-Drive", "元驱动");
             RegisterString("深空来敌介绍6标题", "Axiomatic Meta-Drive", "公理级元驱动");
@@ -854,33 +867,44 @@ namespace DSP_Battle
             RegisterString("decodeType23Title", "Repairing and Analyzing Log File", "正在修复并分析日志");
             RegisterString("decodeType24Title", "Interpreting Meta Drive", "正在解译元驱动");
             RegisterString("decodeType25Title", "Repairing and Interpreting Meta Drive", "正在修复并解译元驱动");
-            RegisterString("消耗复活币原地重组", "Use the resurrection coin to reassemble.", "消耗复活币并原地重组。");
+            //RegisterString("消耗复活币原地重组", "Use the resurrection coin to reassemble.", "消耗复活币并原地重组。");
             RegisterString("不朽之守护启动", " † Aegis of the Immortal † ", " † 不朽之守护 † ");
             RegisterString("不朽之守护就绪", "Aegis of the immortal is ready.", "不朽之守护已就绪。");
-            RegisterString("消耗复活币描述", "Use the resurrection coin to reassemble.", "这会消耗复活币，但不需要消耗任何元数据。");
+            RegisterString("消耗复活币描述", " Use 1 resurrection coin without spending any meta data.", "这会消耗复活币，但不需要消耗任何元数据。");
             RegisterString("使用复活币重新部署描述", "Use resurrection coin and redeploy Icarus to the initial planet?", "确认消耗复活币将伊卡洛斯重新部署至初始行星的降落点？");
             RegisterString("使用复活币立刻复活描述", "Use resurrection coin to reassemble Icarus?", "确认消耗复活币将伊卡洛斯立刻原地重组？");
             RegisterString("下次重新部署消耗不会增加", "Next redeployment cost won't increase.", "下次重新部署的消耗不会增加");
             RegisterString("下次立刻复活消耗不会增加", "Next reassembling cost won't increase.", "下次原地重组的消耗不会增加");
             RegisterString("使用元数据或复活币", "Use Metadata or Resurrect Coin", "使用 元数据 或 复活币");
+
+            RegisterString("剩余技能点", "<color=#d2853d>-  {0} ap not used, click to allocate ( L )</color>", "<color=#d2853d>-  {0} 个授权点未使用，点击以进行分配 ( L )</color>");
+            RegisterString("剩余技能点待确认", "<color=#d2853d>-  Ap allocation has not been confirmed ( L )</color>", "<color=#d2853d>-  有授权点分配尚未确认 ( L )</color>");
+            RegisterString("技能点", "Authorization Point", "授权点");
+            RegisterString("已分配技能点", "Allocated", "已分配");
+            RegisterString("技能点描述", "技能点描述英文", "授权点是COSMO技术伦理委员会对你维护星区安全功绩的奖励，你可以使用授权点从COSMO技术伦理委员会处换取任何受认可的<color=#c2853d>宇宙定律修正技术</color>，这些修正将被立即广播至此星区。\n\n你被允许向COSMO技术伦理委员会提供合理数量的宇宙矩阵以<color=#c2853d>重置</color>对授权点的分配，但你被禁止对定律修正技术进行任何的逆向工程，COSMO技术伦理委员会有权在检测到你的违规行为后收回全部的授权点或已启用的修正。");
+            RegisterString("技能点标题", "Authorization Point Allocation", "授权点分配");
+            RegisterString("按下Shift分配10点说明", "Hold Shift to allocate 10 points at once\nHold Ctrl+Shift to allocate all available points", "按住Shift以一次性分配10点\n按住Ctrl+Shift以分配全部可用授权点");
+            RegisterString("确认分配", "Confirm", "确认");
+            RegisterString("撤销分配", "Withdraw", "全部撤销");
+            RegisterString("技能点窗口取消", "Cancel", "取消");
+            RegisterString("全部重置", "Reset All", "全部重置");
+            RegisterString("重置技能点确认标题", "Reset All", "全部重置");
+            RegisterString("重置技能点确认警告", "Confirm to use {0} universe matrix to reset all ap alloction? This will return all allocated authorization points.", "是否消耗{0}个宇宙矩阵以重置所有的授权点分配？这将返还全部已分配的授权点。");
+            RegisterString("分配技能点确认标题", "Confirm Allocation", "确认分配");
+            RegisterString("分配技能点确认警告", "Confirm and apply all the ap allocation?", "确认并应用所有授权点分配？");
+            //RegisterString("aaa", "aaa", "aaa");
             //RegisterString("aaa", "aaa", "aaa");
             //RegisterString("aaa", "aaa", "aaa");
 
+
+            RegisterString("版本更迭补偿", "Version change compensation", "版本更迭补偿");
+            RegisterString("遗物4-5补偿说明", "Since the effect of the meta driver [Aftershock Echo] has been changed, you received a compensation from the void: you can immediately interpret a new meta drive, and a free resurrection coin. ", "由于[余震回响]元驱动的效果被更改，你收到了一个来自虚空的补偿：可以立刻解译一个新的元驱动，并获得一个复活币。");
         }
 
 
 
         public static void AddTutorialProtos()
         {
-            TutorialProto tp1 = LDB.tutorial.Select(1).Copy();
-            tp1.Name = "深空来敌介绍1标题".Translate();
-            tp1.name = "深空来敌介绍1标题".Translate();
-            tp1.Video = "";
-            tp1.PreText = "深空来敌介绍1前字";
-            tp1.PostText = "";
-            tp1.ID = 41;
-            LDBTool.PreAddProto(tp1);
-
             TutorialProto tp2 = LDB.tutorial.Select(1).Copy();
             tp2.Name = "功勋阶级".Translate();
             tp2.name = "功勋阶级".Translate();
@@ -995,7 +1019,7 @@ namespace DSP_Battle
         {
             if (i == -1)
             {
-                for (int id = 31; id <= 35; id++)
+                for (int id = 42; id <= 44; id++)
                 {
                     GameMain.history.UnlockTutorial(id);
                 }

@@ -308,7 +308,7 @@ namespace DSP_Battle
 
         public static void RefreshESButton()
         {
-            if(EventSystem.recorder != null && EventSystem.recorder.protoId > 0)
+            if(EventSystem.recorder != null && EventSystem.recorder.protoId > 0 && GameMain.instance != null)
             {
                 ESButtonImage.sprite = Resources.Load<Sprite>("Assets/DSPBattle/alienmatrix");
                 ESButtonHighlighting = false;

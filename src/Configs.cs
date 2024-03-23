@@ -17,7 +17,7 @@ namespace DSP_Battle
         public static bool enableBattleBGM = true;
         public static bool enableAlertTextGlowing = true;
         public static int versionWhenImporting = -1;
-        public static int versionCode = 30240303;
+        public static int versionCode = 30240320;
 
 
         public static int difficulty = 0; // -1 easy, 0 normal, 1 hard
@@ -140,7 +140,7 @@ namespace DSP_Battle
                 new Tuple<int, int>(50000000, 0) };
 
         //Rank信息
-        public static int[] expToNextRank = new int[] { 20, 200, 1000, 3000, 20000, 100000, 200000, 500000, 1000000, 10000000, 0, 0, 0};
+        public static int[] expToNextRank = new int[] { 20, 200, 1000, 5000, 30000, 200000, 500000, 1000000, 2000000, 10000000, 2000000, 0, 0};
         public static float[] rewardTimeRatio = new float[] { 1.0f, 1.0f, 1.2f, 1.2f, 1.4f, 1.4f, 1.6f, 1.6f, 1.8f, 1.8f, 2.0f, 2.0f, 2.0f, 2.0f };
         public static float[] expRatioByDifficulty = new float[] { 0.75f, 1f, 1.5f };
         public static int expPerAlienMeta = 20; //每个解码后的异星元数据上传提供的基础功勋点数

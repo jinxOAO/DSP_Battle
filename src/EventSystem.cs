@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using HarmonyLib;
 using Steamworks;
+using UnityEngine;
 
 namespace DSP_Battle
 {
@@ -318,6 +320,9 @@ namespace DSP_Battle
             tickFromLastRelic = r.ReadInt32();
             probabilityForNewEvent = r.ReadDouble();
             neverStartTheFirstEvent = r.ReadInt32();
+
+            Compensations();
+
             UIEventSystem.RefreshAll();
         }
 
@@ -330,6 +335,16 @@ namespace DSP_Battle
             UIEventSystem.RefreshAll();
         }
 
+        public static void Compensations()
+        {
+            // 由于更改了余震回响的效果，对已经取得余震回响的之前版本的玩家进行补偿，如果当前没有元驱动事件，立刻设定为9998事件
+            if (Configs.versionWhenImporting < 30240320 && Relic.HaveRelic(4, 5) && (recorder == null || recorder.protoId == 0))
+            {
+                UIMessageBox.Show("版本更迭补偿".Translate(), "遗物4-5补偿说明".Translate(), "是".Translate(), "是".Translate(), 1, new UIMessageBox.Response(() => { }), new UIMessageBox.Response(() => { }));
+                SetEvent(9998);
+                Relic.AddRelic(3, 5);
+            }
+        }
 
 
         /// <summary>
@@ -613,7 +628,7 @@ namespace DSP_Battle
         }
 
         /// <summary>
-        /// 一些击杀效果 以及 relic 2-2 2-14 3-9 4-4
+        /// 一些击杀效果 以及 relic 0-0 2-2 2-14 3-9 4-4
         /// </summary>
         /// <param name="__instance"></param>
         /// <param name="gameData"></param>
@@ -665,7 +680,7 @@ namespace DSP_Battle
 
                             if (Relic.HaveRelic(0, 0))
                             {
-                                Interlocked.Add(ref Relic.autoConstructMegaStructurePPoint, 20 * (level / 15 + 1));
+                                Interlocked.Add(ref Relic.autoConstructMegaStructurePPoint, 50 * (level / 15 + 1));
                             }
                             if (Relic.HaveRelic(2, 14) && Relic.Verify(Relic.kleptomancyProbability)) // relic 2-14
                             {
@@ -726,7 +741,7 @@ namespace DSP_Battle
                                     DFGBaseComponent dfgbase = planetFactory.enemySystem.bases[ptr3.owner];
                                     level = dfgbase?.evolve.level ?? 0;
                                 }
-                                if (!Relic.HaveRelic(4, 5)) // relic 4-5 阻止从地面单位获得经验值
+                                if (!Relic.HaveRelic(4, 5)) // relic 4-5 大幅降低从地面单位获得经验值
                                 {
                                     if (ptr3.dfGConnectorId + ptr3.dfGReplicatorId + ptr3.dfGShieldId + ptr3.dfGTurretId > 0)
                                         Rank.AddExp(10 * (level + 1));
@@ -735,12 +750,39 @@ namespace DSP_Battle
                                     else
                                         Rank.AddExp(level + 1);
                                 }
+                                else
+                                {
+                                    if (ptr3.dfGConnectorId + ptr3.dfGReplicatorId + ptr3.dfGShieldId + ptr3.dfGTurretId > 0)
+                                        Rank.AddExp(1 * (level + 1));
+                                    else if (ptr3.dfGBaseId > 0)
+                                        Rank.AddExp(20 * (level + 1));
+                                    else
+                                        Rank.AddExp(level / 10);
+                                }
 
                                 if (Relic.HaveRelic(0, 0))
-                                    Interlocked.Add(ref Relic.autoConstructMegaStructurePPoint, (level + 10) / 10);
+                                    Interlocked.Add(ref Relic.autoConstructMegaStructurePPoint, (level + 10) / 2);
 
                                 if (Relic.HaveRelic(4, 4)) // relic 4-4 击杀时进行研究
                                     RelicFunctionPatcher.AddNotDFTechHash(Relic.hashGainByGroundEnemy);
+
+                                // 触发emp 测试中
+                                if(Relic.HaveRelic(4, 5) && Relic.Verify(0.1) && ptr3.owner > 0)
+                                {
+                                    ref LocalDisturbingWave ptrDis = ref GameMain.data.spaceSector.skillSystem.turretDisturbingWave.Add();
+                                    ptrDis.astroId = planetFactory.planetId;
+                                    ptrDis.protoId = 1613;
+                                    ptrDis.center = ptr3.pos;
+                                    ptrDis.rot = ptr3.rot;
+                                    ptrDis.mask = ETargetTypeMask.Enemy;
+                                    ptrDis.caster.type = ETargetType.Enemy;
+                                    ptrDis.caster.id = 1;
+                                    ptrDis.disturbStrength = 0.5f * GameMain.data.history.magneticDamageScale;
+                                    ptrDis.thickness = 2.5f;
+                                    ptrDis.diffusionSpeed = 45f;
+                                    ptrDis.diffusionMaxRadius = Relic.HaveRelic(1, 11) ? 40 : 27;
+                                    ptrDis.StartToDiffuse();
+                                }
 
                                 // 获取元驱动事件可能性
                                 if (recorder == null || recorder.protoId == 0)

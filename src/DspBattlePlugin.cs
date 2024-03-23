@@ -17,7 +17,7 @@ using xiaoye97;
 
 namespace DSP_Battle
 {
-    [BepInPlugin("com.ckcz123.DSP_Battle", "DSP_Battle", "3.0.4")]
+    [BepInPlugin("com.ckcz123.DSP_Battle", "DSP_Battle", "3.0.5")]
     [BepInDependency(DSPModSavePlugin.MODGUID)]
     [BepInDependency(CommonAPIPlugin.GUID)]
     [BepInDependency(LDBToolPlugin.MODGUID)]
@@ -39,6 +39,7 @@ namespace DSP_Battle
         public static ConfigEntry<bool> starCannonDirectionReverse;
 
         public static bool isControlDown = false;
+        public static bool isShiftDown = false;
         public void Awake()
         {
             logger = Logger;
@@ -142,6 +143,16 @@ namespace DSP_Battle
                 isControlDown = false;
                 UIStarFortress.RefreshSetBtnText();
             }
+            if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
+            {
+                isShiftDown = true;
+                UIStarFortress.RefreshSetBtnText();
+            }
+            if (Input.GetKeyUp(KeyCode.LeftShift) || Input.GetKeyUp(KeyCode.RightShift))
+            {
+                isShiftDown = false;
+                UIStarFortress.RefreshSetBtnText();
+            }
             if (Input.GetKeyDown(KeyCode.UpArrow) && UIDevConsole.consoleObj != null && UIDevConsole.consoleObj.activeSelf)
             {
                 DevConsole.PrevCommand();
@@ -156,6 +167,10 @@ namespace DSP_Battle
                     UIEventSystem.OnEventButtonClick();   
                 else if (!MoreMegaStructure.MoreMegaStructure.GenesisCompatibility)
                     UIEventSystem.OnEventButtonClick();
+            }
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                UISkillPointsWindow.Switch();
             }
             if (Configs.developerMode && isControlDown && Input.GetKeyDown(KeyCode.Z))
             {
@@ -188,7 +203,8 @@ namespace DSP_Battle
             UIRelic.CheckRelicSlotsWindowShowByMouse();
             UIRelic.SlotWindowAnimationUpdate();
             UIEventSystem.OnUpdate();
-            //BattleBGMController.BGMLogicUpdate();
+            BattleBGMController.BGMLogicUpdate();
+            UISkillPointsWindow.Update();
             DevConsole.Update();
         }
 
@@ -232,13 +248,17 @@ namespace DSP_Battle
             UpdateLogo();
         }
 
-
+        /// <summary>
+        /// 用于拦截Esc键按下时优先关闭已打开的窗口（如果有），而非打开esc菜单
+        /// </summary>
+        /// <returns></returns>
         [HarmonyPrefix]
         [HarmonyPatch(typeof(GameMain), "LateUpdate")]
         public static bool EscLogicBlocker()
         {
             UIDevConsole.EscLogic();
             UIEventSystem.EscLogic();
+            UISkillPointsWindow.EscLogic();
             return true;
         }
 
@@ -282,7 +302,9 @@ namespace DSP_Battle
             Relic.Export(w);
             EventSystem.Exprot(w);
             StarFortress.Export(w);
-            //DevConsole.Export(w);
+            SkillPoints.Export(w);
+
+            DevConsole.Export(w);
         }
 
         public void Import(BinaryReader r)
@@ -293,7 +315,8 @@ namespace DSP_Battle
             Relic.Import(r);
             EventSystem.Import(r);
             StarFortress.Import(r);
-            //DevConsole.Import(r);
+            SkillPoints.Import(r);
+            DevConsole.Import(r);
 
             BattleProtos.ReCheckTechUnlockRecipes();
             BattleProtos.UnlockTutorials();
@@ -314,6 +337,7 @@ namespace DSP_Battle
             StarFortress.IntoOtherSave();
 
             DevConsole.IntoOtherSave();
+            SkillPoints.IntoOtherSave();
 
             BattleProtos.ReCheckTechUnlockRecipes();
             BattleProtos.UnlockTutorials();
