@@ -168,7 +168,7 @@ namespace DSP_Battle
                 else if (!MoreMegaStructure.MoreMegaStructure.GenesisCompatibility)
                     UIEventSystem.OnEventButtonClick();
             }
-            if (Input.GetKeyDown(KeyCode.L))
+            if (Input.GetKeyDown(KeyCode.L) && !VFInput.inputing)
             {
                 UISkillPointsWindow.Switch();
             }
@@ -193,11 +193,25 @@ namespace DSP_Battle
             }
             if (Configs.developerMode && isControlDown && Input.GetKeyDown(KeyCode.H))
             {
-                EventSystem.ClearEvent();
+                GameMain.data.mainPlayer.mecha.jumpSpeed += 1;
+                GameMain.data.history.constructionDroneSpeed += 1;
+            }
+            if (Configs.developerMode && isShiftDown && Input.GetKeyDown(KeyCode.H))
+            {
+                GameMain.data.mainPlayer.mecha.jumpSpeed += 1;
+                GameMain.data.history.constructionDroneSpeed -= 1;
             }
             if (Configs.developerMode && isControlDown && Input.GetKeyDown(KeyCode.J))
             {
-                EventSystem.TestIfGroudBaseInited();
+                GameMain.data.mainPlayer.mecha.constructionModule.droneCount += 1;
+                GameMain.data.mainPlayer.mecha.constructionModule.droneAliveCount += 1;
+                GameMain.data.mainPlayer.mecha.constructionModule.droneIdleCount += 1;
+            }
+            if (Configs.developerMode && isShiftDown && Input.GetKeyDown(KeyCode.J))
+            {
+                GameMain.data.mainPlayer.mecha.constructionModule.droneCount -= 20;
+                GameMain.data.mainPlayer.mecha.constructionModule.droneAliveCount -= 20;
+                GameMain.data.mainPlayer.mecha.constructionModule.droneIdleCount -= 20;
             }
             UIRelic.SelectionWindowAnimationUpdate();
             UIRelic.CheckRelicSlotsWindowShowByMouse();
@@ -316,6 +330,7 @@ namespace DSP_Battle
             EventSystem.Import(r);
             StarFortress.Import(r);
             SkillPoints.Import(r);
+
             DevConsole.Import(r);
 
             BattleProtos.ReCheckTechUnlockRecipes();

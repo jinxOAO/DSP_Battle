@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace DSP_Battle
@@ -20,6 +21,10 @@ namespace DSP_Battle
         public static Text withdrawButtonText;
         public static Image resetButtonImg;
         public static Image confirmButtonImg;
+        public static List<GameObject> skillTipButtonObjsL = new List<GameObject>();
+        public static List<GameObject> skillTipButtonObjsR = new List<GameObject>();
+        public static List<UIButton> skillTipUIButtonsL = new List<UIButton>();
+        public static List<UIButton> skillTipUIButtonsR = new List<UIButton>();
         public static List<UIButton> plusUIButtonsL = new List<UIButton>();
         public static List<UIButton> minusUIButtonsL = new List<UIButton>();
         public static List<UIButton> plusUIButtonsR = new List<UIButton>();
@@ -186,7 +191,7 @@ namespace DSP_Battle
         {
             int leftCount = SkillPoints.skillCountL;
             int rightCount = SkillPoints.skillCountR;
-            int lineSpace = 40;
+            int lineSpacing = 50;
 
             GameObject contentObj = new GameObject("assign-content");
             contentObj.transform.SetParent(spWindowObj.transform);
@@ -213,8 +218,8 @@ namespace DSP_Battle
             for (int i = 0; i < leftCount + rightCount; i++)
             {
                 bool isLeft = i < leftCount;
-                float x = isLeft ? -230 : 140;
-                float y = 280 - (isLeft ? i * lineSpace : (i - leftCount) * lineSpace);
+                float x = isLeft ? -210 : 160;
+                float y = 260 - (isLeft ? i * lineSpacing : (i - leftCount) * lineSpacing);
                 string sign = isLeft ? i.ToString() : (100 + (i - leftCount)).ToString();
                 string name = $"skill{(isLeft ? "L" : "R")}{(isLeft ? i : i - leftCount)}";
                 int idx = isLeft ? i : i - leftCount;
@@ -223,12 +228,18 @@ namespace DSP_Battle
                 skillObj.transform.SetParent(contentObj.transform);
                 skillObj.transform.localScale = new Vector3(1, 1, 1);
                 skillObj.transform.localPosition = new Vector3(x, y, 0);
+                skillObj.AddComponent<RectTransform>();
+                skillObj.GetComponent<RectTransform>().sizeDelta = new Vector2(350, 30);
+                skillObj.AddComponent<Image>();
+                skillObj.GetComponent<Image>().color = new Color(0, 0, 0, 0);
 
                 // 说明按钮
                 GameObject skillTipButtonObj = GameObject.Instantiate(tipButtonObj, skillObj.transform);
-                skillTipButtonObj.transform.localPosition = new Vector3(-90, -18, 0);
+                skillTipButtonObj.name = name + "-tip";
+                skillTipButtonObj.transform.localPosition = new Vector3(-130, 2, 0);
                 skillTipButtonObj.GetComponent<RectTransform>().sizeDelta = new Vector2(16, 16);
                 skillTipButtonObj.transform.Find("icon").gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(12, 12);
+                skillTipButtonObj.transform.Find("icon").gameObject.name = name + "-tipicon";
                 UIButton tipUIBtn = skillTipButtonObj.GetComponent<UIButton>();
                 tipUIBtn.tips.tipTitle = (name).Translate();
                 tipUIBtn.tips.tipText = (name + "Desc").Translate();
@@ -237,31 +248,32 @@ namespace DSP_Battle
 
                 // 题目文本以及数值文本
                 GameObject titleObj = GameObject.Instantiate(txtObj, skillObj.transform);
-                titleObj.transform.localPosition = new Vector3(0, 0, 0);
+                titleObj.transform.localPosition = new Vector3(-20, 20, 0);
+                titleObj.GetComponent<RectTransform>().sizeDelta = new Vector2(185, 36);
                 titleObj.GetComponent<Text>().alignment = TextAnchor.MiddleLeft;
                 titleObj.GetComponent<Text>().text = name.Translate();
                 titleObj.SetActive(true);
 
                 GameObject valueObj = GameObject.Instantiate(txtObj, skillObj.transform);
                 valueObj.name = "value";
-                valueObj.transform.localPosition = new Vector3(122, 0, 0); // 稍微往右偏移2看起来更在中间
+                valueObj.transform.localPosition = new Vector3(112, 20, 0); // 稍微往右偏移2看起来更在中间
                 Text valueText = valueObj.GetComponent<Text>();
                 valueText.alignment = TextAnchor.MiddleCenter;
                 valueObj.SetActive(true);
 
                 // 分配按钮
 
-                List<float> values = SkillPoints.LSkillValues;
-                List<string> suffixes = SkillPoints.LSkillSuffixes;
+                List<float> values = SkillPoints.skillValuesL;
+                List<string> suffixes = SkillPoints.skillSuffixesL;
                 if (!isLeft)
                 {
-                    values = SkillPoints.RSkillValues;
-                    suffixes = SkillPoints.RSkillSuffixes;
+                    values = SkillPoints.skillValuesR;
+                    suffixes = SkillPoints.skillSuffixesR;
                 }
 
                 GameObject plusObj = GameObject.Instantiate(buttonObj, skillObj.transform);
                 plusObj.name = "assign-" + sign;
-                plusObj.transform.localPosition = new Vector3(170, -17, 0);
+                plusObj.transform.localPosition = new Vector3(150, 3, 0);
                 plusObj.SetActive(true);
                 UIButton plusUIBtn = plusObj.GetComponent<UIButton>();
                 plusUIBtn.tips.tipTitle = (values[idx] > 0 ? "+" : "") + values[idx].ToString() + " " + suffixes[idx];
@@ -275,7 +287,7 @@ namespace DSP_Battle
                 
                 GameObject minusObj = GameObject.Instantiate(buttonObj, skillObj.transform);
                 minusObj.name = "withdraw-" + sign;
-                minusObj.transform.localPosition = new Vector3(70, -17, 0);
+                minusObj.transform.localPosition = new Vector3(70, 3, 0);
                 minusObj.SetActive(true);
                 UIButton minusUIBtn = minusObj.GetComponent<UIButton>();
                 minusUIBtn.tips.tipTitle = "";
@@ -290,12 +302,16 @@ namespace DSP_Battle
                     plusUIButtonsL.Add(plusUIBtn);
                     minusUIButtonsL.Add(minusUIBtn);
                     valueTextsL.Add(valueText);
+                    skillTipButtonObjsL.Add(skillTipButtonObj);
+                    skillTipUIButtonsL.Add(tipUIBtn);
                 }
                 else
                 {
                     plusUIButtonsR.Add(plusUIBtn);
                     minusUIButtonsR.Add(minusUIBtn);
                     valueTextsR.Add(valueText);
+                    skillTipButtonObjsR.Add(skillTipButtonObj);
+                    skillTipUIButtonsR.Add(tipUIBtn);
                 }
 
             }
@@ -316,8 +332,17 @@ namespace DSP_Battle
                 for (int i = 0; i < valueTextsL.Count; i++)
                 {
                     int level = SkillPoints.skillLevelL[i] + tempLevelAddedL[i];
-                    float value = level * SkillPoints.LSkillValues[i];
-                    valueTextsL[i].text = (value > 0 ? "+":"" ) + value.ToString() + " " + SkillPoints.LSkillSuffixes[i];
+                    float value = level * SkillPoints.skillValuesL[i];
+                    if(i == 4)
+                    {
+                        if (Rank.rank >= 10)
+                            value -= 80;
+                        else if (Rank.rank >= 7)
+                            value -= 40;
+                        else if (Rank.rank >= 4)
+                            value -= 20;
+                    }
+                    valueTextsL[i].text = (value > 0 ? "+":"" ) + value.ToString() + " " + SkillPoints.skillSuffixesL[i];
                     int length = plusUIButtonsL[i].transitions.Length;
                     for (int j = 0; j < length && j < 1; j++)
                     {
@@ -369,8 +394,12 @@ namespace DSP_Battle
                 for (int i = 0; i < valueTextsR.Count; i++)
                 {
                     int level = SkillPoints.skillLevelR[i] + tempLevelAddedR[i];
-                    float value = level * SkillPoints.RSkillValues[i];
-                    valueTextsR[i].text = (value > 0 ? "+" : "") + value.ToString() + " " + SkillPoints.RSkillSuffixes[i];
+                    float value = level * SkillPoints.skillValuesR[i];
+                    if (i == 1 && Relic.HaveRelic(2, 12))
+                    {
+                        value += 10;
+                    }
+                    valueTextsR[i].text = (value > 0 ? "+" : "") + value.ToString() + " " + SkillPoints.skillSuffixesR[i];
                     int length = plusUIButtonsR[i].transitions.Length;
                     for (int j = 0; j < length && j < 1; j++)
                     {
@@ -431,6 +460,8 @@ namespace DSP_Battle
                     withdrawButtonText.text = "技能点窗口取消".Translate();
                     confirmButtonImg.color = btnDisableColor;
                 }
+
+                ShowHideSkillTipButton();
             }
 
         }
@@ -506,6 +537,50 @@ namespace DSP_Battle
             }
             return false;
         }
+
+        // 随鼠标显示或隐藏问号
+        public static void ShowHideSkillTipButton()
+        {
+            GameObject obj = null;
+            Camera cam = Camera.main;
+            UnityEngine.EventSystems.EventSystem uiEventSystem = UnityEngine.EventSystems.EventSystem.current;
+            if(uiEventSystem != null)
+            {
+                PointerEventData pointerEventData = new PointerEventData(uiEventSystem);
+                pointerEventData.position = Input.mousePosition;
+                List<RaycastResult> results = new List<RaycastResult>();
+                uiEventSystem.RaycastAll(pointerEventData, results);
+                if(results.Count > 0)
+                {
+                    for (int i = 0; i < results.Count; i++)
+                    {
+                        string name = results[i].gameObject.name;
+                        if (name.Length > 6 && name.Substring(0,5) == "skill")
+                        {
+                            obj = results[i].gameObject;
+                            break;
+                        }
+                    }
+                }
+            }
+            for (int i = 0; i < skillTipButtonObjsL.Count; i++)
+            {
+                string descName = "skillL" + i.ToString() + "Desc";
+                if (obj != null && obj.name.Split('-')[0] == "skillL" + i.ToString() && descName.Translate() != descName)
+                    skillTipButtonObjsL[i].SetActive(true);
+                else
+                    skillTipButtonObjsL[i].SetActive(false);
+            }
+            for (int i = 0; i < skillTipButtonObjsR.Count; i++)
+            {
+                string descName = "skillR" + i.ToString() + "Desc";
+                if (obj != null && obj.name.Split('-')[0] == "skillR" + i.ToString() && descName.Translate() != descName)
+                    skillTipButtonObjsR[i].SetActive(true);
+                else
+                    skillTipButtonObjsR[i].SetActive(false);
+            }
+        }
+
 
         public static bool CheckCanReset(out int need)
         {
@@ -621,15 +696,7 @@ namespace DSP_Battle
                 UIMessageBox.Show("分配技能点确认标题".Translate(), String.Format("分配技能点确认警告".Translate()), "否".Translate(), "是".Translate(), 1, new UIMessageBox.Response(() => { }),
                     new UIMessageBox.Response(() =>
                     {
-                        for (int i = 0; i < SkillPoints.skillCountL; i++)
-                        {
-                            SkillPoints.skillLevelL[i] += tempLevelAddedL[i] > 0 ? tempLevelAddedL[i] : 0;
-                        }
-                        for (int i = 0; i < SkillPoints.skillCountR; i++)
-                        {
-                            SkillPoints.skillLevelR[i] += tempLevelAddedR[i] > 0 ? tempLevelAddedR[i] : 0;
-                        }
-                        ClearTempLevelAdded();
+                        SkillPoints.ConfirmAll();
                         RefreshResetButton();
                     }));
             }
@@ -657,14 +724,7 @@ namespace DSP_Battle
                         int itemId = 6006;
                         int inc = 0;
                         GameMain.mainPlayer.package.TakeTailItems(ref itemId, ref need, out inc, false);
-                        for (int i = 0; i < SkillPoints.skillLevelL.Length; i++)
-                        {
-                            SkillPoints.skillLevelL[i] = 0;
-                        }
-                        for (int i = 0; i < SkillPoints.skillLevelR.Length; i++)
-                        {
-                            SkillPoints.skillLevelR[i] = 0;
-                        }
+                        SkillPoints.ResetAll();
                         RefreshResetButton();
                     }));
             }

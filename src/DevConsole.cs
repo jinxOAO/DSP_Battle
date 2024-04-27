@@ -273,6 +273,11 @@ namespace DSP_Battle
                         EventSystem.recorder.decodeTimeSpend = EventSystem.recorder.decodeTimeNeed;
                         Print($"Event count down finished.");
                         break;
+                    case "ap":
+                        int apAdd = Convert.ToInt32(param[1]);
+                        SkillPoints.totalPoints += apAdd;
+                        Print($"Authorization points {(apAdd >= 0 ? "+" : "")}{apAdd}");
+                        break;
                     case "t":
                         Utils.beginBasic = Convert.ToDouble(param[1]);
                         Utils.minBasic = Convert.ToDouble(param[2]);
@@ -565,8 +570,9 @@ namespace DSP_Battle
                 "<color=#ffffff>cool</color> 恒星炮立即冷却完毕" + "\n" +
                 "<color=#ffffff>es [param1]</color> 设定当前事件链为[param1]，不提供参数则初始化合法的事件" + "\n" +
                 "<color=#ffffff>est [param1]</color> 当前事件链转移至[param1]" + "\n" +
+                "<color=#ffffff>ap [param1]</color> 授权点增加[param1]" + "\n" +
                 "---------------------- help ----------------------";
-            Print(allCmds,17, false); // 这个forceLineCount传值取决于allCmds的行数
+            Print(allCmds,18, false); // 这个forceLineCount传值取决于allCmds的行数
         }
 
         public static void ClearOutputField()

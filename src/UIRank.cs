@@ -165,7 +165,7 @@ namespace DSP_Battle
             uiBtn.tips.width = 250;
             uiBtn.tips.delay = 0.1f;
             uiBtn.tips.offset = new Vector2(-190, 60);
-            RefreshText();
+            RefreshTextAndMark();
 
             if (uiBtn.tipShowing)
             {
@@ -206,7 +206,7 @@ namespace DSP_Battle
             int rank = Rank.rank;
             string res = "";
 
-            if (SkillPoints.UnusedPoints() > 0)
+            if (SkillPoints.UnusedPoints() > 0 && !SkillPoints.isFullLevel)
             {
                 if (UISkillPointsWindow.tempLevelAddedL.Sum() + UISkillPointsWindow.tempLevelAddedR.Sum() > 0)
                     res = "剩余技能点待确认".Translate() + "\n";
@@ -280,17 +280,36 @@ namespace DSP_Battle
             if (promotionNoticeSubText == null)
                 promotionNoticeSubText = GameObject.Find("UI Root/Overlay Canvas/In Game/Top Tips/research-complete/sub-text").GetComponent<Text>();
 
-            RefreshText();
+            if(time % 120 == 22)
+            {
+                int fullLevel = 0;
+                for (int i = 0; i < SkillPoints.skillCountL; i++) 
+                {
+                    fullLevel += SkillPoints.skillMaxLevelL[i];
+                    fullLevel -= SkillPoints.skillLevelL[i];
+                }
+                for (int i = 0; i < SkillPoints.skillCountR; i++)
+                {
+                    fullLevel += SkillPoints.skillMaxLevelR[i];
+                    fullLevel -= SkillPoints.skillLevelR[i];
+                }
+                if (fullLevel <= 0)
+                    SkillPoints.isFullLevel = true;
+                else
+                    SkillPoints.isFullLevel = false;
+            }
+
+            RefreshTextAndMark();
         }
 
-        public static void RefreshText()
+        public static void RefreshTextAndMark()
         {
             //刷新
             uiBtn.tips.tipTitle = ("gmRank" + Rank.rank.ToString()).Translate();
             uiBtn.tips.tipText = GetRankInfoText();
 
-            // 有未使用的授权点时，闪烁感叹号
-            if (SkillPoints.UnusedPoints() > 0)
+            // 有未使用的授权点时，且还能使用时，闪烁感叹号
+            if (SkillPoints.UnusedPoints() > 0 && !SkillPoints.isFullLevel)
             {
                 attentionMarkObj.SetActive(true);
                 if(Rank.rank <= 8)

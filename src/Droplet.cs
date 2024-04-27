@@ -572,6 +572,7 @@ namespace DSP_Battle
             return SearchNextNearestTarget();
         }
 
+        // 发现附近的敌人
         public bool DiscoverSpaceEnemy()
         {
             VectorLF3 centerPosU = GameMain.mainPlayer.uPosition;
@@ -671,7 +672,8 @@ namespace DSP_Battle
             }
             int playerSwarmIndex = GameMain.localStar != null ? GameMain.localStar.index : -1;
             //Utils.Log($"playerindex {playerSwarmIndex}/swarm{swarmIndex}, and state = {state}, forceL={forceLaunchState}, discover?{DiscoverSpaceEnemy()}", 60);
-            if (state == 0 && (DiscoverSpaceEnemy() || forceLaunchState > 0) && playerSwarmIndex >= 0)
+            bool hasNearEnemy = DiscoverSpaceEnemy();
+            if (state == 0 && (hasNearEnemy || forceLaunchState > 0) && playerSwarmIndex >= 0)
             {
                 Launch(playerSwarmIndex);
             }
@@ -697,8 +699,13 @@ namespace DSP_Battle
                 double ratio = 1.0;
                 if (Relic.HaveRelic(1, 4))
                     ratio *= 0.5;
-                if(validTargetEnemy)
-                    Droplets.ForceConsumeMechaEnergy(Droplets.energyConsumptionPerTick * ratio);
+                if (validTargetEnemy)
+                {
+                    if(!hasNearEnemy)
+                        Droplets.ForceConsumeMechaEnergy(Droplets.energyConsumptionPerTick * ratio * 10 * SkillPoints.dropletEnergyPunishmentRate); // 主动出击状态且攻击的远程敌人，10倍耗能
+                    else
+                        Droplets.ForceConsumeMechaEnergy(Droplets.energyConsumptionPerTick * ratio);
+                }
                 else
                     Droplets.ForceConsumeMechaEnergy(Droplets.energyConsumptionPerTick * ratio / 100);
             }

@@ -567,10 +567,10 @@ namespace DSP_Battle
             RegisterString("遗物名称2-16", "Hardened Shield\n<size=18>- Packaged -</size>", "刚毅护盾\n<size=18>- 封装级 -</size>");
             RegisterString("遗物名称2-17", "Aegis of the Immortal\n<size=18>- Packaged -</size>", "不朽之守护\n<size=18>- 封装级 -</size>");
 
-            RegisterString("遗物名称3-0", "Inferior processing\n<size=18>- Regular -</size>", "劣质加工\n<size=18>- 常规级 -</size>");
+            RegisterString("遗物名称3-0", "Inferior Processing\n<size=18>- Regular -</size>", "劣质加工\n<size=18>- 常规级 -</size>");
             RegisterString("遗物名称3-1", "Spelltheif's Edge\n<size=18>- Regular -</size>", "窃法之刃\n<size=18>- 常规级 -</size>");
             RegisterString("遗物名称3-2", "Ark Reactor\n<size=18>- Regular -</size>", "方舟反应堆\n<size=18>- 常规级 -</size>");
-            RegisterString("遗物名称3-3", "Shepherd of souls\n<size=18>- Regular -</size>", "掘墓人\n<size=18>- 常规级 -</size>"); // 英文是牧魂人新名字
+            RegisterString("遗物名称3-3", "Shepherd of Souls\n<size=18>- Regular -</size>", "掘墓人\n<size=18>- 常规级 -</size>"); // 英文是牧魂人新名字
             RegisterString("遗物名称3-4", "Ctrl 6\n<size=18>- Regular -</size>", "装\n<size=18>- 常规级 -</size>");
             RegisterString("遗物名称3-5", "Resurrection Coin\n<size=18>- Regular -</size>", "复活币\n<size=18>- 常规级 -</size>");
             RegisterString("遗物名称3-6", "Upload\n<size=18>- Regular -</size>", "上传\n<size=18>- 常规级 -</size>");
@@ -672,9 +672,9 @@ namespace DSP_Battle
             RegisterString("遗物描述0-5", "Planetary shield and Icarus' Energy Shield gain 10% damage reduction, and they return all reduced or avoided damage to the attacker as <i>additional damage</i>", "行星护盾和伊卡洛斯的能量盾获得10%伤害减免，且它们会将所有被减免或被规避的伤害全额回敬给攻击者作为<i>额外伤害</i>");
             RegisterString("遗物描述0-6", "Each time a turret uses an ammo set to reload, do free reloading and prevent the ammo set consumption", "所有防御设施的每次消耗弹药组装填时，进行免费装填而阻止消耗弹药组");
             RegisterString("遗物描述0-7", "The star system with a megastructure will deal <i>additional damage</i> to all activated dark fog space ships in the star system, higher energy the megastucture generates, higher the damage it deals.", "拥有巨构的星系在战斗时每秒会对星系中所有已激活的太空黑雾舰队造成<i>额外伤害</i>，伤害取决于巨构的能量水平");
-            RegisterString("遗物描述0-8", "Jamming towers deal 20 <i>additional damage</i> to all hit targets when using jamming capsules, deal 30 if using suppresing capsules", "干扰塔使用干扰胶囊造成电磁干扰时，对所有命中目标造成0<i>额外伤害</i>，压制胶囊则转而造成30<i>额外伤害</i>");
+            RegisterString("遗物描述0-8", "When enemies are interfered by non-Icarus-throwing jamming capsules, they take 20 <i>additional damage</i>. Take 30 if it is suppresing capsules", "非投掷的干扰胶囊造成电磁干扰时，对所有命中目标造成0<i>额外伤害</i>，压制胶囊则转而造成30<i>额外伤害</i>");
             RegisterString("遗物描述0-9", "It must do something...", "它必须做点什么...");
-            RegisterString("遗物描述0-9实际", "You have a higher probability of getting rarer meta drives. If the first judgment fails with any probability from other meta drives, it can be judged again. And the hidden effects...", "你有更高的概率获取更稀有的元驱动。任何概率初次判定失败时，可以再判定一次。以及隐藏效果...");
+            RegisterString("遗物描述0-9实际", "You have a higher probability of getting rarer meta drives. If the first judgment fails with any probability from other meta drives, it can be judged again. And the hidden effects...", "你有更高的可能性获取更稀有的元驱动。任何概率初次判定失败时，可以再判定一次。以及隐藏效果...");
             RegisterString("遗物描述0-10", "Every time a droplet destroys an enemy, restores 2MJ power to the Mecha, and all droplets permanently obtain 10 <i>additional damage</i>. ", "水滴每击杀一个敌人，为机甲回复2MJ能量，且所有水滴永久获得+10的<i>额外伤害</i>。");
 
             RegisterString("遗物描述1-0", "Every time you unlock or upgrade a technology, random mega structures will be partially auto-constructed", "每解锁或升级一个科技，少量推进随机巨构的建造进度");
@@ -702,7 +702,7 @@ namespace DSP_Battle
             RegisterString("遗物描述2-9", "Star cannon's recharging speed +50%", "恒星炮充能速度+50%");
             RegisterString("遗物描述2-10", "Turret supernova cooldown and charge time -50%", "防御塔的超新星冷却和蓄能时间-50%");
             RegisterString("遗物描述2-11", "Smelter have 30% chance to produce an additional product", "熔炉每次产出，有30%的概率额外产出一个产物");
-            RegisterString("遗物描述2-12", "You have 10% chance deal 100% <i>additional damage</i> to the dark fog for any type of damage", "你对黑雾造成的任何伤害有10%的概率造成100%<i>额外伤害</i>");
+            RegisterString("遗物描述2-12", "You gain +10% chance of critical hit", "你获得10%暴击几率");
             RegisterString("遗物描述2-13", "Double any <i>additional damage</i> (except the bonus from technology)", "你对黑雾造成的任何<i>额外伤害翻倍</i>（来自科技的加成除外）");
             RegisterString("遗物描述2-14", "Every time you destroy an enemy, you have chance to directly obtain an antimatter fuel rod or a space warper in the backpack", "每次击毁敌军单位，根据敌人强度有概率在背包直接获取1个反物质燃料棒或翘曲器，无视科技解锁进度");
             RegisterString("遗物描述2-15", "Explosive damage +10%. Won't occupy the meta drive slot", "爆破武器伤害+40%，不占用元驱动槽位");
@@ -733,23 +733,25 @@ namespace DSP_Battle
             RegisterString("遗物描述4-2", "Each droplet fleet configuration can have 3 droplets", "每个水滴的舰队配置可放置3个水滴");
             RegisterString("遗物描述4-3", "Comprehensively improve the extra products effect of proliferators", "全面提升增产剂的增产效果");
             RegisterString("遗物描述4-4", "Every an enemy is destoryed, slightly advance the research progress of the current non-darkfog matrix technology for free", "每当击杀敌军单位时，无消耗地略微推进当前非黑雾矩阵科技的研究进度");
-            RegisterString("遗物描述4-5", "When killing a ground dark fog unit, there is 10% chance of causing a weakened electromagnetic interference from it's place", "地面黑雾单位被击杀时，有10%概率在原地引发一次弱化的电磁干扰");
+            RegisterString("遗物描述4-5", "When killing a ground dark fog unit, there is 15% chance of causing a weakened electromagnetic interference from it's place", "地面黑雾单位被击杀时，有15%概率在原地引发一次弱化的电磁干扰");
             RegisterString("遗物描述4-6", "When pick up this meta drive, permanently record the top three meta drives that you already have, retaining their effects but no longer occupying the slot", "获取此元驱动时，将左侧栏位最顶端的三个元驱动永久保存在符文之书中，保留他们的效果但是其不再占用栏位");
             
             
             RegisterString("relicTipTitle0-10", "Upper Limit", "上限");
-            RegisterString("relicTipText0-10", "The upper limit is 200 at the begining. After reaching the upper limit, the mecha will automatically consume a droplet in inventory then increase the upper limit by 200. The upper limit growth is unlimited\nThe type of additional damage is is consistent with the original damage type.", "加成上限初始为200，达到上限后，自动消耗背包中的一个水滴并再次提升200加成上限，提升上限的次数不受限制\n额外伤害的类型与原有伤害的类型一致。");
+            RegisterString("relicTipText0-10", "The upper limit is 200 at the begining. After reaching the upper limit, the mecha will automatically consume a droplet in inventory then increase the upper limit by 200. The upper limit growth is unlimited\nThe type of additional damage is is consistent with the original damage type", "加成上限初始为200，达到上限后，自动消耗背包中的一个水滴并再次提升200加成上限，提升上限的次数不受限制\n额外伤害的类型与原有伤害的类型一致");
             RegisterString("relicTipTitle1-2", "Cooldown", "冷却时间");
             RegisterString("relicTipText1-2", "This effect has a separate 10min cooldown for each planet", "这个效果对每个行星具有独立的10分钟的冷却时间");
             RegisterString("relicTipTitle1-8", "Energy consumption", "能量消耗");
             RegisterString("relicTipText1-8", "It takes twice chamber fuel's energy to recharge the shield power. If this effect is triggered repeatedly within 1 minute, the energy consumption multiplier will rapidly increase to a maximum of 20 times", "需要消耗相当于回复护盾能量2倍的燃烧室燃料。如果在1分钟内反复触发此效果，能量消耗倍率会快速增长至最高20倍");
+            RegisterString("relicTipTitle2-12", "Critical hit", "暴击");
+            RegisterString("relicTipText2-12", "Critical hit will deal 100% additional damage", "暴击会对目标造成100%额外伤害");
             RegisterString("relicTipTitle2-16", "Damage reduction", "伤害减免");
             RegisterString("relicTipText2-16", "If a single damage exceeds 1% of the current shield amount, it will be reduced by 80% instead", "如果单次伤害超过了当前护盾量的1%，则转而减免80%");
             RegisterString("relicTipTitle2-17", "Cooldown", "冷却时间");
             RegisterString("relicTipText2-17", "This effect can only be triggered once every 20 minutes", "这个效果每20分钟只能触发一次");
 
             RegisterString("relicTipText4-0", "All other galaxies receive a negative luminosity correction", "所有其他星系获得一个负的恒星光度修正");
-            RegisterString("relicTipText4-1", "All meta drives with probability, their probability is halved", "所有具有概率的元驱动，判定成功几率减半");
+            RegisterString("relicTipText4-1", "All meta drives with probability, their probability is halved", "所有具有概率的效果，判定成功几率减半");
             RegisterString("relicTipText4-2", "When Icarus is destroyed, downgrade your merit rank level by 1, and clear your merit points of current level", "死亡时，你降低一级功勋阶级并清空当前等级的功勋点数");
             RegisterString("relicTipText4-3", "Comprehensively reduce the production speedup effect of proliferators", "全面降低增产剂的加速效果");
             RegisterString("relicTipText4-4", "The amount of dark fog matrix drop is halved, and you won't obtain any dark fog matrix when you abort interpreting the decoding track\n(Hash gaining can be enhanced by the research speed technology)", "黑雾矩阵掉落减半，放弃解译元驱动的解码轨时不会获得黑雾矩阵\n(Hash点数获取量受研究速度科技加成)");
@@ -881,7 +883,7 @@ namespace DSP_Battle
             RegisterString("剩余技能点待确认", "<color=#d2853d>-  Ap allocation has not been confirmed ( L )</color>", "<color=#d2853d>-  有授权点分配尚未确认 ( L )</color>");
             RegisterString("技能点", "Authorization Point", "授权点");
             RegisterString("已分配技能点", "Allocated", "已分配");
-            RegisterString("技能点描述", "技能点描述英文", "授权点是COSMO技术伦理委员会对你维护星区安全功绩的奖励，你可以使用授权点从COSMO技术伦理委员会处换取任何受认可的<color=#c2853d>宇宙定律修正技术</color>，这些修正将被立即广播至此星区。\n\n你被允许向COSMO技术伦理委员会提供合理数量的宇宙矩阵以<color=#c2853d>重置</color>对授权点的分配，但你被禁止对定律修正技术进行任何的逆向工程，COSMO技术伦理委员会有权在检测到你的违规行为后收回全部的授权点或已启用的修正。");
+            RegisterString("技能点描述", "The Authorization point is a reward from the COSMO Technology Ethics Committee for your contribution to maintaining the safety of the sector, and you can use the authorization point to exchange any approved <color=#c2853d>Cosmic mensural modification technology</color> from the COSMO Technology Ethics Committee, which will be immediately broadcast to your sector.\n\nYou are permitted to provide a reasonable number of universe matrices to the COSMO Technology Ethics Committee to <color=#c2853d>reset</color> the allocation of all the athorization points, but you are not allowed to do any reverse engineering of the modification technology. The COSMO Technology Ethics Committee has the right to withdraw all authorization points or activated modifications when detecting your violation.", "授权点是COSMO技术伦理委员会对你维护星区安全功绩的奖励，你可以使用授权点从COSMO技术伦理委员会处换取任何受认可的<color=#c2853d>宇宙定律修正技术</color>，这些修正将被立即广播至此星区。\n\n你被允许向COSMO技术伦理委员会提供合理数量的宇宙矩阵以<color=#c2853d>重置</color>对授权点的分配，但你被禁止对定律修正技术进行任何的逆向工程，COSMO技术伦理委员会有权在检测到你的违规行为后收回全部的授权点或已启用的修正。");
             RegisterString("技能点标题", "Authorization Point Allocation", "授权点分配");
             RegisterString("按下Shift分配10点说明", "Hold Shift to allocate 10 points at once\nHold Ctrl+Shift to allocate all available points", "按住Shift以一次性分配10点\n按住Ctrl+Shift以分配全部可用授权点");
             RegisterString("确认分配", "Confirm", "确认");
@@ -893,10 +895,47 @@ namespace DSP_Battle
             RegisterString("分配技能点确认标题", "Confirm Allocation", "确认分配");
             RegisterString("分配技能点确认警告", "Confirm and apply all the ap allocation?", "确认并应用所有授权点分配？");
             //RegisterString("aaa", "aaa", "aaa");
+            RegisterString("skillL0", "Walk Speed", "步行速度");
+            RegisterString("skillL1", "Replicator Speed", "手动合成速度");
+            RegisterString("skillL2", "Construction Drone Count", "建设无人机数量");
+            RegisterString("skillL3", "Construction Drone Flight Speed", "建设无人机速度");
+            RegisterString("skillL4", "Ore Consumption", "采矿消耗");
+            RegisterString("skillL5", "Mining Speed", "采矿速度");
+            RegisterString("skillL6", "Proliferator Extra Product Effect", "增产剂增产效果");
+            RegisterString("skillL7", "Proliferator Speedup Effect", "增产剂加速效果");
+            RegisterString("skillL8", "Proliferator Energy Punishment", "增产剂能量惩罚");
+            RegisterString("skillL9", "GM-α Algorithm Weight", "GM-α算法权重");
+            RegisterString("skillL10", "Z7-η Algorithm Weight", "Z7-η算法权重");
+            RegisterString("skillR0", "Global Damage", "全局伤害");
+            RegisterString("skillR1", "Critical Chance", "暴击几率");
+            RegisterString("skillR2", "Armor penetration", "护甲穿透");
+            RegisterString("skillR3", "Icarus Shield Avoid", "伊卡洛斯护盾规避");
+            RegisterString("skillR4", "Icarus Shield Energy Efficiency", "伊卡洛斯护盾能量效率");
+            RegisterString("skillR5", "Planet Shield Energy Efficiency", "行星护盾能量效率");
+            RegisterString("skillR6", "Void Damage", "虚空伤害");
+            RegisterString("skillR7", "Droplet Energy Punishment", "水滴超远距耗能惩罚");
+            RegisterString("skillL4Desc", "The mining consumption reduction effect already includes the effect provided by the merit rank, then it will multiplies with the effect provided by research.", "采矿消耗降低效果已包含功勋阶级提供的消耗降低效果，而后与科技提供的效果乘法叠加。");
+            RegisterString("skillL6Desc", "This buff will be directly increased to the percentage value of Proliferator Mk.III extra product effect. Mk.I and Mk.II only enjoys a partial buff.", "此效果的数值直接增加至Mk.III型增产剂增产效果的百分比数值上，更低阶增产剂只享受部分加成。");
+            RegisterString("skillL7Desc", "This buff will be directly increased to the percentage value of Proliferator Mk.III speedup effect. Mk.I and Mk.II only enjoys a partial buff.", "此效果的数值直接增加至Mk.III型增产剂加速效果的百分比数值上，更低阶增产剂只享受部分加成。");
+            RegisterString("skillL8Desc", "This buff will be directly added to the percentage value of Proliferator Mk.III energy consumption effect. Mk.I and Mk.II only enjoys a partial buff.", "此效果的数值直接增加至Mk.III型增产剂能量消耗惩罚的百分比数值上，更低阶增产剂只享受部分加成。");
+            RegisterString("skillL9Desc", "The COSMO Technology Ethics Committee has expressed doubts about our request for this alternative algorithmic technology, as it hardly makes any visible improvement to the computing power of research facilities. But what they did not know was that using the GM-α algorithm to decode the meta drive could significantly increase the probability of the occurrence of the Mensural decoding track.", "COSMO技术伦理委员会对我们要求这种替代型算法技术的行为表示疑惑，因为它几乎不能对科研设施算力有任何可见的提升。但是他们不知道的是，使用GM-α算法解码元驱动可以显著提升定律级解码轨的出现概率。");
+            RegisterString("skillL10Desc", "The COSMO Technology Ethics Committee has expressed doubts about our request for this alternative algorithmic technology, as it hardly makes any visible improvement to the computing power of research facilities. But what they did not know was that using the Z7-η algorithm to decode the meta drive could significantly increase the probability of the occurrence of the Mensural decoding track.", "COSMO技术伦理委员会对我们要求这种替代型算法技术的行为表示疑惑，因为它几乎不能对科研设施算力有任何可见的提升。但是他们不知道的是，使用Z7-η算法解码元驱动可以显著提升框架级解码轨的出现概率。");
+            RegisterString("skillR0Desc", "The global damage bonus is multiplied with other damage bonuses. Takes effect on all allied attack.", "全局伤害加成将与其他的伤害加成以乘法叠加。对所有友方伤害生效。");
+            RegisterString("skillR1Desc", "Allied attacks has a critical hit chance, dealing 100% additional damage.", "友方攻击有概率暴击，造成100%的额外伤害。");
+            RegisterString("skillR2Desc", "Allied attacks can ignore a fixed amount of armor, and the value that penetrates beyond the target's armor can also increase damage.", "你的伤害可以无视固定数值的护甲，护甲穿透超出目标护甲的部分也可以继续增加伤害。");
+            RegisterString("skillR3Desc", "Icarus' Energy shield will have a chance to avoid the damage.", "伊卡洛斯的能量盾将有概率直接规避一次伤害。");
+            RegisterString("skillR4Desc", "Increasing the energy efficiency will increase the amount of damage the shield can take per unit of energy. But this will not be considered as damage reduction.", "提升护盾能量效率将提高每单位能量的护盾可以承受的伤害总量。但这不会被视为伤害减免。");
+            RegisterString("skillR5Desc", "Increasing the energy efficiency will increase the amount of damage the shield can take per unit of energy. But this will not be considered as damage reduction.", "提升护盾的能量效率将提高每单位能量的行星护盾可以承受的伤害总量。但这不会被视为伤害减免。");
+            RegisterString("skillR6Desc", "Gain a bonus when dealing void damage.", "友方造成虚空类型的伤害时，该伤害获得加成。");
+            RegisterString("skillR7Desc", "Droplets have a 10x energy consumption penalty when manually summoned to attack units beyond 1AU. This reduces that penalty.\nDoes not affect the energy consumption of attacking within 1AU.", "水滴在手动召唤以攻击1AU以外的单位时，将有10倍的能量消耗惩罚，此项可以将该惩罚降低。\n不影响1AU以内的耗能。");
             //RegisterString("aaa", "aaa", "aaa");
             //RegisterString("aaa", "aaa", "aaa");
 
-
+            RegisterString("星河卫士奖章", "Galaxy Guardian's Medal", "星河卫士勋章");
+            RegisterString("星河卫士奖章描述", "This is a medal given to you by the COSMO Technology Ethics Committee for your contribution to the sector, with your name engraved on it. The COSMO Technology Ethics Committee claims that the medal is extremely expensive and rare, and suggests you not to expose it to carbon dioxide, oxygen and water at the same time.", "这是COSMO技术伦理委员会为奖励你对星区做出的贡献而为你颁发的勋章，上面刻有你的名字。COSMO技术伦理委员会声称该奖章造价昂贵、极其稀有，并建议你不要使其同时接触到二氧化碳、氧气和水。");
+            RegisterString("提供算力名称", "Incorporated into the COSMO architecture", "并入COSMO架构");
+            RegisterString("提供算力描述", "Provide area computing power to the COSMO Technology Ethics Committee by Incorporate all research facilities into the COSMO architecture, which will continuously earn you merit points. In addition, this protocol requires universe matrices to ensure that each section can efficiently handle the hash collision problem in the COSMO main-net.", "通过将所有科研设施并入COSMO架构来为COSMO技术伦理委员会提供星区算力，这会为你持续提供功勋点数。此外，这还需要消耗一定的宇宙矩阵来保证每个星区能高效处理主网内的散列碰撞问题。");
+            RegisterString("提供算力结论", "This protocol allows unlimited progress and is automatically added to the end of the queue", "此项科技允许无限进行，已自动添加到队列末尾");
             RegisterString("版本更迭补偿", "Version change compensation", "版本更迭补偿");
             RegisterString("遗物4-5补偿说明", "Since the effect of the meta driver [Aftershock Echo] has been changed, you received a compensation from the void: you can immediately interpret a new meta drive, and a free resurrection coin. ", "由于[余震回响]元驱动的效果被更改，你收到了一个来自虚空的补偿：可以立刻解译一个新的元驱动，并获得一个复活币。");
         }

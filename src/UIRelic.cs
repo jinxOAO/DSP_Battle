@@ -940,7 +940,7 @@ namespace DSP_Battle
                     double[] realWeight = new double[] { 0, 0, 0, 0, 0 };
                     for (int type = 0; type < 5; type++)
                     {
-                        realWeight[type] = probWeight[type] * (1 + 0.01 * Relic.modifierByEvent[type]);
+                        realWeight[type] = probWeight[type] * (1 + 0.01 * Relic.modifierByEvent[type] + (type == 0 ? SkillPoints.relic0WeightBuff : 0) + (type == 1 ? SkillPoints.relic1WeightBuff : 0));
                         if (realWeight[type] < 0)
                             realWeight[type] = 0;
                     }

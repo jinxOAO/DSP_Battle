@@ -69,26 +69,26 @@ namespace DSP_Battle
                 rank = rank > 0 ? rank : 0;
                 SkillPoints.totalPoints = Math.Max(SkillPoints.totalPoints, SkillPoints.spMinByRank[rank]);
                 UIRank.UIPromotionNotify();
-                if(rank == 10 && !GameMain.data.history.ItemUnlocked(9513))
-                {
-                    GameMain.mainPlayer.TryAddItemToPackage(9513, 1, 0, true);
-                    GameMain.data.history.UnlockSpecialItem(9513);
-                    Utils.UIItemUp(9513, 1, 200);
-                }
             }
             else
             {
                 SkillPoints.totalPoints += SkillPoints.spGainFullLevel;
                 UIRank.UIPointsGainNotify();
             }
-
+            if (rank >= 10 && !GameMain.data.history.ItemUnlocked(9513))
+            {
+                GameMain.mainPlayer.TryAddItemToPackage(9513, 1, 0, true);
+                GameMain.data.history.UnlockSpecialItem(9513);
+                Utils.UIItemUp(9513, 1, 200);
+            }
             if (rank == 3)
             {
                 GameMain.data.mainPlayer.mecha.walkSpeed += 4;
             }
             else if (rank == 4)
             {
-                GameMain.history.miningCostRate *= 0.8f;
+                //GameMain.history.miningCostRate *= 0.8f;
+                SkillPoints.RefreshMiningConsumption();
                 if (EventSystem.recorder == null || EventSystem.recorder.protoId == 0) // 第一次升到四级固定获取元驱动
                 {
                     if (EventSystem.neverStartTheFirstEvent > 0)
@@ -101,13 +101,15 @@ namespace DSP_Battle
             }
             else if (rank == 7)
             {
-                GameMain.history.miningCostRate /= 0.8f;
-                GameMain.history.miningCostRate *= 0.6f;
+            //    GameMain.history.miningCostRate /= 0.8f;
+            //    GameMain.history.miningCostRate *= 0.6f;
+                SkillPoints.RefreshMiningConsumption();
             }
             else if (rank == 10)
             {
-                GameMain.history.miningCostRate /= 0.6f;
-                GameMain.history.miningCostRate *= 0.2f;
+                //GameMain.history.miningCostRate /= 0.6f;
+                //GameMain.history.miningCostRate *= 0.2f;
+                SkillPoints.RefreshMiningConsumption();
             }
             if(rank > 8 && Utils.RandDouble() < 0.3)
             {
@@ -134,7 +136,7 @@ namespace DSP_Battle
                 }
                 else if (rank == 4)
                 {
-                    GameMain.history.miningCostRate /= 0.8f;
+                    //GameMain.history.miningCostRate /= 0.8f;
                 }
                 else if (rank == 5)
                 {
@@ -142,15 +144,16 @@ namespace DSP_Battle
                 }
                 else if (rank == 7)
                 {
-                    GameMain.history.miningCostRate /= 0.6f;
-                    GameMain.history.miningCostRate *= 0.8f;
+                    //GameMain.history.miningCostRate /= 0.6f;
+                    //GameMain.history.miningCostRate *= 0.8f;
                 }
                 else if (rank == 10)
                 {
-                    GameMain.history.miningCostRate /= 0.2f;
-                    GameMain.history.miningCostRate *= 0.6f;
+                    //GameMain.history.miningCostRate /= 0.2f;
+                    //GameMain.history.miningCostRate *= 0.6f;
                 }
                 rank -= 1;
+                SkillPoints.RefreshMiningConsumption();
                 UIRank.ForceRefreshAll();
             }
         }
@@ -248,6 +251,17 @@ namespace DSP_Battle
             {
                 InitRank();
             }
+            try
+            {
+                if (rank >= 10 && !GameMain.data.history.ItemUnlocked(9513))
+                {
+                    GameMain.mainPlayer.TryAddItemToPackage(9513, 1, 0, true);
+                    GameMain.data.history.UnlockSpecialItem(9513);
+                    Utils.UIItemUp(9513, 1, 200);
+                }
+            }
+            catch (Exception) { }
+
             UIRank.InitUI();
         }
 

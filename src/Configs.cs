@@ -9,7 +9,7 @@ namespace DSP_Battle
 {
     public class Configs
     {
-        public static string versionString = "3.0.0";
+        public static string versionString = "3.1.0";
         public static string qq = "694213906 & 141801294";
         public static bool developerMode = false; //发布前务必修改！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
         
@@ -17,7 +17,7 @@ namespace DSP_Battle
         public static bool enableBattleBGM = true;
         public static bool enableAlertTextGlowing = true;
         public static int versionWhenImporting = -1;
-        public static int versionCode = 30240320;
+        public static int versionCode = 30240324;
 
 
         public static int difficulty = 0; // -1 easy, 0 normal, 1 hard

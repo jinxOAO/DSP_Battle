@@ -766,8 +766,8 @@ namespace DSP_Battle
                                 if (Relic.HaveRelic(4, 4)) // relic 4-4 击杀时进行研究
                                     RelicFunctionPatcher.AddNotDFTechHash(Relic.hashGainByGroundEnemy);
 
-                                // 触发emp 测试中
-                                if(Relic.HaveRelic(4, 5) && Relic.Verify(0.1) && ptr3.owner > 0)
+                                // relic 4-5 触发emp
+                                if(Relic.HaveRelic(4, 5) && Relic.Verify(0.15) && ptr3.owner > 0)
                                 {
                                     ref LocalDisturbingWave ptrDis = ref GameMain.data.spaceSector.skillSystem.turretDisturbingWave.Add();
                                     ptrDis.astroId = planetFactory.planetId;
@@ -777,7 +777,7 @@ namespace DSP_Battle
                                     ptrDis.mask = ETargetTypeMask.Enemy;
                                     ptrDis.caster.type = ETargetType.Enemy;
                                     ptrDis.caster.id = 1;
-                                    ptrDis.disturbStrength = 0.5f * GameMain.data.history.magneticDamageScale;
+                                    ptrDis.disturbStrength = 1f * GameMain.data.history.magneticDamageScale;
                                     ptrDis.thickness = 2.5f;
                                     ptrDis.diffusionSpeed = 45f;
                                     ptrDis.diffusionMaxRadius = Relic.HaveRelic(1, 11) ? 40 : 27;

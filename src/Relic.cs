@@ -606,7 +606,6 @@ namespace DSP_Battle
         {
             if (power < 0.1f)
                 return true;
-
             if (__instance.recipeType == ERecipeType.Assemble || (int)__instance.recipeType == 9 || (int)__instance.recipeType == 10 || (int)__instance.recipeType == 12)
             {
                 // relic1-6
@@ -616,7 +615,7 @@ namespace DSP_Battle
                     {
                         int rocketId = __instance.products[0];
                         int rodNum = -1;
-                        if (rocketId >= 9488 && rocketId <= 9490)
+                        if (rocketId >= 9488 && rocketId <= 9490 || rocketId == 1503 && MoreMegaStructure.MoreMegaStructure.GenesisCompatibility)
                             rodNum = 2;
                         else if (rocketId == 9491 || rocketId == 9492 || rocketId == 9510 || rocketId == 1503)
                             rodNum = 1;
@@ -967,18 +966,25 @@ namespace DSP_Battle
         public static bool ThornmailAttackPreMarker(ref int damage, ref int __state)
         {
             float factor = 1.0f;
-            if (Relic.HaveRelic(0, 5))
-                factor *= 0.9f;
-            if (Relic.HaveRelic(2,16))
+            if (Relic.Verify(SkillPoints.IcarusShieldEvade))
             {
-                Mecha mecha = GameMain.data.mainPlayer.mecha;
-                if (mecha.energyShieldEnergy / mecha.energyShieldEnergyRate / Relic.higherResistFactorDivisor < damage)
-                    factor *= 0.2f;
-                else
-                    factor *= 0.8f;
+                factor = 0f;
             }
-            if (Rank.rank >= 2)
-                factor *= 0.75f;
+            else
+            {
+                if (Relic.HaveRelic(0, 5))
+                    factor *= 0.9f;
+                if (Relic.HaveRelic(2, 16))
+                {
+                    Mecha mecha = GameMain.data.mainPlayer.mecha;
+                    if (mecha.energyShieldEnergy / mecha.energyShieldEnergyRate / Relic.higherResistFactorDivisor < damage)
+                        factor *= 0.2f;
+                    else
+                        factor *= 0.8f;
+                }
+                if (Rank.rank >= 2)
+                    factor *= 0.75f;
+            }
             __state = (int)(damage * (1 - factor));
             damage = (int)(damage * factor);
             return true;
@@ -987,19 +993,25 @@ namespace DSP_Battle
         [HarmonyPatch(typeof(SkillSystem), "MechaEnergyShieldResist", new Type[] { typeof(SkillTargetLocal), typeof(int), typeof(int) }, new ArgumentType[] { ArgumentType.Normal, ArgumentType.Normal, ArgumentType.Ref })]
         public static bool ThornmailLocalAttackPreMarker(ref int damage, ref int __state)
         {
-            float factor = 1.0f;
-            if (Relic.HaveRelic(0, 5))
-                factor *= 0.9f;
-            if (Relic.HaveRelic(2, 16))
+            float factor = 1.0f; if (Relic.Verify(SkillPoints.IcarusShieldEvade))
             {
-                Mecha mecha = GameMain.data.mainPlayer.mecha;
-                if (mecha.energyShieldEnergy / mecha.energyShieldEnergyRate / Relic.higherResistFactorDivisor < damage)
-                    factor *= 0.2f;
-                else
-                    factor *= 0.8f;
+                factor = 0f;
             }
-            if (Rank.rank >= 2)
-                factor *= 0.75f;
+            else
+            {
+                if (Relic.HaveRelic(0, 5))
+                    factor *= 0.9f;
+                if (Relic.HaveRelic(2, 16))
+                {
+                    Mecha mecha = GameMain.data.mainPlayer.mecha;
+                    if (mecha.energyShieldEnergy / mecha.energyShieldEnergyRate / Relic.higherResistFactorDivisor < damage)
+                        factor *= 0.2f;
+                    else
+                        factor *= 0.8f;
+                }
+                if (Rank.rank >= 2)
+                    factor *= 0.75f;
+            }
             __state = (int)(damage * (1 - factor));
             damage = (int)(damage * factor);
             return true;
@@ -1014,7 +1026,7 @@ namespace DSP_Battle
                 casterPlayer.id = 1;
                 casterPlayer.type = ETargetType.Player;
                 casterPlayer.astroId = 0;
-                int realDamage = Relic.BonusDamage(__state, 1);
+                int realDamage = (int)(Relic.BonusDamage(__state, 1) * SkillPoints.voidDamageRate);
                 GameMain.data.spaceSector.skillSystem.DamageObject(realDamage, 1, ref caster, ref casterPlayer);
             }
             BattleBGMController.PlayerTakeDamage();
@@ -1033,7 +1045,7 @@ namespace DSP_Battle
                 casterPlayer.id = 1;
                 casterPlayer.type = ETargetType.Player;
                 casterPlayer.astroId = 0;
-                int realDamage = Relic.BonusDamage(__state, 1);
+                int realDamage = (int)(Relic.BonusDamage(__state, 1) * SkillPoints.voidDamageRate);
                 GameMain.data.spaceSector.skillSystem.DamageObject(realDamage, 1, ref target, ref casterPlayer);
             }
             BattleBGMController.PlayerTakeDamage();
@@ -1064,7 +1076,7 @@ namespace DSP_Battle
                 }
                 if(r0005) // 虚空荆棘
                 {
-                    int realDamage = Relic.BonusDamage(__instance.damage * (1.0 - factor), 1);
+                    int realDamage = (int)(Relic.BonusDamage(__instance.damage * (1.0 - factor), 1) * SkillPoints.voidDamageRate);
                     skillSystem.DamageObject(realDamage, 1, ref __instance.caster, ref __instance.target);
                 }
                 if(factor != 1.0f)
@@ -1109,7 +1121,7 @@ namespace DSP_Battle
                 }
                 if (r0005) // 虚空荆棘
                 {
-                    int realDamage = Relic.BonusDamage(__instance.damage * (1.0 - factor), 1);
+                    int realDamage = (int)(Relic.BonusDamage(__instance.damage * (1.0 - factor), 1) * SkillPoints.voidDamageRate);
                     skillSystem.DamageObject(realDamage, 1, ref __instance.caster, ref __instance.target);
                 }
                 if (factor != 1.0f)
@@ -1152,7 +1164,7 @@ namespace DSP_Battle
                 }
                 if (r0005) // 虚空荆棘
                 {
-                    int realDamage = Relic.BonusDamage(__instance.damage * (1.0 - factor), 1);
+                    int realDamage = (int)(Relic.BonusDamage(__instance.damage * (1.0 - factor), 1) * SkillPoints.voidDamageRate);
                     skillSystem.DamageObject(realDamage, 1, ref __instance.caster, ref __instance.target);
                 }
                 if (factor != 1.0f)
@@ -1198,7 +1210,7 @@ namespace DSP_Battle
                 }
                 if (r0005) // 虚空荆棘
                 {
-                    int realDamage = Relic.BonusDamage(__instance.damage * (1.0 - factor), 1);
+                    int realDamage = (int)(Relic.BonusDamage(__instance.damage * (1.0 - factor), 1) * SkillPoints.voidDamageRate);
                     SkillTarget emptyCaster;
                     emptyCaster.id = 0;
                     emptyCaster.type = ETargetType.None;
@@ -1687,7 +1699,7 @@ namespace DSP_Battle
             bool r0110 = Relic.trueDamageActive > 0;
             bool r0212 = Relic.HaveRelic(2, 12);
             int cursedRelicCount = Relic.GetRelicCount(4);
-            if (r0103 || r0109 || r0110 || r0212 || cursedRelicCount > 0)
+            if (r0103 || r0109 || r0110 || r0212 || cursedRelicCount > 0 || SkillPoints.criticalRate > 0 || SkillPoints.armorPenetration > 0)
             {
                 ref var _this = ref __instance;
                 float factor = 1.0f;
@@ -1712,10 +1724,13 @@ namespace DSP_Battle
                             int num3 = level * num2 / 2;
                             antiArmor = num3;
                         }
-                        if(r0212 && Relic.Verify(0.1)) // relic 2-12
+                        float critical = r0212 ? 0 : 0.1f + SkillPoints.criticalRate;
+                        if(Relic.Verify(critical)) // relic 2-12
                         {
                             factor += 1f;
                         }
+                        factor *= SkillPoints.globalDamageRate;
+                        antiArmor += SkillPoints.armorPenetration;
                         damage = (int)(damage * (1 - 0.05f * cursedRelicCount));
                     }
                     else if (target.type == ETargetType.Craft)
@@ -1773,7 +1788,7 @@ namespace DSP_Battle
             bool r0110 = Relic.trueDamageActive > 0;
             bool r0212 = Relic.HaveRelic(2, 12);
             int cursedRelicCount = Relic.GetRelicCount(4);
-            if (r0109 || r0110 || r0212 || cursedRelicCount > 0)
+            if (r0109 || r0110 || r0212 || cursedRelicCount > 0 || SkillPoints.criticalRate > 0 || SkillPoints.armorPenetration > 0)
             {
                 ref var _this = ref __instance;
                 float factor = 1.0f;
@@ -1801,11 +1816,14 @@ namespace DSP_Battle
                         int num3 = level * num2 / 5;
                         antiArmor = num3;
                     }
-                    if (r0212 && Relic.Verify(0.1)) // relic 2-12
+                    float critical = r0212 ? 0 : 0.1f + SkillPoints.criticalRate;
+                    if (Relic.Verify(critical)) // relic 2-12
                     {
                         factor += 1f;
                     }
+                    factor *= SkillPoints.globalDamageRate;
                     damage = (int)(damage * (1 - 0.05f * cursedRelicCount));
+                    antiArmor += SkillPoints.armorPenetration;
                 }
                 else if (target.type == ETargetType.Craft)
                 {
@@ -1837,7 +1855,7 @@ namespace DSP_Battle
             bool r0110 = Relic.trueDamageActive > 0;
             bool r0212 = Relic.HaveRelic(2, 12);
             int cursedRelicCount = Relic.GetRelicCount(4);
-            if (r0109 || r0110 || r0212)
+            if (r0109 || r0110 || r0212 || SkillPoints.criticalRate > 0 || SkillPoints.armorPenetration > 0)
             {
                 ref var _this = ref __instance;
                 float factor = 1.0f;
@@ -1865,11 +1883,14 @@ namespace DSP_Battle
                         int num3 = level * num2 / 5;
                         antiArmor = num3;
                     }
-                    if (r0212 && Relic.Verify(0.1)) // relic 2-12
+                    float critical = r0212 ? 0 : 0.1f + SkillPoints.criticalRate;
+                    if (Relic.Verify(critical)) // relic 2-12
                     {
                         factor += 1f;
                     }
+                    factor *= SkillPoints.globalDamageRate;
                     damage = (int)(damage * (1 - 0.05f * cursedRelicCount));
+                    antiArmor += SkillPoints.armorPenetration;
                 }
                 else if (target.type == ETargetType.Craft)
                 {
@@ -2408,7 +2429,7 @@ namespace DSP_Battle
         [HarmonyPatch(typeof(EnemyDFGroundSystem), "NotifyEnemyKilled")]
         public static bool NotifyEnemyKilledPrePatch(ref EnemyDFGroundSystem __instance, ref EnemyData enemy)
         {
-            if(Relic.HaveRelic(3, 1) || Relic.HaveRelic(4, 5))
+            if(Relic.HaveRelic(3, 1) || Relic.HaveRelic(4, 5) || Relic.HaveRelic(3, 3))
             {
                 if (enemy.id != 0)
                 {
@@ -2444,7 +2465,7 @@ namespace DSP_Battle
                                     itemCount /= 2;
                                 }
                                 __instance.gameData.trashSystem.AddTrashFromGroundEnemy(itemId, itemCount, life, enemy.id, __instance.factory);
-                                if(Relic.HaveRelic(4, 5) && itemId >= 5201 && itemId <= 5205) // relic 4-5 余震回响额外掉落
+                                if(false && Relic.HaveRelic(4, 5) && itemId >= 5201 && itemId <= 5205) // relic 4-5 余震回响额外掉落，已被重做
                                 {
                                     int level = dfgbaseComponent.evolve.level;
                                     if(level >= 12)
@@ -2900,19 +2921,48 @@ namespace DSP_Battle
         /// </summary>
         public static void RefreshCargoAccIncTable()
         {
+            double incMilliBonusByAP = SkillPoints.skillValuesL[6] / 100.0 * SkillPoints.skillLevelL[6];
+            int incBonusByAP = (int)(incMilliBonusByAP * 1000);
+            double accMilliBonusByAP = SkillPoints.skillValuesL[7] / 100.0 * SkillPoints.skillLevelL[7];
+            int accBonusByAP = (int)(accMilliBonusByAP * 1000);
+            double powerMilliBonusByAP = SkillPoints.skillValuesL[8] / 100.0 * SkillPoints.skillLevelL[8];
+            int powerBonusByAP = (int)(powerMilliBonusByAP * 1000);
+
             if (Relic.HaveRelic(4,3))
             {
-                Cargo.accTable = new int[] { 0, 200, 350, 500, 750, 1000, 1250, 1500, 1750, 2000, 2250 };
-                Cargo.accTableMilli = new double[] { 0.0, 0.200, 0.350, 0.500, 0.750, 1.000, 1.250, 1.500, 1.750, 2.000, 2.250 };
                 Cargo.incTable = new int[] { 0, 250, 300, 350, 400, 425, 450, 475, 500, 525, 550 };
                 Cargo.incTableMilli = new double[] { 0.0, 0.250, 0.300, 0.350, 0.400, 0.425, 0.450, 0.475, 0.500, 0.525, 0.550 };
+                Cargo.accTable = new int[] { 0, 200, 350, 500, 750, 1000, 1250, 1500, 1750, 2000, 2250 };
+                Cargo.accTableMilli = new double[] { 0.0, 0.200, 0.350, 0.500, 0.750, 1.000, 1.250, 1.500, 1.750, 2.000, 2.250 };
             }
             else
             {
-                Cargo.accTable = new int[] { 0, 250, 500, 750, 1000, 1250, 1500, 1750, 2000, 2250, 2500 };
-                Cargo.accTableMilli = new double[] { 0.0, 0.250, 0.500, 0.750, 1.000, 1.250, 1.500, 1.750, 2.000, 2.250, 2.500 };
                 Cargo.incTable = new int[] { 0, 125, 200, 225, 250, 275, 300, 325, 350, 375, 400 };
                 Cargo.incTableMilli = new double[] { 0.0, 0.125, 0.200, 0.225, 0.250, 0.275, 0.300, 0.325, 0.350, 0.375, 0.400 };
+                Cargo.accTable = new int[] { 0, 250, 500, 750, 1000, 1250, 1500, 1750, 2000, 2250, 2500 };
+                Cargo.accTableMilli = new double[] { 0.0, 0.250, 0.500, 0.750, 1.000, 1.250, 1.500, 1.750, 2.000, 2.250, 2.500 };
+            }
+
+            Cargo.powerTable = new int[] { 0, 300, 700, 1100, 1500, 1900, 2300, 2700, 3100, 3500, 3900 };
+            Cargo.powerTableRatio = new double[] { 1.0, 1.3, 1.7, 2.1, 2.5, 2.9, 3.3, 3.7, 4.1, 4.5, 4.9 };
+
+            for (int i = 1; i < 4; i++)
+            {
+                Cargo.incTable[i] += incBonusByAP / 4 * i;
+                Cargo.incTableMilli[i] += incMilliBonusByAP / 4.0 * i;
+                Cargo.accTable[i] += accBonusByAP / 4 * i;
+                Cargo.accTableMilli[i] += accMilliBonusByAP / 4.0 * i;
+                Cargo.powerTable[i] += powerBonusByAP / 4 * i;
+                Cargo.powerTableRatio[i] += powerMilliBonusByAP / 4.0 * i;
+            }
+            for (int i = 4; i < Cargo.incTable.Length; i++)
+            {
+                Cargo.incTable[i] += incBonusByAP;
+                Cargo.incTableMilli[i] += incMilliBonusByAP;
+                Cargo.accTable[i] += accBonusByAP;
+                Cargo.accTableMilli[i] += accMilliBonusByAP;
+                Cargo.powerTable[i] += powerBonusByAP;
+                Cargo.powerTableRatio[i] += powerMilliBonusByAP;
             }
         }
 

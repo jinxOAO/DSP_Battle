@@ -231,8 +231,6 @@ namespace DSP_Battle
         {
             if (time % 5 == 0 && isOverriding) 
                 MuteGameOriBgm();
-
-            BGMLogicUpdate();
         }
 
         public static void PlayerTakeDamage()
