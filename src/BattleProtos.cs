@@ -671,8 +671,8 @@ namespace DSP_Battle
             RegisterString("遗物描述0-4", "The ray receiver does not need to consume the lens to achieve the maximum output efficiency, and it will no longer be blocked at night", "射线接受器无需消耗透镜即可达到最大输出效率，且不再因背向恒星影响接收效率");
             RegisterString("遗物描述0-5", "Planetary shield and Icarus' Energy Shield gain 10% damage reduction, and they return all reduced or avoided damage to the attacker as <i>additional damage</i>", "行星护盾和伊卡洛斯的能量盾获得10%伤害减免，且它们会将所有被减免或被规避的伤害全额回敬给攻击者作为<i>额外伤害</i>");
             RegisterString("遗物描述0-6", "Each time a turret uses an ammo set to reload, do free reloading and prevent the ammo set consumption", "所有防御设施的每次消耗弹药组装填时，进行免费装填而阻止消耗弹药组");
-            RegisterString("遗物描述0-7", "The star system with a megastructure will deal <i>additional damage</i> to all activated dark fog space ships in the star system, higher energy the megastucture generates, higher the damage it deals.", "拥有巨构的星系在战斗时每秒会对星系中所有已激活的太空黑雾舰队造成<i>额外伤害</i>，伤害取决于巨构的能量水平");
-            RegisterString("遗物描述0-8", "When enemies are interfered by non-Icarus-throwing jamming capsules, they take 20 <i>additional damage</i>. Take 30 if it is suppresing capsules", "非投掷的干扰胶囊造成电磁干扰时，对所有命中目标造成0<i>额外伤害</i>，压制胶囊则转而造成30<i>额外伤害</i>");
+            RegisterString("遗物描述0-7", "The star system with a megastructure will deal damage (considered as <i>additional damage</i>) to all activated dark fog space ships in the star system, higher energy the megastucture generates, higher the damage it deals", "拥有巨构的星系在战斗时每秒会对星系中所有已激活的太空黑雾舰队造成伤害（视为<i>额外伤害</i>），伤害取决于巨构的能量水平");
+            RegisterString("遗物描述0-8", "When enemies are interfered by non-Icarus-throwing jamming capsules, they take <i>additional damage</i>. Jammer tower won't consume bullets after loaded.", "非投掷的干扰胶囊造成电磁干扰时，对所有命中目标造成<i>额外伤害</i>。干扰塔在装弹后不再消耗弹药。");
             RegisterString("遗物描述0-9", "It must do something...", "它必须做点什么...");
             RegisterString("遗物描述0-9实际", "You have a higher probability of getting rarer meta drives. If the first judgment fails with any probability from other meta drives, it can be judged again. And the hidden effects...", "你有更高的可能性获取更稀有的元驱动。任何概率初次判定失败时，可以再判定一次。以及隐藏效果...");
             RegisterString("遗物描述0-10", "Every time a droplet destroys an enemy, restores 2MJ power to the Mecha, and all droplets permanently obtain 10 <i>additional damage</i>. ", "水滴每击杀一个敌人，为机甲回复2MJ能量，且所有水滴永久获得+10的<i>额外伤害</i>。");
@@ -768,7 +768,7 @@ namespace DSP_Battle
 
             RegisterString("relicTipText0-5", "The type of additional damage is void damage.", "该额外伤害的类型为虚空伤害。");
             RegisterString("relicTipText0-7", "The type of additional damage is energy damage. \nIf the megastructure is star cannon, then the additional damage increases 100%.", "该额外伤害的类型为能量伤害。如果巨构为恒星炮，该伤害增加100%");
-            RegisterString("relicTipText0-8", "The type of additional damage is EM damage.", "该额外伤害的类型为电磁伤害。");
+            RegisterString("relicTipText0-8", "Enemies take 20 EM damage. Take 30 if it is suppresing capsules.", "敌人会受到20电磁伤害，压制胶囊则转而造成30电磁伤害。");
             RegisterString("relicTipText1-3", "The type of additional damage is consistent with the original damage type.", "额外伤害类型与原有的伤害的类型一致。");
             RegisterString("relicTipText2-12", "The type of additional damage is consistent with the original damage type.", "额外伤害类型与原有的伤害的类型一致。");
             RegisterString("relicTipText2-13", "Any additional damage described in the meta drives will be increased.", "任何来自元驱动中所描述的额外伤害都将被增幅。");

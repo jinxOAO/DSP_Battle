@@ -69,11 +69,15 @@ namespace DSP_Battle
                 rank = rank > 0 ? rank : 0;
                 SkillPoints.totalPoints = Math.Max(SkillPoints.totalPoints, SkillPoints.spMinByRank[rank]);
                 UIRank.UIPromotionNotify();
+                if (Relic.HaveRelic(2, 1)) // relic 2-1
+                    Interlocked.Add(ref Relic.autoConstructMegaStructureCountDown, rank * rank * rank * 60);
             }
             else
             {
                 SkillPoints.totalPoints += SkillPoints.spGainFullLevel;
                 UIRank.UIPointsGainNotify();
+                if (Relic.HaveRelic(2, 1)) // relic 2-1
+                    Interlocked.Add(ref Relic.autoConstructMegaStructureCountDown, rank * rank * 60);
             }
             if (rank >= 10 && !GameMain.data.history.ItemUnlocked(9513))
             {
@@ -119,8 +123,6 @@ namespace DSP_Battle
                 }
             }
 
-            if (Relic.HaveRelic(2, 1)) // relic 2-1
-                Interlocked.Add(ref Relic.autoConstructMegaStructureCountDown, rank * rank * rank * 60);
             UIRank.ForceRefreshAll();
         }
 

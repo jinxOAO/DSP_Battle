@@ -36,7 +36,8 @@ namespace DSP_Battle
         public static bool nextPlayFinishMusic = false;
 
         public static int takeDamageCountdown = 0;
-
+        public static float volumeBasic = 0.4f;
+        public static float volumeFactor = 0.4f;
 
         public static void InitAudioSources()
         {
@@ -209,16 +210,16 @@ namespace DSP_Battle
                 if (fadeInTime > 0 && currentMusic >= 0 && currentMusic < musicCnt)
                 {
                     battleMusics[currentMusic].volume += 0.01666667f / fadeInTime;
-                    if (battleMusics[currentMusic].volume >= VFAudio.audioVolume * VFAudio.musicVolume * 0.8f)
+                    if (battleMusics[currentMusic].volume >= VFAudio.audioVolume * VFAudio.musicVolume * volumeFactor)
                     {
                         fadeOutTime = 0;
-                        battleMusics[currentMusic].volume = VFAudio.audioVolume * VFAudio.musicVolume * 0.8f;
+                        battleMusics[currentMusic].volume = VFAudio.audioVolume * VFAudio.musicVolume * volumeFactor;
                     }
                 }
                 else if (fadeInTime <= 0 && currentMusic >= 0 && currentMusic < musicCnt)
                 {
                     AudioSource cur = battleMusics[currentMusic];
-                    cur.volume = VFAudio.audioVolume * VFAudio.musicVolume * 0.8f;
+                    cur.volume = VFAudio.audioVolume * VFAudio.musicVolume * volumeFactor;
                 }
             }
             if (takeDamageCountdown > 0)

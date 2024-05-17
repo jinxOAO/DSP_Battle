@@ -1464,7 +1464,7 @@ namespace DSP_Battle
                                                                 flag2 = false;
                                                             }
                                                         }
-                                                        if (flag2 && _this.caster.type == ETargetType.None) // 由relic1-11发射的额外波，设置为casterType是ruin，不消耗额外弹药
+                                                        if (flag2 && _this.caster.type == ETargetType.None && !Relic.HaveRelic(0, 8)) // 由relic1-11发射的额外波，设置为casterType是ruin，不消耗额外弹药
                                                         {
                                                             ref TurretComponent ptr4 = ref ptr;
                                                             ptr4.bulletCount -= 1;

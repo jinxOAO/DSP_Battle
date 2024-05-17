@@ -17,7 +17,7 @@ using xiaoye97;
 
 namespace DSP_Battle
 {
-    [BepInPlugin("com.ckcz123.DSP_Battle", "DSP_Battle", "3.0.5")]
+    [BepInPlugin("com.ckcz123.DSP_Battle", "DSP_Battle", "3.1.1")]
     [BepInDependency(DSPModSavePlugin.MODGUID)]
     [BepInDependency(CommonAPIPlugin.GUID)]
     [BepInDependency(LDBToolPlugin.MODGUID)]
@@ -37,6 +37,8 @@ namespace DSP_Battle
         private static ConfigFile config;
         public static ConfigEntry<int> starCannonRenderLevel;
         public static ConfigEntry<bool> starCannonDirectionReverse;
+        public static ConfigEntry<bool> enableBattleBGM;
+        public static ConfigEntry<float> battleBGMVolume;
 
         public static bool isControlDown = false;
         public static bool isShiftDown = false;
@@ -66,11 +68,15 @@ namespace DSP_Battle
             }
             starCannonRenderLevel = Config.Bind<int>("config", "StarCannonRenderLevel", 2, "[0-3] Higher Level will provide more star cannon effect and particles but might decrease the UPS and FPS when star cannon is firing. 更高的设置会提供更多的恒星炮特效，但可能会在恒星炮开火时降低帧率，反之则可能提高开火时的帧率。");
             starCannonDirectionReverse = Config.Bind<bool>("config", "starCannonDirectionReverse", false, "Deprecated. 已弃用。");
+            enableBattleBGM = Config.Bind<bool>("config", "EnableBattleBGM", true, "Set to false to disable the BGM switching when Icarus is in combat. 设置为false来关闭战斗时的BGM切换。");
+            battleBGMVolume = Config.Bind<float>("config", "BattleBGMVolume", 1.0f, "( 0.0 - 2.0 )Control the Battle BGM's volume, will not affect the vanilla game BGM.  控制战斗音乐的音量大小，不会影响游戏默认BGM的音量。最小为0，最大为2.");
 
-            
+
             MoreMegaStructure.StarCannon.renderLevel = starCannonRenderLevel.Value;
             MoreMegaStructure.StarCannon.renderLevel = MoreMegaStructure.StarCannon.renderLevel > 3 ? 3 : MoreMegaStructure.StarCannon.renderLevel;
             MoreMegaStructure.StarCannon.renderLevel = MoreMegaStructure.StarCannon.renderLevel < 0 ? 0 : MoreMegaStructure.StarCannon.renderLevel;
+            Configs.enableBattleBGM = enableBattleBGM.Value;
+            BattleBGMController.volumeFactor = BattleBGMController.volumeBasic * (float)Maths.Clamp(battleBGMVolume.Value, 0.0f, 2.0f);
             //EnemyShips.Init();
             Harmony.CreateAndPatchAll(typeof(DspBattlePlugin));
             
