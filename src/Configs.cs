@@ -9,10 +9,10 @@ namespace DSP_Battle
 {
     public class Configs
     {
-        public static string versionString = "3.1.2";
+        public static string versionString = "3.1.3";
         public static string qq = "694213906 & 141801294";
         public static bool developerMode = false; //发布前务必修改！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
-        
+
         public static bool enableProliferator4 = false;
         public static bool enableBattleBGM = true;
         public static bool enableAlertTextGlowing = true;
@@ -79,7 +79,7 @@ namespace DSP_Battle
 
         public static int[] enemyLandCnt = new int[] { 1, 3, 5, 5, 10000 };
 
-        public static int[] enemyFireInterval = new int[] {120, 60, int.MaxValue, 60, 60 }; //每攻击一次间隔的tick0
+        public static int[] enemyFireInterval = new int[] { 120, 60, int.MaxValue, 60, 60 }; //每攻击一次间隔的tick0
 
         public static int[] enemyFireRange = new int[] { 5000, 8000, 15000, 15000, 30000 }; //射程
 
@@ -140,7 +140,7 @@ namespace DSP_Battle
                 new Tuple<int, int>(50000000, 0) };
 
         //Rank信息
-        public static int[] expToNextRank = new int[] { 20, 200, 1000, 5000, 30000, 200000, 500000, 1000000, 2000000, 10000000, 2000000, 0, 0};
+        public static int[] expToNextRank = new int[] { 20, 200, 1000, 5000, 30000, 200000, 500000, 1000000, 2000000, 10000000, 2000000, 0, 0 };
         public static float[] rewardTimeRatio = new float[] { 1.0f, 1.0f, 1.2f, 1.2f, 1.4f, 1.4f, 1.6f, 1.6f, 1.8f, 1.8f, 2.0f, 2.0f, 2.0f, 2.0f };
         public static float[] expRatioByDifficulty = new float[] { 0.75f, 1f, 1.5f };
         public static int expPerAlienMeta = 20; //每个解码后的异星元数据上传提供的基础功勋点数
@@ -251,12 +251,12 @@ namespace DSP_Battle
             enemyHp[0] = 4000; // config.Bind("config", "enemy1Hp", defaultValue: 4000, "敌方飞船1血量").Value;
             enemySpeed[0] = 1000f; // config.Bind("config", "enemy1Speed", defaultValue: 1500f, "敌方飞船1速度（米每秒）").Value;
             enemyRange[0] = 20; // config.Bind("config", "enemy1Range", defaultValue: 20, "敌方飞船1破坏范围").Value;
-            
+
             enemyIntensity[1] = 4; // 对子弹类型的伤害（不包括相位）具有90%闪避概率
             enemyHp[1] = 20000; // config.Bind("config", "enemy2Hp", defaultValue: 20000, "敌方飞船2血量").Value;
             enemySpeed[1] = 1500f; // config.Bind("config", "enemy2Speed", defaultValue: 2000f, "敌方飞船2速度（米每秒）").Value;
             enemyRange[1] = 40; // config.Bind("config", "enemy2Range", defaultValue: 40, "敌方飞船2破坏范围").Value;
-            
+
             enemyIntensity[2] = 6; // 会直接撞向护盾，摧毁自己并对护盾造成巨量伤害
             enemyHp[2] = 10000; // config.Bind("config", "enemy3Hp", defaultValue: 10000, "敌方飞船3血量").Value;
             enemySpeed[2] = 3000f; // config.Bind("config", "enemy3Speed", defaultValue: 5000f, "敌方飞船3速度（米每秒）").Value;
@@ -314,7 +314,7 @@ namespace DSP_Battle
             w.Write(extraSpeedEnabled);
 
             w.Write(nextWaveIntensity);
-            
+
             w.Write(nextWaveWormCount);
 
             for (var i = 0; i < 10; ++i) w.Write(nextWaveEnemy[i]);
@@ -364,16 +364,16 @@ namespace DSP_Battle
                 for (var i = 0; i < 100; ++i) wavePerStar[i] = r.ReadInt32();
             }
 
-            if(importVersion >= 30220420)
+            if (importVersion >= 30220420)
             {
                 nextWaveMatrixExpectation = r.ReadInt32();
             }
             else
             {
                 nextWaveMatrixExpectation = expectationMatrices[0];
-                if(combatState>0 && nextWaveStarIndex>=0)
+                if (combatState > 0 && nextWaveStarIndex >= 0)
                 {
-                    nextWaveMatrixExpectation = expectationMatrices[Math.Min(expectationMatrices.Length-1, wavePerStar[nextWaveStarIndex])];
+                    nextWaveMatrixExpectation = expectationMatrices[Math.Min(expectationMatrices.Length - 1, wavePerStar[nextWaveStarIndex])];
                 }
             }
 

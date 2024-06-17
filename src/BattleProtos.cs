@@ -1,11 +1,9 @@
 ﻿using CommonAPI.Systems;
-using HarmonyLib;
 using CommonAPI.Systems.ModLocalization;
+using HarmonyLib;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
-using UnityEngine.UI;
 using xiaoye97;
 
 namespace DSP_Battle
@@ -30,7 +28,7 @@ namespace DSP_Battle
             int recipeIdBias = MoreMegaStructure.MoreMegaStructure.GenesisCompatibility ? -200 : 0;
             int techPosXBias = MoreMegaStructure.MoreMegaStructure.GenesisCompatibility ? -8 : 0;
             TechProto techDrop = ProtoRegistry.RegisterTech(1999, "玻色子操控", "玻色子操控描述", "玻色子操控结论", "Assets/DSPBattle/bosontech", new int[] { }, new int[] { 5201 },
-                new int[] { 400 }, 72000, new int[] { 573 + recipeIdBias, 567 + recipeIdBias, 568 + recipeIdBias, 569 + recipeIdBias, 566 + recipeIdBias  }, new Vector2(65 + techPosXBias, -7));
+                new int[] { 400 }, 72000, new int[] { 573 + recipeIdBias, 567 + recipeIdBias, 568 + recipeIdBias, 569 + recipeIdBias, 566 + recipeIdBias }, new Vector2(65 + techPosXBias, -7));
             techDrop.PreTechsImplicit = new int[] { 1823 };
             techDrop.IsHiddenTech = true;
             techDrop.PreItem = new int[] { 5201 };
@@ -735,8 +733,8 @@ namespace DSP_Battle
             RegisterString("遗物描述4-4", "Every an enemy is destoryed, slightly advance the research progress of the current non-darkfog matrix technology for free", "每当击杀敌军单位时，无消耗地略微推进当前非黑雾矩阵科技的研究进度");
             RegisterString("遗物描述4-5", "When killing a ground dark fog unit, there is 15% chance of causing a weakened electromagnetic interference from it's place", "地面黑雾单位被击杀时，有15%概率在原地引发一次弱化的电磁干扰");
             RegisterString("遗物描述4-6", "When pick up this meta drive, permanently record the top three meta drives that you already have, retaining their effects but no longer occupying the slot", "获取此元驱动时，将左侧栏位最顶端的三个元驱动永久保存在符文之书中，保留他们的效果但是其不再占用栏位");
-            
-            
+
+
             RegisterString("relicTipTitle0-10", "Upper Limit", "上限");
             RegisterString("relicTipText0-10", "The upper limit is 200 at the begining. After reaching the upper limit, the mecha will automatically consume a droplet in inventory then increase the upper limit by 200. The upper limit growth is unlimited\nThe type of additional damage is is consistent with the original damage type", "加成上限初始为200，达到上限后，自动消耗背包中的一个水滴并再次提升200加成上限，提升上限的次数不受限制\n额外伤害的类型与原有伤害的类型一致");
             RegisterString("relicTipTitle1-2", "Cooldown", "冷却时间");
@@ -799,7 +797,7 @@ namespace DSP_Battle
             RegisterString("sf组件3火箭描述", "Use the Vertical Launching Silo to launch this rocket onto the Star Fortress, carring necessary components to build the expansion module. This will fill the component points of the expansion module on the Star Fortress, but it is not helpful for the construction of any mega structures.", "使用发射井发射此火箭来将构建扩展模块的必须组件发射到恒星要塞上，这会填充恒星要塞的扩展模块的组件点数，但无法推进任何巨构的建造。");
             RegisterString("即将拆除模块标题", "Warning! Destructing modules!", "警告！即将拆除模块");
             RegisterString("即将拆除模块警告", "Since the module upper limit will be less than the number of completed modules, the overflowing completed modules will be immediately removed, and the module points will be wasted. Are you sure you want to remove them?", "由于模块上限被调整后将少于已建成的模块数，溢出的已建成的模块将被立刻拆除，模块点数将被浪费。是否确认拆除？");
-            
+
             RegisterString("深空来敌介绍1标题", "They come from void player guide", "深空来敌玩法介绍");
             RegisterString("深空来敌介绍1前字", "Nothing here for now. You can check the meta drive infomation below.", "这里暂时没有东西。你可以翻看下面的元驱动介绍。");
 
@@ -858,7 +856,7 @@ namespace DSP_Battle
             RegisterString("免费随机次数", "Decode-track free re-roll ", "本次解码轨免费随机次数 ");
             RegisterString("获得物品", "Obtain ", "获得 ");
             RegisterString("此选项将导致", "<color=#FD965EC0>Result in:</color>", "<color=#FD965EC0>将导致：</color>");
-            if(MoreMegaStructure.MoreMegaStructure.GenesisCompatibility)
+            if (MoreMegaStructure.MoreMegaStructure.GenesisCompatibility)
                 RegisterString("打开解译事件链", "Open meta drive interpretation event chain ( Ctrl + ~ )", "打开元驱动解译事件链 ( Ctrl + ~ )");
             else
                 RegisterString("打开解译事件链", "Open meta drive interpretation event chain ( ~ )", "打开元驱动解译事件链 ( ~ )");
@@ -938,6 +936,18 @@ namespace DSP_Battle
             RegisterString("提供算力结论", "This protocol allows unlimited progress and is automatically added to the end of the queue", "此项科技允许无限进行，已自动添加到队列末尾");
             RegisterString("版本更迭补偿", "Version change compensation", "版本更迭补偿");
             RegisterString("遗物4-5补偿说明", "Since the effect of the meta driver [Aftershock Echo] has been changed, you received a compensation from the void: you can immediately interpret a new meta drive, and a free resurrection coin. ", "由于[余震回响]元驱动的效果被更改，你收到了一个来自虚空的补偿：可以立刻解译一个新的元驱动，并获得一个复活币。");
+
+            // 统计界面翻译
+            RegisterString("PF深空来敌", "TCFV", "深空来敌");
+            RegisterString("PF入侵逻辑", "Invasion Logic", "入侵逻辑");
+            RegisterString("PF元驱动", "Meta drives", "元驱动");
+            RegisterString("PF工厂重写", "Factory Rewrite", "工厂重写");
+            RegisterString("PF伤害逻辑", "Damage Logic", "伤害逻辑");
+            RegisterString("PF击杀逻辑", "Kill Logic", "击杀逻辑");
+            RegisterString("PF弹道重写", "Ballistic Rewrite", "弹道重写");
+            RegisterString("PF水滴", "Droplets", "水滴");
+            RegisterString("PF事件链", "Event System", "事件链");
+
         }
 
 
@@ -1307,7 +1317,7 @@ namespace DSP_Battle
         //{
         //    if (infoLabel == null)
         //        InitTechInfoUIs();
-            
+
         //    if (infoLabel.text.Split('\n').Length < 38)
         //    {
         //        //infoLabel.text = infoLabel.text + "\r\n\r\n" + "子弹伤害".Translate() + "\r\n" + "相位裂解光束伤害".Translate() + "\r\n"
@@ -1888,7 +1898,7 @@ namespace DSP_Battle
             List<Tuple<int, int>> altItem0 = new List<Tuple<int, int>>();
             for (int i = 1101; i <= 1109; i++)
             {
-                if(i!=1107)
+                if (i != 1107)
                     altItem0.Add(new Tuple<int, int>(i, 100));
             }
             for (int i = 1201; i <= 1203; i++)
@@ -2026,8 +2036,8 @@ namespace DSP_Battle
             switch (__instance.DescFields[index])
             {
                 case 80:
-                    __result = Relic.HaveRelic(0, 10) 
-                        ? (Configs.dropletAtk / 100).ToString("0.0") + "<color=#61D8FFB8> + " + (Droplets.bonusDamage / 100).ToString("0.0#") + "</color> hp" 
+                    __result = Relic.HaveRelic(0, 10)
+                        ? (Configs.dropletAtk / 100).ToString("0.0") + "<color=#61D8FFB8> + " + (Droplets.bonusDamage / 100).ToString("0.0#") + "</color> hp"
                         : (Configs.dropletAtk / 100).ToString("0.0") + " hp";
                     break;
                 case 81:

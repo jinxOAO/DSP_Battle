@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
+﻿using HarmonyLib;
+using System;
 using System.IO;
-using UnityEngine;
-using HarmonyLib;
-using System.Reflection;
-using UnityEngine.Profiling;
+using System.Threading;
 
 namespace DSP_Battle
 {
@@ -48,7 +41,7 @@ namespace DSP_Battle
             //{
             //    AddExp(Configs.expPerAlienMeta);
             //}
-            
+
         }
 
         public static void AddExp(int num)
@@ -105,8 +98,8 @@ namespace DSP_Battle
             }
             else if (rank == 7)
             {
-            //    GameMain.history.miningCostRate /= 0.8f;
-            //    GameMain.history.miningCostRate *= 0.6f;
+                //    GameMain.history.miningCostRate /= 0.8f;
+                //    GameMain.history.miningCostRate *= 0.6f;
                 SkillPoints.RefreshMiningConsumption();
             }
             else if (rank == 10)
@@ -115,9 +108,9 @@ namespace DSP_Battle
                 //GameMain.history.miningCostRate *= 0.2f;
                 SkillPoints.RefreshMiningConsumption();
             }
-            if(rank > 8 && Utils.RandDouble() < 0.3)
+            if (rank > 8 && Utils.RandDouble() < 0.3)
             {
-                if(EventSystem.recorder == null || EventSystem.recorder.protoId == 0)
+                if (EventSystem.recorder == null || EventSystem.recorder.protoId == 0)
                 {
                     EventSystem.InitNewEvent();
                 }
@@ -128,9 +121,9 @@ namespace DSP_Battle
 
         public static void DownGrade(bool clearExp = true)
         {
-            if(clearExp)
+            if (clearExp)
                 Interlocked.Exchange(ref exp, 0);
-            if(rank > 0)
+            if (rank > 0)
             {
                 if (rank == 3)
                 {
@@ -171,7 +164,7 @@ namespace DSP_Battle
         [HarmonyPatch(typeof(GameHistoryData), "DequeueTech")]
         public static bool CatchExpTechWhenDequeue(ref GameHistoryData __instance)
         {
-            if(__instance.currentTech == 1998)
+            if (__instance.currentTech == 1998)
             {
                 nextEnqueueExpTech = true;
             }
@@ -181,7 +174,7 @@ namespace DSP_Battle
         // 检查科技哈希点数的获取以及进行经验获取，检测到科技解锁时，重置
         public static void CheckExpTechUploadHash()
         {
-            if(GameMain.data.history.techStates.ContainsKey(1998))
+            if (GameMain.data.history.techStates.ContainsKey(1998))
             {
                 TechState techState = default(TechState);
                 techState = GameMain.data.history.techStates[1998];
@@ -190,7 +183,7 @@ namespace DSP_Battle
                 {
                     if (nowHash < lastHash)
                     {
-                        lastHash = - (LDB.techs.Select(1998).GetHashNeeded(0) - lastHash);
+                        lastHash = -(LDB.techs.Select(1998).GetHashNeeded(0) - lastHash);
                     }
                     long hashChanged = nowHash - lastHash;
                     if (hashChanged > hash2ExpDivisor)
@@ -202,7 +195,7 @@ namespace DSP_Battle
                 {
                     lastHash = nowHash;
                 }
-                if(techState.unlocked || techState.curLevel > 0)
+                if (techState.unlocked || techState.curLevel > 0)
                 {
                     techState.unlocked = false;
                     techState.curLevel = 0;
@@ -211,7 +204,7 @@ namespace DSP_Battle
                     techState.hashNeeded = tp.GetHashNeeded(0);
                     GameMain.data.history.techStates[1998] = techState;
                 }
-                if(nextEnqueueExpTech)
+                if (nextEnqueueExpTech)
                 {
                     GameMain.data.history.EnqueueTech(1998);
                     nextEnqueueExpTech = false;
@@ -227,7 +220,7 @@ namespace DSP_Battle
         {
             int expGain = (int)(hashChanged / hash2ExpDivisor);
             int realExpGain = expGain;
-            if(realExpGain > linearThreshold)
+            if (realExpGain > linearThreshold)
             {
                 realExpGain = linearThreshold + (int)Math.Sqrt(realExpGain - linearThreshold);
             }
@@ -274,6 +267,6 @@ namespace DSP_Battle
             exp = 0;
             lastHash = -hash2ExpDivisor - 1;
             UIRank.InitUI();
-        }        
+        }
     }
 }

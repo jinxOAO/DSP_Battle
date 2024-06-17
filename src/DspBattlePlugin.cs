@@ -7,17 +7,14 @@ using CommonAPI.Systems.ModLocalization;
 using crecheng.DSPModSave;
 using HarmonyLib;
 using System;
-using System.ComponentModel.Design;
 using System.IO;
 using System.Reflection;
 using UnityEngine;
-using UnityEngine.UI;
-using WinAPI;
 using xiaoye97;
 
 namespace DSP_Battle
 {
-    [BepInPlugin("com.ckcz123.DSP_Battle", "DSP_Battle", "3.1.1")]
+    [BepInPlugin("com.ckcz123.DSP_Battle", "DSP_Battle", "3.1.3")]
     [BepInDependency(DSPModSavePlugin.MODGUID)]
     [BepInDependency(CommonAPIPlugin.GUID)]
     [BepInDependency(LDBToolPlugin.MODGUID)]
@@ -25,7 +22,7 @@ namespace DSP_Battle
     [CommonAPISubmoduleDependency(nameof(ProtoRegistry))]
     [CommonAPISubmoduleDependency(nameof(TabSystem))]
     [CommonAPISubmoduleDependency(nameof(LocalizationModule))]
-    
+
     public class DspBattlePlugin : BaseUnityPlugin, IModCanSave
     {
         public static string GUID = "com.ckcz123.DSP_Battle";
@@ -79,7 +76,7 @@ namespace DSP_Battle
             BattleBGMController.volumeFactor = BattleBGMController.volumeBasic * (float)Maths.Clamp(battleBGMVolume.Value, 0.0f, 2.0f);
             //EnemyShips.Init();
             Harmony.CreateAndPatchAll(typeof(DspBattlePlugin));
-            
+
             Harmony.CreateAndPatchAll(typeof(BattleProtos));
             Harmony.CreateAndPatchAll(typeof(FastStartOption));
             Harmony.CreateAndPatchAll(typeof(UIDialogPatch));
@@ -96,11 +93,14 @@ namespace DSP_Battle
             Harmony.CreateAndPatchAll(typeof(StationOrderFixPatch));
             Harmony.CreateAndPatchAll(typeof(DropletFleetPatchers));
             Harmony.CreateAndPatchAll(typeof(EventSystem));
+            Harmony.CreateAndPatchAll(typeof(AssaultController));
+            Harmony.CreateAndPatchAll(typeof(UIAssaultAlert));
 
             LDBTool.PreAddDataAction += BattleProtos.AddProtos;
             BattleProtos.AddTranslate();
             //LDBTool.PostAddDataAction += BattleProtos.PostDataAction;
             BattleProtos.InitEventProtos();
+            TCFVPerformanceMonitor.Awake();
         }
 
         public void Start()
@@ -169,8 +169,8 @@ namespace DSP_Battle
             }
             if (Input.GetKeyDown(KeyCode.BackQuote))
             {
-                if(MoreMegaStructure.MoreMegaStructure.GenesisCompatibility && isControlDown)
-                    UIEventSystem.OnEventButtonClick();   
+                if (MoreMegaStructure.MoreMegaStructure.GenesisCompatibility && isControlDown)
+                    UIEventSystem.OnEventButtonClick();
                 else if (!MoreMegaStructure.MoreMegaStructure.GenesisCompatibility)
                     UIEventSystem.OnEventButtonClick();
             }
@@ -185,9 +185,9 @@ namespace DSP_Battle
                 if (GameMain.localPlanet != null)
                     planetId = GameMain.localPlanet.id;
             }
-            if(Configs.developerMode && isControlDown && Input.GetKeyDown(KeyCode.M))
+            if (Configs.developerMode && isControlDown && Input.GetKeyDown(KeyCode.M))
             {
-                Utils.Test();
+                AssaultController.quickBuild0 = !AssaultController.quickBuild0;
             }
             if (Configs.developerMode && isControlDown && Input.GetKeyDown(KeyCode.K))
             {
@@ -195,12 +195,11 @@ namespace DSP_Battle
             }
             if (Configs.developerMode && isControlDown && Input.GetKeyDown(KeyCode.G))
             {
-                EventSystem.InitNewEvent();
+                AssaultController.quickBuildNode = !AssaultController.quickBuildNode;
             }
             if (Configs.developerMode && isControlDown && Input.GetKeyDown(KeyCode.H))
             {
-                GameMain.data.mainPlayer.mecha.jumpSpeed += 1;
-                GameMain.data.history.constructionDroneSpeed += 1;
+                AssaultController.TestLaunchAssault(starIndex: 0, 1000);
             }
             if (Configs.developerMode && isShiftDown && Input.GetKeyDown(KeyCode.H))
             {
@@ -226,6 +225,7 @@ namespace DSP_Battle
             BattleBGMController.BGMLogicUpdate();
             UISkillPointsWindow.Update();
             DevConsole.Update();
+            
         }
 
 
@@ -309,7 +309,7 @@ namespace DSP_Battle
         }
 
         public static void InitStaticDataWhenLoad()
-        { 
+        {
             BattleProtos.RewriteTutorialProtosWhenLoad();
             BattleProtos.EditProtossWhenLoad();
         }

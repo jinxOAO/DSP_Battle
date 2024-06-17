@@ -1,16 +1,9 @@
 ﻿using HarmonyLib;
-using Steamworks;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Security.Policy;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -137,7 +130,7 @@ namespace DSP_Battle
             else if ((type == 0 && num == 3) || (type == 4 && num == 0))
             {
                 relics[type] |= 1 << num;
-                RelicFunctionPatcher.CheckAndModifyStarLuminosity(type*100+num);
+                RelicFunctionPatcher.CheckAndModifyStarLuminosity(type * 100 + num);
             }
             else if ((type == 1 && num == 4))
             {
@@ -168,7 +161,7 @@ namespace DSP_Battle
             }
             else if (type == 3 && num == 6)
             {
-                if(Rank.rank < 10 && Rank.rank >= 0)
+                if (Rank.rank < 10 && Rank.rank >= 0)
                 {
                     int exp = (int)(Configs.expToNextRank[Rank.rank] * 0.05);
                     if (exp < 50)
@@ -249,7 +242,7 @@ namespace DSP_Battle
                 RegretRemoveRelic();
                 return;
             }
-            UIMessageBox.Show("删除遗物确认标题".Translate(), String.Format( "删除遗物确认警告".Translate(), ("遗物名称" + removeType.ToString() + "-" + removeNum.ToString()).Translate().Split('\n')[0]),
+            UIMessageBox.Show("删除遗物确认标题".Translate(), String.Format("删除遗物确认警告".Translate(), ("遗物名称" + removeType.ToString() + "-" + removeNum.ToString()).Translate().Split('\n')[0]),
             "否".Translate(), "是".Translate(), 1, new UIMessageBox.Response(RegretRemoveRelic), new UIMessageBox.Response(() =>
             {
                 RemoveRelic(removeType, removeNum);
@@ -263,7 +256,7 @@ namespace DSP_Battle
 
         public static void RemoveRelic(int removeType, int removeNum)
         {
-            if(removeType == 1 && removeNum == 10)
+            if (removeType == 1 && removeNum == 10)
             {
                 trueDamageActive = 0;
             }
@@ -314,7 +307,7 @@ namespace DSP_Battle
                 {
                     foreach (var item in recordRelics)
                     {
-                        if(item / 100 == type)
+                        if (item / 100 == type)
                             recorded++;
                     }
                 }
@@ -375,13 +368,13 @@ namespace DSP_Battle
         // 刷新保存护盾量最低的行星
         public static void RefreshMinShieldPlanet()
         {
-            
+
         }
 
         public static bool Verify(double probability)
         {
             if ((relics[4] & 1 << 1) > 0) // relic4-1负面效果：概率减半
-                probability = 0.5 * probability; 
+                probability = 0.5 * probability;
             if (Utils.RandDouble() < probability)
                 return true;
             else if ((relics[0] & 1 << 9) > 0) // 具有增加幸运的遗物，则可以再判断一次
@@ -442,7 +435,7 @@ namespace DSP_Battle
                                 DysonNode dysonNode = dysonSphereLayer.nodePool[j];
                                 if (dysonNode != null)
                                 {
-                                    for (int k = 0; k < Math.Min(6, amount/frameCost); k++)
+                                    for (int k = 0; k < Math.Min(6, amount / frameCost); k++)
                                     {
                                         if (dysonNode.spReqOrder > 0)
                                         {
@@ -576,6 +569,8 @@ namespace DSP_Battle
         [HarmonyPatch(typeof(GameData), "GameTick")]
         public static void RelicFunctionGameTick(long time)
         {
+            MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.MainLogic);
+            MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.MetaDrive);
             if (time % 60 == 8)
                 CheckMegaStructureAttack();
             //else if (time % 60 == 9)
@@ -588,8 +583,9 @@ namespace DSP_Battle
             AutoBuildMegaOfMaxLuminStar(time);
             CheckBansheesVeilCountdown(time);
             AegisOfTheImmortalCountDown(time);
+            MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MainLogic);
+            MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MetaDrive);
         }
-
 
 
         /// <summary>
@@ -699,7 +695,7 @@ namespace DSP_Battle
                     int reloadNum = __instance.products[0] == 1203 ? 2 : 1;
                     if (MoreMegaStructure.MoreMegaStructure.GenesisCompatibility)
                         reloadNum = __instance.produced[0] == 1203 ? 1 : -1;
-                    if (reloadNum >= 0 && __instance.served[reloadNum] < 10 * __instance.requireCounts[reloadNum] )
+                    if (reloadNum >= 0 && __instance.served[reloadNum] < 10 * __instance.requireCounts[reloadNum])
                     {
                         if (__instance.time >= __instance.timeSpend - 1 && __instance.produced[0] < 10 * __instance.productCounts[0])
                         {
@@ -894,7 +890,7 @@ namespace DSP_Battle
                     }
                 }
                 int labId = _this.entityPool[entityId].labId;
-                if(labId > 0)
+                if (labId > 0)
                 {
                     Mutex obj = _this.entityMutexs[entityId];
                     lock (obj)
@@ -909,9 +905,7 @@ namespace DSP_Battle
                                 return;
                             }
                         }
-                        return;
                     }
-                    return;
                 }
             }
         }
@@ -962,7 +956,7 @@ namespace DSP_Battle
         /// <param name="caster"></param>
         /// <param name="damage"></param>
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(SkillSystem), "MechaEnergyShieldResist", new Type[] { typeof(SkillTarget), typeof(int) }, new ArgumentType[] { ArgumentType.Normal, ArgumentType.Ref})]
+        [HarmonyPatch(typeof(SkillSystem), "MechaEnergyShieldResist", new Type[] { typeof(SkillTarget), typeof(int) }, new ArgumentType[] { ArgumentType.Normal, ArgumentType.Ref })]
         public static bool ThornmailAttackPreMarker(ref int damage, ref int __state)
         {
             float factor = 1.0f;
@@ -1074,12 +1068,12 @@ namespace DSP_Battle
                     else
                         factor *= 0.8f;
                 }
-                if(r0005) // 虚空荆棘
+                if (r0005) // 虚空荆棘
                 {
                     int realDamage = (int)(Relic.BonusDamage(__instance.damage * (1.0 - factor), 1) * SkillPoints.voidDamageRate);
                     skillSystem.DamageObject(realDamage, 1, ref __instance.caster, ref __instance.target);
                 }
-                if(factor != 1.0f)
+                if (factor != 1.0f)
                 {
                     __instance.damage = (int)(__instance.damage * factor);
                 }
@@ -1093,8 +1087,8 @@ namespace DSP_Battle
         [HarmonyPatch(typeof(GeneralExpImpProjectile), "TickSkillLogic")]
         public static void RestoreDamageGeneralExpImpProjectile(ref GeneralExpImpProjectile __instance, ref float __state)
         {
-            if(__state != 0)
-                __instance.damage = (int)(__instance.damage / __state); 
+            if (__state != 0)
+                __instance.damage = (int)(__instance.damage / __state);
         }
 
         [HarmonyPrefix]
@@ -1354,6 +1348,9 @@ namespace DSP_Battle
             {
                 return false;
             }
+            MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.MainLogic);
+            MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.MetaDrive);
+            MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.Ballistic);
             float num = _this.thickness * 0.5f;
             float num2 = _this.currentDiffuseRadius - num;
             float num3 = _this.currentDiffuseRadius + num;
@@ -1484,7 +1481,7 @@ namespace DSP_Battle
                                                             skillSystem.DamageGroundObjectByLocalCaster(planetFactory, realDamage, 1, ref skillTargetLocal, ref _this.caster);
                                                         }
                                                         // 原逻辑 外加relic 1-11 的强化效果
-                                                        ptr3.disturbValue = num19; 
+                                                        ptr3.disturbValue = num19;
                                                         DFGBaseComponent dfgbaseComponent = planetFactory.enemySystem.bases[(int)ptr2.owner];
                                                         if (dfgbaseComponent != null && dfgbaseComponent.id == (int)ptr2.owner)
                                                         {
@@ -1588,6 +1585,9 @@ namespace DSP_Battle
                     }
                 }
             }
+            MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MainLogic);
+            MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MetaDrive);
+            MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.Ballistic);
             return false;
         }
 
@@ -1597,7 +1597,7 @@ namespace DSP_Battle
         /// </summary>
         public static void AutoBuildMega()
         {
-            if(Relic.autoConstructMegaStructurePPoint >= 1000)
+            if (Relic.autoConstructMegaStructurePPoint >= 1000)
             {
                 Interlocked.Add(ref Relic.autoConstructMegaStructureCountDown, Relic.autoConstructMegaStructurePPoint / 1000);
                 Interlocked.Exchange(ref Relic.autoConstructMegaStructurePPoint, Relic.autoConstructMegaStructurePPoint % 1000);
@@ -1631,7 +1631,7 @@ namespace DSP_Battle
         {
             ref var _this = ref __instance;
             // relic 1-1
-            if(Relic.HaveRelic(1,1))
+            if (Relic.HaveRelic(1, 1))
             {
                 if (_this.supernovaStrength == 30f)
                 {
@@ -1652,7 +1652,7 @@ namespace DSP_Battle
                 {
                     _this.supernovaTick = -120;
                 }
-            } 
+            }
         }
 
 
@@ -1694,6 +1694,9 @@ namespace DSP_Battle
         [HarmonyPatch(typeof(SkillSystem), "DamageObject")]
         public static bool DamageObjectPrePatch(ref SkillSystem __instance, ref int damage, int slice, ref SkillTarget target, ref SkillTarget caster)
         {
+            MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.MainLogic);
+            MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.MetaDrive);
+            MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.Damage);
             bool r0103 = Relic.HaveRelic(1, 3);
             bool r0109 = Relic.HaveRelic(1, 9);
             bool r0110 = Relic.trueDamageActive > 0;
@@ -1725,12 +1728,12 @@ namespace DSP_Battle
                             antiArmor = num3;
                         }
                         float critical = r0212 ? 0 : 0.1f + SkillPoints.criticalRate;
-                        if(Relic.Verify(critical)) // relic 2-12
+                        if (Relic.Verify(critical)) // relic 2-12
                         {
                             factor += 1f;
                         }
                         factor *= SkillPoints.globalDamageRate;
-                        antiArmor += SkillPoints.armorPenetration;
+                        antiArmor += SkillPoints.armorPenetration / slice;
                         damage = (int)(damage * (1 - 0.05f * cursedRelicCount));
                     }
                     else if (target.type == ETargetType.Craft)
@@ -1751,10 +1754,16 @@ namespace DSP_Battle
                 {
                     if (caster.astroId == astroId)
                     {
+                        MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MainLogic);
+                        MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MetaDrive);
+                        MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.Damage);
                         return true; // 交由DamageGroundObjectByLocalCaster的prePatch自行处理，因为这个DamageGroundObjectByLocalCaster不止被DamageObject调用，还被各种skill的TickSkillLogic调用
                     }
                     else
                     {
+                        MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MainLogic);
+                        MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MetaDrive);
+                        MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.Damage);
                         return true; // 也交由DamageGroundObjectByRemoteCaster的prePatch自行处理
                     }
                 }
@@ -1773,6 +1782,9 @@ namespace DSP_Battle
                 }
                 damage = Relic.BonusedDamage(damage, factor - 1) + antiArmor;
             }
+            MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MainLogic);
+            MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MetaDrive);
+            MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.Damage);
             return true;
         }
 
@@ -1784,6 +1796,9 @@ namespace DSP_Battle
             {
                 return true;
             }
+            MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.MainLogic);
+            MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.MetaDrive);
+            MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.Damage);
             bool r0109 = Relic.HaveRelic(1, 9);
             bool r0110 = Relic.trueDamageActive > 0;
             bool r0212 = Relic.HaveRelic(2, 12);
@@ -1823,7 +1838,7 @@ namespace DSP_Battle
                     }
                     factor *= SkillPoints.globalDamageRate;
                     damage = (int)(damage * (1 - 0.05f * cursedRelicCount));
-                    antiArmor += SkillPoints.armorPenetration;
+                    antiArmor += SkillPoints.armorPenetration / slice;
                 }
                 else if (target.type == ETargetType.Craft)
                 {
@@ -1840,6 +1855,9 @@ namespace DSP_Battle
                 }
                 damage = Relic.BonusedDamage(damage, factor - 1) + antiArmor;
             }
+            MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MainLogic);
+            MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MetaDrive);
+            MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.Damage);
             return true;
         }
 
@@ -1851,6 +1869,9 @@ namespace DSP_Battle
             {
                 return true;
             }
+            MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.MainLogic);
+            MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.MetaDrive);
+            MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.Damage);
             bool r0109 = Relic.HaveRelic(1, 9);
             bool r0110 = Relic.trueDamageActive > 0;
             bool r0212 = Relic.HaveRelic(2, 12);
@@ -1890,7 +1911,7 @@ namespace DSP_Battle
                     }
                     factor *= SkillPoints.globalDamageRate;
                     damage = (int)(damage * (1 - 0.05f * cursedRelicCount));
-                    antiArmor += SkillPoints.armorPenetration;
+                    antiArmor += SkillPoints.armorPenetration / slice;
                 }
                 else if (target.type == ETargetType.Craft)
                 {
@@ -1907,6 +1928,9 @@ namespace DSP_Battle
                 }
                 damage = Relic.BonusedDamage(damage, factor - 1) + antiArmor;
             }
+            MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MainLogic);
+            MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MetaDrive);
+            MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.Damage);
             return true;
         }
 
@@ -1985,7 +2009,7 @@ namespace DSP_Battle
         [HarmonyPatch(typeof(Mecha), "EnergyShieldResist", new Type[] { typeof(int) }, new ArgumentType[] { ArgumentType.Ref })]
         public static void MechaEnergyShieldResistPostPatch0(ref Mecha __instance)
         {
-            if(__instance.energyShieldEnergy <= 0 && Relic.HaveRelic(1,8))
+            if (__instance.energyShieldEnergy <= 0 && Relic.HaveRelic(1, 8))
             {
                 lock (__instance)
                 {
@@ -1996,20 +2020,20 @@ namespace DSP_Battle
                     {
                         needEnergy -= (long)__instance.reactorEnergy;
                         __instance.reactorEnergy = 0;
-                        for (int i = __instance.reactorStorage.size -1; i >= 0; i--)
+                        for (int i = __instance.reactorStorage.size - 1; i >= 0; i--)
                         {
                             int itemId = __instance.reactorStorage.grids[i].itemId;
-                            if(itemId > 0 && __instance.reactorStorage.grids[i].count > 0)
+                            if (itemId > 0 && __instance.reactorStorage.grids[i].count > 0)
                             {
                                 long heat = LDB.items.Select(itemId)?.HeatValue ?? 0;
                                 long totalHeat = heat * __instance.reactorStorage.grids[i].count;
-                                if(totalHeat > needEnergy)
+                                if (totalHeat > needEnergy)
                                 {
                                     int needCount = (int)(needEnergy / heat);
                                     int inc = 0;
                                     inc = __instance.reactorStorage.split_inc(ref __instance.reactorStorage.grids[i].count, ref __instance.reactorStorage.grids[i].inc, needCount);
                                     needEnergy -= heat * needCount;
-                                    if(needEnergy > 0)
+                                    if (needEnergy > 0)
                                     {
                                         inc = __instance.reactorStorage.split_inc(ref __instance.reactorStorage.grids[i].count, ref __instance.reactorStorage.grids[i].inc, 1);
                                         long energyLeft = Math.Max(0, heat - needEnergy);
@@ -2038,7 +2062,7 @@ namespace DSP_Battle
                         __instance.reactorEnergy -= needEnergy;
                     }
                 }
-                if(Relic.bansheesVeilIncreaseCountdown > 0)
+                if (Relic.bansheesVeilIncreaseCountdown > 0)
                 {
                     Relic.bansheesVeilFactor *= 2;
                     if (Relic.bansheesVeilFactor > Relic.bansheesVeilMaxFactor)
@@ -2178,7 +2202,7 @@ namespace DSP_Battle
                 ptr.diffusionSpeed = 45f;
                 ptr.diffusionMaxRadius = pdesc.turretMaxAttackRange;
                 ptr.StartToDiffuse();
-            }      
+            }
             return false;
         }
 
@@ -2187,7 +2211,7 @@ namespace DSP_Battle
         /// </summary>
         public static void RefreshDisturbPrefabDesc()
         {
-            if(Relic.HaveRelic(1, 11))
+            if (Relic.HaveRelic(1, 11))
             {
                 PlanetFactory.PrefabDescByModelIndex[422].turretMaxAttackRange = 60;
             }
@@ -2207,6 +2231,8 @@ namespace DSP_Battle
         [HarmonyPatch(typeof(PowerSystem), "GameTick")]
         public static void PowerSystemPostPatch(ref PowerSystem __instance)
         {
+            MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.MainLogic);
+            MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.MetaDrive);
             if (Relic.HaveRelic(2, 0))
             {
                 PlanetATField planetATField = __instance.factory.planetATField;
@@ -2220,6 +2246,8 @@ namespace DSP_Battle
                 planetATField.energy += extra;
                 planetATField.atFieldRechargeCurrent += extra * 60L;
             }
+            MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MainLogic);
+            MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MetaDrive);
         }
 
         // relic 2-2 2-14 3-9 4-4 在EventSystem的ZeroHpInceptor处实现
@@ -2234,6 +2262,8 @@ namespace DSP_Battle
         /// </summary>
         public static void CheckPlayerHasaki()
         {
+            MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.MainLogic);
+            MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.MetaDrive);
             if (Relic.HaveRelic(2, 5) || Relic.HaveRelic(3, 10))
             {
                 Vector3 pos = GameMain.mainPlayer.position;
@@ -2253,6 +2283,8 @@ namespace DSP_Battle
                     Relic.playerLastPos = new Vector3(pos.x, pos.y, pos.z);
                 }
             }
+            MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MainLogic);
+            MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MetaDrive);
         }
 
         /// <summary>
@@ -2342,7 +2374,7 @@ namespace DSP_Battle
                 if (Relic.aegisOfTheImmortalCooldown == 0 && Relic.HaveRelic(2, 17))
                     UIRealtimeTip.Popup("不朽之守护就绪".Translate());
             }
-            if(time % 60 == 32)
+            if (time % 60 == 32)
             {
                 for (int slotNum = 0; slotNum < UIRelic.relicSlotUIBtns.Count; slotNum++)
                 {
@@ -2429,7 +2461,7 @@ namespace DSP_Battle
         [HarmonyPatch(typeof(EnemyDFGroundSystem), "NotifyEnemyKilled")]
         public static bool NotifyEnemyKilledPrePatch(ref EnemyDFGroundSystem __instance, ref EnemyData enemy)
         {
-            if(Relic.HaveRelic(3, 1) || Relic.HaveRelic(4, 5) || Relic.HaveRelic(3, 3))
+            if (Relic.HaveRelic(3, 1) || Relic.HaveRelic(4, 5) || Relic.HaveRelic(3, 3))
             {
                 if (enemy.id != 0)
                 {
@@ -2439,6 +2471,9 @@ namespace DSP_Battle
                     {
                         return false;
                     }
+                    MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.MainLogic);
+                    MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.MetaDrive);
+                    MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.Kill);
                     float num = (float)RandomTable.Integer(ref __instance.rtseed, 101) * 0.01f + 1.5f;
                     int count = (int)((float)SkillSystem.EnemySandCountByModelIndex[(int)enemy.modelIndex] * num * 0.2f + 0.5f);
                     if (Relic.HaveRelic(3, 3)) // relic 3-3 掉落双倍沙土
@@ -2456,37 +2491,39 @@ namespace DSP_Battle
                             __instance.RandomDropItemOnce(dfgbaseComponent.evolve.level, out itemId, out itemCount, out life);
                             if (itemId > 0 && itemCount > 0 && life > 0)
                             {
-                                if(Relic.HaveRelic(3,1) && itemId == 5201 && Relic.Verify(0.3))
+                                if (Relic.HaveRelic(3, 1) && itemId == 5201 && Relic.Verify(0.3))
                                 {
                                     itemCount *= 2;
                                 }
-                                if(Relic.HaveRelic(4, 4) && itemId == 5201)
+                                if (Relic.HaveRelic(4, 4) && itemId == 5201)
                                 {
                                     itemCount /= 2;
+                                    if (itemCount < 1 && Utils.RandDouble() <= 0.5)
+                                        itemCount = 1;
                                 }
                                 __instance.gameData.trashSystem.AddTrashFromGroundEnemy(itemId, itemCount, life, enemy.id, __instance.factory);
-                                if(false && Relic.HaveRelic(4, 5) && itemId >= 5201 && itemId <= 5205) // relic 4-5 余震回响额外掉落，已被重做
+                                if (false && Relic.HaveRelic(4, 5) && itemId >= 5201 && itemId <= 5205) // relic 4-5 余震回响额外掉落，已被重做
                                 {
                                     int level = dfgbaseComponent.evolve.level;
-                                    if(level >= 12)
+                                    if (level >= 12)
                                     {
                                         if (itemId != 5201)
                                             __instance.gameData.trashSystem.AddTrashFromGroundEnemy(5201, Relic.HaveRelic(4, 4) ? (itemCount / 4) : (itemCount / 2), life, enemy.id, __instance.factory);
-                                        if(level >= 15)
+                                        if (level >= 15)
                                         {
                                             if (itemId != 5203)
                                                 __instance.gameData.trashSystem.AddTrashFromGroundEnemy(5203, itemCount / 2, life, enemy.id, __instance.factory);
-                                            if(level >= 18)
+                                            if (level >= 18)
                                             {
-                                                if(itemId != 5202)
+                                                if (itemId != 5202)
                                                     __instance.gameData.trashSystem.AddTrashFromGroundEnemy(5202, itemCount / 2, life, enemy.id, __instance.factory);
-                                                if(level >= 21)
+                                                if (level >= 21)
                                                 {
-                                                    if(itemId != 5204)
+                                                    if (itemId != 5204)
                                                         __instance.gameData.trashSystem.AddTrashFromGroundEnemy(5204, itemCount / 2, life, enemy.id, __instance.factory);
-                                                    if(level >= 24)
+                                                    if (level >= 24)
                                                     {
-                                                        if(itemId != 5205)
+                                                        if (itemId != 5205)
                                                             __instance.gameData.trashSystem.AddTrashFromGroundEnemy(5205, itemCount, life, enemy.id, __instance.factory);
                                                     }
                                                 }
@@ -2519,6 +2556,9 @@ namespace DSP_Battle
                         __instance.NotifyUnitKilled(ref enemy, dfgbaseComponent);
                     }
                 }
+                MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MainLogic);
+                MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MetaDrive);
+                MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.Damage);
                 return false;
             }
             return true;
@@ -2540,7 +2580,7 @@ namespace DSP_Battle
                 GameMain.mainPlayer.mecha.MarkEnergyChange(0, change); // 算在核心发电
                 if (__instance.coreEnergy > __instance.coreEnergyCap) __instance.coreEnergy = __instance.coreEnergyCap;
             }
-            if(Rank.rank >= 1)
+            if (Rank.rank >= 1)
             {
                 double change = 1000000 / 60;
                 __instance.coreEnergy += change;
@@ -2755,7 +2795,7 @@ namespace DSP_Battle
                     Relic.respawnTitleText.transform.Find("tip-button").localPosition = new Vector3(70, -30, 0);
                 }
             }
-            if(__instance.respawnOptionButtons.Count > __instance.GetCurrentOptions().Length * 2)
+            if (__instance.respawnOptionButtons.Count > __instance.GetCurrentOptions().Length * 2)
             {
                 if (__instance.respawnOptionButtons[__instance.GetCurrentOptions().Length * 2].isPointerEnter)
                     __instance.costTexts[__instance.costTexts.Count - 2].text = $"1/{Relic.resurrectCoinCount}";
@@ -2793,6 +2833,8 @@ namespace DSP_Battle
         [HarmonyPatch(typeof(Mecha), "GameTick")]
         public static void MechaGameTickPostPatch(Mecha __instance, long time, float dt)
         {
+            MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.MainLogic);
+            MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.MetaDrive);
             if (Relic.HaveRelic(3, 15))
             {
                 __instance.lab.GameTick(time, dt);
@@ -2800,6 +2842,8 @@ namespace DSP_Battle
                 __instance.lab.GameTick(time, dt);
                 __instance.lab.GameTick(time, dt);
             }
+            MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MainLogic);
+            MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MetaDrive);
         }
 
         // relic 3-17 在Rank.AddExp内实现
@@ -2847,13 +2891,13 @@ namespace DSP_Battle
                 for (int i = 0; i < GameMain.galaxy.starCount; i++)
                 {
                     StarData starData = GameMain.galaxy.stars[i];
-                    if((starData != null) && (starData.luminosity > maxL))
+                    if ((starData != null) && (starData.luminosity > maxL))
                     {
                         maxL = starData.luminosity;
                         Relic.starIndexWithMaxLuminosity = i;
                     }
                 }
-                for (int i = 0;i< GameMain.galaxy.starCount;i++)
+                for (int i = 0; i < GameMain.galaxy.starCount; i++)
                 {
                     StarData starData = GameMain.galaxy.stars[i];
                     if (starData != null && i != Relic.starIndexWithMaxLuminosity)
@@ -2928,7 +2972,7 @@ namespace DSP_Battle
             double powerMilliBonusByAP = SkillPoints.skillValuesL[8] / 100.0 * SkillPoints.skillLevelL[8];
             int powerBonusByAP = (int)(powerMilliBonusByAP * 1000);
 
-            if (Relic.HaveRelic(4,3))
+            if (Relic.HaveRelic(4, 3))
             {
                 Cargo.incTable = new int[] { 0, 250, 300, 350, 400, 425, 450, 475, 500, 525, 550 };
                 Cargo.incTableMilli = new double[] { 0.0, 0.250, 0.300, 0.350, 0.400, 0.425, 0.450, 0.475, 0.500, 0.525, 0.550 };
@@ -2991,7 +3035,7 @@ namespace DSP_Battle
         //    }
         //}
 
-        
+
         // relic 4-4 击杀时调用的增加科研进度的方法，触发处在EventSystem的ZeroHp
         public static void AddNotDFTechHash(long hashPoint)
         {

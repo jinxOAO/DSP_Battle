@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine.UI;
-using UnityEngine;
-using System.IO;
+﻿using CommonAPI.Systems;
 using MoreMegaStructure;
-using System.Threading;
-using System.Runtime.ConstrainedExecution;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace DSP_Battle
 {
@@ -50,13 +47,13 @@ namespace DSP_Battle
         }
 
         public static void InitData()
-        { 
-        
+        {
+
         }
 
         public static void Update()
         {
-            if(num>=200000000)
+            if (num >= 200000000)
                 num = 0;
             for (int i = 0; i < 10; i++)
             {
@@ -99,7 +96,7 @@ namespace DSP_Battle
                 bool execute = false;
                 foreach (var item in cmd)
                 {
-                    if(item == '\n')
+                    if (item == '\n')
                         execute = true;
                     else
                         final += item;
@@ -120,7 +117,7 @@ namespace DSP_Battle
             try
             {
                 param[0] = param[0].ToLower();
-                switch(param[0])
+                switch (param[0])
                 {
                     case "h":
                     case "help":
@@ -144,7 +141,7 @@ namespace DSP_Battle
                         int idx = Convert.ToInt32(param[1]);
                         int type = Convert.ToInt32(param[2]);
                         MoreMegaStructure.MoreMegaStructure.StarMegaStructureType[idx] = type;
-                        if(MoreMegaStructure.MoreMegaStructure.curStar!=null)
+                        if (MoreMegaStructure.MoreMegaStructure.curStar != null)
                             MoreMegaStructure.MoreMegaStructure.RefreshUILabels(MoreMegaStructure.MoreMegaStructure.curStar);
                         if (type == 4)
                             StarAssembly.ResetInGameDataByStarIndex(idx);
@@ -177,7 +174,7 @@ namespace DSP_Battle
                         }
                         else
                         {
-                            while(Rank.rank > target)
+                            while (Rank.rank > target)
                             {
                                 Rank.DownGrade();
                             }
@@ -189,6 +186,14 @@ namespace DSP_Battle
                         Print($"Add exp {param[1]}");
                         break;
                     case "newrelic":
+                        if (param.Length > 1)
+                        {
+                            UIRelic.forceType = Convert.ToInt32(param[1]);
+                            if (param.Length > 2)
+                            {
+                                UIRelic.forceNum = Convert.ToInt32(param[2]);
+                            }
+                        }
                         Relic.PrepareNewRelic();
                         Print($"Prepare new relics.");
                         break;
@@ -202,7 +207,7 @@ namespace DSP_Battle
                     case "rmrelic":
                         int type5 = Convert.ToInt32(param[1]);
                         int num5 = Convert.ToInt32(param[2]);
-                        if(Relic.HaveRelic(type5, num5))
+                        if (Relic.HaveRelic(type5, num5))
                             Relic.RemoveRelic(type5, num5);
                         UIRelic.RefreshSlotsWindowUI();
                         Print($"Remove relic " + ("遗物名称" + type5.ToString() + "-" + num5.ToString()).Translate().Split('\n')[0]);
@@ -236,7 +241,7 @@ namespace DSP_Battle
                         Print($"Add {param[2]} {LDB.items.Select(Convert.ToInt32(param[1]))?.Name.Translate()} to mecha storage.");
                         break;
                     case "cool":
-                        if(MoreMegaStructure.StarCannon.time < 0)
+                        if (MoreMegaStructure.StarCannon.time < 0)
                             MoreMegaStructure.StarCannon.time = 0;
                         Print($"Star cannon cool down.");
                         break;
@@ -287,6 +292,92 @@ namespace DSP_Battle
                     case "probtick":
                         EventSystem.tickFromLastRelic = Convert.ToInt32(param[1]);
                         Print($"ok.");
+                        break;
+
+                    //  
+                    case "scan":
+
+                        List<int> res = new List<int>();
+                        string resStr = "";
+                        if (param.Length == 1)// || param[1] == "hive" || param[1] == "h")
+                        {
+                            Print("Found hives in players star system");
+                            int starIndex = GameMain.data.localStar != null ? GameMain.data.localStar.index : -1;
+                            SpaceSector sector = GameMain.spaceSector;
+                            EnemyDFHiveSystem[] dfHivesByAstro = GameMain.data.spaceSector.dfHivesByAstro;
+                            for (int i = 1; i < sector.enemyCursor; i++)
+                            {
+                                int oriAstroId = sector.enemyPool[i].originAstroId;
+                                int index = oriAstroId - 1000000;
+                                if (index >= 0 && index < dfHivesByAstro.Length)
+                                {
+                                    if (!res.Contains(oriAstroId) && dfHivesByAstro[oriAstroId - 1000000]?.starData?.index == starIndex)
+                                        res.Add(oriAstroId);
+                                }
+                            }
+                        }
+                        if (res.Count > 0)
+                        {
+                            foreach (int r in res)
+                            {
+                                resStr += r.ToString() + "   ";
+                            }
+                        }
+                        else
+                        {
+                            resStr += "Nothing";
+                        }
+                        Print(resStr);
+                        break;
+                    case "qhive":
+                    case "qthive":
+                    case "qbhive":
+                        AssaultController.quickTickHive = Convert.ToInt32(param[1]);
+                        int factor = 10;
+                        if (param.Length > 2)
+                            factor = Convert.ToInt32(param[2]);
+                        AssaultController.quickTickFactor = factor;
+                        Print($"set hive {param[1]} to quick tick mode to {factor * 60}x speed");
+                        break;
+                    case "mkhive":
+                    case "newhive":
+                        EnemyDFHiveSystem hive = null;
+                        if(param.Length > 1)
+                            hive = AssaultController.TryCreateNewHiveAndCore(Convert.ToInt32(param[1]));
+                        else if(GameMain.data.localStar != null)
+                            hive = AssaultController.TryCreateNewHiveAndCore(GameMain.data.localStar.index);
+                        if (hive != null)
+                        {
+                            Print($"Created hive in star system {hive.starData.index}");
+                        }
+                        else
+                            Print("Failed to create hive.");
+                        break;
+                    case "checkhive":
+                        int starIndex2 = -1;
+                        if (param.Length > 1)
+                            starIndex2 =Convert.ToInt32(param[1]);
+                        else if (GameMain.data.localStar != null)
+                            starIndex2 = GameMain.data.localStar.index;
+                        if(starIndex2 >= 0)
+                        {
+                            for (int i = 0; i < 9; i++)
+                            {
+                                EnemyDFHiveSystem hive2 = GameMain.spaceSector.dfHivesByAstro[starIndex2 * 8 + i];
+                                if(hive2 != null)
+                                {
+                                    Print($"i = {i}, star is {hive2.starData.index}");
+                                }
+                            }
+                            AssaultController.CheckHiveStatus(starIndex2);
+                        }
+                        break;
+                    case "buildhive":
+                        AssaultController.BuildHiveAlreadyInited(Convert.ToInt32(param[1]));
+                        break;
+                    case "tlvl":
+                        AssaultController.testLvlSet = Convert.ToInt32(param[1]);
+                        Print($"set lvl to {param[1]} once");
                         break;
                     default:
                         Print($"未知的命令：{param[0]}，输入 \"help\" 查看所有命令说明。", 1, true);
@@ -345,7 +436,7 @@ namespace DSP_Battle
                 cur = last;
             }
             else if (UIDevConsole.consoleInputField.text == "")
-            { 
+            {
                 // 不做任何事
             }
             else if (cur.prev != null)
@@ -471,7 +562,7 @@ namespace DSP_Battle
                 outputFieldObj.GetComponent<RectTransform>().sizeDelta = new Vector2(-20, 500);
                 outputFieldObj.transform.Find("value-text").GetComponent<Text>().supportRichText = true;
                 outputFieldObj.transform.Find("value-text").GetComponent<Text>().alignment = TextAnchor.LowerLeft;
-                outputFieldObj.transform.Find("value-text").GetComponent<Text>().color = new Color(0.1875f,0.8125f,1f);
+                outputFieldObj.transform.Find("value-text").GetComponent<Text>().color = new Color(0.1875f, 0.8125f, 1f);
                 consoleOutputField = outputFieldObj.GetComponent<InputField>();
                 consoleOutputField.onValueChange.RemoveAllListeners();
                 consoleOutputField.interactable = false;
@@ -559,20 +650,20 @@ namespace DSP_Battle
                 "<color=#ffffff>c</color>或<color=#ffffff>clear</color> 清空输出缓存" + "\n" +
                 "<color=#ffffff>cur</color> 输出伊卡洛斯所在星系的starId和starIndex，并输出伊卡洛斯所在行星的planetId" + "\n" +
                 "<color=#ffffff>setmega [param1] [param2]</color> 立刻将星系index为[param1]的巨构类型设置为[param2]" + "\n" +
-                "<color=#ffffff>setsf [param1] [param2] [param3]</color>  立刻将星系index为[param1]的恒星要塞第[param2]个模块已建成数量设置为[param3]" + "\n" +
+                //"<color=#ffffff>setsf [param1] [param2] [param3]</color>  立刻将星系index为[param1]的恒星要塞第[param2]个模块已建成数量设置为[param3]" + "\n" +
                 "<color=#ffffff>setrank [param1]</color> 将功勋等级设置为[param1]，改变等级后还会使经验降低至0" + "\n" +
                 "<color=#ffffff>addexp [param1]</color> 增加[param1]经验，可升级，也可为负但不会降级" + "\n" +
-                "<color=#ffffff>newrelic</color> 立刻随机并打开选择圣物窗口" + "\n" +
-                "<color=#ffffff>addrelic [param1] [param2]</color> 立刻获得第[param1]类型第[param2]号圣物" + "\n" +
-                "<color=#ffffff>rmrelic [param1] [param2]</color> 立刻删除第[param1]类型第[param2]号圣物（如果已经拥有）" + "\n" +
-                "<color=#ffffff>lsrelic</color> 展示所有圣物名称" + "\n" +
+                "<color=#ffffff>newrelic ([param1]) ([param2])</color> 立刻随机并打开选择元驱动窗口，可选参数用来强制在中间刷新某个特定稀有度，或刷新某个特定的元驱动" + "\n" +
+                "<color=#ffffff>addrelic [param1] [param2]</color> 立刻获得第[param1]类型第[param2]号元驱动" + "\n" +
+                "<color=#ffffff>rmrelic [param1] [param2]</color> 立刻删除第[param1]类型第[param2]号元驱动（如果已经拥有）" + "\n" +
+                "<color=#ffffff>lsrelic</color> 展示所有元驱动的名称" + "\n" +
                 "<color=#ffffff>give [param1] [param2]</color> 立刻给予[param2]个itemId为[param1]的物品" + "\n" +
                 "<color=#ffffff>cool</color> 恒星炮立即冷却完毕" + "\n" +
                 "<color=#ffffff>es [param1]</color> 设定当前事件链为[param1]，不提供参数则初始化合法的事件" + "\n" +
                 "<color=#ffffff>est [param1]</color> 当前事件链转移至[param1]" + "\n" +
                 "<color=#ffffff>ap [param1]</color> 授权点增加[param1]" + "\n" +
                 "---------------------- help ----------------------";
-            Print(allCmds,18, false); // 这个forceLineCount传值取决于allCmds的行数
+            Print(allCmds, 17, false); // 这个forceLineCount传值取决于allCmds的行数
         }
 
         public static void ClearOutputField()

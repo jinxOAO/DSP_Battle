@@ -1,11 +1,7 @@
-﻿using HarmonyLib;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DSP_Battle
 {
@@ -209,11 +205,11 @@ namespace DSP_Battle
         {
             float byResearh = 1.0f;
             GameHistoryData history = GameMain.data.history;
-            if(history.techStates.ContainsKey(3606) && history.techStates.ContainsKey(3605) && history.techStates[3605].unlocked)
+            if (history.techStates.ContainsKey(3606) && history.techStates.ContainsKey(3605) && history.techStates[3605].unlocked)
             {
                 byResearh = (float)Math.Pow(0.94, history.techStates[3606].curLevel - 1);
             }
-            else if(history.TechState(3605).unlocked)
+            else if (history.TechState(3605).unlocked)
             {
                 byResearh = (float)Math.Pow(0.94, 5);
             }
@@ -284,7 +280,7 @@ namespace DSP_Battle
 
         }
 
-       
+
         public static void Export(BinaryWriter w)
         {
             w.Write(totalPoints);
@@ -319,7 +315,7 @@ namespace DSP_Battle
                 skillLevelR = new int[skillCountR];
                 for (int i = 0; i < countR; i++)
                 {
-                    if(i < skillCountR)
+                    if (i < skillCountR)
                         skillLevelR[i] = r.ReadInt32();
                     else
                         _ = r.ReadInt32();

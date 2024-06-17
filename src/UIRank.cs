@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using HarmonyLib;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
-using HarmonyLib;
 using UnityEngine.UI;
-using System.IO;
-using System.Diagnostics.Eventing.Reader;
 
 namespace DSP_Battle
 {
@@ -51,7 +45,7 @@ namespace DSP_Battle
             }
             rankObj = new GameObject();
             GameObject inGameObj = GameObject.Find("UI Root/Overlay Canvas/In Game");
-            
+
             rankObj.name = "BattleRank";
             rankObj.transform.SetParent(inGameObj.transform);
 
@@ -136,7 +130,7 @@ namespace DSP_Battle
         [HarmonyPatch(typeof(UIButtonTip), "Create")]
         public static void UIButtonTipTitleSetSupportRichText(string title, ref UIButtonTip __result)
         {
-            if( title !=null && title.Length>0 && title[0] == '<') //对于<color=#>形式的标题，修改标题支持richtext
+            if (title != null && title.Length > 0 && title[0] == '<') //对于<color=#>形式的标题，修改标题支持richtext
             {
                 __result.titleComp.supportRichText = true;
             }
@@ -215,7 +209,7 @@ namespace DSP_Battle
             }
 
             res += "<color=#61d8ffb4>";
-            if(Relic.resurrectCoinCount > 0)
+            if (Relic.resurrectCoinCount > 0)
                 res += "-  " + "剩余复活币".Translate() + $"  {Relic.resurrectCoinCount}\n";
             if (rank >= 1)
                 res += "-  " + "gmRankReward1".Translate() + "\n";
@@ -225,7 +219,7 @@ namespace DSP_Battle
                 res += "-  " + "gmRankReward3".Translate() + "\n";
             if (rank >= 4)
             {
-                if(rank >= 10)
+                if (rank >= 10)
                     res += "-  " + "gmRankReward10".Translate() + "\n";
                 else if (rank >= 7)
                     res += "-  " + "gmRankReward7".Translate() + "\n";
@@ -245,9 +239,9 @@ namespace DSP_Battle
             res += "</color>";
 
             int nextRank = rank + 1;
-            if (rank > 0 && rank < 10) 
+            if (rank > 0 && rank < 10)
                 res += "\n";
-            if (rank<10)
+            if (rank < 10)
             {
                 res += "下一功勋等级解锁".Translate() + "\n<color=#61d8ffb4>-  ";
                 res += $"gmRankUnlockText{nextRank}".Translate();
@@ -265,7 +259,7 @@ namespace DSP_Battle
             {
                 float expProp = Rank.exp * 1.0f / Configs.expToNextRank[Rank.rank];
                 expBarImg.fillAmount = expProp < 1 ? expProp : 1;
-                if(uiBtn.tip != null && uiBtn.tipShowing)
+                if (uiBtn.tip != null && uiBtn.tipShowing)
                 {
                     expText.text = Rank.exp.ToString() + " / " + Configs.expToNextRank[Rank.rank].ToString();
                 }
@@ -280,10 +274,10 @@ namespace DSP_Battle
             if (promotionNoticeSubText == null)
                 promotionNoticeSubText = GameObject.Find("UI Root/Overlay Canvas/In Game/Top Tips/research-complete/sub-text").GetComponent<Text>();
 
-            if(time % 120 == 22)
+            if (time % 120 == 22)
             {
                 int fullLevel = 0;
-                for (int i = 0; i < SkillPoints.skillCountL; i++) 
+                for (int i = 0; i < SkillPoints.skillCountL; i++)
                 {
                     fullLevel += SkillPoints.skillMaxLevelL[i];
                     fullLevel -= SkillPoints.skillLevelL[i];
@@ -312,7 +306,7 @@ namespace DSP_Battle
             if (SkillPoints.UnusedPoints() > 0 && !SkillPoints.isFullLevel)
             {
                 attentionMarkObj.SetActive(true);
-                if(Rank.rank <= 8)
+                if (Rank.rank <= 8)
                 {
                     attentionMarkObj.transform.localPosition = new Vector3(49.5f, -75, 0);
                 }

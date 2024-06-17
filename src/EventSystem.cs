@@ -1,14 +1,9 @@
-﻿using System;
+﻿using HarmonyLib;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using HarmonyLib;
-using Steamworks;
-using UnityEngine;
 
 namespace DSP_Battle
 {
@@ -16,7 +11,7 @@ namespace DSP_Battle
     {
         public static Dictionary<int, EventProto> protos;
         public static List<List<Tuple<int, int>>> alterItems; // 用于上交的物品的id和数量，以等级分（alterItems[level][i])
-        public static Dictionary<int,List<int>> alterProtos;
+        public static Dictionary<int, List<int>> alterProtos;
         public static List<double> maxProbabilityBy10Minutes; // 刚获取完元驱动，一定时间内的击杀获取概率上限
         public static List<double> probabilityDecreaseByRelicCount = new List<double> { 1, 1, 1, 0.9, 0.8, 0.75, 0.6, 0.5, 0.5, 0.5, 0.5 }; // 已经拥有x个元驱动之后，开启新的event的概率系数降低
         public static double probDecreaseByKill = 0.999; // 每次击杀有概率获取，但为了让曲线不被暴涨的击杀速度迅速拉高，每次击杀还会降低概率
@@ -52,7 +47,7 @@ namespace DSP_Battle
             recorder = new EventRecorder(id);
             RefreshRequestMeetData();
         }
-        
+
         public static void TransferTo(int id)
         {
             EventRecorder next = new EventRecorder(id, recorder.modifier, recorder.level);
@@ -88,17 +83,17 @@ namespace DSP_Battle
         {
             if (recorder == null || !protos.ContainsKey(recorder.protoId))
             {
-                if(recorder != null && recorder.protoId != 0)
+                if (recorder != null && recorder.protoId != 0)
                     ClearEvent();
                 return;
             }
             EventProto proto = protos[recorder.protoId];
-            if(index >= proto.decisionLen)
+            if (index >= proto.decisionLen)
             {
                 return;
             }
             bool satisfied = true;
-            for (int i = 0;i < proto.decisionRequestNeed[index].Length; i++)
+            for (int i = 0; i < proto.decisionRequestNeed[index].Length; i++)
             {
                 int reqIndex = proto.decisionRequestNeed[index][i];
                 if (recorder.requestMeet[reqIndex] < recorder.requestCount[reqIndex])
@@ -109,13 +104,13 @@ namespace DSP_Battle
                     {
                         int baseCode = fullCode / 10000 * 10000;
                         int starIndex = fullCode - baseCode;
-                        if(starIndex < GameMain.galaxy.starCount)
+                        if (starIndex < GameMain.galaxy.starCount)
                         {
                             PlayerNavigation navigation = GameMain.mainPlayer.navigation;
                             navigation.indicatorAstroId = (starIndex + 1) * 100;
                         }
                     }
-                    else if(fullCode > 1000000 && fullCode < 2000000)
+                    else if (fullCode > 1000000 && fullCode < 2000000)
                     {
                         PlayerNavigation navigation = GameMain.mainPlayer.navigation;
                         navigation.indicatorAstroId = fullCode;
@@ -130,7 +125,7 @@ namespace DSP_Battle
                     break;
                 }
             }
-            if(!satisfied)
+            if (!satisfied)
             {
                 return;
             }
@@ -138,7 +133,7 @@ namespace DSP_Battle
             {
                 int reqIndex = proto.decisionRequestNeed[index][i];
                 int fullCode = recorder.requestId[reqIndex];
-                if(fullCode > 10000 && fullCode < 20000)
+                if (fullCode > 10000 && fullCode < 20000)
                 {
                     int itemId = fullCode - 10000;
                     int needCount = recorder.requestCount[reqIndex];
@@ -223,7 +218,7 @@ namespace DSP_Battle
                     recorder.decodeType = code;
                     recorder.decodeTimeNeed = amount;
                     recorder.decodeTimeSpend = 0;
-                    if(Relic.HaveRelic(4, 6) && (code == 24 || code == 25)) // relic 4-6 负面效果 解译时间增加
+                    if (Relic.HaveRelic(4, 6) && (code == 24 || code == 25)) // relic 4-6 负面效果 解译时间增加
                     {
                         recorder.decodeTimeNeed = amount + 3600 * 15;
                     }
@@ -242,7 +237,7 @@ namespace DSP_Battle
                     // 暂未实现
                 }
             }
-            if(willClearEvent)
+            if (willClearEvent)
             {
                 UIEventSystem.OnClose();
                 ClearEvent();
@@ -252,7 +247,7 @@ namespace DSP_Battle
 
         public static void RefreshProbability()
         {
-            if(recorder!=null && recorder.protoId > 0)
+            if (recorder != null && recorder.protoId > 0)
             {
                 tickFromLastRelic = 0;
                 probabilityForNewEvent = 0;
@@ -278,7 +273,7 @@ namespace DSP_Battle
                 }
                 if (probabilityForNewEvent < lastMax * 0.5)
                     probabilityForNewEvent = lastMax * 0.5;
-                else if(probabilityForNewEvent > curMax)
+                else if (probabilityForNewEvent > curMax)
                     probabilityForNewEvent = curMax;
 
                 //if (tickFromLastRelic % 60 == 0)
@@ -290,7 +285,9 @@ namespace DSP_Battle
         [HarmonyPatch(typeof(GameData), "GameTick")]
         public static void OnUpdate()
         {
-            if(recorder != null && recorder.protoId > 0 && recorder.decodeType > 20)
+            MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.MainLogic);
+            MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.EventSys);
+            if (recorder != null && recorder.protoId > 0 && recorder.decodeType > 20)
             {
                 if (recorder.decodeTimeSpend < recorder.decodeTimeNeed)
                     recorder.decodeTimeSpend++;
@@ -303,6 +300,8 @@ namespace DSP_Battle
             }
             RefreshRequestMeetData();
             RefreshProbability();
+            MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MainLogic);
+            MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.EventSys);
         }
 
 
@@ -500,7 +499,7 @@ namespace DSP_Battle
                             for (int j = 0; j < maxLen; j++)
                             {
                                 DysonSphere sphere = GameMain.data.dysonSpheres[j];
-                                if(sphere!=null)
+                                if (sphere != null)
                                 {
                                     maxGen = Math.Max(maxGen, sphere.energyGenCurrentTick * 60 / 1000000);
                                 }
@@ -558,7 +557,7 @@ namespace DSP_Battle
                         {
                             int planetId = code - 2000000;
                             PlanetData planet = GameMain.galaxy.PlanetById(planetId);
-                            if(planet != null)
+                            if (planet != null)
                             {
                                 PlanetFactory factory = planet.factory;
                                 if (factory == null)
@@ -572,7 +571,7 @@ namespace DSP_Battle
                                         ref EnemyData ptr = ref gPool[j];
                                         if (ptr.id > 0 && ptr.dfGBaseId == 0)
                                         {
-                                                remaining++;
+                                            remaining++;
                                         }
                                     }
                                     recorder.requestMeet[i] = -remaining;
@@ -617,7 +616,7 @@ namespace DSP_Battle
                     else if (code >= 4000000 && code < 5000000)
                     {
                         int planetId = code - 4000000;
-                        if(GameMain.data.localPlanet != null && GameMain.data.localPlanet.id == planetId)
+                        if (GameMain.data.localPlanet != null && GameMain.data.localPlanet.id == planetId)
                         {
                             recorder.requestMeet[i] = recorder.requestCount[i];
                         }
@@ -638,6 +637,9 @@ namespace DSP_Battle
         [HarmonyPatch(typeof(CombatStat), "HandleZeroHp")]
         public static bool ZeroHpInceptor(ref CombatStat __instance, GameData gameData, SkillSystem skillSystem)
         {
+            MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.MainLogic);
+            MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.EventSys);
+            MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.Kill);
             if (recorder != null && recorder.protoId > 0 && recorder.requestId.Length > 0 || true)
             {
                 var _this = __instance;
@@ -662,7 +664,7 @@ namespace DSP_Battle
                                     EnemyDFHiveSystem[] dfHivesByAstro = GameMain.data.spaceSector.dfHivesByAstro;
                                     EnemyDFHiveSystem enemyDFHiveSystem = dfHivesByAstro[ptr.originAstroId - 1000000];
                                     int ptrStarIndex = enemyDFHiveSystem?.starData?.index ?? -1;
-                                    if(starIndex == ptrStarIndex)
+                                    if (starIndex == ptrStarIndex)
                                         recorder.requestMeet[i]++;
                                 }
                             }
@@ -767,7 +769,7 @@ namespace DSP_Battle
                                     RelicFunctionPatcher.AddNotDFTechHash(Relic.hashGainByGroundEnemy);
 
                                 // relic 4-5 触发emp
-                                if(Relic.HaveRelic(4, 5) && Relic.Verify(0.15) && ptr3.owner > 0)
+                                if (Relic.HaveRelic(4, 5) && Relic.Verify(0.15) && ptr3.owner > 0)
                                 {
                                     ref LocalDisturbingWave ptrDis = ref GameMain.data.spaceSector.skillSystem.turretDisturbingWave.Add();
                                     ptrDis.astroId = planetFactory.planetId;
@@ -803,7 +805,7 @@ namespace DSP_Battle
                                 int protoId = ptr4.protoId;
                                 if (protoId == 2001 || protoId == 2011 || protoId == 2012 || protoId == 2101 || protoId == 2102 || protoId == 2201) // 低级传送带、低级分拣器和低级电线杆给的经验很少
                                 {
-                                    if(Relic.HaveRelic(2,2))
+                                    if (Relic.HaveRelic(2, 2))
                                         Rank.AddExp(1);
                                     if (Relic.HaveRelic(3, 9))
                                         Interlocked.Add(ref Relic.autoConstructMegaStructurePPoint, 1); // 每1000个点数大约相当于120个太阳帆或24个火箭
@@ -811,7 +813,7 @@ namespace DSP_Battle
                                 else if (protoId == 2104 || protoId == 2105 || protoId == 2210 || protoId == 2902 || protoId == 2318 || protoId == 2319) // 昂贵的建筑，小太阳、火箭发射井、大物流塔和黑雾建筑等
                                 {
                                     if (Relic.HaveRelic(2, 2))
-                                        Rank.AddExp(100); 
+                                        Rank.AddExp(100);
                                     if (Relic.HaveRelic(3, 9))
                                         Interlocked.Add(ref Relic.autoConstructMegaStructurePPoint, 100);
                                 }
@@ -834,6 +836,9 @@ namespace DSP_Battle
                     }
                 }
             }
+            MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MainLogic);
+            MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.EventSys);
+            MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.Kill);
             return true;
         }
 
@@ -842,12 +847,12 @@ namespace DSP_Battle
         [HarmonyPatch(typeof(GameHistoryData), "NotifyTechUnlock")]
         public static void UnlockTechHandler()
         {
-            if(recorder!=null && recorder.protoId > 0)
+            if (recorder != null && recorder.protoId > 0)
             {
                 for (int i = 0; i < recorder.requestLen; i++)
                 {
                     int code = recorder.requestId[i];
-                    if(code == 30000 && recorder.requestCount[i] > recorder.requestMeet[i])
+                    if (code == 30000 && recorder.requestCount[i] > recorder.requestMeet[i])
                     {
                         recorder.requestMeet[i]++;
                     }
@@ -857,7 +862,7 @@ namespace DSP_Battle
 
         public static void TestIfGroudBaseInited()
         {
-            if(GameMain.data.localPlanet != null)
+            if (GameMain.data.localPlanet != null)
             {
                 EnemyData[] gPool = GameMain.data.localPlanet.factory?.enemyPool;
                 if (gPool != null)
@@ -880,7 +885,7 @@ namespace DSP_Battle
 
                 EnemyDFHiveSystem[] dfHivesByAstro = GameMain.data.spaceSector.dfHivesByAstro;
                 EnemyDFHiveSystem hive = dfHivesByAstro[ptr.originAstroId - 1000000];
-                
+
                 Utils.Log($"oriAstro is {ptr.originAstroId} and hive astro is {hive.hiveAstroId}");
             }
         }

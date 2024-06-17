@@ -1,13 +1,4 @@
-﻿using HarmonyLib;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
-using UnityEngine.UI;
-
-namespace DSP_Battle
+﻿namespace DSP_Battle
 {
     class FastStartOption
     {
@@ -76,7 +67,7 @@ namespace DSP_Battle
 
         //    GameMain.data.mainPlayer.TryAddItemToPackage(2001, 280, 0, false); // 一级带
         //    GameMain.data.mainPlayer.TryAddItemToPackage(2002, 600, 0, false); // 二级带
-            
+
         //    GameMain.data.mainPlayer.TryAddItemToPackage(2011, 195, 0, false); // 一级爪
         //    GameMain.data.mainPlayer.TryAddItemToPackage(2013, 195, 0, false); // 二级爪
         //    GameMain.data.mainPlayer.TryAddItemToPackage(2013, 200, 0, false); // 三级爪

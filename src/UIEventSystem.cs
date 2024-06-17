@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
-using HarmonyLib;
-using System.Security.Cryptography;
-using static UnityEngine.UI.DefaultControls;
 
 namespace DSP_Battle
 {
@@ -203,7 +198,7 @@ namespace DSP_Battle
                 GameObject buttonObj = GameObject.Instantiate(oriButtonObj);
                 buttonObj.name = "decision" + i.ToString();
                 buttonObj.transform.SetParent(eventWindowContentObj.transform);
-                buttonObj.transform.localPosition = new Vector3(-400 , -250 + i * 30, 0);
+                buttonObj.transform.localPosition = new Vector3(-400, -250 + i * 30, 0);
                 buttonObj.GetComponent<RectTransform>().sizeDelta = new Vector2(800, 25);
                 Text buttonText = buttonObj.transform.Find("Text").gameObject.GetComponent<Text>();
                 GameObject.DestroyImmediate(buttonObj.GetComponent<Button>());
@@ -259,7 +254,7 @@ namespace DSP_Battle
             animationTime = 0;
             closeButtonText.text = "一";
             RefreshAll();
-        }   
+        }
 
         public static void OnClose(bool closeImmediate = false)
         {
@@ -280,7 +275,7 @@ namespace DSP_Battle
         {
             if (eventWindowObj == null)
                 return false;
-            if(eventWindowObj.activeSelf)
+            if (eventWindowObj.activeSelf)
             {
                 bool flag = !VFInput._godModeMechaMove;
                 bool flag2 = VFInput.rtsCancel.onDown || VFInput.escKey.onDown || VFInput.escape || VFInput.delayedEscape;
@@ -314,7 +309,7 @@ namespace DSP_Battle
 
         public static void RefreshESButton()
         {
-            if(EventSystem.recorder != null && EventSystem.recorder.protoId > 0 && GameMain.instance != null)
+            if (EventSystem.recorder != null && EventSystem.recorder.protoId > 0 && GameMain.instance != null)
             {
                 ESButtonImage.sprite = activeSprite;
                 ESButtonHighlighting = false;
@@ -344,12 +339,12 @@ namespace DSP_Battle
                         if (allSatisfied)
                         {
                             int[] decisionResults = proto.decisionResultId[i];
-                            if(decisionResults == null)
+                            if (decisionResults == null)
                             {
                                 allSatisfied = false;
                                 continue;
                             }
-                            for (int j = 0;j < decisionResults.Length; j++)
+                            for (int j = 0; j < decisionResults.Length; j++)
                             {
                                 if (decisionResults[j] == -1) // 结束事件链一般都是无需前置条件的，所以不参与事件按钮是否高亮的决定
                                 {
@@ -358,7 +353,7 @@ namespace DSP_Battle
                                 }
                             }
                         }
-                        if(allSatisfied && (EventSystem.recorder.decodeType == 0 || EventSystem.recorder.decodeTimeSpend >= EventSystem.recorder.decodeTimeNeed))
+                        if (allSatisfied && (EventSystem.recorder.decodeType == 0 || EventSystem.recorder.decodeTimeSpend >= EventSystem.recorder.decodeTimeNeed))
                         {
                             ESButtonHighlighting = true;
                             break;
@@ -404,7 +399,7 @@ namespace DSP_Battle
                 return;
 
             // 处理关闭动画逻辑，用来提示玩家再次打开这个窗口的按钮在哪儿
-            if(eventWindowObj.activeSelf && animationTime != 0)
+            if (eventWindowObj.activeSelf && animationTime != 0)
             {
                 float timeLeft = Math.Abs(animationTime);
                 float scale = 1.0f * (timeLeft - 1) / 10;
@@ -413,7 +408,7 @@ namespace DSP_Battle
                 eventWindowObj.transform.localScale = new Vector3(scale, scale, scale);
                 float xDis = (eventButtonObj.transform.position.x - eventWindowObj.transform.position.x) / (float)Math.Pow(timeLeft, 1);
                 float yDis = (eventButtonObj.transform.position.y - eventWindowObj.transform.position.y) / (float)Math.Pow(timeLeft, 1);
-                eventWindowObj.transform.position = 
+                eventWindowObj.transform.position =
                     new Vector3(eventWindowObj.transform.position.x + xDis, eventWindowObj.transform.position.y + yDis, eventWindowObj.transform.position.z);
 
                 if (animationTime < 0)
@@ -425,7 +420,7 @@ namespace DSP_Battle
                 else if (animationTime > 0)
                     animationTime--;
             }
-            if(EventSystem.recorder != null && EventSystem.recorder.protoId > 0)
+            if (EventSystem.recorder != null && EventSystem.recorder.protoId > 0)
             {
                 ref EventRecorder recorder = ref EventSystem.recorder;
                 if (recorder.decodeType != 0 && recorder.decodeTimeSpend < recorder.decodeTimeNeed && recorder.decodeTimeNeed != 0)
@@ -752,13 +747,13 @@ namespace DSP_Battle
                     EventProto proto = EventSystem.protos[recorder.protoId];
                     if (i >= proto.decisionLen)
                         break;
-                    if(decisionUIButtons[i]!= null && decisionUIButtons[i].isPointerEnter)
+                    if (decisionUIButtons[i] != null && decisionUIButtons[i].isPointerEnter)
                     {
                         int resultLen = proto.decisionResultId[i].Length;
                         for (int j = 0; j < resultLen; j++)
                         {
                             int code = proto.decisionResultId[i][j];
-                            if(code >= 4 && code <= 9) // 说明是改动
+                            if (code >= 4 && code <= 9) // 说明是改动
                             {
                                 int amount = proto.decisionResultCount[i][j];
                                 if (code == 4)
@@ -806,7 +801,7 @@ namespace DSP_Battle
                     }
 
                     //probabilityText.text = string.Format("<color=#00c280>◈ {0:#.0}%</color>     <color=#d2853d>◈ {1:#.0}%</color>     <color=#8040d0>◈ {2:##}%</color>     <color=#2070d0>◈ {3:##}%</color>     <color=#30b330>◈ {4:##}%</color>     <color=#00adffa8>↻ {5:0}</color>", prob[4] * 100.0, prob[0] * 100.0, prob[1] * 100.0, prob[2] * 100.0, prob[3] * 100.0, preview[5] + 1);
-                    probabilityTextCursed.text = string.Format("<color=#00c280>◈ {0:#.0}%</color>", prob[4]*100);
+                    probabilityTextCursed.text = string.Format("<color=#00c280>◈ {0:#.0}%</color>", prob[4] * 100);
                     probabilityTextLegend.text = string.Format("<color=#d2853d>◈ {0:#.0}%</color>", prob[0] * 100);
                     probabilityTextEpic.text = string.Format("<color=#8040d0>◈ {0:#.0}%</color>", prob[1] * 100);
                     probabilityTextRare.text = string.Format("<color=#2070d0>◈ {0:##}%</color>", prob[2] * 100);

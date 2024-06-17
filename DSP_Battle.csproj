@@ -129,6 +129,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\AssaultController.cs" />
     <Compile Include="src\BattleBGMController.cs" />
     <Compile Include="src\BattleProtos.cs" />
     <Compile Include="src\DevConsole.cs" />
@@ -148,6 +149,8 @@
     <Compile Include="src\Configs.cs" />
     <Compile Include="src\DspBattlePlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\TCFVPerformanceMonitor.cs" />
+    <Compile Include="src\UIAssaultAlert.cs" />
     <Compile Include="src\UIDialogPatch.cs" />
     <Compile Include="src\UIEventSystem.cs" />
     <Compile Include="src\UIRank.cs" />

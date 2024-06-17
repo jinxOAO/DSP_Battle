@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DSP_Battle
 {
@@ -100,14 +97,14 @@ namespace DSP_Battle
             int level = id / 1000;
             if (level < 0)
                 level = 0;
-            if (level > 9) 
+            if (level > 9)
                 level = 9;
             if (EventSystem.protos != null && !EventSystem.protos.ContainsKey(id))
                 protoCount[level]++;
-            if(EventSystem.alterProtos != null && register)
+            if (EventSystem.alterProtos != null && register)
             {
                 int fullLevel = id / 100;
-                if(!EventSystem.alterProtos.ContainsKey(fullLevel))
+                if (!EventSystem.alterProtos.ContainsKey(fullLevel))
                     EventSystem.alterProtos.Add(fullLevel, new List<int> { id });
                 else
                     EventSystem.alterProtos[fullLevel].Add(id);
@@ -147,7 +144,7 @@ namespace DSP_Battle
 
     public class EventRecorder
     {
-        public static int[] levelByRelicCount = new int[] {0,1,2,3,3,4,4,4,4,4,4,4,4 };
+        public static int[] levelByRelicCount = new int[] { 0, 1, 2, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4 };
         public int protoId;
         public int lockedStarIndex;
         public int lockedPlanetId;
@@ -187,7 +184,7 @@ namespace DSP_Battle
             {
                 w.Write(modifier[i]);
             }
-            w.Write(decodeType); 
+            w.Write(decodeType);
             w.Write(decodeTimeNeed);
             w.Write(decodeTimeSpend);
         }
@@ -206,7 +203,7 @@ namespace DSP_Battle
                 requestId[i] = r.ReadInt32();
             }
             requestCount = new int[requestLen];
-            for(int i = 0;i < requestLen; i++)
+            for (int i = 0; i < requestLen; i++)
             {
                 requestCount[i] = r.ReadInt32();
             }
@@ -228,7 +225,7 @@ namespace DSP_Battle
 
         public EventRecorder(int protoId, int[] prevModifier = null, int forceLevel = -1)
         {
-            if(EventSystem.protos.ContainsKey(protoId))
+            if (EventSystem.protos.ContainsKey(protoId))
             {
                 EventProto proto = EventSystem.protos[protoId];
                 this.protoId = protoId;
@@ -239,7 +236,7 @@ namespace DSP_Battle
                 if (level < 0)
                 {
                     int relicCount = Relic.GetRelicCount() + (Relic.recordRelics == null ? 0 : Relic.recordRelics.Count);
-                    if (relicCount > levelByRelicCount.Length) 
+                    if (relicCount > levelByRelicCount.Length)
                         relicCount = levelByRelicCount.Length;
                     level = levelByRelicCount[relicCount];
                 }
@@ -420,7 +417,7 @@ namespace DSP_Battle
                     }
                     else if (code == 100)
                     {
-                        if(lockedOriAstroId < 0)
+                        if (lockedOriAstroId < 0)
                         {
                             int each = GameMain.galaxy.starCount / 4;
                             if (each < 1) each = 1;
@@ -517,7 +514,7 @@ namespace DSP_Battle
                         }
                         requestId[i] = actual + lockedPlanetId;
                     }
-                    else if(code == 400)
+                    else if (code == 400)
                     {
                         if (lockedPlanetId < 0)
                         {

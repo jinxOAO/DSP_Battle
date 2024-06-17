@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -150,7 +148,7 @@ namespace DSP_Battle
                 GameObject matrixIcon = new GameObject("icon-matrix");
                 matrixIcon.transform.SetParent(spWindowObj.transform);
                 matrixIcon.transform.localScale = Vector3.one;
-                matrixIcon.transform.localPosition = new Vector3(290,318,0);
+                matrixIcon.transform.localPosition = new Vector3(290, 318, 0);
                 matrixIcon.AddComponent<RectTransform>();
                 matrixIcon.AddComponent<Image>();
                 matrixIcon.GetComponent<RectTransform>().sizeDelta = new Vector2(25, 25);
@@ -198,7 +196,7 @@ namespace DSP_Battle
             contentObj.transform.localPosition = new Vector3(0, 0, 0);
             contentObj.transform.localScale = new Vector3(1, 1, 1);
             contentObj.AddComponent<RectTransform>();
-            contentObj.GetComponent<RectTransform>().sizeDelta = new Vector2(740,600);
+            contentObj.GetComponent<RectTransform>().sizeDelta = new Vector2(740, 600);
             contentObj.AddComponent<Image>();
             contentObj.GetComponent<Image>().color = new Color(0.6f, 0.7f, 0.8f, 0.15f);
 
@@ -284,7 +282,7 @@ namespace DSP_Battle
                 Button plusBtn = plusObj.AddComponent<Button>();
                 //plusBtn.onClick.RemoveAllListeners();
                 plusBtn.onClick.AddListener(() => { OnAssignOneClick(Convert.ToInt32(sign)); });
-                
+
                 GameObject minusObj = GameObject.Instantiate(buttonObj, skillObj.transform);
                 minusObj.name = "withdraw-" + sign;
                 minusObj.transform.localPosition = new Vector3(70, 3, 0);
@@ -297,7 +295,7 @@ namespace DSP_Battle
                 //minusBtn.onClick.RemoveAllListeners();
                 minusBtn.onClick.AddListener(() => { OnWithdrawOneClick(Convert.ToInt32(sign)); });
 
-                if(isLeft)
+                if (isLeft)
                 {
                     plusUIButtonsL.Add(plusUIBtn);
                     minusUIButtonsL.Add(minusUIBtn);
@@ -333,7 +331,7 @@ namespace DSP_Battle
                 {
                     int level = SkillPoints.skillLevelL[i] + tempLevelAddedL[i];
                     float value = level * SkillPoints.skillValuesL[i];
-                    if(i == 4)
+                    if (i == 4)
                     {
                         if (Rank.rank >= 10)
                             value -= 80;
@@ -342,7 +340,7 @@ namespace DSP_Battle
                         else if (Rank.rank >= 4)
                             value -= 20;
                     }
-                    valueTextsL[i].text = (value > 0 ? "+":"" ) + value.ToString() + " " + SkillPoints.skillSuffixesL[i];
+                    valueTextsL[i].text = (value > 0 ? "+" : "") + value.ToString() + " " + SkillPoints.skillSuffixesL[i];
                     int length = plusUIButtonsL[i].transitions.Length;
                     for (int j = 0; j < length && j < 1; j++)
                     {
@@ -450,7 +448,7 @@ namespace DSP_Battle
 
                 // 按钮表现
                 int assignedTemp = tempLevelAddedL.Sum() + tempLevelAddedR.Sum();
-                if(assignedTemp > 0)
+                if (assignedTemp > 0)
                 {
                     withdrawButtonText.text = "撤销分配".Translate();
                     confirmButtonImg.color = btnEnableColor;
@@ -497,7 +495,7 @@ namespace DSP_Battle
                     Show();
             }
         }
-        
+
         public static void Show()
         {
             spWindowObj.SetActive(true);
@@ -544,18 +542,18 @@ namespace DSP_Battle
             GameObject obj = null;
             Camera cam = Camera.main;
             UnityEngine.EventSystems.EventSystem uiEventSystem = UnityEngine.EventSystems.EventSystem.current;
-            if(uiEventSystem != null)
+            if (uiEventSystem != null)
             {
                 PointerEventData pointerEventData = new PointerEventData(uiEventSystem);
                 pointerEventData.position = Input.mousePosition;
                 List<RaycastResult> results = new List<RaycastResult>();
                 uiEventSystem.RaycastAll(pointerEventData, results);
-                if(results.Count > 0)
+                if (results.Count > 0)
                 {
                     for (int i = 0; i < results.Count; i++)
                     {
                         string name = results[i].gameObject.name;
-                        if (name.Length > 6 && name.Substring(0,5) == "skill")
+                        if (name.Length > 6 && name.Substring(0, 5) == "skill")
                         {
                             obj = results[i].gameObject;
                             break;
@@ -626,7 +624,7 @@ namespace DSP_Battle
                     if (remainingLevel > 0)
                     {
                         int num = 1;
-                        if(DspBattlePlugin.isShiftDown)
+                        if (DspBattlePlugin.isShiftDown)
                         {
                             if (DspBattlePlugin.isControlDown)
                                 num = Math.Min(unassigned, remainingLevel);
@@ -659,7 +657,7 @@ namespace DSP_Battle
         {
             bool isLeft = idx < 100;
             idx = idx % 100;
-            if(isLeft)
+            if (isLeft)
             {
                 int tempAssigned = tempLevelAddedL[idx];
                 if (DspBattlePlugin.isControlDown && DspBattlePlugin.isShiftDown)
@@ -691,7 +689,7 @@ namespace DSP_Battle
         public static void OnConfirmAllClick()
         {
             int assignedTemp = tempLevelAddedL.Sum() + tempLevelAddedR.Sum();
-            if(assignedTemp > 0)
+            if (assignedTemp > 0)
             {
                 UIMessageBox.Show("分配技能点确认标题".Translate(), String.Format("分配技能点确认警告".Translate()), "否".Translate(), "是".Translate(), 1, new UIMessageBox.Response(() => { }),
                     new UIMessageBox.Response(() =>
@@ -733,7 +731,7 @@ namespace DSP_Battle
         // 清除暂存的对技能点的分配
         public static void ClearTempLevelAdded()
         {
-            if(tempLevelAddedL.Length != SkillPoints.skillCountL)
+            if (tempLevelAddedL.Length != SkillPoints.skillCountL)
             {
                 tempLevelAddedL = new int[SkillPoints.skillCountL];
             }

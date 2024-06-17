@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace DSP_Battle
 {
@@ -19,6 +17,9 @@ namespace DSP_Battle
         static int closingCountDown = -1;
         static int openingCountDown = -1;
         static int selectedRelicInUI = 0; // 本次选择了在UI上的左中右(123)哪个遗物
+
+        public static int forceType = -1; // 通过控制台强行刷新的元驱动稀有度，-1代表不是强制刷新任何稀有度
+        public static int forceNum = -1; // 通过控制台强行刷新的元驱动序号，需要强制稀有度才有效，-1代表不强制序号
 
         static GameObject relicSelectionWindowObj = null;
         static GameObject relicSelectionContentObj;
@@ -169,7 +170,7 @@ namespace DSP_Battle
                     closingCountDown--;
                     if (closingCountDown <= 0)
                     {
-                        closingCountDown = -1; 
+                        closingCountDown = -1;
                         relicSelectionWindowObj.SetActive(false);
                     }
                 }
@@ -418,7 +419,7 @@ namespace DSP_Battle
         // 准备打开选择遗物窗口的动画
         public static void OpenSelectionWindow()
         {
-            selectedRelicInUI = -1; 
+            selectedRelicInUI = -1;
             CloseSelectionWindow(); // 先执行立刻全关（立刻体现在closingCountDown在之后手动置为-1）
             closingCountDown = -1;
             closingCountDown = -1; // 取消任何正在关闭的动画
@@ -428,7 +429,7 @@ namespace DSP_Battle
             relic2SelectButtonObj.transform.Find("Text").GetComponent<Text>().text = "".Translate();
             relic3SelectButtonObj.transform.Find("Text").GetComponent<Text>().text = "".Translate();
 
-            
+
         }
 
         // 准备进行关闭选择遗物窗口的动画
@@ -472,6 +473,9 @@ namespace DSP_Battle
                 relic3UIBtn.transitions[0].mouseoverColor = zero;
                 relic3UIBtn.transitions[0].pressedColor = zero;
             }
+            relic1Desc.text = ""; // 红色字不会渐变消失，不知道为啥，所以将描述设置成空
+            relic2Desc.text = "";
+            relic3Desc.text = "";
             relicSelectionNoticeText.text = "";
             rollCostText.text = "";
             relicSelectWindowTitle.text = "";
@@ -528,7 +532,7 @@ namespace DSP_Battle
             relic2Frame.color = new Color(0, 0, 0, 0);
             relic3Frame.color = new Color(0, 0, 0, 0);
             relic1FrameObj.SetActive(false);
-            relic2FrameObj.SetActive(false); 
+            relic2FrameObj.SetActive(false);
             relic3FrameObj.SetActive(false);
 
             // 如果是删除遗物的按钮
@@ -566,8 +570,8 @@ namespace DSP_Battle
                 int r1type = Relic.alternateRelics[0] / 100;
                 int r1num = Relic.alternateRelics[0] % 100;
                 if (isRemove)
-                { 
-                    r1type = (-1 * (Relic.alternateRelics[0] + 1)) / 100; 
+                {
+                    r1type = (-1 * (Relic.alternateRelics[0] + 1)) / 100;
                     r1num = (-1 * (Relic.alternateRelics[0] + 1)) % 100;
                 }
                 if (r1type == 0)
@@ -663,7 +667,7 @@ namespace DSP_Battle
                     relic2UIBtn.transitions[0].mouseoverColor = colorBtnRareH;
                     relic2UIBtn.transitions[0].pressedColor = colorBtnRareP;
                 }
-                else if(r2type == 3)
+                else if (r2type == 3)
                 {
                     relic2Name.color = colorTextCommon;
                     relic2BtnImg.color = colorBtnCommon;
@@ -702,7 +706,7 @@ namespace DSP_Battle
                 // Relic3
                 isRemove = Relic.alternateRelics[2] < 0;
                 int r3type = Relic.alternateRelics[2] / 100;
-                int r3num = Relic.alternateRelics[2] % 100; 
+                int r3num = Relic.alternateRelics[2] % 100;
                 if (isRemove)
                 {
                     r3type = (-1 * (Relic.alternateRelics[2] + 1)) / 100;
@@ -805,7 +809,7 @@ namespace DSP_Battle
         public static void AddTipText(int type, int num, UIButton uibt, bool isLeftSlot = false)
         {
             //if ((type == 0 && num == 2 && !(Relic.HaveRelic(0, 2) && Relic.relic0_2Version == 0)) || (type == 0 && num == 7) || (type == 0 && num == 10))
-            if($"relicTipText{type}-{num}".Translate() != $"relicTipText{type}-{num}" && type != 4)
+            if ($"relicTipText{type}-{num}".Translate() != $"relicTipText{type}-{num}" && type != 4)
             {
                 if (uibt.tips.tipTitle.Length == 0)
                     uibt.tips.tipTitle = ($"relicTipTitle{type}-{num}").Translate();
@@ -815,7 +819,7 @@ namespace DSP_Battle
             {
                 if (uibt.tips.tipTitle.Length == 0)
                     uibt.tips.tipTitle = ($"诅咒").Translate();
-                if(isLeftSlot)
+                if (isLeftSlot)
                     uibt.tips.tipText += "\n" + "诅咒描述短".Translate() + ($"relicTipText{type}-{num}").Translate(); // 受诅咒的圣物全都具有后面这项TipText，因为都有负面效果
                 else
                     uibt.tips.tipText += "诅咒描述".Translate() + ($"relicTipText{type}-{num}").Translate(); // 受诅咒的圣物全都具有后面这项TipText，因为都有负面效果
@@ -846,7 +850,7 @@ namespace DSP_Battle
             {
                 int timeLeft = Relic.bansheesVeilIncreaseCountdown;
                 uibt.tips.tipText = uibt.tips.tipText + "\n\n<color=#61d8ffb4>" + "当前倍率".Translate() + "  " + Relic.bansheesVeilFactor + "</color>";
-                if(timeLeft > 0)
+                if (timeLeft > 0)
                     uibt.tips.tipText = uibt.tips.tipText + "\n<color=#61d8ffb4>" + "消退于".Translate() + string.Format("  {0:D2}:{1:D2}", timeLeft / 3600, timeLeft / 60 % 60) + "</color>";
             }
             else if (type == 2 && num == 17)
@@ -887,7 +891,7 @@ namespace DSP_Battle
             return false;
         }
 
-       
+
         // 随机3个新的relic 并刷新显示
         public static void RollNewAlternateRelics(bool firstRoll = false)
         {
@@ -914,7 +918,7 @@ namespace DSP_Battle
                     }
                 }
                 int i = 0;
-                while(i < 3 && relicAlreadyHave.Count>0)
+                while (i < 3 && relicAlreadyHave.Count > 0)
                 {
                     int relicId = relicAlreadyHave[Utils.RandInt(0, relicAlreadyHave.Count)];
                     Relic.alternateRelics[i] = -1 * relicId - 1; // 遗物id的相反数-1设定为移除遗物
@@ -953,8 +957,13 @@ namespace DSP_Battle
 
                     for (int type = 0; type < 5; type++)
                     {
-                        if (rand <= prob[type] || (i == 0 && type == 2 && rand < Relic.firstRelicIsRare) || (i == 1 && type == 0 && Relic.HaveRelic(4, 1) && firstRoll)) // 后面的判别条件是，第一个遗物至少是稀有以上的概率为独立的较大的一个概率，第三个判别条件是relic 4-1的效果 第一次必在中间位置刷一个传说
+                        if (rand <= prob[type] || (i == 0 && type == 2 && rand < Relic.firstRelicIsRare) || (i == 1 && type == 0 && Relic.HaveRelic(4, 1) && firstRoll) || (i == 1 && type == forceType))
+                        // 第二个判别条件是，第一个遗物至少是稀有以上的概率为独立的较大的一个概率
+                        // 第三个判别条件是relic 4-1的效果 第一次必在中间位置刷一个传说
+                        // 第四个判别条件是通过控制台强行在中间格子刷新目标稀有度的元驱动
                         {
+                            if (i == 1 && forceType >= 0 && forceType <= 4 && forceType != type)
+                                continue;
                             List<int> relicNotHave = new List<int>();
                             for (int num = 0; num < Relic.relicNumByType[type]; num++)
                             {
@@ -998,14 +1007,17 @@ namespace DSP_Battle
                     }
                 }
             }
-            Relic.rollCount = Math.Min(Relic.rollCount+1, 8); // 记录本次重随次数，重随消耗有上限
-            if (Configs.developerMode)
+            Relic.rollCount = Math.Min(Relic.rollCount + 1, 8); // 记录本次重随次数，重随消耗有上限
+            if (forceType >= 0 && forceNum >= 0 && forceType <= 4 && forceNum <= Relic.relicNumByType[forceType])
             {
                 //Relic.alternateRelics[0] = 7;
-                //Relic.alternateRelics[1] = 2;
+                if (!Relic.alternateRelics.Contains(forceType * 100 + forceNum))
+                    Relic.alternateRelics[1] = forceType * 100 + forceNum;
                 //Relic.alternateRelics[2] = 10;
             }
             RefreshSelectionWindowUI();
+            forceType = -1;
+            forceNum = -1;
         }
 
         public static void SelectNewRelic(int selection)
@@ -1025,8 +1037,8 @@ namespace DSP_Battle
                 }
                 else
                 {
-                    int type = -(Relic.alternateRelics[selection]+1) / 100;
-                    int num = -(Relic.alternateRelics[selection]+1) % 100;
+                    int type = -(Relic.alternateRelics[selection] + 1) / 100;
+                    int num = -(Relic.alternateRelics[selection] + 1) % 100;
                     Relic.AskRemoveRelic(type, num);
                 }
             }
@@ -1049,7 +1061,7 @@ namespace DSP_Battle
             RefreshSlotsWindowUI();
         }
 
-        
+
         //  以下为左侧Relic 预览窗口
         public static GameObject relicSlotsWindowObj = null;
         public static List<GameObject> relicSlotObjs = new List<GameObject>();
@@ -1057,7 +1069,7 @@ namespace DSP_Battle
         public static List<UIButton> relicSlotUIBtns = new List<UIButton>();
         static float targetX = -1065;
         static float curX = -1065;
-        
+
 
         public static void InitRelicSlotsWindowUI()
         {
@@ -1067,7 +1079,7 @@ namespace DSP_Battle
 
                 Transform parentTrans = GameObject.Find("UI Root/Overlay Canvas/In Game/Windows").transform;
                 relicSlotsWindowObj = new GameObject("RelicPanel");
-                relicSlotsWindowObj.transform.SetParent(parentTrans); 
+                relicSlotsWindowObj.transform.SetParent(parentTrans);
                 relicSlotsWindowObj.transform.SetAsFirstSibling(); // 置于底层
                 GameObject.Find("UI Root/Overlay Canvas/In Game/Windows/Mini Lab Panel").transform.SetAsFirstSibling(); //否则UI Root/Overlay Canvas/In Game/Windows/Mini Lab Panel/这个会挡住relic
                 relicSlotsWindowObj.AddComponent<RectTransform>();
@@ -1076,7 +1088,7 @@ namespace DSP_Battle
                 rt.anchorMax = new Vector2(0, 0);
                 rt.pivot = new Vector2(0, 0);
                 rt.sizeDelta = new Vector2(0, 0);
-                relicSlotsWindowObj.transform.localPosition = new Vector3(-0.5f*resolutionX - 105, -50, 0);
+                relicSlotsWindowObj.transform.localPosition = new Vector3(-0.5f * resolutionX - 105, -50, 0);
                 relicSlotsWindowObj.transform.localScale = new Vector3(1, 1, 1);
                 relicSlotsWindowObj.SetActive(true);
                 GameObject rightBarObj = GameObject.Instantiate(GameObject.Find("UI Root/Overlay Canvas/In Game/Windows/Dyson Sphere Editor/Dyson Editor Control Panel/inspector/sphere-group/sail-stat/bar-group/bar-orange"), relicSlotsWindowObj.transform);
@@ -1087,7 +1099,7 @@ namespace DSP_Battle
                 rightBarObj.GetComponent<RectTransform>().anchorMin = new Vector2(0, 0);
                 rightBarObj.GetComponent<RectTransform>().anchorMax = new Vector2(0, 0);
                 rightBarObj.GetComponent<Image>().fillAmount = 1;
-                rightBarObj.GetComponent<RectTransform>().sizeDelta = new Vector2(8, slotDis*Relic.relicHoldMax);
+                rightBarObj.GetComponent<RectTransform>().sizeDelta = new Vector2(8, slotDis * Relic.relicHoldMax);
 
                 // 创建relic的slot
                 GameObject oriIconWithTips = GameObject.Find("UI Root/Overlay Canvas/In Game/Windows/Research Result Window/content/icon");
@@ -1106,12 +1118,12 @@ namespace DSP_Battle
                     iconObj.SetActive(true);
                 }
             }
-            else 
+            else
             {
                 HideSlots();
                 RefreshSlotsWindowUI();
             }
-            
+
 
         }
 
@@ -1139,12 +1151,12 @@ namespace DSP_Battle
                         }
                         if (slotNum < relicSlotImgs.Count)
                         {
-                            if(slotNum < relicInSlots.Count)
+                            if (slotNum < relicInSlots.Count)
                                 relicInSlots[slotNum] = type * 100 + num;
                             relicSlotImgs[slotNum].sprite = Resources.Load<Sprite>("Assets/DSPBattle/r" + type.ToString() + "-" + num.ToString());
                             relicSlotUIBtns[slotNum].tips.tipTitle = ("遗物名称带颜色" + type.ToString() + "-" + num.ToString()).Translate();
                             relicSlotUIBtns[slotNum].tips.tipText = ("遗物描述" + type.ToString() + "-" + num.ToString()).Translate();
-                            if(type == 0 && num == 9)
+                            if (type == 0 && num == 9)
                                 relicSlotUIBtns[slotNum].tips.tipText = "遗物描述0-9实际".Translate();
                             AddTipText(type, num, relicSlotUIBtns[slotNum], true); // 对于一些原本描述较短的，还要将更详细的描述加入
                             AddTipVarData(type, num, relicSlotUIBtns[slotNum]); // 对于部分需要展示实时数据的，还需要加入数据
@@ -1175,7 +1187,7 @@ namespace DSP_Battle
                 }
                 if (type == 3) break;
             }
-            for (; slotNum < relicSlotImgs.Count ; slotNum++)
+            for (; slotNum < relicSlotImgs.Count; slotNum++)
             {
                 relicSlotImgs[slotNum].sprite = Resources.Load<Sprite>("Assets/DSPBattle/rEmpty");
                 relicSlotUIBtns[slotNum].tips.tipTitle = ("未获取遗物标题").Translate();
@@ -1208,7 +1220,7 @@ namespace DSP_Battle
             {
                 ShowSlots();
             }
-            else if(targetX != -0.5f * resolutionX - 105 && !Relic.canSelectNewRelic) // 第二个判据是：正在选择relic时不允许隐藏
+            else if (targetX != -0.5f * resolutionX - 105 && !Relic.canSelectNewRelic) // 第二个判据是：正在选择relic时不允许隐藏
             {
                 HideSlots();
             }
@@ -1224,7 +1236,7 @@ namespace DSP_Battle
                 {
                     relicSlotsWindowObj.transform.localPosition = new Vector3(targetX, -50, 0);
                 }
-                else 
+                else
                 {
                     move *= distance / (targetX - curX);
                     relicSlotsWindowObj.transform.localPosition = new Vector3(curX + move, -50, 0);
@@ -1232,7 +1244,7 @@ namespace DSP_Battle
                 curX = relicSlotsWindowObj.transform.localPosition.x;
             }
         }
-        
+
         public static void ShowSlots()
         {
             if (relicSlotsWindowObj != null)

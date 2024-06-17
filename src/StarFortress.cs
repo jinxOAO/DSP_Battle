@@ -1,18 +1,9 @@
-﻿using BepInEx;
-using BepInEx.Logging;
-using HarmonyLib;
+﻿using HarmonyLib;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-using UITools;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
-using static UnityEngine.EventSystems.EventTrigger;
 
 namespace DSP_Battle
 {
@@ -119,7 +110,7 @@ namespace DSP_Battle
             for (int i = 0; i < sector.enemyCursor; i++)
             {
                 ref EnemyData e = ref oriPool[i];
-                if(e.id > 0 && e.unitId > 0)
+                if (e.id > 0 && e.unitId > 0)
                 {
                     EnemyDFHiveSystem hive = hives[e.originAstroId - 1000000];
                     int starIndex = hive?.starData?.index ?? -1;
@@ -128,7 +119,7 @@ namespace DSP_Battle
                         EnemyUnitComponent[] units = hive.units.buffer;
                         ref EnemyUnitComponent u = ref units[e.unitId];
 
-                        if ( true||u.behavior == EEnemyBehavior.ApproachTarget || u.behavior == EEnemyBehavior.OrbitTarget || u.behavior == EEnemyBehavior.Engage || u.behavior == EEnemyBehavior.SeekTarget)
+                        if (true || u.behavior == EEnemyBehavior.ApproachTarget || u.behavior == EEnemyBehavior.OrbitTarget || u.behavior == EEnemyBehavior.Engage || u.behavior == EEnemyBehavior.SeekTarget)
                         {
                             if (enemyPoolByStarIndex.ContainsKey(starIndex))
                                 enemyPoolByStarIndex[starIndex].Add(e.id);
@@ -219,7 +210,7 @@ namespace DSP_Battle
             }
             RecalcRocketNeed(f * starsPerFrame, end);
             if (time % 60 == 18)
-                RefreshEnemyPool();  
+                RefreshEnemyPool();
 
             if (UIStarFortress.curDysonSphere == null) return;
             if (time % 60 == 46)
@@ -311,7 +302,7 @@ namespace DSP_Battle
                     }
                 }
             }
-            
+
         }
 
         /// <summary>
@@ -381,10 +372,10 @@ namespace DSP_Battle
                 while (true)
                 {
                     int id = enemyPoolByStarIndex[starIndex][i];
-                    if(id < sector.enemyCursor)
+                    if (id < sector.enemyCursor)
                     {
                         ref EnemyData e = ref sector.enemyPool[id];
-                        if(e.id == id)
+                        if (e.id == id)
                         {
 
                             ShootLaser(swarm.starData.uPosition, e.pos, e.id, 100000, 35);
@@ -410,7 +401,7 @@ namespace DSP_Battle
             ptr.uPos = beginUPos;
             ptr.uRot = Quaternion.LookRotation(beginUPos - starUPos);
             ptr.uVel = (beginUPos - starUPos).normalized * 1000;
-            ptr.moveAcc = 10*prefabDesc.AmmoMoveAcc;
+            ptr.moveAcc = 10 * prefabDesc.AmmoMoveAcc;
             ptr.turnAcc = prefabDesc.AmmoTurnAcc;
             ptr.damage = damage;
             ptr.mask = ETargetTypeMask.Enemy;
@@ -452,7 +443,7 @@ namespace DSP_Battle
             //Utils.Log("rewrite mesh done");
         }
 
-        
+
 
         public static void ShootLaser(VectorLF3 uBegin, VectorLF3 uEnd, int targetId, int damage, int life)
         {
@@ -543,7 +534,7 @@ namespace DSP_Battle
                     {
                         int key = r.ReadInt32();
                         int value = r.ReadInt32();
-                        moduleComponentCount[i].AddOrUpdate(key, value, (x,y)=>value); // 这里不用tryadd是因为InitAll里面对每个key（只有0123）都进行过了add
+                        moduleComponentCount[i].AddOrUpdate(key, value, (x, y) => value); // 这里不用tryadd是因为InitAll里面对每个key（只有0123）都进行过了add
                     }
                 }
                 int total3 = r.ReadInt32();

@@ -1,12 +1,7 @@
-﻿using System;
+﻿using HarmonyLib;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using BepInEx.Configuration;
-using HarmonyLib;
 using UnityEngine;
 
 
@@ -89,11 +84,11 @@ namespace DSP_Battle
         {
             if (!Configs.enableBattleBGM) return;
 
-            if(takeDamageCountdown > 30 * 60)
+            if (takeDamageCountdown > 30 * 60)
             {
                 Configs.combatState = 3;
             }
-            else if(UIRoot.instance.uiGame.dfAssaultTip.assaulting_cluster.Count > 0)
+            else if (UIRoot.instance.uiGame.dfAssaultTip.assaulting_cluster.Count > 0)
             {
                 if (Configs.combatState == 3)
                 {
@@ -230,7 +225,7 @@ namespace DSP_Battle
         [HarmonyPatch(typeof(GameData), "GameTick")]
         public static void GameData_GameTick(ref GameData __instance, long time)
         {
-            if (time % 5 == 0 && isOverriding) 
+            if (time % 5 == 0 && isOverriding)
                 MuteGameOriBgm();
         }
 
@@ -244,7 +239,7 @@ namespace DSP_Battle
         [HarmonyPatch(typeof(SkillSystem), "DeterminePlanetATFieldRaytestInStar")]
         public static void VerifyPlayerPlanetWillTakeDamage(int __result)
         {
-            if(GameMain.data.localPlanet != null)
+            if (GameMain.data.localPlanet != null)
             {
                 if (__result == GameMain.data.localPlanet.id)
                     Interlocked.Exchange(ref takeDamageCountdown, 45 * 60);
