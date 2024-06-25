@@ -36,6 +36,8 @@ namespace DSP_Battle
         public static Color rank46Color = new Color(0.823f, 0.22f, 1f, 0.7f);
         public static Color rank79Color = new Color(0.99f, 0.588f, 0.125f, 0.753f);
 
+        public static Sprite[] rank = new Sprite[12];
+
         public static void InitUI()
         {
             if (rankObj != null)
@@ -75,7 +77,10 @@ namespace DSP_Battle
             rankIconObj.transform.localPosition = new Vector3(0, 40, 0);
             rankIconObj.transform.localScale = new Vector3(1, 1, 1);
             rankIcon = rankIconObj.GetComponent<Image>();
-            rankIcon.sprite = Resources.Load<Sprite>("Assets/DSPBattle/rank0");
+            if (rank[0] == null) {
+                rank[0] = Resources.Load<Sprite>("Assets/DSPBattle/rank0");
+            }
+            rankIcon.sprite = rank[0];
             uiBtn = rankIconObj.GetComponent<UIButton>();
             Button rankClickButton = rankIconObj.AddComponent<Button>();
             rankClickButton.onClick.RemoveAllListeners();
@@ -161,7 +166,10 @@ namespace DSP_Battle
             if (rankObj == null) return;
             rankIconObj.SetActive(true);
             rankText.text = ("gmRank" + Rank.rank.ToString()).Translate();
-            rankIcon.sprite = Resources.Load<Sprite>("Assets/DSPBattle/rank" + Rank.rank.ToString());
+            if (rank[Rank.rank] == null) {
+                rank[Rank.rank] = Resources.Load<Sprite>($"Assets/DSPBattle/rank{Rank.rank}");
+            }
+            rankIcon.sprite = rank[Rank.rank];
             uiBtn.tips.width = 250;
             uiBtn.tips.delay = 0.1f;
             uiBtn.tips.offset = new Vector2(-190, 60);

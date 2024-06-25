@@ -18,6 +18,9 @@ namespace DSP_Battle
 		public static UIButton[] dropletFleetTypeButtons = new UIButton[2];
 		public static ECraftSize dropletSize = (ECraftSize)9;
 
+        private static Sprite dropletInFleetConfig = Resources.Load<Sprite>("Assets/DSPBattle/dropletInFleetConfig");
+        private static Sprite dropletInFleetConfig3 = Resources.Load<Sprite>("Assets/DSPBattle/dropletInFleetConfig3");
+
         /// <summary>
         /// 允许水滴放入
         /// </summary>
@@ -63,7 +66,7 @@ namespace DSP_Battle
 				__result = false;
 				return;
 			}
-			
+
 			if (__instance.protoId >= fleetConfigId1 && __instance.protoId <= fleetConfigId2)
 			{
 				if (itemId == dropletId)
@@ -80,7 +83,7 @@ namespace DSP_Battle
 					return;
                 }
 			}
-			
+
 			return;
 		}
 
@@ -95,7 +98,7 @@ namespace DSP_Battle
 			var _this = __instance;
 			int num = _this.mecha.groundCombatModule.moduleFleets.Length;
 			// 为防止某些mod增加的额外的太空舰队栏位也能选择水滴，限制index为num+8以内
-            if (_this.fleetConfigIndex >= num && _this.fleetConfigIndex < num + 8 && GameMain.data.history.TechUnlocked(1999)) 
+            if (_this.fleetConfigIndex >= num && _this.fleetConfigIndex < num + 8 && GameMain.data.history.TechUnlocked(1999))
 			{
 				int maxNum = Relic.HaveRelic(4, 2) ? 6 : 5;
 				for (int i = 4; i < maxNum; i++)
@@ -106,8 +109,8 @@ namespace DSP_Battle
                     rectTransform.anchoredPosition = new Vector2(rectTransform.anchoredPosition.x + (float)(i % 2 * 65), rectTransform.anchoredPosition.y - (float)(i / 2 * 20));
                     uibutton.gameObject.SetActive(true);
                     uibutton.onClick += OnDropletFleetTypeButtonClick;
-					dropletFleetTypeButtons[i - 4] = uibutton;
-					Sprite iconSprite = Resources.Load<Sprite>("Assets/DSPBattle/dropletInFleetConfig" + (i == 4 ? "" : "3"));
+                    dropletFleetTypeButtons[i - 4] = uibutton;
+                    Sprite iconSprite = i == 4 ? dropletInFleetConfig : dropletInFleetConfig3;
                     Image image = uibutton.GetComponentsInChildren<Image>()[1];
                     image.sprite = iconSprite;
                     image.enabled = (iconSprite != null);
@@ -275,7 +278,7 @@ namespace DSP_Battle
 						//combatModuleComponent.moduleFleets[__instance.fleetIndex].fleetEnabled = !combatModuleComponent.moduleFleets[__instance.fleetIndex].fleetEnabled;
 						combatModuleComponent.moduleFleets[__instance.fleetIndex].inCommand = false; // 水滴编队不接受手动调遣，但是通过这个标志告诉玩家是强制launch的状态
 					}
-					
+
 				}
 			}
 		}

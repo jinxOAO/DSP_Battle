@@ -103,6 +103,14 @@ namespace DSP_Battle
         static Color colorTextDelete = new Color(0.5f, 0.5f, 0.5f, 1f);
         static Color btnDisableColor = new Color(0.4f, 0.4f, 0.4f, 1f);
         static Color btnAbleColor = new Color(0f, 0.499f, 0.824f, 1f);
+
+        private static Sprite flagCursedBig = Resources.Load<Sprite>("Assets/DSPBattle/flagCursedBig");
+        private static Sprite alienmatrix = Resources.Load<Sprite>("Assets/DSPBattle/alienmatrix");
+        private static Sprite alienmeta = Resources.Load<Sprite>("Assets/DSPBattle/alienmeta");
+        private static Sprite rNULL = Resources.Load<Sprite>("Assets/DSPBattle/rNULL");
+        private static Sprite rEmpty = Resources.Load<Sprite>("Assets/DSPBattle/rEmpty");
+        private static Sprite[,] rankType_Num = new Sprite[100, 100];
+
         public static void InitAll()
         {
             relicInSlots = new List<int> { -1, -1, -1, -1, -1, -1, -1, -1, -1 };
@@ -235,7 +243,7 @@ namespace DSP_Battle
                 relic1FrameObj.GetComponent<RectTransform>().sizeDelta = new Vector2(300, 500);
                 relic1FrameObj.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
                 relic1Frame = relic1FrameObj.GetComponent<Image>();
-                relic1Frame.sprite = Resources.Load<Sprite>("Assets/DSPBattle/flagCursedBig");
+                relic1Frame.sprite = flagCursedBig;
 
                 relic2NameObj = GameObject.Instantiate(relic1NameObj, relicSelectionContentObj.transform);
                 relic2DescObj = GameObject.Instantiate(relic1DescObj, relicSelectionContentObj.transform);
@@ -260,7 +268,7 @@ namespace DSP_Battle
                 relic2FrameObj.GetComponent<RectTransform>().sizeDelta = new Vector2(300, 500);
                 relic2FrameObj.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
                 relic2Frame = relic2FrameObj.GetComponent<Image>();
-                relic2Frame.sprite = Resources.Load<Sprite>("Assets/DSPBattle/flagCursedBig");
+                relic2Frame.sprite = flagCursedBig;
 
                 relic3NameObj = GameObject.Instantiate(relic1NameObj, relicSelectionContentObj.transform);
                 relic3DescObj = GameObject.Instantiate(relic1DescObj, relicSelectionContentObj.transform);
@@ -285,7 +293,7 @@ namespace DSP_Battle
                 relic3FrameObj.GetComponent<RectTransform>().sizeDelta = new Vector2(300, 500);
                 relic3FrameObj.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
                 relic3Frame = relic3FrameObj.GetComponent<Image>();
-                relic3Frame.sprite = Resources.Load<Sprite>("Assets/DSPBattle/flagCursedBig");
+                relic3Frame.sprite = flagCursedBig;
 
                 //GameObject oriButton = GameObject.Find("UI Root/Overlay Canvas/In Game/Windows/Station Window/storage-box-0/popup-box/sd-option-button-1");
                 GameObject oriButtonWOTip = GameObject.Find("UI Root/Overlay Canvas/In Game/Windows/Station Window/storage-box-0/popup-box/sd-option-button-1");
@@ -386,7 +394,7 @@ namespace DSP_Battle
                 matrixIcon.name = "icon-matrix-cost";
                 matrixIcon.transform.localPosition = new Vector3(430, 263);
                 matrixIcon.GetComponent<RectTransform>().sizeDelta = new Vector2(25, 25);
-                matrixIcon.GetComponent<Image>().sprite = LDB.items.Select(5201).iconSprite; // Resources.Load<Sprite>("Assets/DSPBattle/alienmatrix");
+                matrixIcon.GetComponent<Image>().sprite = LDB.items.Select(5201).iconSprite;
                 matrixIcon.SetActive(true);
 
                 //放弃解译按钮
@@ -406,7 +414,7 @@ namespace DSP_Battle
                 matrixIcon2.name = "icon-matrix-abort";
                 matrixIcon2.transform.localPosition = new Vector3(23, -249);
                 matrixIcon2.GetComponent<RectTransform>().sizeDelta = new Vector2(40, 40);
-                matrixIcon2.GetComponent<Image>().sprite = LDB.items.Select(5201).iconSprite; // Resources.Load<Sprite>("Assets/DSPBattle/alienmatrix");
+                matrixIcon2.GetComponent<Image>().sprite = LDB.items.Select(5201).iconSprite;
                 matrixIcon2.SetActive(true);
 
                 relicSelectionContentObj.transform.SetAsLastSibling();
@@ -541,7 +549,7 @@ namespace DSP_Battle
                 relic1UIBtn.transitions[0].pressedColor = colorBtnDeleteP;
                 relic1Name.text = "删除遗物名称".Translate();
                 relic1Desc.text = "删除遗物描述".Translate();
-                relic1Icon.sprite = Resources.Load<Sprite>("Assets/DSPBattle/rNULL");
+                relic1Icon.sprite = rNULL;
                 relic2Name.color = colorTextDelete;
                 relic2BtnImg.color = colorBtnDelete;
                 relic2UIBtn.transitions[0].normalColor = colorBtnDelete;
@@ -549,7 +557,7 @@ namespace DSP_Battle
                 relic2UIBtn.transitions[0].pressedColor = colorBtnDeleteP;
                 relic2Name.text = "删除遗物名称".Translate();
                 relic2Desc.text = "删除遗物描述".Translate();
-                relic2Icon.sprite = Resources.Load<Sprite>("Assets/DSPBattle/rNULL");
+                relic2Icon.sprite = rNULL;
                 relic3Name.color = colorTextDelete;
                 relic3BtnImg.color = colorBtnDelete;
                 relic3UIBtn.transitions[0].normalColor = colorBtnDelete;
@@ -557,7 +565,7 @@ namespace DSP_Battle
                 relic3UIBtn.transitions[0].pressedColor = colorBtnDeleteP;
                 relic3Name.text = "删除遗物名称".Translate();
                 relic3Desc.text = "删除遗物描述".Translate();
-                relic3Icon.sprite = Resources.Load<Sprite>("Assets/DSPBattle/rNULL");
+                relic3Icon.sprite = rNULL;
             }
             else
             {
@@ -627,7 +635,10 @@ namespace DSP_Battle
                 }
                 relic1Desc.text = ("遗物描述" + r1type.ToString() + "-" + r1num.ToString()).Translate();
                 if (r1type == 4) relic1Desc.text += "\n" + "负面效果警告".Translate();
-                relic1Icon.sprite = Resources.Load<Sprite>("Assets/DSPBattle/r" + r1type.ToString() + "-" + r1num.ToString());
+                if (rankType_Num[r1type, r1num] == null) {
+                    rankType_Num[r1type, r1num] = Resources.Load<Sprite>($"Assets/DSPBattle/r{r1type}-{r1num}");
+                }
+                relic1Icon.sprite = rankType_Num[r1type, r1num];
                 AddTipText(r1type, r1num, relic1UIBtn);
 
                 // Relic2
@@ -696,7 +707,10 @@ namespace DSP_Battle
                 }
                 relic2Desc.text = ("遗物描述" + r2type.ToString() + "-" + r2num.ToString()).Translate();
                 if (r2type == 4) relic2Desc.text += "\n" + "负面效果警告".Translate();
-                relic2Icon.sprite = Resources.Load<Sprite>("Assets/DSPBattle/r" + r2type.ToString() + "-" + r2num.ToString());
+                if (rankType_Num[r2type, r2num] == null) {
+                    rankType_Num[r2type, r2num] = Resources.Load<Sprite>($"Assets/DSPBattle/r{r2type}-{r2num}");
+                }
+                relic2Icon.sprite = rankType_Num[r2type, r2num];
                 AddTipText(r2type, r2num, relic2UIBtn);
 
                 // Relic3
@@ -765,7 +779,10 @@ namespace DSP_Battle
                 }
                 relic3Desc.text = ("遗物描述" + r3type.ToString() + "-" + r3num.ToString()).Translate();
                 if (r3type == 4) relic3Desc.text += "\n" + "负面效果警告".Translate();
-                relic3Icon.sprite = Resources.Load<Sprite>("Assets/DSPBattle/r" + r3type.ToString() + "-" + r3num.ToString());
+                if (rankType_Num[r3type, r3num] == null) {
+                    rankType_Num[r3type, r3num] = Resources.Load<Sprite>($"Assets/DSPBattle/r{r3type}-{r3num}");
+                }
+                relic3Icon.sprite = rankType_Num[r3type, r3num];
                 AddTipText(r3type, r3num, relic3UIBtn);
             }
 
@@ -1101,7 +1118,7 @@ namespace DSP_Battle
                     iconObj.GetComponent<RectTransform>().sizeDelta = new Vector2(90, 90);
                     relicSlotObjs.Add(iconObj);
                     relicSlotImgs.Add(iconObj.GetComponent<Image>());
-                    relicSlotImgs[i].sprite = Resources.Load<Sprite>("Assets/DSPBattle/alienmeta"); // 载入空遗物的图片
+                    relicSlotImgs[i].sprite = alienmeta; // 载入空遗物的图片
                     relicSlotUIBtns.Add(iconObj.GetComponent<UIButton>());
                     iconObj.SetActive(true);
                 }
@@ -1141,7 +1158,10 @@ namespace DSP_Battle
                         {
                             if(slotNum < relicInSlots.Count)
                                 relicInSlots[slotNum] = type * 100 + num;
-                            relicSlotImgs[slotNum].sprite = Resources.Load<Sprite>("Assets/DSPBattle/r" + type.ToString() + "-" + num.ToString());
+                            if (rankType_Num[type, num] == null) {
+                                rankType_Num[type, num] = Resources.Load<Sprite>($"Assets/DSPBattle/r{type}-{num}");
+                            }
+                            relicSlotImgs[slotNum].sprite = rankType_Num[type, num];
                             relicSlotUIBtns[slotNum].tips.tipTitle = ("遗物名称带颜色" + type.ToString() + "-" + num.ToString()).Translate();
                             relicSlotUIBtns[slotNum].tips.tipText = ("遗物描述" + type.ToString() + "-" + num.ToString()).Translate();
                             if(type == 0 && num == 9)
