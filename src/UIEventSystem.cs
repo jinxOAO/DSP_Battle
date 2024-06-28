@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using HarmonyLib;
+using System.Security.Cryptography;
 
 namespace DSP_Battle
 {
@@ -45,16 +47,16 @@ namespace DSP_Battle
         public static Color ButtonDisabledColorHigh = new Color(0.5f, 0.5f, 0.5f, 0.7f);
         public static Color ButtonDisabledColorPressed = new Color(0.5f, 0.5f, 0.5f, 0.45f);
 
-        public static Sprite activeSprite;
-        public static Sprite inactiveSprite;
+        private static Sprite alienmatrix = Resources.Load<Sprite>("Assets/DSPBattle/alienmatrix");
+        private static Sprite alienmatrixGray = Resources.Load<Sprite>("Assets/DSPBattle/alienmatrixGray");
+        private static Sprite alienmatrixCircle = Resources.Load<Sprite>("Assets/DSPBattle/alienmatrixCircle");
+
         public static void InitAll()
         {
             // 左上角 事件按钮
             if (eventButtonObj != null)
                 return;
             GameObject oriIconWithTips = GameObject.Find("UI Root/Overlay Canvas/In Game/Windows/Research Result Window/content/icon");
-            activeSprite = UnityEngine.Resources.Load<Sprite>("Assets/DSPBattle/alienmatrix");
-            inactiveSprite = UnityEngine.Resources.Load<Sprite>("Assets/DSPBattle/alienmatrixGray");
             // Init EventSystemButton
             eventButtonObj = GameObject.Instantiate(oriIconWithTips);
             eventButtonObj.name = "eventButton";
@@ -64,7 +66,7 @@ namespace DSP_Battle
             eventButtonObj.GetComponent<RectTransform>().sizeDelta = new Vector2(80, 80);
             eventButtonObj.SetActive(true);
             ESButtonImage = eventButtonObj.GetComponent<Image>();
-            ESButtonImage.sprite = activeSprite;
+            ESButtonImage.sprite = alienmatrix;
             ESUIButton = eventButtonObj.GetComponent<UIButton>();
             ESUIButton.tips.offset = new Vector2(160, 50);
             ESUIButton.tips.delay = 0.05f;
@@ -83,7 +85,7 @@ namespace DSP_Battle
             ESButtonBorderObj.transform.localScale = new Vector3(1, 1, 1);
             ESButtonBorderObj.transform.localPosition = new Vector3(0, 0, 0);
             ESButtonCircle = ESButtonBorderObj.AddComponent<Image>();
-            ESButtonCircle.sprite = UnityEngine.Resources.Load<Sprite>("Assets/DSPBattle/alienmatrixCircle");
+            ESButtonCircle.sprite = alienmatrixCircle;
             ESButtonCircle.material = attentionMarkText.material;
             if (ESButtonBorderObj.GetComponent<RectTransform>() == null)
             {
@@ -311,7 +313,7 @@ namespace DSP_Battle
         {
             if (EventSystem.recorder != null && EventSystem.recorder.protoId > 0 && GameMain.instance != null)
             {
-                ESButtonImage.sprite = activeSprite;
+                ESButtonImage.sprite = alienmatrix;
                 ESButtonHighlighting = false;
                 if (EventSystem.protos.ContainsKey(EventSystem.recorder.protoId)) // 至少有一个非结束事件链的decision的所有request被满足时，highlight
                 {
@@ -363,7 +365,7 @@ namespace DSP_Battle
             }
             else
             {
-                ESButtonImage.sprite = inactiveSprite;
+                ESButtonImage.sprite = alienmatrixGray;
                 ESButtonHighlighting = false;
             }
             // 处理有选项可完成时，按钮始终显示以及闪烁动画

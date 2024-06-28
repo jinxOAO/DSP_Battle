@@ -152,7 +152,7 @@ namespace DSP_Battle
                 matrixIcon.AddComponent<RectTransform>();
                 matrixIcon.AddComponent<Image>();
                 matrixIcon.GetComponent<RectTransform>().sizeDelta = new Vector2(25, 25);
-                matrixIcon.GetComponent<Image>().sprite = LDB.items.Select(6006).iconSprite; // Resources.Load<Sprite>("Assets/DSPBattle/alienmatrix");
+                matrixIcon.GetComponent<Image>().sprite = LDB.items.Select(6006).iconSprite;
                 matrixIcon.SetActive(true);
 
                 // 撤销按钮

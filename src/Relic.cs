@@ -565,6 +565,8 @@ namespace DSP_Battle
 
     public class RelicFunctionPatcher
     {
+        private static Sprite r3_5_coin = Resources.Load<Sprite>("Assets/DSPBattle/r3-5-coin");
+
         [HarmonyPostfix]
         [HarmonyPatch(typeof(GameData), "GameTick")]
         public static void RelicFunctionGameTick(long time)
@@ -2691,8 +2693,8 @@ namespace DSP_Battle
                 _this.zeroTexts.Add(uiiconCount2.transform.Find("zero").GetComponent<Text>());
                 uiiconCount.transform.Find("value").GetComponent<Text>().text = "1";
                 uiiconCount2.transform.Find("value").GetComponent<Text>().text = "1";
-                uiiconCount.GetComponent<Image>().sprite = Resources.Load<Sprite>("Assets/DSPBattle/r3-5-coin");
-                uiiconCount2.GetComponent<Image>().sprite = Resources.Load<Sprite>("Assets/DSPBattle/r3-5-coin");
+                uiiconCount.GetComponent<Image>().sprite = r3_5_coin;
+                uiiconCount2.GetComponent<Image>().sprite = r3_5_coin;
                 uiiconCount.rectTrans.anchoredPosition = new Vector2(0, 0);
                 uiiconCount2.rectTrans.anchoredPosition = new Vector2(0, 0);
                 // 修改原始按钮盒新按钮的位置

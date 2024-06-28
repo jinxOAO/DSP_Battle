@@ -13,6 +13,9 @@ namespace DSP_Battle
         public static UIButton[] dropletFleetTypeButtons = new UIButton[2];
         public static ECraftSize dropletSize = (ECraftSize)9;
 
+        private static Sprite dropletInFleetConfig = Resources.Load<Sprite>("Assets/DSPBattle/dropletInFleetConfig");
+        private static Sprite dropletInFleetConfig3 = Resources.Load<Sprite>("Assets/DSPBattle/dropletInFleetConfig3");
+
         /// <summary>
         /// 允许水滴放入
         /// </summary>
@@ -41,60 +44,60 @@ namespace DSP_Battle
         [HarmonyPatch(typeof(ModuleFleet), "AddFighterToPort")]
         public static void AddFighterToPortPostPatch(ref ModuleFleet __instance, ref bool __result, int fighterIndex, int itemId)
         {
-            ref ModuleFighter ptr = ref __instance.fighters[fighterIndex];
-            if (ptr.count > 0)
-            {
-                return;
-            }
-            FleetProto fleetProto = LDB.fleets.Select(__instance.protoId);
-            if (fleetProto == null && __instance.protoId != fleetConfigId1 && __instance.protoId != fleetConfigId2)
-            {
-                __result = false;
-                return;
-            }
-            ItemProto itemProto = LDB.items.Select(itemId);
-            if (itemProto == null)
-            {
-                __result = false;
-                return;
-            }
+			ref ModuleFighter ptr = ref __instance.fighters[fighterIndex];
+			if (ptr.count > 0)
+			{
+				return;
+			}
+			FleetProto fleetProto = LDB.fleets.Select(__instance.protoId);
+			if (fleetProto == null && __instance.protoId != fleetConfigId1 && __instance.protoId != fleetConfigId2)
+			{
+				__result = false;
+				return;
+			}
+			ItemProto itemProto = LDB.items.Select(itemId);
+			if (itemProto == null)
+			{
+				__result = false;
+				return;
+			}
 
-            if (__instance.protoId >= fleetConfigId1 && __instance.protoId <= fleetConfigId2)
-            {
-                if (itemId == dropletId)
-                {
-                    ptr.itemId = itemId;
-                    ptr.count = 1;
-                    __result = true;
-                    return;
-                }
-                else
+			if (__instance.protoId >= fleetConfigId1 && __instance.protoId <= fleetConfigId2)
+			{
+				if (itemId == dropletId)
+				{
+					ptr.itemId = itemId;
+					ptr.count = 1;
+					__result = true;
+					return;
+				}
+				else
                 {
                     UIRealtimeTip.Popup("只能放入水滴".Translate(), true, 0);
                     __result = false;
                     return;
                 }
-            }
+			}
 
-            return;
-        }
+			return;
+		}
 
-        /// <summary>
-        /// 为编辑队形新增（单个）水滴队形
-        /// </summary>
-        /// <param name="__instance"></param>
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(UIMechaWindow), "OpenConfigPanel")]
-        public static void OpenConfigPanelPostPatch(ref UIMechaWindow __instance)
-        {
-            var _this = __instance;
-            int num = _this.mecha.groundCombatModule.moduleFleets.Length;
-            // 为防止某些mod增加的额外的太空舰队栏位也能选择水滴，限制index为num+8以内
+		/// <summary>
+		/// 为编辑队形新增（单个）水滴队形
+		/// </summary>
+		/// <param name="__instance"></param>
+		[HarmonyPostfix]
+		[HarmonyPatch(typeof(UIMechaWindow), "OpenConfigPanel")]
+		public static void OpenConfigPanelPostPatch(ref UIMechaWindow __instance)
+		{
+			var _this = __instance;
+			int num = _this.mecha.groundCombatModule.moduleFleets.Length;
+			// 为防止某些mod增加的额外的太空舰队栏位也能选择水滴，限制index为num+8以内
             if (_this.fleetConfigIndex >= num && _this.fleetConfigIndex < num + 8 && GameMain.data.history.TechUnlocked(1999))
-            {
-                int maxNum = Relic.HaveRelic(4, 2) ? 6 : 5;
-                for (int i = 4; i < maxNum; i++)
-                {
+			{
+				int maxNum = Relic.HaveRelic(4, 2) ? 6 : 5;
+				for (int i = 4; i < maxNum; i++)
+				{
                     UIButton uibutton = UnityEngine.Object.Instantiate<UIButton>(_this.spaceFleetTypeButton, _this.spaceFleetTypeButton.transform.parent);
                     uibutton.data = i;
                     RectTransform rectTransform = uibutton.transform as RectTransform;
@@ -102,7 +105,7 @@ namespace DSP_Battle
                     uibutton.gameObject.SetActive(true);
                     uibutton.onClick += OnDropletFleetTypeButtonClick;
                     dropletFleetTypeButtons[i - 4] = uibutton;
-                    Sprite iconSprite = Resources.Load<Sprite>("Assets/DSPBattle/dropletInFleetConfig" + (i == 4 ? "" : "3"));
+                    Sprite iconSprite = i == 4 ? dropletInFleetConfig : dropletInFleetConfig3;
                     Image image = uibutton.GetComponentsInChildren<Image>()[1];
                     image.sprite = iconSprite;
                     image.enabled = (iconSprite != null);
@@ -252,24 +255,28 @@ namespace DSP_Battle
         [HarmonyPatch(typeof(UIZS_FleetEntry), "OnCommandButtonClick")]
         public static void OnCommandButtonClickPostPatch(ref UIZS_FleetEntry __instance, int obj)
         {
-            if (__instance.isSpace)
-            {
-                CombatModuleComponent combatModuleComponent = __instance.mecha.spaceCombatModule;
-                if (combatModuleComponent.moduleFleets[__instance.fleetIndex].protoId == fleetConfigId1 || combatModuleComponent.moduleFleets[__instance.fleetIndex].protoId == fleetConfigId2) // 判断是水滴编队
-                {
-                    int idx = __instance.fleetIndex * 3;
-                    if (idx + 2 < Droplets.dropletArrayLength)
-                    {
-                        for (int i = idx; i < idx + 3; i++)
-                        {
-                            int ori = Droplets.dropletPool[i].forceLaunchState;
-                            Droplets.dropletPool[i].forceLaunchState = 1 - ori;
-                            if (ori > 0)
-                                Droplets.dropletPool[i].Retreat();
-                        }
-                        //combatModuleComponent.moduleFleets[__instance.fleetIndex].fleetEnabled = !combatModuleComponent.moduleFleets[__instance.fleetIndex].fleetEnabled;
-                        combatModuleComponent.moduleFleets[__instance.fleetIndex].inCommand = false; // 水滴编队不接受手动调遣，但是通过这个标志告诉玩家是强制launch的状态
-                    }
+			if (__instance.isSpace)
+			{
+				CombatModuleComponent combatModuleComponent = __instance.mecha.spaceCombatModule;
+				if (combatModuleComponent.moduleFleets[__instance.fleetIndex].protoId == fleetConfigId1 || combatModuleComponent.moduleFleets[__instance.fleetIndex].protoId == fleetConfigId2) // 判断是水滴编队
+				{
+					int idx = __instance.fleetIndex * 3;
+					if (idx + 2 < Droplets.dropletArrayLength)
+					{
+						for (int i = idx; i < idx + 3; i++)
+						{
+							int ori = Droplets.dropletPool[i].forceLaunchState;
+							Droplets.dropletPool[i].forceLaunchState = 1 - ori;
+							if (ori > 0)
+								Droplets.dropletPool[i].Retreat();
+						}
+						//combatModuleComponent.moduleFleets[__instance.fleetIndex].fleetEnabled = !combatModuleComponent.moduleFleets[__instance.fleetIndex].fleetEnabled;
+						combatModuleComponent.moduleFleets[__instance.fleetIndex].inCommand = false; // 水滴编队不接受手动调遣，但是通过这个标志告诉玩家是强制launch的状态
+					}
+
+				}
+			}
+		}
 
                 }
             }
