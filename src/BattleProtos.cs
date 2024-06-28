@@ -262,6 +262,7 @@ namespace DSP_Battle
             //RegisterString("奖励倒计时：", "Reward time left: ", "奖励剩余时间：");
 
             RegisterString("快速开局", "Fast Start", "快速开局");
+            RegisterString("快速开局提示", "Unlock some techs at the begining, and start with additional items.", "开局立即解锁额外科技，并提供额外物品。");
             RegisterString("mod版本信息", "Current version: " + Configs.versionString + "                Contact me in Discord: ckcz123#3576", "当前版本：" + Configs.versionString + "          欢迎加入mod交流群：" + Configs.qq);
             //RegisterString("未探测到威胁", "No threat detected", "未探测到威胁");
             //RegisterString("预估数量", "Estimated quantity", "预估数量");

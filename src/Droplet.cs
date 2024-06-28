@@ -648,6 +648,7 @@ namespace DSP_Battle
         public void Update(bool working = true)
         {
             if (state < 0) return;
+            //Utils.Log($"droplet {dropletIndex} state is {state}");
             if (swarmIndex < 0)
             {
                 swarmIndex = GameMain.localStar != null ? GameMain.localStar.index : -1;

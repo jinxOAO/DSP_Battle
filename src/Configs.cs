@@ -17,7 +17,7 @@ namespace DSP_Battle
         public static bool enableBattleBGM = true;
         public static bool enableAlertTextGlowing = true;
         public static int versionWhenImporting = -1;
-        public static int versionCode = 30240324;
+        public static int versionCode = 30240621;
 
 
         public static int difficulty = 0; // -1 easy, 0 normal, 1 hard
@@ -94,6 +94,15 @@ namespace DSP_Battle
         public static int eliteDurationFrames = 3600 * 3; // 精英进攻持续的时间
 
         // --- 虫洞信息
+
+        // 入侵的巢穴等级
+
+        public static List<int> levelMap = new List<int> { 1, 2, 5, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100 }; 
+        // 集结阶段的所需时间（帧数），基本可以认为是入侵准备时间
+        public static List<int> assembleTimeMap = new List<int> { 3600 * 60, 3600 * 50, 3600 * 40, 3600 * 30, 3600 * 30, 3600 * 30, 3600 * 30, 3600 * 25, 3600 * 20, 3600 * 20, 3600 * 20, 3600 * 20, 3600 * 15, 3600 * 15, 3600 * 15, 3600 * 15, 3600 * 10 };
+        // 所有巢穴的入侵枪骑数量总和，标准值，可上下浮动10%
+        public static List<int> totalAssaultNumMap = new List<int> { 5, 10, 15, 20, 30, 40, 50, 60, 80, 100, 120, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 900, 1000, 1200, 1400, 1600, 1800, 2000, 2250, 2500, 2750, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 6500, 7000, 7500, 8000, 8500, 9000, 9500, 10000, 11520 }; // 11520 = 1440 * 8
+
         public static int _wormholeRange;
 
         public static int[] intensity;

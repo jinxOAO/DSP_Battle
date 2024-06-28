@@ -101,6 +101,7 @@ namespace DSP_Battle
             //LDBTool.PostAddDataAction += BattleProtos.PostDataAction;
             BattleProtos.InitEventProtos();
             TCFVPerformanceMonitor.Awake();
+            EvolveData.levelExps[100] = 2147483647; // 防止出现除以0的错误
         }
 
         public void Start()
@@ -323,6 +324,7 @@ namespace DSP_Battle
             EventSystem.Exprot(w);
             StarFortress.Export(w);
             SkillPoints.Export(w);
+            AssaultController.Export(w);
 
             DevConsole.Export(w);
         }
@@ -336,6 +338,7 @@ namespace DSP_Battle
             EventSystem.Import(r);
             StarFortress.Import(r);
             SkillPoints.Import(r);
+            AssaultController.Import(r);
 
             DevConsole.Import(r);
 
@@ -359,6 +362,7 @@ namespace DSP_Battle
 
             DevConsole.IntoOtherSave();
             SkillPoints.IntoOtherSave();
+            AssaultController.IntoOtherSave();
 
             BattleProtos.ReCheckTechUnlockRecipes();
             BattleProtos.UnlockTutorials();

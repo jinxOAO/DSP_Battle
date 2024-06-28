@@ -130,6 +130,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\AssaultController.cs" />
+    <Compile Include="src\AssaultHive.cs" />
     <Compile Include="src\BattleBGMController.cs" />
     <Compile Include="src\BattleProtos.cs" />
     <Compile Include="src\DevConsole.cs" />

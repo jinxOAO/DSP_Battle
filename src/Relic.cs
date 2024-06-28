@@ -1661,23 +1661,30 @@ namespace DSP_Battle
         /// </summary>
         [HarmonyPrefix]
         [HarmonyPatch(typeof(PlanetATField), "BreakShield")]
-        public static bool BreakFieldPostPatch(ref PlanetATField __instance)
+        public static bool BreakFieldPrePatch(ref PlanetATField __instance)
         {
-            if (__instance.recoverCD <= 0)
+            if (Relic.HaveRelic(1, 2))
             {
-                __instance.energy = __instance.energyMax;
-                __instance.recoverCD = 36000;
+                if (__instance.recoverCD <= 0)
+                {
+                    __instance.energy = __instance.energyMax;
+                    __instance.recoverCD = 36000;
+                }
+                else
+                {
+                    __instance.energy = 0L;
+                    if (__instance.rigidTime == 0)
+                    {
+                        __instance.recoverCD = Math.Max(360, __instance.recoverCD);
+                    }
+                    __instance.ClearFieldResistHistory();
+                }
+                return false;
             }
             else
             {
-                __instance.energy = 0L;
-                if (__instance.rigidTime == 0)
-                {
-                    __instance.recoverCD = Math.Max(360, __instance.recoverCD);
-                }
-                __instance.ClearFieldResistHistory();
+                return true;
             }
-            return false;
         }
 
 
@@ -1694,6 +1701,27 @@ namespace DSP_Battle
         [HarmonyPatch(typeof(SkillSystem), "DamageObject")]
         public static bool DamageObjectPrePatch(ref SkillSystem __instance, ref int damage, int slice, ref SkillTarget target, ref SkillTarget caster)
         {
+            //if(target.type == ETargetType.Player)
+            //{
+            //    string res = " unknown";
+            //    if (caster.type == ETargetType.Player)
+            //        res = " myself";
+            //    else if (caster.astroId > 1000000)
+            //    {
+            //        res = " caster astro id > 1000000";
+            //        if(caster.type == ETargetType.Enemy)
+            //        {
+            //            ref EnemyData ptr = ref __instance.sector.enemyPool[target.id];
+            //            res += $"-- enemy, is relay ? {ptr.dfRelayId}, is unit ? {ptr.unitId}";
+            //        }
+            //        else if (caster.type == ETargetType.Craft)
+            //        {
+            //            res += "-- craft";
+            //        }
+            //    }
+            //    Utils.Log($"damage player direct by" + res);
+            //}
+
             MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.MainLogic);
             MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.MetaDrive);
             MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.Damage);
@@ -1792,6 +1820,10 @@ namespace DSP_Battle
         [HarmonyPatch(typeof(SkillSystem), "DamageGroundObjectByLocalCaster")]
         public static bool DamageGroundObjectByLocalCasterPrePatch(ref SkillSystem __instance, PlanetFactory factory, ref int damage, int slice, ref SkillTargetLocal target, ref SkillTargetLocal caster)
         {
+            if(target.type == ETargetType.Player)
+            {
+                //Utils.Log($"damage ground player direct by local caster, type : {caster.type} and {caster.id}");
+            }
             if (target.id <= 0)
             {
                 return true;
@@ -1865,6 +1897,10 @@ namespace DSP_Battle
         [HarmonyPatch(typeof(SkillSystem), "DamageGroundObjectByRemoteCaster")]
         public static bool DamageGroundObjectByRemoteCastPrePatch(ref SkillSystem __instance, PlanetFactory factory, ref int damage, int slice, ref SkillTargetLocal target, ref SkillTarget caster)
         {
+            if (target.type == ETargetType.Player)
+            {
+                //Utils.Log($"damage ground player direct by remote caster, type : {caster.type} and {caster.id}");
+            }
             if (target.id <= 0)
             {
                 return true;

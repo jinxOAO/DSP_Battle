@@ -293,6 +293,15 @@ namespace DSP_Battle
                         EventSystem.tickFromLastRelic = Convert.ToInt32(param[1]);
                         Print($"ok.");
                         break;
+                    case "voidon":
+                        AssaultController.theyComeFromVoid = true;
+                        Print("Void assault enabled");
+                        break;
+                    case "voidoff":
+                        AssaultController.theyComeFromVoid = false;
+                        Print("Void assault disabled.");
+                        break;
+
 
                     //  
                     case "scan":
@@ -340,15 +349,28 @@ namespace DSP_Battle
                         Print($"set hive {param[1]} to quick tick mode to {factor * 60}x speed");
                         break;
                     case "mkhive":
-                    case "newhive":
                         EnemyDFHiveSystem hive = null;
-                        if(param.Length > 1)
-                            hive = AssaultController.TryCreateNewHiveAndCore(Convert.ToInt32(param[1]));
-                        else if(GameMain.data.localStar != null)
-                            hive = AssaultController.TryCreateNewHiveAndCore(GameMain.data.localStar.index);
+                        if (param.Length > 2)
+                        {
+                            AssaultHive ah = new AssaultHive(Convert.ToInt32(param[1]), Convert.ToInt32(param[2]), 0);
+                            hive = ah.hive;
+                        }
                         if (hive != null)
                         {
                             Print($"Created hive in star system {hive.starData.index}");
+                        }
+                        else
+                            Print("Failed to create hive.");
+                        break;
+                    case "newhive":
+                        EnemyDFHiveSystem hive2 = null;
+                        if(param.Length > 1)
+                            hive2 = AssaultController.TryCreateNewHiveAndCore(Convert.ToInt32(param[1]));
+                        else if(GameMain.data.localStar != null)
+                            hive2 = AssaultController.TryCreateNewHiveAndCore(GameMain.data.localStar.index);
+                        if (hive2 != null)
+                        {
+                            Print($"Created hive in star system {hive2.starData.index}");
                         }
                         else
                             Print("Failed to create hive.");
@@ -363,10 +385,10 @@ namespace DSP_Battle
                         {
                             for (int i = 0; i < 9; i++)
                             {
-                                EnemyDFHiveSystem hive2 = GameMain.spaceSector.dfHivesByAstro[starIndex2 * 8 + i];
-                                if(hive2 != null)
+                                EnemyDFHiveSystem hive3 = GameMain.spaceSector.dfHivesByAstro[starIndex2 * 8 + i];
+                                if(hive3 != null)
                                 {
-                                    Print($"i = {i}, star is {hive2.starData.index}");
+                                    Print($"i = {i}, star is {hive3.starData.index}");
                                 }
                             }
                             AssaultController.CheckHiveStatus(starIndex2);
@@ -662,8 +684,10 @@ namespace DSP_Battle
                 "<color=#ffffff>es [param1]</color> 设定当前事件链为[param1]，不提供参数则初始化合法的事件" + "\n" +
                 "<color=#ffffff>est [param1]</color> 当前事件链转移至[param1]" + "\n" +
                 "<color=#ffffff>ap [param1]</color> 授权点增加[param1]" + "\n" +
+                "<color=#ffffff>voidon</color> 开启虚空入侵" + "\n" +
+                "<color=#ffffff>voidoff</color> 禁止虚空入侵" + "\n" +
                 "---------------------- help ----------------------";
-            Print(allCmds, 17, false); // 这个forceLineCount传值取决于allCmds的行数
+            Print(allCmds, 19, false); // 这个forceLineCount传值取决于allCmds的行数
         }
 
         public static void ClearOutputField()
