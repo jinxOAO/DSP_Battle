@@ -278,9 +278,6 @@ namespace DSP_Battle
 			}
 		}
 
-                }
-            }
-        }
 
         /// <summary>
         /// 右击，强制收回水滴
