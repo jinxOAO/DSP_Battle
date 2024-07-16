@@ -12,24 +12,29 @@ namespace DSP_Battle
 {
     public static class AssaultController
     {
-        public static bool theyComeFromVoid = false; // 入侵逻辑是否已开启
+        // 存档内容
+        public static bool voidInvasionEnabled = true; // 入侵逻辑是否已开启
         public static int difficulty = 2;
 
         public static List<AssaultHive> assaultHives = new List<AssaultHive>(); // 虚空入侵已激活的hive
+        public static bool modifierEnabled; // 是否已启用入侵修改器
+        public static List<int> modifier; // 入侵修改器（附带效果）
+
+        public static bool timeChangedByRelic = false;
+
+        // 不需要存档
         public static int[] invincibleHives; // 因为虚空入侵处于几乎无敌（对恒星炮除外）的hive
         public static int[] modifierHives; // 因为虚空入侵获得了修改器的hive
         public static int[] alertHives; // 因为虚空入侵需要更改警告显示的hive
-        public static bool modifierEnabled; // 是否已启用入侵修改器
-        public static List<int> modifier; // 入侵修改器（附带效果）
         public static bool assaultActive; // 入侵已实例化，正在入侵的某个阶段中
 
         // UIDarkFogMonitor里面的OrganizeTargetList决定显示在左上角的警报和顺序
 
-        public static bool quickBuild0 = false; // 枪骑
-        public static bool quickBuild1 = false;
-        public static bool quickBuild2 = false;
+        //public static bool quickBuild0 = false; // 枪骑
+        //public static bool quickBuild1 = false;
+        //public static bool quickBuild2 = false;
 
-        public static bool quickBuildNode = false;
+        //public static bool quickBuildNode = false;
 
         public static int quickTickHive = -1;
         public static int quickTickFactor = 1;
@@ -42,16 +47,26 @@ namespace DSP_Battle
         public static List<int> level = new List<int>();
         public static int count = 0;
 
-        
+        // modifier index
+        public const int DamageReduction = 0; // 独立减伤百分比
+        public const int Dodge = 1; // 独立闪避百分比
+        public const int DamageToShield = 2; // 对行星护盾增伤
+        public const int DropletInvincible = 3; // 免疫水滴伤害
+        public const int AddtionalArmor = 4; // 额外护甲
+        public const int SpeedUp = 5; // 移速加成百分比
+        public const int HardenedStructure = 6; // 刚毅结构（超出该数值的伤害会被降低为该数值）
+
+
         public static void InitWhenLoad()
         {
-            theyComeFromVoid = false;
+            voidInvasionEnabled = false;
             difficulty = 2;
             assaultHives = new List<AssaultHive>();
             invincibleHives = new int[GameMain.spaceSector.maxHiveCount];
             modifierHives = new int[GameMain.spaceSector.maxHiveCount];
             alertHives = new int[GameMain.spaceSector.maxHiveCount];
             modifier = new List<int>(50);
+            timeChangedByRelic = false;
             ClearDataArrays();
         }
 
@@ -61,15 +76,36 @@ namespace DSP_Battle
         {
             MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.MainLogic);
             MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.Assault);
-            // test
-            if (assaultHives.Count <= 0)
-                InitNewAssault(0);
 
-            BuildLogicBoost();
+            // 一定条件下，开启新入侵
+            if (voidInvasionEnabled && assaultHives.Count == 0 && time % 3600 == 0)
+            {
+                int starIndex = -1;
+                bool haveStarEnergyUsing = false;
+                if (GameMain.data.dysonSpheres != null)
+                {
+                    for (int i = 0; i < GameMain.data.dysonSpheres.Length; i++)
+                    {
+                        if (GameMain.data.dysonSpheres[i] != null)
+                        {
+                            if (GameMain.data.dysonSpheres[i].energyGenCurrentTick_Swarm > 0)
+                            {
+                                haveStarEnergyUsing = true;
+                                starIndex = GameMain.data.dysonSpheres[i].starData.index;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if(haveStarEnergyUsing)
+                    InitNewAssault(-1);
+            }
+
             for (int i = 0; i < assaultHives.Count; i++)
             {
                 assaultHives[i].LogicTick();
             }
+            CalcCombatState();
             PostLogicTick(time);
             MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.Assault);
             MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MainLogic);
@@ -81,7 +117,7 @@ namespace DSP_Battle
         /// <param name="time"></param>
         public static void PostLogicTick(long time)
         {
-            bool removeAll = true;
+            bool removeAll = assaultHives != null && assaultHives.Count > 0;
             for (int i = 0; i < assaultHives.Count; i++)
             {
                 if(assaultHives[i].state == EAssaultHiveState.Remove)
@@ -97,7 +133,43 @@ namespace DSP_Battle
             }
             if(removeAll)
             {
-                assaultHives.Clear();
+                OnAssaultEnd();
+            }
+        }
+
+        public static void CalcCombatState()
+        {
+            if(assaultHives == null || assaultHives.Count == 0)
+            {
+                Configs.combatState = 0;
+            }
+            else
+            {
+                bool generated = false;
+                bool warning = false;
+                bool inCombat = false;
+                for (int i = 0; i < assaultHives.Count; i++)
+                {
+                    if (assaultHives[i].state == EAssaultHiveState.Assault)
+                    {
+                        inCombat = true;
+                        break;
+                    }
+                    else if (assaultHives[i].timeTillAssault <= 3600 * 5)
+                    {
+                        warning = true;
+                    }
+                    else if (assaultHives[i].state != EAssaultHiveState.End && assaultHives[i].state != EAssaultHiveState.Remove)
+                    {
+                        generated = true;
+                    }
+                }
+                if (inCombat)
+                    Configs.combatState = 3;
+                else if (warning)
+                    Configs.combatState = 2;
+                else if (generated)
+                    Configs.combatState = 1;
             }
         }
 
@@ -150,21 +222,69 @@ namespace DSP_Battle
                     modifier[i] = 0;
                 }
             }
+            modifierEnabled = false;
+            assaultHives.Clear();
         }
 
         public static void InitNewAssault(int starIndex = -1)
         {
-            PlanetFactory[] factories = GameMain.data.factories;
-            ClearDataArrays();
-            assaultHives = new List<AssaultHive>();
+            // 如果starIndex 为负 根据能量水平 选择一个恒星系
             if (starIndex < 0)
             {
-                int count = GameMain.data.factoryCount;
-                for (int i = 0; i < count; i++)
+                long energyThreshold = (long)(SkillPoints.skillLevelR[8] * 1000000L * SkillPoints.skillValuesR[8]);
+                List<long> totalEnergyServedByStar = new List<long>();
+                for (int i = 0; i < GameMain.galaxy.starCount; i++)
                 {
+                    totalEnergyServedByStar.Add(0);
+                    if (GameMain.galaxy.stars[i] != null)
+                    {
+                        PlanetData[] planets = GameMain.galaxy.stars[i].planets;
+                        for (int j = 0; j < GameMain.galaxy.stars[i].planetCount; j++)
+                        {
+                            if (planets[j] != null && planets[j].factory != null)
+                            {
+                                PlanetFactory factory = planets[j].factory;
+                                PowerSystem powerSystem = factory.powerSystem;
+                                if (powerSystem != null)
+                                {
+                                    for (int k = 1; k < powerSystem.netCursor; k++)
+                                    {
+                                        PowerNetwork net = powerSystem.netPool[k];
+                                        if (net != null)
+                                            totalEnergyServedByStar[i] += net.energyServed;
+                                    }
+                                }
+                            }
+                        }
+                        if (totalEnergyServedByStar[i] * 60 <= energyThreshold)
+                            totalEnergyServedByStar[i] = 0;
+                    }
+                }
+                long totalEnergySum = totalEnergyServedByStar.Sum();
+                if (totalEnergySum <= 0)
+                    totalEnergySum = 1;
+                List<double> prob = new List<double>();
+                if (totalEnergyServedByStar.Count > 1)
+                    prob.Add(totalEnergyServedByStar[0] * 1.0 / totalEnergySum);
+                for (int i = 1; i < totalEnergyServedByStar.Count; i++)
+                {
+                    prob.Add(prob[i - 1] + (totalEnergyServedByStar[i] * 1.0 / totalEnergySum));
+                }
 
+                double randSeed = Utils.RandDouble();
+                for (int i = 0; i < prob.Count; i++)
+                {
+                    if (prob[i] >= randSeed)
+                    {
+                        starIndex = i;
+                        break;
+                    }
                 }
             }
+            ClearDataArrays();
+            if (starIndex < 0)
+                return;
+
             int waveCount = Configs.wavePerStar[starIndex];
             int totalNum = GetAssaultTotalNum(waveCount);
             int minHiveCount = totalNum / 1440 + 1;
@@ -178,20 +298,23 @@ namespace DSP_Battle
             {
                 int realNum = (int)(((Utils.RandDouble() - 0.5) / 2.5 + 1) * eachNum) + 1;
                 AssaultHive ah = new AssaultHive(starIndex, i, assaultHives.Count);
-                ah.assaultNum = realNum;
+                ah.assaultNumTotal = realNum;
                 ah.level = level;
-                ah.hive.evolve.level = ah.level;
-                ah.inhibitPointsTotal = ah.level * 10 + ah.assaultNum * 2;
-                ah.inhibitPointsLimit = ah.inhibitPointsTotal;
+                ah.hive.evolve.level = Math.Max(ah.hive.evolve.level, ah.level);
+                ah.inhibitPointsTotalInit = ah.level * 10 + ah.assaultNumTotal * 2;
+                ah.inhibitPointsLimit = ah.inhibitPointsTotalInit;
                 if (i == hiveCount - 1) // 最后一个巢穴无法被完全压制掉点数
                     ah.inhibitPointsLimit = (int)(ah.inhibitPointsLimit * 0.8) + 1;
-                ah.time = i * 1200;
-                ah.totalTime = GetAssembleTime(waveCount) + ah.time;
+                ah.time = i * 5;
+                ah.timeTillAssault = GetAssembleTime(waveCount) + 5 * i;
+                ah.timeTotalInit = ah.timeTillAssault;
                 assaultHives.Add(ah);
             }
 
-            assaultActive = true; 
+            assaultActive = true;
+            timeChangedByRelic = false;
             Configs.wavePerStar[starIndex]++;
+            //Utils.Log($"Initing new void invasion in star index {starIndex}.");
         }
 
 
@@ -199,12 +322,45 @@ namespace DSP_Battle
         {
             assaultActive = false;
             modifierEnabled = false;
+
+            int totalKill = 0;
+            int totalAssault = 0;
+            for (int i = 0; i < assaultHives.Count; i++)
+            {
+                totalKill += assaultHives[i].enemyKilled;
+                totalAssault += assaultHives[i].assaultNum;
+            }
+            if (totalAssault <= 0)
+                totalAssault = 1;
+            float rewardFactor = totalKill * 1.0f / totalAssault;
+            int realReward = GiveReward(rewardFactor);
+            UIDialogPatch.ShowUIDialog("虚空入侵结束".Translate(), string.Format("虚空入侵结束提示".Translate(), totalKill, totalAssault, realReward));
+
+            assaultHives.Clear();
             ClearDataArrays();
+            Configs.combatState = 0;
+            BattleBGMController.SetWaveFinished();
+        }
+
+        public static int GiveReward(float factor)
+        {
+            int waveCount = Configs.totalWave;
+            int maxRewardSP = 0;
+            if (waveCount >= Configs.rewardSPMap.Count || waveCount < 0)
+                maxRewardSP = Configs.rewardSPMap.Last();
+            else
+                maxRewardSP = Configs.rewardSPMap[waveCount];
+            if (maxRewardSP > 2 && timeChangedByRelic) // relic 4-7 修改过的进攻波次最多拿两个点数
+                maxRewardSP = 2;
+            int realRewardSP = (int)(factor * maxRewardSP);
+            SkillPoints.totalPoints += realRewardSP;
+
+            return realRewardSP;
         }
 
         public static int GetAssaultTotalNum(int waveCount)
         {
-            if (waveCount > Configs.totalAssaultNumMap.Count || waveCount < 0)
+            if (waveCount >= Configs.totalAssaultNumMap.Count || waveCount < 0)
                 return Configs.totalAssaultNumMap.Last();
             else
                 return Configs.totalAssaultNumMap[waveCount];
@@ -212,7 +368,7 @@ namespace DSP_Battle
 
         public static int GetHiveLevel(int waveCount)
         {
-            if (waveCount > Configs.levelMap.Count || waveCount < 0)
+            if (waveCount >= Configs.levelMap.Count || waveCount < 0)
                 return Configs.levelMap.Last();
             else
                 return Configs.levelMap[waveCount];
@@ -220,28 +376,36 @@ namespace DSP_Battle
 
         public static int GetAssembleTime(int waveCount)
         {
-            if(waveCount > Configs.assembleTimeMap.Count || waveCount < 0)
+            if(Configs.totalWave > 20)
+            {
+                int inc = Configs.totalWave / 10;
+                if (inc > 10)
+                    inc = 10;
+                waveCount += inc;
+            }
+
+            if(waveCount >= Configs.assembleTimeMap.Count || waveCount < 0)
                 return Configs.assembleTimeMap.Last();
             else
                 return Configs.assembleTimeMap[waveCount];
         }
 
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(DFSReplicatorComponent), "LogicTick")]
-        public static void DFSReplicatorTickPostPatch(ref DFSReplicatorComponent __instance, EnemyDFHiveSystem hive, bool isLocal)
-        {
-            // cacancyCount max (space) {1440, 120, 6} 枪骑、巨鲸、？
-            EnemyFormation enemyFormation = hive.forms[__instance.productFormId];
-            if (enemyFormation.vacancyCount > 0 && hive.starData.index == 0 && (quickBuild0 && __instance.productFormId == 0 || quickBuild1 && __instance.productFormId == 1))
-            {
-                int num5 = enemyFormation.AddUnit();
-                if (isLocal && num5 > 0)
-                {
-                    hive.InitiateUnitDeferred(__instance.productFormId, num5, __instance.productInitialPos, __instance.productInitialRot, __instance.productInitialVel, __instance.productInitialTick);
-                }
-                //Utils.Log($"add unit {__instance.productFormId}");
-            }
-        }
+        //[HarmonyPostfix]
+        //[HarmonyPatch(typeof(DFSReplicatorComponent), "LogicTick")]
+        //public static void DFSReplicatorTickPostPatch(ref DFSReplicatorComponent __instance, EnemyDFHiveSystem hive, bool isLocal)
+        //{
+        //    // cacancyCount max (space) {1440, 120, 6} 枪骑、巨鲸、？
+        //    EnemyFormation enemyFormation = hive.forms[__instance.productFormId];
+        //    if (false && enemyFormation.vacancyCount > 0 && hive.starData.index == 0 && (__instance.productFormId == 0 || __instance.productFormId == 1))
+        //    {
+        //        int num5 = enemyFormation.AddUnit();
+        //        if (isLocal && num5 > 0)
+        //        {
+        //            hive.InitiateUnitDeferred(__instance.productFormId, num5, __instance.productInitialPos, __instance.productInitialRot, __instance.productInitialVel, __instance.productInitialTick);
+        //        }
+        //        //Utils.Log($"add unit {__instance.productFormId}");
+        //    }
+        //}
 
 
         public static void BuildLogicBoost()
@@ -608,24 +772,156 @@ namespace DSP_Battle
             }
         }
 
+        // 阻止强行将等级上限设置为30
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(EvolveData), "AddExp")]
+        public static bool EvolveDataAddExpPrefix(ref EvolveData __instance, int _addexp)
+        {
+            if (__instance.level >= 100)
+            {
+                if (__instance.expf != 0 || __instance.expp != 0 || __instance.level != 100)
+                {
+                    __instance.level = 100;
+                    __instance.expf = 0;
+                    __instance.expp = 0;
+                    __instance.expl = EvolveData.LevelCummulativeExp(100);
+                }
+                return false;
+            }
+            __instance.expf += _addexp;
+            while (__instance.expf >= EvolveData.levelExps[__instance.level])
+            {
+                int num = EvolveData.levelExps.Length - 1;
+                __instance.expf -= EvolveData.levelExps[__instance.level];
+                __instance.expl += EvolveData.levelExps[__instance.level];
+                __instance.level++;
+                if (__instance.level >= num)
+                {
+                    __instance.level = num;
+                    __instance.expf = 0;
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(EvolveData), "AddExpPoint")]
+        public static bool EvolveDataAddExpPointPrefix(ref EvolveData __instance, int _addexpp)
+        {
+            if (__instance.level >= 100)
+            {
+                if (__instance.expf != 0 || __instance.expp != 0 || __instance.level != 100)
+                {
+                    __instance.level = 30;
+                    __instance.expf = 0;
+                    __instance.expp = 0;
+                    __instance.expl = EvolveData.LevelCummulativeExp(100);
+                }
+                return false;
+            }
+            if (_addexpp > 0)
+            {
+                __instance.expp += _addexpp;
+                if (__instance.expp >= 10000)
+                {
+                    __instance.expf += __instance.expp / 10000;
+                    __instance.expp %= 10000;
+                    while (__instance.expf >= EvolveData.levelExps[__instance.level])
+                    {
+                        int num = EvolveData.levelExps.Length - 1;
+                        __instance.expf -= EvolveData.levelExps[__instance.level];
+                        __instance.expl += EvolveData.levelExps[__instance.level];
+                        __instance.level++;
+                        if (__instance.level >= num)
+                        {
+                            __instance.level = num;
+                            __instance.expf = 0;
+                            __instance.expp = 0;
+                            return false;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        public static void TryEnableVoidInvasion()
+        {
+            UIMessageBox.Show("开启虚空入侵".Translate(), "虚空入侵提示".Translate(), 
+            "否".Translate(), "是".Translate(), 1, new UIMessageBox.Response(RegretEnable), new UIMessageBox.Response(() =>
+            {
+                voidInvasionEnabled = true;
+            }));
+        }
+
+        public static void RegretEnable()
+        {
+
+        }
+
+        public static void AskEnableVoidInvasion()
+        {
+            UIMessageBox.Show("开启虚空入侵".Translate(), "虚空入侵版本更新提示".Translate(),
+            "否".Translate(), "是".Translate(), 1, new UIMessageBox.Response(RegretEnable), new UIMessageBox.Response(() =>
+            {
+                voidInvasionEnabled = true;
+            }));
+        }
 
         public static void Import(BinaryReader r)
         {
             InitWhenLoad();
-            if(Configs.versionWhenImporting >= 30240622)
+            if(Configs.versionWhenImporting >= 30240716)
             {
-                //theyComeFromVoid = r.ReadBoolean();
+                voidInvasionEnabled = r.ReadBoolean();
+                difficulty = r.ReadInt32();
+                int ahCount = r.ReadInt32();
+                for (int i = 0; i < ahCount; i++)
+                {
+                    AssaultHive ah = new AssaultHive(0, i, i);
+                    ah.Import(r);
+                    assaultHives.Add(ah);
+                }
+                modifierEnabled = r.ReadBoolean();
+                int mCount = r.ReadInt32();
+                for (int i = 0; i < mCount; i++)
+                {
+                    int mod = r.ReadInt32();
+                    if(i < modifier.Count)
+                        modifier[i] = mod;
+                }
+                timeChangedByRelic = r.ReadBoolean();
+            }
+            UIEscMenuPatch.Init();
+            if(Configs.versionWhenImporting < 30240703)
+            {
+                AskEnableVoidInvasion();
             }
         }
 
         public static void Export(BinaryWriter w)
         {
-            //w.Write(theyComeFromVoid);
+            w.Write(voidInvasionEnabled);
+            w.Write(difficulty);
+            w.Write(assaultHives.Count);
+            for (int i = 0; i < assaultHives.Count; i++)
+            {
+                assaultHives[i].Export(w);
+            }
+            w.Write(modifierEnabled);
+            w.Write(modifier.Count);
+            for (int i = 0; i < modifier.Count; i++)
+            {
+                w.Write(modifier[i]);
+            }
+            w.Write(timeChangedByRelic);
         }
 
         public static void IntoOtherSave()
         {
             InitWhenLoad();
+            voidInvasionEnabled = false;
         }
 
 

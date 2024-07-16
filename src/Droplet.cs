@@ -218,7 +218,12 @@ namespace DSP_Battle
                 int slotNum = 0;
                 for (int rnum = 0; rnum < 10; rnum++)
                 {
-                    if (Relic.HaveRelic(0, rnum))
+                    if (Relic.HaveRelic(4, rnum) && !Relic.isRecorded(4, rnum))
+                        slotNum++;
+                }
+                for (int rnum = 0; rnum < 10; rnum++)
+                {
+                    if (Relic.HaveRelic(0, rnum) && !Relic.isRecorded(0, rnum))
                         slotNum++;
                 }
                 if (slotNum >= 8) return;
@@ -288,6 +293,8 @@ namespace DSP_Battle
         int[] bulletIds = new int[bulletCnt];
         int targetEnemyId = -1;
         int randSeed = 0; //决定水滴在撞向敌舰时的一个随机的小偏移，使其往返攻击时不是在两个点之间来回飞，而是有一些随机的角度变化，每次find敌人和从2阶段回到1阶段都会改变一次randSeed
+
+        int curTargetLockTime = 0; // 在一个敌人上持续锁定的时长。不存档。切换目标时置0。
 
         public Droplet(int idx)
         {
@@ -432,17 +439,18 @@ namespace DSP_Battle
         /// 搜索最近的敌军单位（火种除外）
         /// </summary>
         /// <returns></returns>
-        bool SearchNextNearestTarget(bool nearMecha = false)
+        bool SearchNextNearestTarget(bool distanceCenterIsMecha = false, bool nearMecha = false)
         {
             SpaceSector sector = GameMain.data.spaceSector;
             EnemyData[] enemyPool = sector.enemyPool;
             int enemyCursor = sector.enemyCursor;
             EnemyDFHiveSystem[] dfHivesByAstro = sector.dfHivesByAstro;
             Vector3 currentUPos = GetCurrentUPos();
-            if (nearMecha)
+            if (distanceCenterIsMecha)
                 currentUPos = GameMain.mainPlayer.uPosition;
+            Vector3 mechaUPos = GameMain.mainPlayer.uPosition;
             float defaultCheckDistance2 = 60000f * 60000f;
-            if (forceLaunchState > 0)// 手动launch的水滴寻敌距离是无限的，否则只有以水滴本身为中心的1.5AU半径
+            if (forceLaunchState > 0)// 手动launch的水滴寻敌距离是无限的，否则只有以 水滴/机甲(取决于nearMecha的值) 本身为中心的1.5AU半径
             {
                 defaultCheckDistance2 = float.MaxValue;
             }
@@ -479,15 +487,33 @@ namespace DSP_Battle
                         checkDistance2 = isUnitTargetDistance;
                     float x = (float)(zero.x - currentUPos.x);
                     float x2 = x * x;
-                    if (x2 <= checkDistance2)
+                    float xm2 = 0;
+                    if (!distanceCenterIsMecha && nearMecha)
+                    {
+                        float xm = (float)(zero.x - mechaUPos.x);
+                        xm2 = xm * xm;
+                    }
+                    if (x2 <= checkDistance2 && xm2 <= checkDistance2)
                     {
                         float y = (float)(zero.y - currentUPos.y);
                         float y2 = y * y;
-                        if (y2 <= checkDistance2)
+                        float ym2 = 0;
+                        if (!distanceCenterIsMecha && nearMecha)
+                        {
+                            float ym = (float)(zero.y - mechaUPos.y);
+                            ym2 = ym * ym;
+                        }
+                        if (y2 <= checkDistance2 && ym2 <= checkDistance2)
                         {
                             float z = (float)(zero.z - currentUPos.z);
                             float z2 = z * z;
-                            if (z2 <= checkDistance2)
+                            float zm2 = 0;
+                            if (!distanceCenterIsMecha && nearMecha)
+                            {
+                                float zm = (float)(zero.z - mechaUPos.z);
+                                zm2 = zm * zm;
+                            }
+                            if (z2 <= checkDistance2 && zm2 <= checkDistance2)
                             {
                                 //bool isUnit = ptr.unitId > 0;
                                 float distance2 = x2 + y2 + z2;
@@ -536,6 +562,9 @@ namespace DSP_Battle
                 targetEnemyId = targetIds[Utils.RandInt(0, foundCount)];
             else
                 targetEnemyId = isUnitTargetId;
+
+            if(foundCount > 0 || isUnitTargetId > 0)
+                curTargetLockTime = 0;
             return foundCount > 0 || isUnitTargetId > 0;
         }
 
@@ -556,6 +585,16 @@ namespace DSP_Battle
                     {
                         EnemyDFHiveSystem[] dfHivesByAstro = sector.dfHivesByAstro;
                         int hiveAstroId = ptr.originAstroId - 1000000;
+                        if (hiveAstroId >= 0 && hiveAstroId <= AssaultController.invincibleHives.Length)
+                        {
+                            if (AssaultController.invincibleHives[hiveAstroId] >= 0 && curTargetLockTime > 60 && !ptr.isAssaultingUnit) // 攻击/追击近乎无敌的虚空同化中的目标超过一秒后会尝试切换目标
+                            {
+                                if (Utils.RandDouble() <= 0.9)
+                                    return SearchNextNearestTarget(true, true); // 一定概率优先攻击距离机甲较近的，而非距离水滴自己当前位置较近的
+                                return SearchNextNearestTarget(false, true); // 通常攻击距离水滴自身距离比较近的单位
+                            }
+
+                        }
                         if (hiveAstroId >= 0 && hiveAstroId < dfHivesByAstro.Length)
                         {
                             EnemyDFHiveSystem enemyDFHiveSystem = dfHivesByAstro[ptr.originAstroId - 1000000];
@@ -567,7 +606,9 @@ namespace DSP_Battle
                     }
                 }
             }
-            return SearchNextNearestTarget();
+            if(Utils.RandDouble() <= 0.25)
+                return SearchNextNearestTarget(true, true); // 一定概率优先攻击距离机甲较近的，而非距离水滴自己当前位置较近的
+            return SearchNextNearestTarget(false, true); // 通常攻击距离水滴自身距离比较近的单位
         }
 
         // 发现附近的敌人
@@ -748,6 +789,7 @@ namespace DSP_Battle
             //}
             if (state == 2 || state == 4) //追敌中或强制返航途中
             {
+                curTargetLockTime++;
                 float lastT = swarm.bulletPool[bulletIds[0]].t;
                 float lastMaxt = swarm.bulletPool[bulletIds[0]].maxt;
                 //如果原目标不存在了（或被强制召回（前提是机甲附近没有目标）的状态state==4），回机甲附近，然后收回太空中的水滴

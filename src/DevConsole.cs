@@ -294,11 +294,11 @@ namespace DSP_Battle
                         Print($"ok.");
                         break;
                     case "voidon":
-                        AssaultController.theyComeFromVoid = true;
+                        AssaultController.voidInvasionEnabled = true;
                         Print("Void assault enabled");
                         break;
                     case "voidoff":
-                        AssaultController.theyComeFromVoid = false;
+                        AssaultController.voidInvasionEnabled = false;
                         Print("Void assault disabled.");
                         break;
 
@@ -400,6 +400,14 @@ namespace DSP_Battle
                     case "tlvl":
                         AssaultController.testLvlSet = Convert.ToInt32(param[1]);
                         Print($"set lvl to {param[1]} once");
+                        break;
+                    case "god":
+                        DspBattlePlugin.playerInvincible = true;
+                        Print($"god mode on");
+                        break;
+                    case "ngod":
+                        DspBattlePlugin.playerInvincible = false;
+                        Print($"god mode off");
                         break;
                     default:
                         Print($"未知的命令：{param[0]}，输入 \"help\" 查看所有命令说明。", 1, true);

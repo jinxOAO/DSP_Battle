@@ -55,15 +55,6 @@ namespace DSP_Battle
             rankObj.transform.SetAsFirstSibling();
             rankObj.transform.localScale = new Vector3(1, 1, 1);
 
-
-            attentionMarkObj = GameObject.Instantiate(GameObject.Find("UI Root/Overlay Canvas/In Game/Windows/Assembler Window/produce/circle-back/cnt-text"), rankObj.transform);
-            attentionMarkObj.name = "attentionmark";
-            attentionMarkObj.transform.localPosition = new Vector3(49.5f, -78, 0);
-            attentionMarkObj.transform.localScale = new Vector3(1, 1, 1);
-            attentionMarkText = attentionMarkObj.GetComponent<Text>();
-            attentionMarkText.text = "□";
-            attentionMarkText.fontSize = 100;
-
             GameObject oriIconWithTips = GameObject.Find("UI Root/Overlay Canvas/In Game/Windows/Research Result Window/content/icon");
             rankIconObj = GameObject.Instantiate(oriIconWithTips);
             rankIconObj.name = "icon";
@@ -123,6 +114,16 @@ namespace DSP_Battle
             expText.alignment = TextAnchor.UpperCenter;
             expText.supportRichText = true;
             expText.text = "";
+
+            attentionMarkObj = GameObject.Instantiate(GameObject.Find("UI Root/Overlay Canvas/In Game/Windows/Assembler Window/produce/circle-back/cnt-text"), rankObj.transform);
+            attentionMarkObj.name = "attentionmark";
+            attentionMarkObj.transform.localPosition = new Vector3(46f, 22f, 0);
+            attentionMarkObj.transform.localScale = new Vector3(1, 1, 1);
+            attentionMarkText = attentionMarkObj.GetComponent<Text>();
+            attentionMarkText.text = "□";
+            attentionMarkText.alignment = TextAnchor.MiddleRight;
+            attentionMarkText.fontSize = 30;
+
 
             if (Rank.rank >= 0 && Rank.rank <= 10) ForceRefreshAll();
         }
@@ -314,21 +315,22 @@ namespace DSP_Battle
             if (SkillPoints.UnusedPoints() > 0 && !SkillPoints.isFullLevel)
             {
                 attentionMarkObj.SetActive(true);
-                if (Rank.rank <= 8)
-                {
-                    attentionMarkObj.transform.localPosition = new Vector3(49.5f, -75, 0);
-                }
-                else
-                {
-                    attentionMarkObj.transform.localPosition = new Vector3(49.5f, -78, 0);
-                }
+                //if (Rank.rank <= 8)
+                //{
+                //    // attentionMarkObj.transform.localPosition = new Vector3(49.5f, -75, 0); // -75
+                //}
+                //else
+                //{
+                //    // attentionMarkObj.transform.localPosition = new Vector3(49.5f, -78, 0); // -78
+                //}
                 int t = (int)(GameMain.instance.timei % 120);
-                float alpha = 0.7f + 0.3f * t / 60;
+                float alpha = 0.65f + 0.2f * t / 60;
                 if (t > 60)
                 {
-                    alpha = 1f - 0.3f * (t - 60) / 60;
+                    alpha = 0.85f - 0.2f * (t - 60) / 60;
                 }
                 attentionMarkText.color = new Color(1f, 0.62f, 0.14f, alpha);
+                attentionMarkText.text = SkillPoints.UnusedPoints().ToString(); 
             }
             else
             {

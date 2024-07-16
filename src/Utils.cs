@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = System.Random;
 
 namespace DSP_Battle
 {
-    public class Utils
+    public static class Utils
     {
         static int seed = Environment.TickCount;
 
@@ -204,5 +205,7 @@ namespace DSP_Battle
                 Log($"{i} cur prob is {basic}, total prob {1 - total}");
             }
         }
+
+        
     }
 }

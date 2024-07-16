@@ -84,26 +84,30 @@ namespace DSP_Battle
         {
             if (!Configs.enableBattleBGM) return;
 
-            if (takeDamageCountdown > 30 * 60)
-            {
-                Configs.combatState = 3;
-            }
-            else if (UIRoot.instance.uiGame.dfAssaultTip.assaulting_cluster.Count > 0)
-            {
-                if (Configs.combatState == 3)
-                {
-                    SetWaveFinished();
-                }
-                Configs.combatState = 2;
-            }
-            else
-            {
-                if (Configs.combatState == 3)
-                {
-                    SetWaveFinished();
-                }
-                Configs.combatState = 1;
-            }
+            // 受伤触发BGM的逻辑
+            //if (takeDamageCountdown > 30 * 60)
+            //{
+            //    Configs.combatState = 3;
+            //}
+            //else if (UIRoot.instance.uiGame.dfAssaultTip.assaulting_cluster.Count > 0)
+            //{
+            //    if (Configs.combatState == 3)
+            //    {
+            //        SetWaveFinished();
+            //    }
+            //    Configs.combatState = 2;
+            //}
+            //else
+            //{
+            //    if (Configs.combatState == 3)
+            //    {
+            //        SetWaveFinished();
+            //    }
+            //    Configs.combatState = 1;
+            //}
+
+            // 虚空进攻触发bgm的逻辑在AssaultController里面CalcCombatState
+
             //bgm监测与选择逻辑
             if (Configs.combatState <= 1 || Configs.combatState != 3 && nextPlayFinishMusic) // 战斗结束后播放
             {

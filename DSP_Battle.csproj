@@ -138,7 +138,7 @@
     <Compile Include="src\DropletFleetPatchers.cs" />
     <Compile Include="src\EventProto.cs" />
     <Compile Include="src\EventSystem.cs" />
-    <Compile Include="src\FastStartOption.cs" />
+    <Compile Include="src\NewGameOption.cs" />
     <Compile Include="src\Rank.cs" />
     <Compile Include="src\Relic.cs" />
     <Compile Include="src\PlanetEngine.cs" />
@@ -153,7 +153,9 @@
     <Compile Include="src\TCFVPerformanceMonitor.cs" />
     <Compile Include="src\UIAssaultAlert.cs" />
     <Compile Include="src\UIDialogPatch.cs" />
+    <Compile Include="src\UIEscMenuPatch.cs" />
     <Compile Include="src\UIEventSystem.cs" />
+    <Compile Include="src\UIHiveNamePatcher.cs" />
     <Compile Include="src\UIRank.cs" />
     <Compile Include="src\UIRelic.cs" />
     <Compile Include="src\UISkillPointsWindow.cs" />

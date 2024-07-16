@@ -7,19 +7,43 @@ using UnityEngine.UI;
 
 namespace DSP_Battle
 {
-    class FastStartOption
+    class NewGameOption
     {
         public static bool fastStart = false;
         public static GameObject fastStartObj = null;
+        public static GameObject voidInvasionToggleObj = null;
+
+        public static  GameObject oriPropertyMultiplierObj;
+        public static GameObject oriSeedKeyObj;
+
+        public static Image voidInvasionLogo;
+        public static Toggle voidInvasionToggle;
+        public static UIToggle voidInvasionUITg;
+        public static Text voidInvasionTitleText;
+
+        public static float propertyObjX = 70;
+        public static float propertyObjY0 = -325;
+        public static float propertyObjY1 = -361;
+        public static float seedKeyObjX = 0;
+        public static float seedKeyObjY0 = -351;
+        public static float seedKeyObjY1 = -387;
+
+        public static Toggle DFToggle;
 
         [HarmonyPostfix]
         [HarmonyPatch(typeof(UIGalaxySelect), "_OnOpen")]
         public static void UIGalaxySelect_OnOpen(ref UIGalaxySelect __instance)
         {
             fastStart = false;
+
+
+            GameObject oriSettingObj = GameObject.Find("UI Root/Overlay Canvas/Galaxy Select/setting-group/sandbox-mode");
+
+            oriPropertyMultiplierObj = GameObject.Find("UI Root/Overlay Canvas/Galaxy Select/setting-group/property-multiplier");
+            oriSeedKeyObj = GameObject.Find("UI Root/Overlay Canvas/Galaxy Select/setting-group/seed-key");
+
             if (fastStartObj == null)
             {
-                GameObject oriSettingObj = GameObject.Find("UI Root/Overlay Canvas/Galaxy Select/setting-group/sandbox-mode");
                 if (oriSettingObj == null)
                     return;
                 fastStartObj = GameObject.Instantiate(oriSettingObj);
@@ -41,14 +65,47 @@ namespace DSP_Battle
                 else
                 {
                     GameObject oriDFToggleObj = GameObject.Find("UI Root/Overlay Canvas/Galaxy Select/setting-group/DF-toggle");
-                    GameObject oriPropertyMultiplierObj = GameObject.Find("UI Root/Overlay Canvas/Galaxy Select/setting-group/property-multiplier");
-                    GameObject oriSeedKeyObj = GameObject.Find("UI Root/Overlay Canvas/Galaxy Select/setting-group/seed-key");
                     oriDFToggleObj.transform.localPosition = new Vector3(0, -280, 0);
                     oriPropertyMultiplierObj.transform.localPosition = new Vector3(70, -325, 0);
                     oriSeedKeyObj.transform.localPosition = new Vector3(0, -351, 0);
                 }
             }
-            
+
+            if(voidInvasionToggleObj == null)
+            { 
+                GameObject oriToggleWithIcon = GameObject.Find("UI Root/Overlay Canvas/Galaxy Select/setting-group/DF-toggle/check-box");
+                DFToggle = oriToggleWithIcon.GetComponent<Toggle>();
+
+                voidInvasionToggleObj = GameObject.Instantiate(oriSettingObj);
+                voidInvasionToggleObj.name = "void-invasion-toggle";
+                voidInvasionToggleObj.transform.SetParent(GameObject.Find("UI Root/Overlay Canvas/Galaxy Select/setting-group/").transform, false);
+                //GameObject.DestroyImmediate(voidInvasionToggleObj.transform.Find("CheckBox"));
+                voidInvasionToggleObj.transform.Find("CheckBox").gameObject.SetActive(false);
+                voidInvasionToggleObj.transform.localScale = Vector3.one;
+                voidInvasionToggleObj.transform.localPosition = new Vector3(0, -316, 0);
+
+                GameObject VICheckBoxObj = GameObject.Instantiate(oriToggleWithIcon, voidInvasionToggleObj.transform);
+                VICheckBoxObj.transform.localScale = Vector3.one;
+                VICheckBoxObj.transform.localPosition = new Vector3(-40, -15, 0);
+                GameObject toggleIconObj = VICheckBoxObj.transform.Find("df-icon").gameObject;
+                toggleIconObj.name = "vi-icon";
+                voidInvasionLogo = toggleIconObj.GetComponent<Image>();
+                voidInvasionLogo.sprite = Resources.Load<Sprite>("Assets/DSPBattle/techMD");
+
+                voidInvasionTitleText = voidInvasionToggleObj.GetComponent<Text>();
+                voidInvasionTitleText.text = "虚空入侵".Translate();
+                voidInvasionToggleObj.GetComponentInChildren<UIButton>().tips.tipTitle = "虚空入侵".Translate();
+                voidInvasionToggleObj.GetComponentInChildren<UIButton>().tips.tipText = "虚空入侵提示".Translate();
+                voidInvasionToggle = voidInvasionToggleObj.GetComponentInChildren<Toggle>();
+                voidInvasionToggle.onValueChanged.RemoveAllListeners();
+                voidInvasionToggle.onValueChanged.AddListener(new UnityEngine.Events.UnityAction<bool>((isOn) => AssaultController.voidInvasionEnabled = isOn));
+                voidInvasionToggleObj.GetComponentInChildren<Toggle>().isOn = true;
+                voidInvasionUITg = voidInvasionToggleObj.GetComponentInChildren<UIToggle>();
+
+                DFToggle.onValueChanged.AddListener(new UnityEngine.Events.UnityAction<bool>((isOn) => voidInvasionToggle.isOn = isOn));
+            }
+
+            AssaultController.voidInvasionEnabled = voidInvasionToggle.isOn;
         }
 
         [HarmonyPostfix]
@@ -57,6 +114,35 @@ namespace DSP_Battle
         {
             if(fastStartObj != null)
                 GameObject.Destroy(fastStartObj);
+            if (voidInvasionToggleObj != null)
+                GameObject.Destroy(voidInvasionToggleObj);    
+        }
+
+
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(UIGalaxySelect), "_OnUpdate")]
+        public static void UIGalaxySelect_OnUpdate(ref UIGalaxySelect __instance)
+        {
+            if(__instance.gameDesc.isCombatMode)
+            {
+                oriPropertyMultiplierObj.transform.localPosition = new Vector3(propertyObjX, propertyObjY1, 0);
+                oriSeedKeyObj.transform.localPosition = new Vector3(seedKeyObjX, seedKeyObjY1, 0);
+
+                voidInvasionToggleObj.SetActive(true);
+                voidInvasionTitleText.text = "虚空入侵".Translate();
+                voidInvasionLogo.color = new Color(1f, 1f, 1f, (AssaultController.voidInvasionEnabled ? 0.86f : 0.06f) + (voidInvasionUITg.isMouseEnter ? 0.14f : 0f));
+                if(voidInvasionToggleObj.transform.localPosition.y != -316)
+                {
+                    voidInvasionToggleObj.transform.localPosition = new Vector3(0, -316, 0);
+                }
+            }
+            else
+            {
+                oriPropertyMultiplierObj.transform.localPosition = new Vector3(propertyObjX, propertyObjY0, 0);
+                oriSeedKeyObj.transform.localPosition = new Vector3(seedKeyObjX, seedKeyObjY0, 0);
+                voidInvasionToggleObj.SetActive(false);
+            }
+
         }
 
         [HarmonyPrefix]
@@ -75,6 +161,7 @@ namespace DSP_Battle
                 DspBattlePlugin.logger.LogInfo("=======================================> FAST START");
                 Init();
             }
+            UIEscMenuPatch.Init();
         }
 
         private static void Init()

@@ -9,15 +9,15 @@ namespace DSP_Battle
 {
     public class Configs
     {
-        public static string versionString = "3.1.3";
+        public static string versionString = "3.2.0";
         public static string qq = "694213906 & 141801294";
-        public static bool developerMode = false; //发布前务必修改！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+        public static bool developerMode = true; //发布前务必修改！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
 
         public static bool enableProliferator4 = false;
         public static bool enableBattleBGM = true;
         public static bool enableAlertTextGlowing = true;
         public static int versionWhenImporting = -1;
-        public static int versionCode = 30240621;
+        public static int versionCode = 30240716;
 
 
         public static int difficulty = 0; // -1 easy, 0 normal, 1 hard
@@ -97,11 +97,13 @@ namespace DSP_Battle
 
         // 入侵的巢穴等级
 
-        public static List<int> levelMap = new List<int> { 1, 2, 5, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100 }; 
+        public static List<int> levelMap = new List<int> { 1, 2, 5, 10, 15, 16, 18, 20, 22, 25, 25, 30, 30, 30, 30, 35, 35, 35, 40, 40, 45, 45, 50, 55, 60, 65, 70, 75, 80 }; 
         // 集结阶段的所需时间（帧数），基本可以认为是入侵准备时间
         public static List<int> assembleTimeMap = new List<int> { 3600 * 60, 3600 * 50, 3600 * 40, 3600 * 30, 3600 * 30, 3600 * 30, 3600 * 30, 3600 * 25, 3600 * 20, 3600 * 20, 3600 * 20, 3600 * 20, 3600 * 15, 3600 * 15, 3600 * 15, 3600 * 15, 3600 * 10 };
         // 所有巢穴的入侵枪骑数量总和，标准值，可上下浮动10%
         public static List<int> totalAssaultNumMap = new List<int> { 5, 10, 15, 20, 30, 40, 50, 60, 80, 100, 120, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 900, 1000, 1200, 1400, 1600, 1800, 2000, 2250, 2500, 2750, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 6500, 7000, 7500, 8000, 8500, 9000, 9500, 10000, 11520 }; // 11520 = 1440 * 8
+
+        public static List<int> rewardSPMap = new List<int> { 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 8, 8, 8, 8, 8, 8, 8, 8, 8, 10 };
 
         public static int _wormholeRange;
 
@@ -159,6 +161,8 @@ namespace DSP_Battle
         //public static double[] relic1settings = { 0.1, -1, -1, 1, -1, 0.1, 500, 20, 1, -1 }; // 史诗遗物的功能概率或数值设定
         //public static double[] relic2settings = { 0.1, -1, -1, 1, -1, 0.1, 500, 20, 1, -1 }; // 稀有遗物的功能概率或数值设定
         //public static double[] relic3settings = { 0.1, -1, -1, 1, -1, 0.1, 500, 20, 1, -1 }; // 普通遗物的功能概率或数值设定
+
+
 
         public static int totalWave
         {

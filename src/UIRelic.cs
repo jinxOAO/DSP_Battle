@@ -112,6 +112,10 @@ namespace DSP_Battle
         private static Sprite rEmpty = Resources.Load<Sprite>("Assets/DSPBattle/rEmpty");
         private static Sprite[,] rankType_Num = new Sprite[100, 100];
 
+        public static string uiClickAudioName = "ui-click-0";
+        public static string uiHoverAudioName = "ui-hover-0";
+        public static List<int> interactableRelics = new List<int> { 406, 407 };
+
         public static void InitAll()
         {
             relicInSlots = new List<int> { -1, -1, -1, -1, -1, -1, -1, -1, -1 };
@@ -1131,7 +1135,16 @@ namespace DSP_Battle
                     relicSlotObjs.Add(iconObj);
                     relicSlotImgs.Add(iconObj.GetComponent<Image>());
                     relicSlotImgs[i].sprite = alienmeta; // 载入空遗物的图片
-                    relicSlotUIBtns.Add(iconObj.GetComponent<UIButton>());
+                    UIButton uibtn = iconObj.GetComponent<UIButton>();
+                    uibtn.tips.corner = 6;
+                    uibtn.tips.offset = Vector2.zero;
+                    uibtn.tips.width = 300;
+                    uibtn.tips.delay = 0.05f;
+                    relicSlotUIBtns.Add(uibtn);
+                    iconObj.AddComponent<Button>();
+                    uibtn.button = iconObj.GetComponent<Button>();
+                    int index = i;
+                    iconObj.GetComponent<Button>().onClick.AddListener(() => { RelicSlotOnClick(index); });
                     iconObj.SetActive(true);
                 }
             }
@@ -1152,6 +1165,10 @@ namespace DSP_Battle
         public static void RefreshSlotsWindowUI(bool onlyVarTips)
         {
             int slotNum = 0;
+            if (!onlyVarTips) // 不是只刷新tips的时候，才会刷新orderedRelics
+            {
+                Relic.orderedRelics = new List<int>();
+            }
             for (int type = 4; type < 5; type = (type + 1) % 5)
             {
                 for (int num = 0; num < Relic.relicNumByType[type]; num++)
@@ -1166,6 +1183,11 @@ namespace DSP_Battle
                                 continue;
                             }
                         }
+                        else // 不是只刷新tips的时候，才会刷新orderedRelics
+                        {
+                            Relic.orderedRelics.Add(type * 100 + num);
+                        }
+
                         if (slotNum < relicSlotImgs.Count)
                         {
                             if (slotNum < relicInSlots.Count)
@@ -1181,9 +1203,10 @@ namespace DSP_Battle
                             AddTipText(type, num, relicSlotUIBtns[slotNum], true); // 对于一些原本描述较短的，还要将更详细的描述加入
                             AddTipVarData(type, num, relicSlotUIBtns[slotNum]); // 对于部分需要展示实时数据的，还需要加入数据
 
-                            relicSlotUIBtns[slotNum].tips.offset = new Vector2(160, 70);
+                            //relicSlotUIBtns[slotNum].tips.offset = new Vector2(0, 0);
+                            //relicSlotUIBtns[slotNum].tips.corner = 6;
                             relicSlotUIBtns[slotNum].tips.width = 300;
-                            relicSlotUIBtns[slotNum].tips.delay = 0.05f;
+                            //relicSlotUIBtns[slotNum].tips.delay = 0.05f;
                             UIButtonTip uibtnt = relicSlotUIBtns[slotNum].tip as UIButtonTip;
                             if (uibtnt != null) uibtnt.titleComp.supportRichText = true;
 
@@ -1194,6 +1217,17 @@ namespace DSP_Battle
                                     UIRelic.relicSlotUIBtns[slotNum].OnPointerExit(null);
                                     UIRelic.relicSlotUIBtns[slotNum].OnPointerEnter(null);
                                     UIRelic.relicSlotUIBtns[slotNum].enterTime = 1;
+                                }
+                            }
+                            else // 点击按钮是否有声音反馈，只有可交互的元驱动可以在点击时有声音反馈
+                            {
+                                if(interactableRelics.Contains(type * 100 + num))
+                                {
+                                    relicSlotUIBtns[slotNum].audios.downName = uiClickAudioName;
+                                }
+                                else
+                                {
+                                    relicSlotUIBtns[slotNum].audios.downName = "";
                                 }
                             }
 
@@ -1212,9 +1246,11 @@ namespace DSP_Battle
                 relicSlotImgs[slotNum].sprite = Resources.Load<Sprite>("Assets/DSPBattle/rEmpty");
                 relicSlotUIBtns[slotNum].tips.tipTitle = ("未获取遗物标题").Translate();
                 relicSlotUIBtns[slotNum].tips.tipText = ("未获取遗物描述").Translate();
-                relicSlotUIBtns[slotNum].tips.offset = new Vector2(160, 70);
-                relicSlotUIBtns[slotNum].tips.delay = 0.05f;
+                //relicSlotUIBtns[slotNum].tips.offset = new Vector2(160, 70);
+                //relicSlotUIBtns[slotNum].tips.delay = 0.05f;
+                relicSlotUIBtns[slotNum].tips.width = 200;
                 relicInSlots[slotNum] = -1;
+                Relic.orderedRelics.Add(-1);
             }
         }
 
@@ -1281,6 +1317,48 @@ namespace DSP_Battle
                 curX = relicSlotsWindowObj.transform.localPosition.x;
                 targetX = -0.5f * resolutionX - 105;
             }
+        }
+
+        public static void RelicSlotOnClick(int index)
+        {
+            if (index < 0 || Relic.orderedRelics == null || index >= Relic.orderedRelics.Count)
+                return;
+            int relic = Relic.orderedRelics[index];
+            if (relic < 0)
+                return;
+
+            if(relic == 407 && AssaultController.assaultHives!=null && AssaultController.assaultHives.Count() > 0)
+            {
+                relicSlotUIBtns[index].OnPointerExit(null); // 点击后隐藏tips，防止遮挡倒计时
+                if(DspBattlePlugin.isControlDown)
+                {
+                    foreach (var ah in AssaultController.assaultHives)
+                    {
+                        if(ah.state == EAssaultHiveState.Assemble && ah.time > 3600)
+                        {
+                            int maxAdvanceTime = Math.Min(3600, ah.time - 3600);
+                            ah.time -= maxAdvanceTime;
+                            ah.timeTillAssault -= maxAdvanceTime;
+                            AssaultController.timeChangedByRelic = true;
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var ah in AssaultController.assaultHives)
+                    {
+                        if (ah.state == EAssaultHiveState.Assemble && ah.timeDelayedByRelic < AssaultHive.timeDelayedMax)
+                        {
+                            ah.time += 3600;
+                            ah.timeTillAssault += 3600;
+                            ah.timeDelayedByRelic += 3600;
+                            AssaultController.timeChangedByRelic = true;
+                        }
+                    }
+                }
+            }
+
+            //Utils.Log($"onlick relic {relic}");
         }
     }
 }

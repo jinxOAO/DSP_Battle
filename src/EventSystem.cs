@@ -640,6 +640,7 @@ namespace DSP_Battle
             MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.MainLogic);
             MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.EventSys);
             MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.Kill);
+            bool hasRecorder = recorder != null && recorder.protoId > 0 && recorder.requestId.Length > 0;
             if (recorder != null && recorder.protoId > 0 && recorder.requestId.Length > 0 || true)
             {
                 var _this = __instance;
@@ -651,21 +652,24 @@ namespace DSP_Battle
                         ref EnemyData ptr = ref skillSystem.sector.enemyPool[_this.objectId];
                         if (ptr.id > 0)
                         {
-                            for (int i = 0; i < recorder.requestLen; i++)
+                            if (hasRecorder)
                             {
-                                int code = recorder.requestId[i];
-                                if (code == 9998 || code == 9999 && recorder.requestCount[i] > recorder.requestMeet[i])
+                                for (int i = 0; i < recorder.requestLen; i++)
                                 {
-                                    recorder.requestMeet[i]++;
-                                }
-                                else if (code >= 50000 && code < 60000 && recorder.requestCount[i] > recorder.requestMeet[i] && recorder.requestCount[i] > 0)
-                                {
-                                    int starIndex = code - 50000;
-                                    EnemyDFHiveSystem[] dfHivesByAstro = GameMain.data.spaceSector.dfHivesByAstro;
-                                    EnemyDFHiveSystem enemyDFHiveSystem = dfHivesByAstro[ptr.originAstroId - 1000000];
-                                    int ptrStarIndex = enemyDFHiveSystem?.starData?.index ?? -1;
-                                    if (starIndex == ptrStarIndex)
+                                    int code = recorder.requestId[i];
+                                    if (code == 9998 || code == 9999 && recorder.requestCount[i] > recorder.requestMeet[i])
+                                    {
                                         recorder.requestMeet[i]++;
+                                    }
+                                    else if (code >= 50000 && code < 60000 && recorder.requestCount[i] > recorder.requestMeet[i] && recorder.requestCount[i] > 0)
+                                    {
+                                        int starIndex = code - 50000;
+                                        EnemyDFHiveSystem[] dfHivesByAstro = GameMain.data.spaceSector.dfHivesByAstro;
+                                        EnemyDFHiveSystem enemyDFHiveSystem = dfHivesByAstro[ptr.originAstroId - 1000000];
+                                        int ptrStarIndex = enemyDFHiveSystem?.starData?.index ?? -1;
+                                        if (starIndex == ptrStarIndex)
+                                            recorder.requestMeet[i]++;
+                                    }
                                 }
                             }
                             EnemyDFHiveSystem[] dfHivesByAstro2 = GameMain.data.spaceSector.dfHivesByAstro;
@@ -695,6 +699,22 @@ namespace DSP_Battle
                             if (Relic.HaveRelic(4, 4)) // relic 4-4 击杀时进行研究
                                 RelicFunctionPatcher.AddNotDFTechHash(Relic.hashGainBySpaceEnemy);
 
+                            // 击杀入侵中的敌舰 记录击杀数
+                            //Utils.Log($"{enemyDFHiveSystem2.hiveAstroId}");
+                            if (ptr.isAssaultingUnit)
+                            {
+                                if (enemyDFHiveSystem2 != null && AssaultController.alertHives[enemyDFHiveSystem2.hiveAstroId - 1000000] >= 0)
+                                {
+                                    int listIndex = AssaultController.alertHives[enemyDFHiveSystem2.hiveAstroId - 1000000];
+                                    if (listIndex >= 0 && listIndex < AssaultController.assaultHives.Count)
+                                    {
+                                        AssaultHive ah = AssaultController.assaultHives[listIndex];
+                                        Interlocked.Add(ref ah.enemyKilled, 1);
+                                        Utils.Log("add kill");
+                                    }
+                                }
+                            }
+
                             // 获取元驱动事件可能性
                             if (recorder == null || recorder.protoId == 0)
                             {
@@ -717,24 +737,27 @@ namespace DSP_Battle
                             ref EnemyData ptr3 = ref planetFactory.enemyPool[_this.objectId];
                             if (ptr3.id > 0)
                             {
-                                for (int i = 0; i < recorder.requestLen; i++)
+                                if (hasRecorder)
                                 {
-                                    int code = recorder.requestId[i];
-                                    if (code == 9997 || code == 9999 && recorder.requestCount[i] > recorder.requestMeet[i])
+                                    for (int i = 0; i < recorder.requestLen; i++)
                                     {
-                                        recorder.requestMeet[i]++;
-                                    }
-                                    else if (code >= 40000 && code < 50000 && recorder.requestCount[i] > recorder.requestMeet[i])
-                                    {
-                                        int starIndex = code - 40000;
-                                        if (ptr3.originAstroId / 100 - 1 == starIndex)
+                                        int code = recorder.requestId[i];
+                                        if (code == 9997 || code == 9999 && recorder.requestCount[i] > recorder.requestMeet[i])
+                                        {
                                             recorder.requestMeet[i]++;
-                                    }
-                                    else if (code >= 2000000 && code < 3000000 && recorder.requestCount[i] > recorder.requestMeet[i] && recorder.requestCount[i] > 0)
-                                    {
-                                        int planetId = code - 2000000;
-                                        if (ptr3.originAstroId == planetId)
-                                            recorder.requestMeet[i]++;
+                                        }
+                                        else if (code >= 40000 && code < 50000 && recorder.requestCount[i] > recorder.requestMeet[i])
+                                        {
+                                            int starIndex = code - 40000;
+                                            if (ptr3.originAstroId / 100 - 1 == starIndex)
+                                                recorder.requestMeet[i]++;
+                                        }
+                                        else if (code >= 2000000 && code < 3000000 && recorder.requestCount[i] > recorder.requestMeet[i] && recorder.requestCount[i] > 0)
+                                        {
+                                            int planetId = code - 2000000;
+                                            if (ptr3.originAstroId == planetId)
+                                                recorder.requestMeet[i]++;
+                                        }
                                     }
                                 }
                                 int level = 0;

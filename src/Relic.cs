@@ -3,6 +3,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,8 +30,9 @@ namespace DSP_Battle
         public static int resurrectCoinCount = 0; // 复活币持有个数，要在rank的UI里面显示
 
         //不存档的设定参数
+        public static List<int> orderedRelics = new List<int>(); // 与左侧ui显示一直的排序后的元驱动
         public static int relicHoldMax = 8; // 最多可以持有的遗物数
-        public static int[] relicNumByType = { 11, 12, 18, 18, 7 }; // 当前版本各种类型的遗物各有多少种，每种类型均不能大于30
+        public static int[] relicNumByType = { 11, 12, 18, 18, 8 }; // 当前版本各种类型的遗物各有多少种，每种类型均不能大于30
         public static double[] relicTypeProbability = { 0.03, 0.06, 0.13, 0.76, 0.02 }; // 各类型遗物刷新的权重
         public static double[] relicTypeProbabilityBuffed = { 0.045, 0.09, 0.195, 0.63, 0.04 }; // 五叶草buff后
         public static int[] modifierByEvent = new int[] { 0, 0, 0, 0, 0, 0 };
@@ -100,6 +102,7 @@ namespace DSP_Battle
             UIEventSystem.InitAll();
             UIEventSystem.InitWhenLoad();
             isUsingResurrectCoin = false;
+            //RelicFunctionPatcher.starCannonDamageSlice = MoreMegaStructure.StarCannon.damageSlice;
         }
 
         public static void RefreshConfigs()
@@ -566,6 +569,7 @@ namespace DSP_Battle
     public class RelicFunctionPatcher
     {
         private static Sprite r3_5_coin = Resources.Load<Sprite>("Assets/DSPBattle/r3-5-coin");
+        public static int starCannonDamageSlice = 7; // 读档时从MoreMegaStructure中获取
 
         [HarmonyPostfix]
         [HarmonyPatch(typeof(GameData), "GameTick")]
@@ -1812,6 +1816,20 @@ namespace DSP_Battle
                 }
                 damage = Relic.BonusedDamage(damage, factor - 1) + antiArmor;
             }
+
+            // 虚空入侵的敌人，在入侵开始前几乎免疫常规武器伤害
+            if(target.astroId > 1000000 && target.type == ETargetType.Enemy && slice != starCannonDamageSlice) // slice == 7 为恒星炮伤害，不为7的认定为常规武器
+            {
+                EnemyDFHiveSystem enemyDFHiveSystem = __instance.sector.dfHivesByAstro[target.astroId - 1000000];
+                int byAstroId = target.astroId - 1000000;
+                if(byAstroId >= 0 && byAstroId < AssaultController.invincibleHives.Length)
+                {
+                    ref EnemyData ptr = ref __instance.sector.enemyPool[target.id];
+                    if(!ptr.isAssaultingUnit && AssaultController.invincibleHives[byAstroId] >= 0)
+                        damage = Math.Min(1000, (int)(damage * 0.001)); // 只能造成1‰的伤害，且单次不能超过10点。免伤效果对于正在进攻中的单位无效
+                }
+            }
+
             MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MainLogic);
             MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MetaDrive);
             MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.Damage);
@@ -1971,6 +1989,32 @@ namespace DSP_Battle
             MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.Damage);
             return true;
         }
+
+        // Test
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(Mecha), "TakeDamage")]
+        public static bool MechaTakeDamagePrefix(ref Mecha __instance, ref int damage)
+        {
+            __instance.EnergyShieldResist(ref damage);
+            if (damage > 0)
+            {
+                if (!__instance.player.invincible)
+                {
+                    __instance.hpRecoverCD = 360;
+                    __instance.hp -= damage;
+                }
+                if (__instance.hp <= 0)
+                {
+                    __instance.hp = 0;
+                    __instance.hpRecoverCD = 0;
+                    __instance.energyShieldRecoverCD = 0;
+                    __instance.player.Kill();
+                }
+            }
+            return false;
+        }
+
+
 
         /// <summary>
         /// relic1-7 relic3-11

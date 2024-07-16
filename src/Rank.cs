@@ -8,7 +8,8 @@ namespace DSP_Battle
     public class Rank
     {
         public static int rank = 0;
-        public static int exp = 0;
+        public static int exp = 0; 
+        public static int maxRankHistory = 0; // 历史达到过的最高功勋阶级。升到某级已经给过这一级（以及之前）的授权点了，下次再升到此等级（或以下等级）则不再给授权点。
 
         public static long lastHash = -9999; // -9999代表
         public static int hash2ExpDivisor = 100; // 每这么多hash点数提供1经验值
@@ -22,6 +23,7 @@ namespace DSP_Battle
 
         public static void InitBeforeLoad()
         {
+            maxRankHistory = 0;
             lastHash = -hash2ExpDivisor - 1;
             nextEnqueueExpTech = false;
         }
@@ -60,7 +62,12 @@ namespace DSP_Battle
             {
                 rank += 1;
                 rank = rank > 0 ? rank : 0;
-                SkillPoints.totalPoints = Math.Max(SkillPoints.totalPoints, SkillPoints.spMinByRank[rank]);
+                // SkillPoints.totalPoints = Math.Max(SkillPoints.totalPoints, SkillPoints.spMinByRank[rank]);
+                if (rank > maxRankHistory)
+                {
+                    SkillPoints.totalPoints += SkillPoints.spGainByRank[rank];
+                    maxRankHistory = rank;
+                }
                 UIRank.UIPromotionNotify();
                 if (Relic.HaveRelic(2, 1)) // relic 2-1
                     Interlocked.Add(ref Relic.autoConstructMegaStructureCountDown, rank * rank * rank * 60);
@@ -72,6 +79,7 @@ namespace DSP_Battle
                 if (Relic.HaveRelic(2, 1)) // relic 2-1
                     Interlocked.Add(ref Relic.autoConstructMegaStructureCountDown, rank * rank * 60);
             }
+
             if (rank >= 10 && !GameMain.data.history.ItemUnlocked(9513))
             {
                 GameMain.mainPlayer.TryAddItemToPackage(9513, 1, 0, true);
@@ -232,6 +240,7 @@ namespace DSP_Battle
         {
             w.Write(rank);
             w.Write(exp);
+            w.Write(maxRankHistory);
         }
 
         public static void Import(BinaryReader r)
@@ -256,6 +265,15 @@ namespace DSP_Battle
                 }
             }
             catch (Exception) { }
+
+            if(Configs.versionWhenImporting >= 30240708)
+            {
+                maxRankHistory = r.ReadInt32();
+            }
+            else
+            {
+                maxRankHistory = rank;
+            }
 
             UIRank.InitUI();
         }

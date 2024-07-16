@@ -44,6 +44,9 @@ namespace DSP_Battle
                                        ProtoRegistry.GetDefaultIconDesc(Color.white, new Color(0.7f, 0.4f, 0.1f)));
             medal.UnlockKey = -2;
             ProtoRegistry.RegisterRecipe(382, ERecipeType.Smelt, 60, new int[] { 1104 }, new int[] { 2 }, new int[] { 9513 }, new int[] { 1 }, "星河卫视奖章描述", 0, 9998, "Assets/DSPBattle/rank10");
+
+            // Void-Recipes
+            //ProtoRegistry.RegisterItem()
         }
         public static void AddTranslate()
         {
@@ -481,7 +484,7 @@ namespace DSP_Battle
             // 遗物
             RegisterString("发现异星圣物", "Meta-drive Interpretation Complete", "元驱动解译完毕");
             RegisterString("解译异星圣物提示",
-                "Select one decoding track from the following three to finish the interpret procedure and enable the meta drive.\nYou can use dark fog matrix to seek new decoding track with different effects.",
+                "Select one decoding track from the following three to finish the interpret procedure and enable the meta driver.\nYou can use dark fog matrix to seek new decoding track with different effects.",
                 "从以下三个亚稳态解码轨中选取一个，并完成解译的最后阶段，从而启用该元驱动。\n可以使用黑雾矩阵重随解码轨来发现新的可用效果。");
             RegisterString("重新随机", "Roll", "重新随机");
             RegisterString("重新随机可以长", "Re-roll", "重新随机");
@@ -489,20 +492,20 @@ namespace DSP_Battle
             RegisterString("移除遗物", "Remove", "移除");
             RegisterString("放弃解译", "   Abort This           +", "放弃解译         +");
             RegisterString("放弃解译居中", "Abort Interpret", "放弃解译");
-            RegisterString("删除遗物名称", "Remove Meta Drive", "移除元驱动");
+            RegisterString("删除遗物名称", "Remove Meta Driver", "移除元驱动");
             RegisterString("删除遗物描述",
                 "Randomly remove a [common] meta-drive, and return the slot occupied by the meta-drive. \nIf there is no [common] meta-drive, then randomly remove a [rare] meta-drive.",
                 "随机移除一个已拥有的[普通]稀有度的元驱动，并返还该元驱动所占用的元驱动槽位\n如果没有[普通]元驱动，则随机移除一个已拥有的[稀有]元驱动");
-            RegisterString("删除遗物确认标题", "Confirm Remove Meta Drive", "确认移除元驱动");
+            RegisterString("删除遗物确认标题", "Confirm Remove Meta Driver", "确认移除元驱动");
             RegisterString("删除遗物确认警告",
-                "This will remove {0} and return the slot occupied by the meta drive!",
+                "This will remove {0} and return the slot occupied by the meta driver!",
                 "这将移除圣物 {0}，并返还该圣物所占用的圣物槽位！");
-            RegisterString("成功移除！", "Meta drive removed", "成功移除元驱动");
-            RegisterString("已移除遗物描述", "You've removed meta drive ", "你已移除");
+            RegisterString("成功移除！", "Meta driver removed", "成功移除元驱动");
+            RegisterString("已移除遗物描述", "You've removed meta driver ", "你已移除");
             RegisterString("未能移除！", "No mate drive can be removed", "没有可移除的元驱动");
-            RegisterString("未能移除遗物描述", "No matched meta drive can be removed", "你没有稀有度匹配的元驱动可供移除");
+            RegisterString("未能移除遗物描述", "No matched meta driver can be removed", "你没有稀有度匹配的元驱动可供移除");
             RegisterString("未获取遗物标题", "Unknown mata drive", "未知元驱动");
-            RegisterString("未获取遗物描述", "This slot can place a decrypted meta drive", "此位置可供已解译的元驱动放置");
+            RegisterString("未获取遗物描述", "This slot can place a decrypted meta driver", "此位置可供已解译的元驱动放置");
             RegisterString("水滴伤害增加", "Droplet Bonus Damage", "水滴额外伤害");
             RegisterString("当前加成gm", "Current bonus damage", "当前伤害加成");
             RegisterString("已充能gm", "Charged", "已充能");
@@ -515,10 +518,10 @@ namespace DSP_Battle
             RegisterString("圣物稀有度3", "<color=#30b530>Regular</color>", "<color=#30b530>常规级</color>");
             RegisterString("圣物稀有度4", "<color=#00c560>Axiomatic</color>", "<color=#00c560>公理级</color>");
             RegisterString("诅咒", "Editing Universal Axioms", "编辑宇宙公理");
-            RegisterString("诅咒描述", "Attempting to touch and edit Cosmological Axioms is extremely dangerous, every time you enable an axiomatic level meta-drive, the disrupted Cosmological Axioms will cause the Dark Fog units to gain 50% extra experience and 5% damage resistence.\nYou can not remove an axiomatic meta drive once you enable it.\n\nNegative effect: ", "尝试触碰并编辑宇宙公理是极其危险的，你每启用一个公理级的元驱动，被扰乱的宇宙公理会使黑雾单位获得的经验+50%，以及5%伤害抵抗。\n公理级元驱动无法被移除。\n\n负面效果：");
-            RegisterString("诅咒描述独立", "Axiomatic meta drives have different <color=#d00000>negative effects</color>. Besides, for each axiomatic meta drive you have, dark fog units gain 50% extra experience, and 5% damage resistence.\nYou can not remove an axiomatic meta drive once you enable it.", "公理级元驱动均具有各不相同的<color=#d00000>负面效果</color>，且你每拥有一个公理级元驱动，所有黑雾单位获得50%经验获取加成，以及5%伤害抵抗。\n公理级元驱动无法被移除。");
-            RegisterString("诅咒描述短", "This meta drive can not be removed.\nDark fog units experience +50%, damage resistence +5%. ", "此元驱动无法被移除\n黑雾单位经验获取+50%，伤害抵抗+5%。");
-            RegisterString("负面效果警告", "<color=#ff0000>Warning! This meta drive has negative effect!</color>", "<color=#ff0000>警告！此元驱动具有负面效果！</color>");
+            RegisterString("诅咒描述", "Attempting to touch and edit Cosmological Axioms is extremely dangerous, every time you enable an axiomatic level meta-drive, the disrupted Cosmological Axioms will cause the Dark Fog units to gain 50% extra experience and 5% damage resistence.\nYou can not remove an axiomatic meta driver once you enable it.\n\nNegative effect: ", "尝试触碰并编辑宇宙公理是极其危险的，你每启用一个公理级的元驱动，被扰乱的宇宙公理会使黑雾单位获得的经验+50%，以及5%伤害抵抗。\n公理级元驱动无法被移除。\n\n负面效果：");
+            RegisterString("诅咒描述独立", "Axiomatic meta drivers have different <color=#d00000>negative effects</color>. Besides, for each axiomatic meta driver you have, dark fog units gain 50% extra experience, and 5% damage resistence.\nYou can not remove an axiomatic meta driver once you enable it.", "公理级元驱动均具有各不相同的<color=#d00000>负面效果</color>，且你每拥有一个公理级元驱动，所有黑雾单位获得50%经验获取加成，以及5%伤害抵抗。\n公理级元驱动无法被移除。");
+            RegisterString("诅咒描述短", "This meta driver can not be removed.\nDark fog units experience +50%, damage resistence +5%. ", "此元驱动无法被移除\n黑雾单位经验获取+50%，伤害抵抗+5%。");
+            RegisterString("负面效果警告", "<color=#ff0000>Warning! This meta driver has negative effect!</color>", "<color=#ff0000>警告!此元驱动具有负面效果!</color>");
 
             RegisterString("已记载", "Recorded: ", "已记载：");
 
@@ -592,6 +595,8 @@ namespace DSP_Battle
             RegisterString("遗物名称4-4", "Enlightenment Echo\n<size=18>- Axiomatic -</size>", "启迪回响\n<size=18>- 公理级 -</size>");
             RegisterString("遗物名称4-5", "Aftershock Echo\n<size=18>- Axiomatic -</size>", "余震回响\n<size=18>- 公理级 -</size>");
             RegisterString("遗物名称4-6", "Rune Book\n<size=18>- Axiomatic -</size>", "符文之书\n<size=18>- 公理级 -</size>");
+            RegisterString("遗物名称4-7", "Void Echo\n<size=18>- Axiomatic -</size>", "虚空回响\n<size=18>- 公理级 -</size>");
+
             RegisterString("遗物名称带颜色0-0", "<color=#d2853d>Swallower  [Mensural]</color>", "<color=#d2853d>吞噬者  [定律级]</color>");
             RegisterString("遗物名称带颜色0-1", "<color=#d2853d>Blue Buff  [Mensural]</color>", "<color=#d2853d>蓝buff  [定律级]</color>");
             RegisterString("遗物名称带颜色0-2", "<color=#d2853d>Tear of the Goddess  [Mensural]</color> ", "<color=#d2853d>女神之泪  [定律级]</color>");
@@ -662,6 +667,7 @@ namespace DSP_Battle
             RegisterString("遗物名称带颜色4-4", "<color=#00c560>Enlightenment Echo  [Axiomatic]</color>", "<color=#00c560>启迪回响  [公理级]</color>");
             RegisterString("遗物名称带颜色4-5", "<color=#00c560>Aftershock Echo  [Axiomatic]</color>", "<color=#00c560>余震回响  [公理级]</color>");
             RegisterString("遗物名称带颜色4-6", "<color=#00c560>Rune Book  [Axiomatic]</color>", "<color=#00c560>符文之书  [公理级]</color>");
+            RegisterString("遗物名称带颜色4-7", "<color=#00c560>Void Echo  [Axiomatic]</color>", "<color=#00c560>虚空回响  [公理级]</color>");
 
             RegisterString("遗物描述0-0", "Each time a certain number of dark fog units are killed, a random mega structure will be partially auto-constructed", "每击杀一定数量的黑雾单位，略微推进随机星系的巨构的建造进度");
             RegisterString("遗物描述0-1", "When assembling recipes with at least 2 different materials (except when assembling antimatter fuel rods) in assembling machine or Star Assembly, every time a product is produced, one material in the first slot will be returned.", "制造厂和星际组装厂在制造原材料至少2种的配方时（反物质燃料棒的产线除外），每产出1个产物，会返还1个第1位置的原材料");
@@ -673,7 +679,7 @@ namespace DSP_Battle
             RegisterString("遗物描述0-7", "The star system with a megastructure will deal damage (considered as <i>additional damage</i>) to all activated dark fog space ships in the star system, higher energy the megastucture generates, higher the damage it deals", "拥有巨构的星系在战斗时每秒会对星系中所有已激活的太空黑雾舰队造成伤害（视为<i>额外伤害</i>），伤害取决于巨构的能量水平");
             RegisterString("遗物描述0-8", "When enemies are interfered by non-Icarus-throwing jamming capsules, they take <i>additional damage</i>. Jammer tower won't consume bullets after loaded.", "非投掷的干扰胶囊造成电磁干扰时，对所有命中目标造成<i>额外伤害</i>。干扰塔在装弹后不再消耗弹药。");
             RegisterString("遗物描述0-9", "It must do something...", "它必须做点什么...");
-            RegisterString("遗物描述0-9实际", "You have a higher probability of getting rarer meta drives. If the first judgment fails with any probability from other meta drives, it can be judged again. And the hidden effects...", "你有更高的可能性获取更稀有的元驱动。任何概率初次判定失败时，可以再判定一次。以及隐藏效果...");
+            RegisterString("遗物描述0-9实际", "You have a higher probability of getting rarer meta drivers. If the first judgment fails with any probability from other meta drivers, it can be judged again. And the hidden effects...", "你有更高的可能性获取更稀有的元驱动。任何概率初次判定失败时，可以再判定一次。以及隐藏效果...");
             RegisterString("遗物描述0-10", "Every time a droplet destroys an enemy, restores 2MJ power to the Mecha, and all droplets permanently obtain 10 <i>additional damage</i>. ", "水滴每击杀一个敌人，为机甲回复2MJ能量，且所有水滴永久获得+10的<i>额外伤害</i>。");
 
             RegisterString("遗物描述1-0", "Every time you unlock or upgrade a technology, random mega structures will be partially auto-constructed", "每解锁或升级一个科技，少量推进随机巨构的建造进度");
@@ -686,7 +692,7 @@ namespace DSP_Battle
             RegisterString("遗物描述1-7", "Solar sail absorption speed increases 300%, ejecting speed increases 100%", "巨构的太阳帆吸附速度提升300%，弹射器弹射太阳帆的速度提升100%");
             RegisterString("遗物描述1-8", "When Icarus' Energy shield is broken, depleting the Mech's fuel chamber to instantly restore up to 100% energy shield", "伊卡洛斯的能量盾被打破时，消耗机甲燃烧室储备立刻回复最多100%的能量盾");
             RegisterString("遗物描述1-9", "When an ally fleet unit is about to take damage, if Icarus' shield is charged above 50%, Icarus will take the damage instead", "我方舰队中的单位将要承受伤害时，如果伊卡洛斯的能量盾充能高于50%，则由其代为承担");
-            RegisterString("遗物描述1-10", "Ally damage will permanently ignore the armor of the dark fog unit. Won't occupy the meta drive slot", "友方伤害将永久无视黑雾单位的护甲，不占用元驱动槽位");
+            RegisterString("遗物描述1-10", "Ally damage will permanently ignore the armor of the dark fog unit. Won't occupy the meta driver slot", "友方伤害将永久无视黑雾单位的护甲，不占用元驱动槽位");
             RegisterString("遗物描述1-11", "Greatly enhanced jamming tower's effect", "大幅强化干扰塔的效果");
 
             RegisterString("遗物描述2-0", "Planetary Shields gain 50% additional charge energy", "行星护盾获得50%额外的充能量");
@@ -696,7 +702,7 @@ namespace DSP_Battle
             RegisterString("遗物描述2-4", "When producing normal fuel rods, each output will returne 5 materials in the second slot", "生产常规燃料棒时，每次产出会回填5个第2位置的原材料（氢、重氢）");
             RegisterString("遗物描述2-5", "Every second, if Icaros is on the planet and have moved in the previous second, you have 8% chance to obtain a multi-functional integrated component", "每过一秒，如果伊卡洛斯处于行星上并且在上一秒进行过移动，就有8%的概率获得一个多功能集成组件");
             RegisterString("遗物描述2-6", "All your fleets energy consumption -40%", "战斗无人机各项能量消耗-40%");
-            RegisterString("遗物描述2-7", "Kinetic, energy and explosive damage +10%. Won't occupy the meta drive slot", "动能武器伤害、爆破武器伤害、能量武器伤害+10%，不占用元驱动槽位");
+            RegisterString("遗物描述2-7", "Kinetic, energy and explosive damage +10%. Won't occupy the meta driver slot", "动能武器伤害、爆破武器伤害、能量武器伤害+10%，不占用元驱动槽位");
             RegisterString("遗物描述2-8", "When decomposing critical photons, hydrogen is no longer produced, but the antimatter production increase 50%", "分解临界光子时，不再产出氢，但产出的反物质增加50%");
             RegisterString("遗物描述2-9", "Star cannon's recharging speed +50%", "恒星炮充能速度+50%");
             RegisterString("遗物描述2-10", "Turret supernova cooldown and charge time -50%", "防御塔的超新星冷却和蓄能时间-50%");
@@ -704,7 +710,7 @@ namespace DSP_Battle
             RegisterString("遗物描述2-12", "You gain +10% chance of critical hit", "你获得10%暴击几率");
             RegisterString("遗物描述2-13", "Double any <i>additional damage</i> (except the bonus from technology)", "你对黑雾造成的任何<i>额外伤害翻倍</i>（来自科技的加成除外）");
             RegisterString("遗物描述2-14", "Every time you destroy an enemy, you have chance to directly obtain an antimatter fuel rod or a space warper in the backpack", "每次击毁敌军单位，根据敌人强度有概率在背包直接获取1个反物质燃料棒或翘曲器，无视科技解锁进度");
-            RegisterString("遗物描述2-15", "Explosive damage +10%. Won't occupy the meta drive slot", "爆破武器伤害+40%，不占用元驱动槽位");
+            RegisterString("遗物描述2-15", "Explosive damage +10%. Won't occupy the meta driver slot", "爆破武器伤害+40%，不占用元驱动槽位");
             RegisterString("遗物描述2-16", "Planetary Shield and Icarus Shield gain 20% damage reduction", "行星护盾和伊卡洛斯的护盾获得20%伤害减免");
             RegisterString("遗物描述2-17", "When Icarus is about to be destroyed, restore all health and energy shields instead, and gains invincible for 30 seconds", "伊卡洛斯即将被摧毁时，转而立刻回复全部的生命值和能量盾，并获得30s的伤害免疫");
 
@@ -713,10 +719,10 @@ namespace DSP_Battle
             RegisterString("遗物描述3-2", "Icarus will generate additional energy without consuming fuel, which is equivalent to 50% of the base power of the fuel generation reactor", "伊卡洛斯会不消耗燃料地持续获得额外的能量回复，相当于反应堆基础功率的50%");
             RegisterString("遗物描述3-3", "Double the sand amount dropped by dark fog units", "黑雾单位掉落的沙土加倍");
             RegisterString("遗物描述3-4", "Dark fog gain +100% extra experience", "黑雾获得经验+100%");
-            RegisterString("遗物描述3-5", "When Icarus is destroyed, give you options to use resurrection coins to redeploy or reassemble for free. Won't occupy the meta drive slot", "伊卡洛斯被毁时，可以选择消耗复活币来无消耗地重新部署或原地重组，不占用元驱动槽位");
-            RegisterString("遗物描述3-6", "Gain some merit points based on your current rank level. Won't occupy the meta drive slot", "获得基于当前阶级的少量功勋点数，不占用元驱动槽位");
-            RegisterString("遗物描述3-7", "Energy weapon damage +10%. Won't occupy the meta drive slot", "能量武器伤害+10%，不占用元驱动槽位");
-            RegisterString("遗物描述3-8", "Based on the unlocked matrix technology, immediately give a large number of normal matrix. Won't occupy the meta drive slot", "基于已解锁的矩阵科技，立刻获得大量普通矩阵（异星矩阵和宇宙矩阵除外），不会占用元驱动槽位");
+            RegisterString("遗物描述3-5", "When Icarus is destroyed, give you options to use resurrection coins to redeploy or reassemble for free. Won't occupy the meta driver slot", "伊卡洛斯被毁时，可以选择消耗复活币来无消耗地重新部署或原地重组，不占用元驱动槽位");
+            RegisterString("遗物描述3-6", "Gain some merit points based on your current rank level. Won't occupy the meta driver slot", "获得基于当前阶级的少量功勋点数，不占用元驱动槽位");
+            RegisterString("遗物描述3-7", "Energy weapon damage +10%. Won't occupy the meta driver slot", "能量武器伤害+10%，不占用元驱动槽位");
+            RegisterString("遗物描述3-8", "Based on the unlocked matrix technology, immediately give a large number of normal matrix. Won't occupy the meta driver slot", "基于已解锁的矩阵科技，立刻获得大量普通矩阵（异星矩阵和宇宙矩阵除外），不会占用元驱动槽位");
             RegisterString("遗物描述3-9", "When a certain number of buildings are destroyed, random mega structure will be slightly auto-constructed", "一定数量的建筑被毁时，微量推进随机星系的巨构的建造进度");
             RegisterString("遗物描述3-10", "Every second, if Icaros is on the planet and have moved in the previous second, you have 3% chance to obtain a multi-functional integrated component", "每过一秒，如果伊卡洛斯处于行星上并且在上一秒进行过移动，就有3%的概率获得一个多功能集成组件");
             RegisterString("遗物描述3-11", "Solar sial adsorption speed increases 100%", "巨构的太阳帆吸附速度提升100%");
@@ -728,12 +734,13 @@ namespace DSP_Battle
             RegisterString("遗物描述3-17", "You get 25% extra merit points", "功勋点数获取+25%");
 
             RegisterString("遗物描述4-0", "The mega structure in the star system with the max luminosity in the galaxy, will be constantly auto-constructing", "星区中光度最高的恒星系的巨构会不停地自动建造");
-            RegisterString("遗物描述4-1", "Every time you interpret a meta drive, at least one Mensural decoding track will be available before you reroll. Reroll cost is halved", "每次解译完毕元驱动时，必然刷新一个定律级解码轨，重随消耗减半");
+            RegisterString("遗物描述4-1", "Every time you interpret a meta driver, at least one Mensural decoding track will be available before you reroll. Reroll cost is halved", "每次解译完毕元驱动时，必然刷新一个定律级解码轨，重随消耗减半");
             RegisterString("遗物描述4-2", "Each droplet fleet configuration can have 3 droplets", "每个水滴的舰队配置可放置3个水滴");
             RegisterString("遗物描述4-3", "Comprehensively improve the extra products effect of proliferators", "全面提升增产剂的增产效果");
             RegisterString("遗物描述4-4", "Every an enemy is destoryed, slightly advance the research progress of the current non-darkfog matrix technology for free", "每当击杀敌军单位时，无消耗地略微推进当前非黑雾矩阵科技的研究进度");
             RegisterString("遗物描述4-5", "When killing a ground dark fog unit, there is 15% chance of causing a weakened electromagnetic interference from it's place", "地面黑雾单位被击杀时，有15%概率在原地引发一次弱化的电磁干扰");
-            RegisterString("遗物描述4-6", "When pick up this meta drive, permanently record the top three meta drives that you already have, retaining their effects but no longer occupying the slot", "获取此元驱动时，将左侧栏位最顶端的三个元驱动永久保存在符文之书中，保留他们的效果但是其不再占用栏位");
+            RegisterString("遗物描述4-6", "When pick up this meta driver, permanently record the top three meta drivers that you already have, retaining their effects but no longer occupying the slot", "获取此元驱动时，将左侧栏位最顶端的三个元驱动永久保存在符文之书中，保留他们的效果但是其不再占用栏位");
+            RegisterString("遗物描述4-7", "Each time you click this meta driver, delay the assimilation progress of the void by 60s. Hold Ctrl and click to advance the progress instead. ", "每次点击此元驱动，立即使虚空的同化进度延缓一分钟。按住Ctrl点击则反而推进一分钟。");
 
 
             RegisterString("relicTipTitle0-10", "Upper Limit", "上限");
@@ -750,12 +757,13 @@ namespace DSP_Battle
             RegisterString("relicTipText2-17", "This effect can only be triggered once every 20 minutes", "这个效果每20分钟只能触发一次");
 
             RegisterString("relicTipText4-0", "All other galaxies receive a negative luminosity correction", "所有其他星系获得一个负的恒星光度修正");
-            RegisterString("relicTipText4-1", "All meta drives with probability, their probability is halved", "所有具有概率的效果，判定成功几率减半");
+            RegisterString("relicTipText4-1", "All meta drivers with probability, their probability is halved", "所有具有概率的效果，判定成功几率减半");
             RegisterString("relicTipText4-2", "When Icarus is destroyed, downgrade your merit rank level by 1, and clear your merit points of current level", "死亡时，你降低一级功勋阶级并清空当前等级的功勋点数");
             RegisterString("relicTipText4-3", "Comprehensively reduce the production speedup effect of proliferators", "全面降低增产剂的加速效果");
             RegisterString("relicTipText4-4", "The amount of dark fog matrix drop is halved, and you won't obtain any dark fog matrix when you abort interpreting the decoding track\n(Hash gaining can be enhanced by the research speed technology)", "黑雾矩阵掉落减半，放弃解译元驱动的解码轨时不会获得黑雾矩阵\n(Hash点数获取量受研究速度科技加成)");
             RegisterString("relicTipText4-5", "You will get 90% less merit points by killing ground dark fog units", "击杀地面黑雾单位获得的功勋点数-90%");
-            RegisterString("relicTipText4-6", "The required time to interpret a meta drive +15min", "解译元驱动的所需时间增加15分钟");
+            RegisterString("relicTipText4-6", "The required time to interpret a meta driver +15min", "解译元驱动的所需时间增加15分钟");
+            RegisterString("relicTipText4-7", "You can delay 20 minutes at most for each void invasion. The COSMO Technology Ethics Committee will dissatisfied with your behavior of taking the advantage of void power. The Void invasion wave which you used this meta driver's active effect can only earn you 2 authorization point rewards at most", "每次虚空入侵最多被延缓20分钟。COSMO技术伦理委员会不满你利用虚空力量的行为，使用过此元驱动主动效果的那次虚空入侵在结束时最多只能收到2点授权点奖励");
 
             RegisterString("relicTipTitle0-5", "Additional damage", "额外伤害");
             RegisterString("relicTipTitle0-7", "Additional damage", "额外伤害");
@@ -770,7 +778,7 @@ namespace DSP_Battle
             RegisterString("relicTipText0-8", "Enemies take 20 EM damage. Take 30 if it is suppresing capsules.", "敌人会受到20电磁伤害，压制胶囊则转而造成30电磁伤害。");
             RegisterString("relicTipText1-3", "The type of additional damage is consistent with the original damage type.", "额外伤害类型与原有的伤害的类型一致。");
             RegisterString("relicTipText2-12", "The type of additional damage is consistent with the original damage type.", "额外伤害类型与原有的伤害的类型一致。");
-            RegisterString("relicTipText2-13", "Any additional damage described in the meta drives will be increased.", "任何来自元驱动中所描述的额外伤害都将被增幅。");
+            RegisterString("relicTipText2-13", "Any additional damage described in the meta drivers will be increased.", "任何来自元驱动中所描述的额外伤害都将被增幅。");
             RegisterString("relicTipText3-16", "The type of additional damage is consistent with the original damage type.", "额外伤害类型与原有的伤害的类型一致。");
 
             RegisterString("当前倍率", "Current factor", "当前倍率");
@@ -800,7 +808,7 @@ namespace DSP_Battle
             RegisterString("即将拆除模块警告", "Since the module upper limit will be less than the number of completed modules, the overflowing completed modules will be immediately removed, and the module points will be wasted. Are you sure you want to remove them?", "由于模块上限被调整后将少于已建成的模块数，溢出的已建成的模块将被立刻拆除，模块点数将被浪费。是否确认拆除？");
 
             RegisterString("深空来敌介绍1标题", "They come from void player guide", "深空来敌玩法介绍");
-            RegisterString("深空来敌介绍1前字", "Nothing here for now. You can check the meta drive infomation below.", "这里暂时没有东西。你可以翻看下面的元驱动介绍。");
+            RegisterString("深空来敌介绍1前字", "Nothing here for now. You can check the meta driver infomation below.", "这里暂时没有东西。你可以翻看下面的元驱动介绍。");
 
             RegisterString("深空来敌介绍2前字", "By destroying dark fog units, you can gain experience points to promote your merit rank, and accumulate combat experience to strengthen yourself. Every time you reach the new merit rank, you will not only receive authorization points award issued by the COSMO Technology Ethics Committee, but also permanent bonus effects. Authorization points can be assigned on demand by clicking on the merit rank icon in the upper right corner, some providing bonuses for your production line, while others strengthening your combat capabilities. You can also view the bonus effect of the current rank, the experience requirements of the next level, and the bonus effect of the next level by hovering the mouse over the merit rank icon in the upper right corner. After advancing to the final rank, you will still be able to continuously earn merit points to get authorization points from the COSMO Technology Ethics Committee.\n\nExplorer I: Core power generation +1 MW\nExplorer II: Energy shield damage reduction +25%\nExplorer III: Walk speed +4 m/s\nPioneer I: Ore loss per mining operation -20%\nPioneer II: EM effect +20%\nPioneer III: Droplets can quickly approach distant target\nConqueror I: Ore loss per mining operation -20%\nConqueror II: Star cannon charging speed +50%\nConqueror III: Droplet damage +100%\nGalaxy Guardian: Ore loss per mining operation  -40%", "通过击毁黑雾单位，你可以获得经验点数来提升功勋阶级，并积累战斗经验来强化自身。每次提升功勋阶级，你除了会收到由COSMO技术伦理委员会发放的授权点奖励外，还将获得固定的永久加成效果。授权点奖励可以通过点击右上角的功勋阶级图标进行按需分配，有些为你的生产线提供加成，有些则强化你的战斗能力。你也可以通过将鼠标悬停在右上角的功勋阶级图标上来查看当前等级的加成效果，下一等级的经验需求和下一等级的加成效果。在提升到最终等级后，你仍然可以不断获取功勋点数，以不断从COSMO技术伦理委员会处获取授权点奖励。\n\n探索者 I: 核心发电 +1MW\n探索者 II: 能量盾伤害减免 +25%\n探索者 III: 步行移动速度 +4 m/s\n开拓者 I: 采矿消耗 -20%\n开拓者 II: 电磁武器效果 +20%\n开拓者 III: 水滴能够快速接近远距离的目标\n征服者 I: 采矿消耗 -20%\n征服者 II: 恒星炮充能速度 +50%\n征服者 III: 水滴伤害 +100%\n星河卫士: 采矿消耗 -40%");
 
@@ -810,7 +818,7 @@ namespace DSP_Battle
             ProtoRegistry.RegisterItem(8035, "水滴伤害增加", "", "Assets/DSPBattle/r0-10", 9999, 100, EItemType.Material);
 
 
-            RegisterString("事件链窗口标题", "Meta Drive Event Chain", "元驱动事件链");
+            RegisterString("事件链窗口标题", "Meta Driver Event Chain", "元驱动事件链");
             RegisterString("执行此决定你", "Choose this decision", "执行此决定");
             RegisterString("需要gm", "<color=#61d8ffb4>Prerequisite:</color>", "<color=#61d8ffb4>需要:</color>");
             RegisterString("功勋阶级", "Merit rank level", "功勋阶级");
@@ -843,7 +851,7 @@ namespace DSP_Battle
             RegisterString("已到达gm", "accomplished", "已完成");
             RegisterString("这将终止序列", "<color=#cc2020c0>End this event chain</color>", "<color=#cc2020c0>此事件链将终止</color>");
             RegisterString("未知后果", "Unknow consequences", "未知后果");
-            RegisterString("解译元驱动", "Interpret meta drive", "解译元驱动");
+            RegisterString("解译元驱动", "Interpret meta driver", "解译元驱动");
             RegisterString("获得功勋点数", "Obtain merit points ", "获得功勋点数 ");
             RegisterString("失去功勋点数", "Lose merit points ", "失去功勋点数");
             RegisterString("提升功勋阶级", "Upgrade merit rank ", "提升功勋阶级 ");
@@ -858,16 +866,16 @@ namespace DSP_Battle
             RegisterString("获得物品", "Obtain ", "获得 ");
             RegisterString("此选项将导致", "<color=#FD965EC0>Result in:</color>", "<color=#FD965EC0>将导致：</color>");
             if (MoreMegaStructure.MoreMegaStructure.GenesisCompatibility)
-                RegisterString("打开解译事件链", "Open meta drive interpretation event chain ( Ctrl + ~ )", "打开元驱动解译事件链 ( Ctrl + ~ )");
+                RegisterString("打开解译事件链", "Open meta driver interpretation event chain ( Ctrl + ~ )", "打开元驱动解译事件链 ( Ctrl + ~ )");
             else
-                RegisterString("打开解译事件链", "Open meta drive interpretation event chain ( ~ )", "打开元驱动解译事件链 ( ~ )");
+                RegisterString("打开解译事件链", "Open meta driver interpretation event chain ( ~ )", "打开元驱动解译事件链 ( ~ )");
 
             RegisterString("预计剩余解译时间", "Estimated time of finishing", "预计剩余");
             RegisterString("decodeType21Title", "Analyzing Log File", "正在分析日志");
             RegisterString("decodeType22Title", "Trying to repair", "正在尝试修复");
             RegisterString("decodeType23Title", "Repairing and Analyzing Log File", "正在修复并分析日志");
-            RegisterString("decodeType24Title", "Interpreting Meta Drive", "正在解译元驱动");
-            RegisterString("decodeType25Title", "Repairing and Interpreting Meta Drive", "正在修复并解译元驱动");
+            RegisterString("decodeType24Title", "Interpreting Meta Driver", "正在解译元驱动");
+            RegisterString("decodeType25Title", "Repairing and Interpreting Meta Driver", "正在修复并解译元驱动");
             //RegisterString("消耗复活币原地重组", "Use the resurrection coin to reassemble.", "消耗复活币并原地重组。");
             RegisterString("不朽之守护启动", " † Aegis of the Immortal † ", " † 不朽之守护 † ");
             RegisterString("不朽之守护就绪", "Aegis of the immortal is ready.", "不朽之守护已就绪。");
@@ -913,12 +921,13 @@ namespace DSP_Battle
             RegisterString("skillR5", "Planet Shield Energy Efficiency", "行星护盾能量效率");
             RegisterString("skillR6", "Void Damage", "虚空伤害");
             RegisterString("skillR7", "Droplet Energy Punishment", "水滴超远距耗能惩罚");
+            RegisterString("skillR8", "Energy Fluctuation Camouflage", "能量波动屏蔽");
             RegisterString("skillL4Desc", "The mining consumption reduction effect already includes the effect provided by the merit rank, then it will multiplies with the effect provided by research.", "采矿消耗降低效果已包含功勋阶级提供的消耗降低效果，而后与科技提供的效果乘法叠加。");
             RegisterString("skillL6Desc", "This buff will be directly increased to the percentage value of Proliferator Mk.III extra product effect. Mk.I and Mk.II only enjoys a partial buff.", "此效果的数值直接增加至Mk.III型增产剂增产效果的百分比数值上，更低阶增产剂只享受部分加成。");
             RegisterString("skillL7Desc", "This buff will be directly increased to the percentage value of Proliferator Mk.III speedup effect. Mk.I and Mk.II only enjoys a partial buff.", "此效果的数值直接增加至Mk.III型增产剂加速效果的百分比数值上，更低阶增产剂只享受部分加成。");
             RegisterString("skillL8Desc", "This buff will be directly added to the percentage value of Proliferator Mk.III energy consumption effect. Mk.I and Mk.II only enjoys a partial buff.", "此效果的数值直接增加至Mk.III型增产剂能量消耗惩罚的百分比数值上，更低阶增产剂只享受部分加成。");
-            RegisterString("skillL9Desc", "The COSMO Technology Ethics Committee has expressed doubts about our request for this alternative algorithmic technology, as it hardly makes any visible improvement to the computing power of research facilities. But what they did not know was that using the GM-α algorithm to decode the meta drive could significantly increase the probability of the occurrence of the Mensural decoding track.", "COSMO技术伦理委员会对我们要求这种替代型算法技术的行为表示疑惑，因为它几乎不能对科研设施算力有任何可见的提升。但是他们不知道的是，使用GM-α算法解码元驱动可以显著提升定律级解码轨的出现概率。");
-            RegisterString("skillL10Desc", "The COSMO Technology Ethics Committee has expressed doubts about our request for this alternative algorithmic technology, as it hardly makes any visible improvement to the computing power of research facilities. But what they did not know was that using the Z7-η algorithm to decode the meta drive could significantly increase the probability of the occurrence of the Mensural decoding track.", "COSMO技术伦理委员会对我们要求这种替代型算法技术的行为表示疑惑，因为它几乎不能对科研设施算力有任何可见的提升。但是他们不知道的是，使用Z7-η算法解码元驱动可以显著提升框架级解码轨的出现概率。");
+            RegisterString("skillL9Desc", "The COSMO Technology Ethics Committee has expressed doubts about our request for this alternative algorithmic technology, as it hardly makes any visible improvement to the computing power of research facilities. But what they did not know was that using the GM-α algorithm to decode the meta driver could significantly increase the probability of the occurrence of the Mensural decoding track.", "COSMO技术伦理委员会对我们要求这种替代型算法技术的行为表示疑惑，因为它几乎不能对科研设施算力有任何可见的提升。但是他们不知道的是，使用GM-α算法解码元驱动可以显著提升定律级解码轨的出现概率。");
+            RegisterString("skillL10Desc", "The COSMO Technology Ethics Committee has expressed doubts about our request for this alternative algorithmic technology, as it hardly makes any visible improvement to the computing power of research facilities. But what they did not know was that using the Z7-η algorithm to decode the meta driver could significantly increase the probability of the occurrence of the Mensural decoding track.", "COSMO技术伦理委员会对我们要求这种替代型算法技术的行为表示疑惑，因为它几乎不能对科研设施算力有任何可见的提升。但是他们不知道的是，使用Z7-η算法解码元驱动可以显著提升框架级解码轨的出现概率。");
             RegisterString("skillR0Desc", "The global damage bonus is multiplied with other damage bonuses. Takes effect on all allied attack.", "全局伤害加成将与其他的伤害加成以乘法叠加。对所有友方伤害生效。");
             RegisterString("skillR1Desc", "Allied attacks has a critical hit chance, dealing 100% additional damage.", "友方攻击有概率暴击，造成100%的额外伤害。");
             RegisterString("skillR2Desc", "Allied attacks can ignore a fixed amount of armor, and the value that penetrates beyond the target's armor can also increase damage.", "你的伤害可以无视固定数值的护甲，护甲穿透超出目标护甲的部分也可以继续增加伤害。");
@@ -927,27 +936,54 @@ namespace DSP_Battle
             RegisterString("skillR5Desc", "Increasing the energy efficiency will increase the amount of damage the shield can take per unit of energy. But this will not be considered as damage reduction.", "提升护盾的能量效率将提高每单位能量的行星护盾可以承受的伤害总量。但这不会被视为伤害减免。");
             RegisterString("skillR6Desc", "Gain a bonus when dealing void damage.", "友方造成虚空类型的伤害时，该伤害获得加成。");
             RegisterString("skillR7Desc", "Droplets have a 10x energy consumption penalty when manually summoned to attack units beyond 1AU. This reduces that penalty.\nDoes not affect the energy consumption of attacking within 1AU.", "水滴在手动召唤以攻击1AU以外的单位时，将有10倍的能量消耗惩罚，此项可以将该惩罚降低。\n不影响1AU以内的耗能。");
+            RegisterString("skillR8Desc", "If the sum of the power grids' energy generation on all planets in a star system is lower than the energy fluctuation camouflage value, that star system will not be assimilated or invaded by the void. \nNote: If the star system has surviving dark fog hives, the normal dark fog hive may still launch an attack.", "如果一个恒星系内所有行星上的电网实际功率总和低于能量波动屏蔽值，该星系将不会招致虚空同化及入侵。\n注意：如果该星系有存留的黑雾巢穴，普通黑雾巢穴仍然可以发起进攻。");
             //RegisterString("aaa", "aaa", "aaa");
             //RegisterString("aaa", "aaa", "aaa");
 
             RegisterString("星河卫士奖章", "Galaxy Guardian's Medal", "星河卫士勋章");
-            RegisterString("星河卫士奖章描述", "This is a medal given to you by the COSMO Technology Ethics Committee for your contribution to the sector, with your name engraved on it. The COSMO Technology Ethics Committee claims that the medal is extremely expensive and rare, and suggests you not to expose it to carbon dioxide, oxygen and water at the same time.", "这是COSMO技术伦理委员会为奖励你对星区做出的贡献而为你颁发的勋章，上面刻有你的名字。COSMO技术伦理委员会声称该奖章造价昂贵、极其稀有，并建议你不要使其同时接触到二氧化碳、氧气和水。");
+            RegisterString("星河卫士奖章描述", "This is a medal given to you by the COSMO Technology Ethics Committee for your contribution to the sector, with your name engraved on it. The COSMO Technology Ethics Committee claims that the medal is extremely expensive and rare, and suggests you not to expose it to carbon dioxide, oxygen and water at the same time.", "这是COSMO技术伦理委员会为奖励你对星区做出的贡献而为你颁发的勋章，上面刻有你的名字。COSMO技术伦理委员会声称该奖章造价昂贵、极其稀有，并建议你<color=#c2853d>不要使其同时接触到二氧化碳、氧气和水</color>。");
             RegisterString("提供算力名称", "Incorporated into the COSMO architecture", "并入COSMO架构");
-            RegisterString("提供算力描述", "Provide area computing power to the COSMO Technology Ethics Committee by Incorporate all research facilities into the COSMO architecture, which will continuously earn you merit points. In addition, this protocol requires universe matrices to ensure that each section can efficiently handle the hash collision problem in the COSMO main-net.", "通过将所有科研设施并入COSMO架构来为COSMO技术伦理委员会提供星区算力，这会为你持续提供功勋点数。此外，这还需要消耗一定的宇宙矩阵来保证每个星区能高效处理主网内的散列碰撞问题。");
+            RegisterString("提供算力描述", "Provide area computing power to the COSMO Technology Ethics Committee by Incorporate all research facilities into the COSMO architecture, which will continuously earn you merit points. In addition, this protocol requires universe matrices to ensure that each section can efficiently handle the hash collision problem in the COSMO main-net.", "通过将所有科研设施并入COSMO架构来为COSMO技术伦理委员会提供星区算力，<color=#c2853d>这会为你持续提供功勋点数</color>。此外，这还需要消耗一定的宇宙矩阵来保证每个星区能高效处理主网内的散列碰撞问题。");
             RegisterString("提供算力结论", "This protocol allows unlimited progress and is automatically added to the end of the queue", "此项科技允许无限进行，已自动添加到队列末尾");
             RegisterString("版本更迭补偿", "Version change compensation", "版本更迭补偿");
-            RegisterString("遗物4-5补偿说明", "Since the effect of the meta driver [Aftershock Echo] has been changed, you received a compensation from the void: you can immediately interpret a new meta drive, and a free resurrection coin. ", "由于[余震回响]元驱动的效果被更改，你收到了一个来自虚空的补偿：可以立刻解译一个新的元驱动，并获得一个复活币。");
+            RegisterString("遗物4-5补偿说明", "Since the effect of the meta driver [Aftershock Echo] has been changed, you received a compensation from the void: you can immediately interpret a new meta driver, and a free resurrection coin. ", "由于[余震回响]元驱动的效果被更改，你收到了一个来自虚空的补偿：可以立刻解译一个新的元驱动，并获得一个复活币。");
 
             // 统计界面翻译
             RegisterString("PF深空来敌", "TCFV", "深空来敌");
             RegisterString("PF入侵逻辑", "Invasion Logic", "入侵逻辑");
-            RegisterString("PF元驱动", "Meta drives", "元驱动");
+            RegisterString("PF元驱动", "Meta drivers", "元驱动");
             RegisterString("PF工厂重写", "Factory Rewrite", "工厂重写");
             RegisterString("PF伤害逻辑", "Damage Logic", "伤害逻辑");
             RegisterString("PF击杀逻辑", "Kill Logic", "击杀逻辑");
             RegisterString("PF弹道重写", "Ballistic Rewrite", "弹道重写");
             RegisterString("PF水滴", "Droplets", "水滴");
             RegisterString("PF事件链", "Event System", "事件链");
+
+            // 入侵逻辑
+
+            RegisterString("虚空入侵扩张中", "Expanding {0:D2}:{1:D2}", "扩张中 {0:D2}:{1:D2}");
+            RegisterString("虚空入侵集结中", "Assimilating {0:D2}:{1:D2}", "同化中 {0:D2}:{1:D2}");
+            RegisterString("虚空入侵进攻中", "{2} incoming", "{2}艘战舰袭来");
+            RegisterString("虚空入侵进攻中计时", "Invasion {0:D2}:{1:D2}", "正在入侵 {0:D2}:{1:D2}");
+            RegisterString("虚空入侵数量", "Est. {0} Vessels", "预估数量 {0}");
+            RegisterString("削弱入侵标题", "Weaken the Invasion", "削弱入侵");
+            RegisterString("削弱入侵内容", "After the invasion of the void is detected, conventional weapons are almost unable to damage the dark fog that is assimilating by the void. Before the attack begins, only star cannons can effectively weaken the hive, thereby weakening the incoming invasion intensity. \nHowever, once the assimilation process is completed, the Void Dark Fog will launch the attack immediately, the enemy ships will quickly lose their immunity to conventional weapons.", "在虚空入侵被探测到后，常规武器几乎无法伤害到正被虚空同化中的黑雾巢穴。在进攻开始前，只有动用恒星炮才可以有效削弱巢穴，以此削弱即将到来的入侵强度。\n然而，一旦同化完成，虚空黑雾将立即发动进攻，敌舰也将迅速失去对常规武器的免疫效果。");
+
+
+            RegisterString("开启虚空入侵", "Enable Void Invasion", "开启虚空入侵");
+            RegisterString("已开启虚空入侵", "Void Invasion Enabled", "虚空入侵已启用");
+            RegisterString("虚空入侵", "Void Invasion", "虚空入侵");
+            RegisterString("虚空入侵提示", "Enabling Void Invasion will result in periodic and increasingly powerful dark fog invasions, and resisting invasion will earn you additional rewards. Recommended for a complete experience.\n\nWarning: Once you enabled the void invasion, you cannot disable it.", "启用虚空入侵会导致星区周期性地受到越来越强大的黑雾进攻，抵抗进攻也将获得额外奖励。建议启用以获得完整的体验。\n\n警告：一旦开启虚空入侵，此选项无法被关闭。");
+            RegisterString("虚空入侵版本更新提示", "They Come From Void has updated. There is a new mode available now. Enabling Void Invasion will result in periodic and increasingly powerful dark fog invasions, and resisting invasion will earn you additional rewards.\nNote: Recommended to enable it for a complete experience. However, once you enabled the void invasion, you cannot disable it.\nWill you enable it now?\n\n( You can also enable it later in Esc Menu. )", "深空来敌已更新虚空入侵模式，启用虚空入侵会导致星区周期性地受到越来越强大的黑雾进攻，抵抗进攻也将获得额外奖励。\n注意：推荐开启以获得完整的体验，但一旦开启虚空入侵，此选项无法被关闭。\n是否立即启用？\n\n（你也可以稍后在Esc菜单中启用虚空入侵。）");
+
+            RegisterString("侦测到虚空入侵提示", "Detected signs of void energy projection. Void is attempting to assimilate dark fog to invade {0}.", "探测到虚空能量投射，虚空正在尝试同化黑雾以入侵{0}。");
+
+            RegisterString("虚空入侵额外特性提示", "", "过载的虚空能量投射赋予了部分被同化的黑雾舰船额外特性：");
+
+            RegisterString("虚空入侵结束", "Invasion Ended", "入侵结束");
+            RegisterString("虚空入侵结束提示", "", "虚空已无法继续维持连接，所有黑雾单位已脱离了同化。{0}/{1}艘敌舰已被消灭，COSMO技术伦理委员为奖励你对维护星区和平和贡献，向你发放了{2}授权点。");
+
+            RegisterString("虚空入侵结束提示元驱动解译", "", "由于强大的虚空能量投射揭示了部分物理定律的扩展点位，下次解译元驱动时，将有更大概率发现定律级和框架级解码轨。");
 
         }
 
@@ -1492,7 +1528,7 @@ namespace DSP_Battle
                 RegisterString("ept" + id.ToString(), "Log Analysis", "分析日志");
                 RegisterString("epd" + id.ToString(), "The analysis module completes the destructive analysis of the logs, and the physical entities driven by the data indicators are scattered and stored in the ground dark fog base on a planet. Destroying all the dark fog bases and remove all the core drillers on the planet will retrieve the driving entities for further interpretation.", "分析模块完成了对日志的破坏性分析，数据指示元驱动的物理实体被分散保存在某行星上的地面黑雾基地中。摧毁并填埋该行星上的全部黑雾基地就可以取回驱动实体，以便进行下一步的解译了。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort", "放弃搜寻");
-                RegisterString("epdt" + id.ToString() + "-1", "Retrieve meta drive", "取回元驱动");
+                RegisterString("epdt" + id.ToString() + "-1", "Retrieve meta driver", "取回元驱动");
             }
             {
                 int id = 2204;
@@ -1614,10 +1650,10 @@ namespace DSP_Battle
                 ep.SetDecision(2, new int[] { 1 }, new int[] { 14 }, new int[] { 0 });
                 EventSystem.protos.Add(id, ep);
                 RegisterString("ept" + id.ToString(), "Log Analysis", "分析日志");
-                RegisterString("epd" + id.ToString(), "The analysis module completed the destructive analysis of the log and found that the specific positioning of the meta drive pointed to a space dark fog hive. It seems that the meta drive's data was distributed stored in multiple units and nodes belonging to the space dark fog hive. If you want to retrieve the complete meta drive, all units and structures of the dark fog hive, including the relay station, must be destroyed. Alternatively, Icarus attempts to decode as soon as it has acquired enough meta-drive data, but incomplete data will cause the final decoding track to be insufficiently separated, resulting in a large amount of redundant code, which will reduce the probability of finding higher-level APIs.", "分析模块完成了对日志的破坏性分析，发现元驱动的具体定位指向了一个太空黑雾巢穴，似乎元驱动的数据被分布式存储在了属于该太空黑雾巢穴的多个单位和节点中，如果想取回完整的元驱动，必须消灭该黑雾巢穴所有的单位和结构，包括中继站。或者，在伊卡洛斯获取了足够多的元驱动相关数据时立刻尝试进行解译，但不完整的数据会导致最终的解码轨分离得不够彻底，使得解码轨包含大量冗余代码，这会降低找到更高阶API的概率。");
+                RegisterString("epd" + id.ToString(), "The analysis module completed the destructive analysis of the log and found that the specific positioning of the meta driver pointed to a space dark fog hive. It seems that the meta driver's data was distributed stored in multiple units and nodes belonging to the space dark fog hive. If you want to retrieve the complete meta driver, all units and structures of the dark fog hive, including the relay station, must be destroyed. Alternatively, Icarus attempts to decode as soon as it has acquired enough meta-drive data, but incomplete data will cause the final decoding track to be insufficiently separated, resulting in a large amount of redundant code, which will reduce the probability of finding higher-level APIs.", "分析模块完成了对日志的破坏性分析，发现元驱动的具体定位指向了一个太空黑雾巢穴，似乎元驱动的数据被分布式存储在了属于该太空黑雾巢穴的多个单位和节点中，如果想取回完整的元驱动，必须消灭该黑雾巢穴所有的单位和结构，包括中继站。或者，在伊卡洛斯获取了足够多的元驱动相关数据时立刻尝试进行解译，但不完整的数据会导致最终的解码轨分离得不够彻底，使得解码轨包含大量冗余代码，这会降低找到更高阶API的概率。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort searching", "放弃搜寻");
-                RegisterString("epdt" + id.ToString() + "-1", "Retrieve partial meta drive", "取回部分元驱动");
-                RegisterString("epdt" + id.ToString() + "-2", "Retrieve meta drive", "取回元驱动");
+                RegisterString("epdt" + id.ToString() + "-1", "Retrieve partial meta driver", "取回部分元驱动");
+                RegisterString("epdt" + id.ToString() + "-2", "Retrieve meta driver", "取回元驱动");
             }
             {
                 int id = 3302;
@@ -1627,9 +1663,9 @@ namespace DSP_Battle
                 ep.SetDecision(1, new int[] { 0 }, new int[] { 14 }, new int[] { 0 });
                 EventSystem.protos.Add(id, ep);
                 RegisterString("ept" + id.ToString(), "Log Analysis", "分析日志");
-                RegisterString("epd" + id.ToString(), "The analysis module completed a destructive analysis of the log, which mentioned that the meta drive data would appear in the higher order units of a star system, and if Icarus could increase the level of the dark fog hive in space of the star system, the analysis module should be able to find enough meta drive data.", "分析模块完成了对日志的破坏性分析，日志提到了元驱动的数据会出现在某恒星系高阶单位中，如果能够提升该恒星系太空黑雾巢穴的等级，伊卡洛斯应该就能找到足够的元驱动数据。");
+                RegisterString("epd" + id.ToString(), "The analysis module completed a destructive analysis of the log, which mentioned that the meta driver data would appear in the higher order units of a star system, and if Icarus could increase the level of the dark fog hive in space of the star system, the analysis module should be able to find enough meta driver data.", "分析模块完成了对日志的破坏性分析，日志提到了元驱动的数据会出现在某恒星系高阶单位中，如果能够提升该恒星系太空黑雾巢穴的等级，伊卡洛斯应该就能找到足够的元驱动数据。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort searching", "放弃搜寻");
-                RegisterString("epdt" + id.ToString() + "-1", "Retrieve meta drive", "取回元驱动");
+                RegisterString("epdt" + id.ToString() + "-1", "Retrieve meta driver", "取回元驱动");
             }
             {
                 int id = 3303;
@@ -1641,7 +1677,7 @@ namespace DSP_Battle
                 ep.SetDecision(3, new int[] { 0 }, new int[] { 14 }, new int[] { 0 });
                 EventSystem.protos.Add(id, ep);
                 RegisterString("ept" + id.ToString(), "Log Analysis", "分析日志");
-                RegisterString("epd" + id.ToString(), "The analysis log appears to have non-mechanical emotional tendencies from lower order life, and in the course of its destructive analysis, the analysis module finds biological emotions similar to fear, compassion, excitement, and curiosity. Obviously, pure log files do not carry the need for complex emotional coding. The analysis module supposes that the log itself carries meta drive information. Unfortunately, the personality of the log securely protects its own data, which cannot be read directly by the analysis module. We can try to kill its own kind to make it fear, so we can find a loophole for aggressive decryption. Or you can use its sympathy to lower its guard, or you can try to divert its attention by using lots of complex objects to arouse its curiosity. It seems willing to offer you some thanks if you give up this intrusion.", "这个分析日志似乎拥有来自低阶生命的非机械的情感倾向，分析模块在对其进行破坏性分析的过程中，发现了类似于恐惧、同情、兴奋和好奇的生物情感。显然，单纯的日志文件没有承载复杂情感编码的需要。分析模块推测日志本身就携带着元驱动信息。但不幸的是，日志的人格牢牢地保护着自身的数据，分析模块无法直接读取。我们可以尝试杀死他的同类来让它恐惧，从而找到漏洞进行攻击性破译。或者利用它的同情降低它的戒备，还可以尝试使用大量的复杂物体引起它的好奇来试图转移其注意。如果放弃对它的入侵，它似乎愿意为我们提供一些感谢。");
+                RegisterString("epd" + id.ToString(), "The analysis log appears to have non-mechanical emotional tendencies from lower order life, and in the course of its destructive analysis, the analysis module finds biological emotions similar to fear, compassion, excitement, and curiosity. Obviously, pure log files do not carry the need for complex emotional coding. The analysis module supposes that the log itself carries meta driver information. Unfortunately, the personality of the log securely protects its own data, which cannot be read directly by the analysis module. We can try to kill its own kind to make it fear, so we can find a loophole for aggressive decryption. Or you can use its sympathy to lower its guard, or you can try to divert its attention by using lots of complex objects to arouse its curiosity. It seems willing to offer you some thanks if you give up this intrusion.", "这个分析日志似乎拥有来自低阶生命的非机械的情感倾向，分析模块在对其进行破坏性分析的过程中，发现了类似于恐惧、同情、兴奋和好奇的生物情感。显然，单纯的日志文件没有承载复杂情感编码的需要。分析模块推测日志本身就携带着元驱动信息。但不幸的是，日志的人格牢牢地保护着自身的数据，分析模块无法直接读取。我们可以尝试杀死他的同类来让它恐惧，从而找到漏洞进行攻击性破译。或者利用它的同情降低它的戒备，还可以尝试使用大量的复杂物体引起它的好奇来试图转移其注意。如果放弃对它的入侵，它似乎愿意为我们提供一些感谢。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort", "放弃");
                 RegisterString("epdt" + id.ToString() + "-1", "Distract it", "分散它的注意力");
                 RegisterString("epdt" + id.ToString() + "-2", "Arouse its sympathy", "引起它的同情");
@@ -1673,7 +1709,7 @@ namespace DSP_Battle
                 RegisterString("ept" + id.ToString(), "Log Analysis", "分析日志");
                 RegisterString("epd" + id.ToString(), "The analysis module completed the destructive analysis of the log, and found that the specific positioning of the meta-drive pointed to a star system, and it seemed that the meta-drive data was distributed stored in all the space dark fog ships and hives belonging to that star system, and we had to destroy all the space dark fog units of the star system to obtain the complete meta-drive.", "分析模块完成了对日志的破坏性分析，发现元驱动的具体定位指向了一个恒星系，似乎元驱动的数据被分布式存储在了属于该星系的所有太空黑雾单位和巢穴中，我们不得不消灭该星系的全部太空黑雾单位来获取完整的元驱动。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort searching", "放弃搜寻");
-                RegisterString("epdt" + id.ToString() + "-1", "Retrieve meta drive", "取回元驱动");
+                RegisterString("epdt" + id.ToString() + "-1", "Retrieve meta driver", "取回元驱动");
             }
             {
                 int id = 3402;
@@ -1683,9 +1719,9 @@ namespace DSP_Battle
                 ep.SetDecision(1, new int[] { 0 }, new int[] { 14 }, new int[] { 0 });
                 EventSystem.protos.Add(id, ep);
                 RegisterString("ept" + id.ToString(), "Log Analysis", "分析日志");
-                RegisterString("epd" + id.ToString(), "The analysis module completed a destructive analysis of the log, which showed that the meta-drive was actually enclosed in the star by the dark fog, although it is not known how they did it, but this stellar operation carried out by mechanical creatures can apparently be cracked by stellar energy. Using enough stellar energy should be able to snatch the meta drive out of the star in the form of quantum wave fluctuations.", "分析模块完成了对日志的破坏性分析，日志显示，元驱动居然被黑雾封闭在了恒星之中，尽管不知道他们是如何做到的，但是这种由机械生物进行的恒星级操作显然可以通过恒星级的能量破解。使用足够的恒星能量应该能够将元驱动以量子波涨落的形式从恒星中攫取出来。");
+                RegisterString("epd" + id.ToString(), "The analysis module completed a destructive analysis of the log, which showed that the meta-drive was actually enclosed in the star by the dark fog, although it is not known how they did it, but this stellar operation carried out by mechanical creatures can apparently be cracked by stellar energy. Using enough stellar energy should be able to snatch the meta driver out of the star in the form of quantum wave fluctuations.", "分析模块完成了对日志的破坏性分析，日志显示，元驱动居然被黑雾封闭在了恒星之中，尽管不知道他们是如何做到的，但是这种由机械生物进行的恒星级操作显然可以通过恒星级的能量破解。使用足够的恒星能量应该能够将元驱动以量子波涨落的形式从恒星中攫取出来。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort", "放弃搜寻");
-                RegisterString("epdt" + id.ToString() + "-1", "Retrieve meta drive", "取回元驱动");
+                RegisterString("epdt" + id.ToString() + "-1", "Retrieve meta driver", "取回元驱动");
             }
             {
                 int id = 3403;
@@ -1697,7 +1733,7 @@ namespace DSP_Battle
                 ep.SetDecision(3, new int[] { 0 }, new int[] { 14 }, new int[] { 0 });
                 EventSystem.protos.Add(id, ep);
                 RegisterString("ept" + id.ToString(), "Log Analysis", "分析日志");
-                RegisterString("epd" + id.ToString(), "The analysis log appears to have non-mechanical emotional tendencies from lower order life, and in the course of its destructive analysis, the analysis module finds biological emotions similar to fear, compassion, excitement, and curiosity. Obviously, pure log files do not carry the need for complex emotional coding. The analysis module supposes that the log itself carries meta drive information. Unfortunately, the personality of the log securely protects its own data, which cannot be read directly by the analysis module. We can try to kill its own kind to make it fear, so we can find a loophole for aggressive decryption. Or you can use its sympathy to lower its guard, or you can try to divert its attention by using lots of complex objects to arouse its curiosity. It seems willing to offer you some thanks if you give up this intrusion.", "这个分析日志似乎拥有来自低阶生命的非机械的情感倾向，分析模块在对其进行破坏性分析的过程中，发现了类似于恐惧、同情、兴奋和好奇的生物情感。显然，单纯的日志文件没有承载复杂情感编码的需要。分析模块推测日志本身就携带着元驱动信息。但不幸的是，日志的人格牢牢地保护着自身的数据，分析模块无法直接读取。我们可以尝试杀死他的同类来让它恐惧，从而找到漏洞进行攻击性破译。或者利用它的同情降低它的戒备，还可以尝试使用大量的复杂物体引起它的好奇来试图转移其注意。如果放弃对它的入侵，它似乎愿意为我们提供一些感谢。");
+                RegisterString("epd" + id.ToString(), "The analysis log appears to have non-mechanical emotional tendencies from lower order life, and in the course of its destructive analysis, the analysis module finds biological emotions similar to fear, compassion, excitement, and curiosity. Obviously, pure log files do not carry the need for complex emotional coding. The analysis module supposes that the log itself carries meta driver information. Unfortunately, the personality of the log securely protects its own data, which cannot be read directly by the analysis module. We can try to kill its own kind to make it fear, so we can find a loophole for aggressive decryption. Or you can use its sympathy to lower its guard, or you can try to divert its attention by using lots of complex objects to arouse its curiosity. It seems willing to offer you some thanks if you give up this intrusion.", "这个分析日志似乎拥有来自低阶生命的非机械的情感倾向，分析模块在对其进行破坏性分析的过程中，发现了类似于恐惧、同情、兴奋和好奇的生物情感。显然，单纯的日志文件没有承载复杂情感编码的需要。分析模块推测日志本身就携带着元驱动信息。但不幸的是，日志的人格牢牢地保护着自身的数据，分析模块无法直接读取。我们可以尝试杀死他的同类来让它恐惧，从而找到漏洞进行攻击性破译。或者利用它的同情降低它的戒备，还可以尝试使用大量的复杂物体引起它的好奇来试图转移其注意。如果放弃对它的入侵，它似乎愿意为我们提供一些感谢。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort", "放弃");
                 RegisterString("epdt" + id.ToString() + "-1", "Distract it", "分散它的注意力");
                 RegisterString("epdt" + id.ToString() + "-2", "Arouse its sympathy", "引起它的同情");
@@ -1768,7 +1804,7 @@ namespace DSP_Battle
                 ep.SetDecision(1, new int[] { 0 }, new int[] { 19998 }, new int[] { 0 });
                 EventSystem.protos.Add(id, ep);
                 RegisterString("ept" + id.ToString(), "Retrieve Meta-Drive", "寻回元驱动");
-                RegisterString("epd" + id.ToString(), "The meta drive was successfully obtained, and this drive appears to be reacted to the disintegration of the dark fog units. Every time a dark fog unit is destroyed, it will trigger regular fluctuations encoded in the entire star region, and the analysis module may be able to find a way to interpret the drive by learning a large amount of regular fluctuation data. Once the sample size is large enough, Icarus can start the interpretation procedure.", "元驱动被成功获取，这个驱动似乎对黑雾单位的解体过程有反应。每当有黑雾单位被摧毁，都会激发整个星区编码的规律性波动，分析模块或许可以通过学习大量的规律性波动数据来寻找解译驱动的方法。一旦样本量足够，伊卡洛斯就可以启动解译程序。");
+                RegisterString("epd" + id.ToString(), "The meta driver was successfully obtained, and this drive appears to be reacted to the disintegration of the dark fog units. Every time a dark fog unit is destroyed, it will trigger regular fluctuations encoded in the entire star region, and the analysis module may be able to find a way to interpret the drive by learning a large amount of regular fluctuation data. Once the sample size is large enough, Icarus can start the interpretation procedure.", "元驱动被成功获取，这个驱动似乎对黑雾单位的解体过程有反应。每当有黑雾单位被摧毁，都会激发整个星区编码的规律性波动，分析模块或许可以通过学习大量的规律性波动数据来寻找解译驱动的方法。一旦样本量足够，伊卡洛斯就可以启动解译程序。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort", "放弃解译");
                 RegisterString("epdt" + id.ToString() + "-1", "Continue interpretation procedure", "继续解译程序");
             }
@@ -1818,7 +1854,7 @@ namespace DSP_Battle
                 ep.SetDecision(1, new int[] { 0 }, new int[] { 19998 }, new int[] { 0 });
                 EventSystem.protos.Add(id, ep);
                 RegisterString("ept" + id.ToString(), "Retrieve Meta-Drive", "寻回元驱动");
-                RegisterString("epd" + id.ToString(), "The meta drive was successfully obtained, and this drive appears to be reacted to the disintegration of the dark fog units. Every time a dark fog unit is destroyed, it will trigger regular fluctuations encoded in the entire star region, and the analysis module may be able to find a way to interpret the drive by learning a large amount of regular fluctuation data. Once the sample size is large enough, Icarus can start the interpretation procedure.", "元驱动被成功获取，这个驱动似乎对黑雾单位的解体过程有反应。每当有黑雾单位被摧毁，都会激发整个星区编码的规律性波动，分析模块或许可以通过学习大量的规律性波动数据来寻找解译驱动的方法。一旦样本量足够，伊卡洛斯就可以启动解译程序。");
+                RegisterString("epd" + id.ToString(), "The meta driver was successfully obtained, and this drive appears to be reacted to the disintegration of the dark fog units. Every time a dark fog unit is destroyed, it will trigger regular fluctuations encoded in the entire star region, and the analysis module may be able to find a way to interpret the drive by learning a large amount of regular fluctuation data. Once the sample size is large enough, Icarus can start the interpretation procedure.", "元驱动被成功获取，这个驱动似乎对黑雾单位的解体过程有反应。每当有黑雾单位被摧毁，都会激发整个星区编码的规律性波动，分析模块或许可以通过学习大量的规律性波动数据来寻找解译驱动的方法。一旦样本量足够，伊卡洛斯就可以启动解译程序。");
                 RegisterString("epdt" + id.ToString() + "-0", "Abort", "放弃解译");
                 RegisterString("epdt" + id.ToString() + "-1", "Continue interpretation procedure", "继续解译程序");
             }

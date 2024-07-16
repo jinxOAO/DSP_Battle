@@ -39,6 +39,8 @@ namespace DSP_Battle
 
         public static bool isControlDown = false;
         public static bool isShiftDown = false;
+
+        public static bool playerInvincible = false;
         public void Awake()
         {
             logger = Logger;
@@ -78,7 +80,7 @@ namespace DSP_Battle
             Harmony.CreateAndPatchAll(typeof(DspBattlePlugin));
 
             Harmony.CreateAndPatchAll(typeof(BattleProtos));
-            Harmony.CreateAndPatchAll(typeof(FastStartOption));
+            Harmony.CreateAndPatchAll(typeof(NewGameOption));
             Harmony.CreateAndPatchAll(typeof(UIDialogPatch));
             Harmony.CreateAndPatchAll(typeof(Droplets));
             Harmony.CreateAndPatchAll(typeof(RendererSphere));
@@ -95,6 +97,8 @@ namespace DSP_Battle
             Harmony.CreateAndPatchAll(typeof(EventSystem));
             Harmony.CreateAndPatchAll(typeof(AssaultController));
             Harmony.CreateAndPatchAll(typeof(UIAssaultAlert));
+            Harmony.CreateAndPatchAll(typeof(UIEscMenuPatch));
+            Harmony.CreateAndPatchAll(typeof(UIHiveNamePatcher));
 
             LDBTool.PreAddDataAction += BattleProtos.AddProtos;
             BattleProtos.AddTranslate();
@@ -188,7 +192,6 @@ namespace DSP_Battle
             }
             if (Configs.developerMode && isControlDown && Input.GetKeyDown(KeyCode.M))
             {
-                AssaultController.quickBuild0 = !AssaultController.quickBuild0;
             }
             if (Configs.developerMode && isControlDown && Input.GetKeyDown(KeyCode.K))
             {
@@ -196,29 +199,38 @@ namespace DSP_Battle
             }
             if (Configs.developerMode && isControlDown && Input.GetKeyDown(KeyCode.G))
             {
-                AssaultController.quickBuildNode = !AssaultController.quickBuildNode;
             }
             if (Configs.developerMode && isControlDown && Input.GetKeyDown(KeyCode.H))
             {
-                AssaultController.TestLaunchAssault(starIndex: 0, 1000);
+                for (int i = 0; i < AssaultController.assaultHives.Count; i++)
+                {
+                    AssaultController.assaultHives[i].time -= 3600;
+                    AssaultController.assaultHives[i].timeTillAssault -= 3600;
+                }
             }
             if (Configs.developerMode && isShiftDown && Input.GetKeyDown(KeyCode.H))
             {
-                GameMain.data.mainPlayer.mecha.jumpSpeed += 1;
-                GameMain.data.history.constructionDroneSpeed -= 1;
+                for (int i = 0; i < AssaultController.assaultHives.Count; i++)
+                {
+                    AssaultController.assaultHives[i].time -= 3600 * 5;
+                    AssaultController.assaultHives[i].timeTillAssault -= 3600 * 5;
+                }
             }
             if (Configs.developerMode && isControlDown && Input.GetKeyDown(KeyCode.J))
             {
-                GameMain.data.mainPlayer.mecha.constructionModule.droneCount += 1;
-                GameMain.data.mainPlayer.mecha.constructionModule.droneAliveCount += 1;
-                GameMain.data.mainPlayer.mecha.constructionModule.droneIdleCount += 1;
+                AssaultController.InitNewAssault(-1);
             }
             if (Configs.developerMode && isShiftDown && Input.GetKeyDown(KeyCode.J))
             {
-                GameMain.data.mainPlayer.mecha.constructionModule.droneCount -= 20;
-                GameMain.data.mainPlayer.mecha.constructionModule.droneAliveCount -= 20;
-                GameMain.data.mainPlayer.mecha.constructionModule.droneIdleCount -= 20;
+                for (int i = 0; i < AssaultController.assaultHives.Count; i++)
+                {
+                    AssaultController.assaultHives[i].state = EAssaultHiveState.Remove;
+                }
             }
+
+            if (playerInvincible && GameMain.mainPlayer != null)
+                GameMain.mainPlayer.invincibleTicks = 60;
+
             UIRelic.SelectionWindowAnimationUpdate();
             UIRelic.CheckRelicSlotsWindowShowByMouse();
             UIRelic.SlotWindowAnimationUpdate();
@@ -226,7 +238,6 @@ namespace DSP_Battle
             BattleBGMController.BGMLogicUpdate();
             UISkillPointsWindow.Update();
             DevConsole.Update();
-            
         }
 
 
