@@ -269,6 +269,10 @@ namespace DSP_Battle
                 requestId = new int[] { };
                 requestCount = new int[] { };
                 requestMeet = new int[] { };
+                int relicCount = Relic.GetRelicCount() + (Relic.recordRelics == null ? 0 : Relic.recordRelics.Count);
+                if (relicCount > levelByRelicCount.Length)
+                    relicCount = levelByRelicCount.Length;
+                level = levelByRelicCount[relicCount];
             }
             if (prevModifier == null)
                 modifier = new int[] { 0, 0, 0, 0, 0, 0 };

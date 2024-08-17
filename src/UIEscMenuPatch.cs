@@ -15,10 +15,12 @@ namespace DSP_Battle
         public static GameObject EnableVoidInvasionButtonObj = null;
         public static UIButton EnableVoidInvasionUIBtn;
         public static Text EnableVoidInvasionText;
+        public static string mainMenuLogoObjPath = "UI Root/Overlay Canvas/Main Menu/dsp-logo"; // RawImage
+        public static string escMenuLogoObjPath = "UI Root/Overlay Canvas/In Game/Esc Menu/logo"; // RawImage
 
         public static void Init()
         {
-            if(EnableVoidInvasionButtonObj == null)
+            if(EnableVoidInvasionButtonObj == null && Configs.enableVoidInvasionUpdate)
             {
                 GameObject oriButton = GameObject.Find("UI Root/Overlay Canvas/In Game/Esc Menu/button-group/button (1)");
                 GameObject parentObj = GameObject.Find("UI Root/Overlay Canvas/In Game/Esc Menu/button-group");
@@ -42,15 +44,26 @@ namespace DSP_Battle
         [HarmonyPatch(typeof(UIEscMenu), "_OnUpdate")]
         public static void UIEscMenuOnUpdate()
         {
-            if(AssaultController.voidInvasionEnabled)
+            if (Configs.enableVoidInvasionUpdate)
             {
-                EnableVoidInvasionText.text = "已开启虚空入侵".Translate();
-                EnableVoidInvasionUIBtn.button.interactable = false;
-            }
-            else
-            {
-                EnableVoidInvasionText.text = "开启虚空入侵".Translate();
-                EnableVoidInvasionUIBtn.button.interactable = true;
+                if (!GameMain.data.gameDesc.isCombatMode)
+                {
+                    EnableVoidInvasionUIBtn.gameObject.SetActive(false);
+                    //EnableVoidInvasionText.text = "非黑雾模式".Translate();
+                    //EnableVoidInvasionUIBtn.button.interactable = false;
+                }
+                else if (AssaultController.voidInvasionEnabled)
+                {
+                    EnableVoidInvasionUIBtn.gameObject.SetActive(true);
+                    EnableVoidInvasionText.text = "已开启虚空入侵".Translate();
+                    EnableVoidInvasionUIBtn.button.interactable = false;
+                }
+                else
+                {
+                    EnableVoidInvasionUIBtn.gameObject.SetActive(true);
+                    EnableVoidInvasionText.text = "开启虚空入侵".Translate();
+                    EnableVoidInvasionUIBtn.button.interactable = true;
+                }
             }
         }
     }

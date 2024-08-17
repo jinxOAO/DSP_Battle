@@ -31,7 +31,7 @@ namespace DSP_Battle
 
         public static float globalDamageRate = 1.0f;
         public static float criticalRate = 0f;
-        public static int armorPenetration = 0;
+        public static int armorPenetration = 0; // 已经乘过100了，存储在此处的值
         public static float IcarusShieldEvade = 0f;
         public static float voidDamageRate = 1.0f;
         public static float dropletEnergyPunishmentRate = 1.0f;

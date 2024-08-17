@@ -675,7 +675,11 @@ namespace DSP_Battle
                             EnemyDFHiveSystem[] dfHivesByAstro2 = GameMain.data.spaceSector.dfHivesByAstro;
                             EnemyDFHiveSystem enemyDFHiveSystem2 = dfHivesByAstro2[ptr.originAstroId - 1000000];
                             int level = enemyDFHiveSystem2?.evolve.level ?? 0;
-                            if (ptr.dfSConnectorId + ptr.dfSGammaId + ptr.dfSNodeId + ptr.dfSReplicatorId + ptr.dfSTurretId + ptr.dfRelayId > 0)
+                            if (AssaultController.CheckHiveHasModifier(ptr.originAstroId) && AssaultController.modifier[5] > 0) // modifier 5 不给经验值
+                            {
+
+                            }
+                            else if (ptr.dfSConnectorId + ptr.dfSGammaId + ptr.dfSNodeId + ptr.dfSReplicatorId + ptr.dfSTurretId + ptr.dfRelayId > 0)
                                 Rank.AddExp(30 * (level + 1));
                             else if (ptr.dfSCoreId > 0)
                                 Rank.AddExp(50 * (level + 1));
@@ -710,7 +714,20 @@ namespace DSP_Battle
                                     {
                                         AssaultHive ah = AssaultController.assaultHives[listIndex];
                                         Interlocked.Add(ref ah.enemyKilled, 1);
-                                        Utils.Log("add kill");
+                                    }
+                                }
+                            }
+                            else if (ptr.unitId == 0)
+                            {
+                                if(enemyDFHiveSystem2 != null && AssaultController.invincibleHives[enemyDFHiveSystem2.hiveAstroId - 1000000] >= 0)
+                                {
+                                    int listIndex = AssaultController.invincibleHives[enemyDFHiveSystem2.hiveAstroId - 1000000];
+                                    if(listIndex >= 0 && listIndex < AssaultController.assaultHives.Count)
+                                    {
+                                        if(AssaultController.assaultHives[listIndex]!=null && AssaultController.assaultHives[listIndex].inhibitPoints < AssaultController.assaultHives[listIndex].inhibitPointsLimit)
+                                        {
+                                            AssaultController.assaultHives[listIndex].inhibitPoints++;
+                                        }
                                     }
                                 }
                             }
@@ -859,9 +876,9 @@ namespace DSP_Battle
                     }
                 }
             }
-            MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MainLogic);
-            MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.EventSys);
             MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.Kill);
+            MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.EventSys);
+            MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MainLogic);
             return true;
         }
 

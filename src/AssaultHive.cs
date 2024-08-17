@@ -12,7 +12,7 @@ namespace DSP_Battle
     {
         public int listIndex; // index of AssaultController.assaultHives;
         public int starIndex;
-        public int oriAstroId; // 1000000+byAstro，也是hiveAstro
+        public int oriAstroId; // 1000000+byAstro，也是hiveAstroId
         public int orbitIndex; // 0-7, hive's (orbit) index in star system
         public int byAstroIndex; // spaceSector.dfHivesByAstro[] index
         public int strength; // strength
@@ -89,10 +89,15 @@ namespace DSP_Battle
                     isCreated = true;
                     hive.BuildCore();
                 }
+                if (!hive.realized)
+                    hive.Realize();
+                oriLevel = hive.evolve.level;
             }
-            if(!hive.realized)
-                hive.Realize();
-            oriLevel = hive.evolve.level;
+            else
+            {
+                Debug.Log($"hive is null when init assault hives with {starIndex} - {listIndex}, now removing");
+                state = EAssaultHiveState.Remove;
+            }
         }
 
         public void LogicTick()
@@ -102,7 +107,7 @@ namespace DSP_Battle
                 state = EAssaultHiveState.Remove;
                 time = 0;
             }
-            else if(!hive.isAlive)
+            else if(!hive.isAlive && state != EAssaultHiveState.End && state != EAssaultHiveState.Remove)
             {
                 state = EAssaultHiveState.End;
                 time = 10;
@@ -145,7 +150,7 @@ namespace DSP_Battle
                 AssaultController.modifierHives[byAstroIndex] = -1;
 
             // if should show special alert monitor, add me to the alertHives array
-            if (state == EAssaultHiveState.Assemble || state == EAssaultHiveState.Assault || state == EAssaultHiveState.Expand)
+            if (state == EAssaultHiveState.Assemble || state == EAssaultHiveState.Assault)
                 AssaultController.alertHives[byAstroIndex] = listIndex;
             else
                 AssaultController.alertHives[byAstroIndex] = -1;
@@ -175,17 +180,22 @@ namespace DSP_Battle
             {
                 state = EAssaultHiveState.Assemble;
                 time = timeTillAssault;
+
+                // 弹出提示
                 if(listIndex == 0)
                 {
-                    UIDialogPatch.ShowUIDialog("虚空入侵".Translate(), string.Format("侦测到虚空入侵提示".Translate(), GameMain.galaxy.StarById(starIndex + 1)?.displayName ));
+                    AssaultController.NotifyAssaultDetected();
                 }
             }
 
         }
         public void LogicTickAssemble()
         {
-            timeTillAssault--;
-            time--;
+            if (Relic.playerIdleTime < Relic.playerIdleTimeMax)
+            {
+                timeTillAssault--;
+                time--;
+            }
             QuickAssemble();
 
             hive.evolve.threat = 0;
@@ -196,9 +206,58 @@ namespace DSP_Battle
             {
                 LaunchAssault();
                 state = EAssaultHiveState.Assault;
-                if (!AssaultController.modifierEnabled && AssaultController.modifier.Sum() > 0)
+                if (!AssaultController.modifierEnabled && AssaultController.modifier.Sum() > 0) // 虽然modifier可能出现负数，还是可以用Sum()，但是出现负数的时候modifierEnabled已经置为true了，不会影响置true的过程
                     AssaultController.modifierEnabled = true;
                 time = 0;
+
+                // 触发修改器 modifier 6 7 8 9，只有第一次切换到入侵状态的巢穴才会触发这个，一旦触发，就会将数值变为负数来防止后续触发，且用于结束之后返还减益的系数，结束之后的返还在AssaultController
+                if(AssaultController.modifierEnabled)
+                {
+                    int value = AssaultController.modifier[6];
+                    if(value > 0) 
+                    {
+                        float realDebuff = value * 1.0f / 100f;
+                        if (realDebuff > GameMain.data.history.kineticDamageScale)
+                            realDebuff = GameMain.data.history.kineticDamageScale;
+                        int realDebuffInt = (int)(realDebuff * 100);
+                        realDebuff = realDebuffInt * 1.0f / 100f;
+                        GameMain.data.history.kineticDamageScale -= realDebuff;
+                        AssaultController.modifier[6] = -realDebuffInt; // 设置为负数
+                    }
+                    value = AssaultController.modifier[7];
+                    if (value > 0)
+                    {
+                        float realDebuff = value * 1.0f / 100f;
+                        if (realDebuff > GameMain.data.history.energyDamageScale)
+                            realDebuff = GameMain.data.history.energyDamageScale;
+                        int realDebuffInt = (int)(realDebuff * 100);
+                        realDebuff = realDebuffInt * 1.0f / 100f;
+                        GameMain.data.history.energyDamageScale -= realDebuff;
+                        AssaultController.modifier[7] = -realDebuffInt; // 设置为负数
+                    }
+                    value = AssaultController.modifier[8];
+                    if (value > 0)
+                    {
+                        float realDebuff = value * 1.0f / 100f;
+                        if (realDebuff > GameMain.data.history.blastDamageScale)
+                            realDebuff = GameMain.data.history.blastDamageScale;
+                        int realDebuffInt = (int)(realDebuff * 100);
+                        realDebuff = realDebuffInt * 1.0f / 100f;
+                        GameMain.data.history.blastDamageScale -= realDebuff;
+                        AssaultController.modifier[8] = -realDebuffInt; // 设置为负数
+                    }
+                    value = AssaultController.modifier[9];
+                    if (value > 0)
+                    {
+                        float realDebuff = value * 1.0f / 100f;
+                        if (realDebuff > GameMain.data.history.magneticDamageScale)
+                            realDebuff = GameMain.data.history.magneticDamageScale;
+                        int realDebuffInt = (int)(realDebuff * 100);
+                        realDebuff = realDebuffInt * 1.0f / 100f;
+                        GameMain.data.history.magneticDamageScale -= realDebuff;
+                        AssaultController.modifier[9] = -realDebuffInt; // 设置为负数
+                    }
+                }
             }
         }
         public void LogicTickAssault()

@@ -215,8 +215,16 @@ namespace DSP_Battle
                             {
                                 __instance.thrtButton.tips.tipTitle = "削弱入侵标题";
                                 __instance.thrtButton.tips.tipText = "削弱入侵内容";
-                                __instance.thrtButton.tips.width = 258;
+
+                                __instance.thrtButton.tips.width = 345;
                                 __instance.thrtButton.tips.corner = 3;
+
+                                if (AssaultController.assaultHives[listIndex].isSuper)
+                                {
+                                    string modifierDesc ="\n\n" + "虚空入侵额外特性提示".Translate() + AssaultController.GetModifierDesc();
+                                    __instance.thrtButton.tips.tipText = "削弱入侵内容".Translate() + modifierDesc;
+                                }
+
                                 __instance.thrtButton.UpdateTip();
                             }
                         }

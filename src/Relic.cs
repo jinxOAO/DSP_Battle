@@ -32,7 +32,8 @@ namespace DSP_Battle
         //不存档的设定参数
         public static List<int> orderedRelics = new List<int>(); // 与左侧ui显示一直的排序后的元驱动
         public static int relicHoldMax = 8; // 最多可以持有的遗物数
-        public static int[] relicNumByType = { 11, 12, 18, 18, 8 }; // 当前版本各种类型的遗物各有多少种，每种类型均不能大于30
+        public static int[] relicNumByType = { 11, 13, 18, 19, 8 }; // 当前版本各种类型的遗物各有多少种，每种类型均不能大于30
+        public static List<int> relicOnlyForEnvasion = new List<int> { 407, 112 };
         public static double[] relicTypeProbability = { 0.03, 0.06, 0.13, 0.76, 0.02 }; // 各类型遗物刷新的权重
         public static double[] relicTypeProbabilityBuffed = { 0.045, 0.09, 0.195, 0.63, 0.04 }; // 五叶草buff后
         public static int[] modifierByEvent = new int[] { 0, 0, 0, 0, 0, 0 };
@@ -47,6 +48,8 @@ namespace DSP_Battle
         public static List<int> starsWithMegaStructure = new List<int>(); // 每秒更新，具有巨构的星系。
         public static List<int> starsWithMegaStructureUnfinished = new List<int>(); // 每秒更新，具有巨构且未完成建造的星系.
         public static Vector3 playerLastPos = new VectorLF3(0, 0, 0); // 上一秒玩家的位置
+        public static int playerIdleTime = 0; // 玩家在行星上持续静止的帧数
+        public static int playerIdleTimeMax = 14400; // 持续静止达到这个帧数则停止倒计时，如果有relic1-12
         public static bool alreadyRecalcDysonStarLumin = false; // 不需要存档，如果需要置false则会在读档时以及选择特定遗物时自动完成
         public static int dropletDamageGrowth = 1000; // relic0-10每次水滴击杀的伤害成长
         public static int dropletDamageLimitGrowth = 20000; // relic0-10每次消耗水滴提供的伤害成长上限的成长
@@ -79,7 +82,6 @@ namespace DSP_Battle
                 RefreshStarsWithMegaStructure();
             if (time % 60 == 8)
                 RefreshMinShieldPlanet();
-
         }
 
         static int N(int num)
@@ -162,7 +164,7 @@ namespace DSP_Battle
                 if (resurrectCoinCount < resurrectCoinMaxCount)
                     resurrectCoinCount++;
             }
-            else if (type == 3 && num == 6)
+            else if (type == 3 && num == 6) // 3-6
             {
                 if (Rank.rank < 10 && Rank.rank >= 0)
                 {
@@ -595,7 +597,7 @@ namespace DSP_Battle
 
 
         /// <summary>
-        /// relic 0-1 1-6 2-4 2-11 2-8 3-0 3-6 3-14
+        /// relic 0-1 1-6 2-4 2-11 2-8 3-0 3-14
         /// </summary>
         /// <param name="__instance"></param>
         /// <param name="power"></param>
@@ -1059,9 +1061,21 @@ namespace DSP_Battle
             float factor = 1.0f;
             if (__instance.atfAstroId > 0 && __instance.atfRayId > 0)
             {
+                if (AssaultController.CheckCasterOrTargetHasModifier(ref __instance.caster)) // 虚空入侵修改器增伤
+                {
+                    int value = AssaultController.modifier[3];
+                    factor += value * 1.0f / 100f;
+
+                    int value2 = AssaultController.modifier[11];
+                    float maxDB = Math.Max(GameMain.data.history.kineticDamageScale, GameMain.data.history.blastDamageScale);
+                    maxDB = Math.Max(maxDB, GameMain.data.history.energyDamageScale);
+                    maxDB = Math.Max(maxDB, GameMain.data.history.magneticDamageScale);
+                    factor += (maxDB - 1.0f) * value2 / 100f;
+                }
                 bool r0005 = Relic.HaveRelic(0, 5);
                 bool r0216 = Relic.HaveRelic(2, 16);
                 bool r0312 = Relic.HaveRelic(3, 12);
+                bool r0318 = Relic.HaveRelic(3, 18);
                 if (r0312 && Relic.Verify(0.15)) // 灵动巨物护盾完全规避伤害
                 {
                     factor = 0f;
@@ -1073,6 +1087,13 @@ namespace DSP_Battle
                         factor *= 0.2f;
                     else
                         factor *= 0.8f;
+                }
+                if(r0318) // 次级刚毅护盾减伤
+                {
+                    if (factor > 0.1f)
+                        factor -= 0.1f;
+                    else
+                        factor = 0f;
                 }
                 if (r0005) // 虚空荆棘
                 {
@@ -1104,9 +1125,21 @@ namespace DSP_Battle
             float factor = 1.0f;
             if (__instance.atfAstroId > 0 && __instance.atfRayId > 0)
             {
+                if (AssaultController.CheckCasterOrTargetHasModifier(ref __instance.caster)) // 虚空入侵修改器增伤
+                {
+                    int value = AssaultController.modifier[3];
+                    factor += value * 1.0f / 100f;
+
+                    int value2 = AssaultController.modifier[11];
+                    float maxDB = Math.Max(GameMain.data.history.kineticDamageScale, GameMain.data.history.blastDamageScale);
+                    maxDB = Math.Max(maxDB, GameMain.data.history.energyDamageScale);
+                    maxDB = Math.Max(maxDB, GameMain.data.history.magneticDamageScale);
+                    factor += (maxDB - 1.0f) * value2 / 100f;
+                }
                 bool r0005 = Relic.HaveRelic(0, 5);
                 bool r0216 = Relic.HaveRelic(2, 16);
                 bool r0312 = Relic.HaveRelic(3, 12);
+                bool r0318 = Relic.HaveRelic(3, 18);
                 if (r0312 && Relic.Verify(0.15)) // 灵动巨物护盾完全规避伤害
                 {
                     factor = 0f;
@@ -1118,6 +1151,13 @@ namespace DSP_Battle
                         factor *= 0.2f;
                     else
                         factor *= 0.8f;
+                }
+                if (r0318) // 次级刚毅护盾减伤
+                {
+                    if (factor > 0.1f)
+                        factor -= 0.1f;
+                    else
+                        factor = 0f;
                 }
                 if (r0005) // 虚空荆棘
                 {
@@ -1147,9 +1187,21 @@ namespace DSP_Battle
             float factor = 1.0f;
             if (__instance.atfAstroId > 0 && __instance.atfRayId > 0)
             {
+                if (AssaultController.CheckCasterOrTargetHasModifier(ref __instance.caster)) // 虚空入侵修改器增伤
+                {
+                    int value = AssaultController.modifier[3];
+                    factor += value * 1.0f / 100f;
+
+                    int value2 = AssaultController.modifier[11];
+                    float maxDB = Math.Max(GameMain.data.history.kineticDamageScale, GameMain.data.history.blastDamageScale);
+                    maxDB = Math.Max(maxDB, GameMain.data.history.energyDamageScale);
+                    maxDB = Math.Max(maxDB, GameMain.data.history.magneticDamageScale);
+                    factor += (maxDB - 1.0f) * value2 / 100f;
+                }
                 bool r0005 = Relic.HaveRelic(0, 5);
                 bool r0216 = Relic.HaveRelic(2, 16);
                 bool r0312 = Relic.HaveRelic(3, 12);
+                bool r0318 = Relic.HaveRelic(3, 18);
                 if (r0312 && Relic.Verify(0.15)) // 灵动巨物护盾完全规避伤害
                 {
                     factor = 0f;
@@ -1161,6 +1213,13 @@ namespace DSP_Battle
                         factor *= 0.2f;
                     else
                         factor *= 0.8f;
+                }
+                if (r0318) // 次级刚毅护盾减伤
+                {
+                    if (factor > 0.1f)
+                        factor -= 0.1f;
+                    else
+                        factor = 0f;
                 }
                 if (r0005) // 虚空荆棘
                 {
@@ -1193,9 +1252,21 @@ namespace DSP_Battle
                 timeTick = __instance.lifemax - (-9);
             if (__instance.atfAstroId > 0 && __instance.atfRayId > 0 && timeTick % __instance.damageInterval == 0) // 对于sweep，原本逻辑只有每10tick造成一次伤害，所以反伤和减免也是同时计算，但是由于prepatch的时候lifeMax还没减小
             {
+                if (AssaultController.CheckCasterOrTargetHasModifier(ref __instance.caster)) // 虚空入侵修改器增伤
+                {
+                    int value = AssaultController.modifier[3];
+                    factor += value * 1.0f / 100f;
+
+                    int value2 = AssaultController.modifier[11];
+                    float maxDB = Math.Max(GameMain.data.history.kineticDamageScale, GameMain.data.history.blastDamageScale);
+                    maxDB = Math.Max(maxDB, GameMain.data.history.energyDamageScale);
+                    maxDB = Math.Max(maxDB, GameMain.data.history.magneticDamageScale);
+                    factor += (maxDB - 1.0f) * value2 / 100f;
+                }
                 bool r0005 = Relic.HaveRelic(0, 5);
                 bool r0216 = Relic.HaveRelic(2, 16);
                 bool r0312 = Relic.HaveRelic(3, 12);
+                bool r0318 = Relic.HaveRelic(3, 18);
                 if (r0312 && Relic.Verify(0.15)) // 灵动巨物护盾完全规避伤害
                 {
                     factor = 0f;
@@ -1207,6 +1278,13 @@ namespace DSP_Battle
                         factor *= 0.2f;
                     else
                         factor *= 0.8f;
+                }
+                if (r0318) // 次级刚毅护盾减伤
+                {
+                    if (factor > 0.1f)
+                        factor -= 0.1f;
+                    else
+                        factor = 0f;
                 }
                 if (r0005) // 虚空荆棘
                 {
@@ -1788,16 +1866,16 @@ namespace DSP_Battle
                 {
                     if (caster.astroId == astroId)
                     {
-                        MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MainLogic);
-                        MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MetaDrive);
                         MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.Damage);
+                        MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MetaDrive);
+                        MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MainLogic);
                         return true; // 交由DamageGroundObjectByLocalCaster的prePatch自行处理，因为这个DamageGroundObjectByLocalCaster不止被DamageObject调用，还被各种skill的TickSkillLogic调用
                     }
                     else
                     {
-                        MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MainLogic);
-                        MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MetaDrive);
                         MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.Damage);
+                        MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MetaDrive);
+                        MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MainLogic);
                         return true; // 也交由DamageGroundObjectByRemoteCaster的prePatch自行处理
                     }
                 }
@@ -1818,15 +1896,45 @@ namespace DSP_Battle
             }
 
             // 虚空入侵的敌人，在入侵开始前几乎免疫常规武器伤害
-            if(target.astroId > 1000000 && target.type == ETargetType.Enemy && slice != starCannonDamageSlice) // slice == 7 为恒星炮伤害，不为7的认定为常规武器
+            if(target.astroId > 1000000 && target.type == ETargetType.Enemy) 
             {
                 EnemyDFHiveSystem enemyDFHiveSystem = __instance.sector.dfHivesByAstro[target.astroId - 1000000];
                 int byAstroId = target.astroId - 1000000;
-                if(byAstroId >= 0 && byAstroId < AssaultController.invincibleHives.Length)
+                if (slice != starCannonDamageSlice && byAstroId >= 0 && byAstroId < AssaultController.invincibleHives.Length) // slice == 7 为恒星炮伤害，不为7的认定为常规武器
                 {
                     ref EnemyData ptr = ref __instance.sector.enemyPool[target.id];
                     if(!ptr.isAssaultingUnit && AssaultController.invincibleHives[byAstroId] >= 0)
                         damage = Math.Min(1000, (int)(damage * 0.001)); // 只能造成1‰的伤害，且单次不能超过10点。免伤效果对于正在进攻中的单位无效
+                }
+                if(AssaultController.modifierEnabled)
+                {
+                    if(byAstroId >= 0 && byAstroId < AssaultController.modifierHives.Length && AssaultController.modifierHives[byAstroId] >= 0)
+                    {
+                        int value = AssaultController.modifier[0];
+                        if(value > 0)
+                        {
+                            damage = (int)(damage * (100f - value) / 100f);
+                        }
+                        value = AssaultController.modifier[1];
+                        if (value > 0)
+                        {
+                            if (Utils.RandDouble() * 100 < value)
+                                damage = 0;
+                        }
+                        value = AssaultController.modifier[2];
+                        if (value > 0)
+                        {
+                            if (!r0110)
+                                damage -= value * 100;
+                            if (damage < 0)
+                                damage = 0;
+                        }
+                        value = AssaultController.modifier[3];
+                        if (value > 0)
+                        {
+
+                        }
+                    }
                 }
             }
 
@@ -2340,7 +2448,7 @@ namespace DSP_Battle
         }
 
         /// <summary>
-        /// relic2-5 3-10
+        /// relic2-5 3-10 1-12
         /// </summary>
         public static void CheckPlayerHasaki()
         {
@@ -2364,6 +2472,29 @@ namespace DSP_Battle
 
                     Relic.playerLastPos = new Vector3(pos.x, pos.y, pos.z);
                 }
+            }
+            if (Relic.HaveRelic(1, 12))
+            {
+                if(Relic.HaveRelic(0, 9)) // 铲子强化
+                {
+                    Relic.playerIdleTimeMax = 600;
+                }
+                else
+                {
+                    Relic.playerIdleTimeMax = 3600 * 4;
+                }
+                Vector3 pos = GameMain.mainPlayer.position;
+                if (pos.x == Relic.playerLastPos.x && pos.y == Relic.playerLastPos.y && pos.z == Relic.playerLastPos.z && GameMain.mainPlayer.planetId > 0)
+                {
+                    Relic.playerIdleTime += 60;
+                    if (Relic.playerIdleTime > Relic.playerIdleTimeMax)
+                        Relic.playerIdleTime = Relic.playerIdleTimeMax;
+                }
+                else
+                {
+                    Relic.playerIdleTime = 0;
+                }
+                Relic.playerLastPos = new Vector3(pos.x, pos.y, pos.z);
             }
             MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MainLogic);
             MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MetaDrive);

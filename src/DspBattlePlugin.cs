@@ -10,6 +10,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.UI;
 using xiaoye97;
 
 namespace DSP_Battle
@@ -41,6 +42,11 @@ namespace DSP_Battle
         public static bool isShiftDown = false;
 
         public static bool playerInvincible = false;
+
+        public static GameObject mainLogo = null;
+        public static GameObject escLogo = null;
+        public static Texture2D logoTexture = null;
+        public static Texture2D escLogoTexture = null;
         public void Awake()
         {
             logger = Logger;
@@ -99,6 +105,8 @@ namespace DSP_Battle
             Harmony.CreateAndPatchAll(typeof(UIAssaultAlert));
             Harmony.CreateAndPatchAll(typeof(UIEscMenuPatch));
             Harmony.CreateAndPatchAll(typeof(UIHiveNamePatcher));
+            Harmony.CreateAndPatchAll(typeof(WormholeRenderer));
+            Harmony.CreateAndPatchAll(typeof(UIEnemyBriefInfoPatcher));
 
             LDBTool.PreAddDataAction += BattleProtos.AddProtos;
             BattleProtos.AddTranslate();
@@ -267,8 +275,22 @@ namespace DSP_Battle
         }
 
         [HarmonyPostfix]
+        [HarmonyPatch(typeof(UIMainMenu), "_OnUpdate")]
+        public static void UIMainMenu_OnUpdate()
+        {
+            UpdateLogo();
+        }
+
+        [HarmonyPostfix]
         [HarmonyPatch(typeof(UIEscMenu), "_OnOpen")]
         public static void UIEscMenu_OnOpen()
+        {
+            UpdateLogo();
+        }
+
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(UIEscMenu), "_OnUpdate")]
+        public static void UIEscMenu_OnUpdate()
         {
             UpdateLogo();
         }
@@ -296,18 +318,36 @@ namespace DSP_Battle
 
         public static void UpdateLogo()
         {
-            //var mainLogo = GameObject.Find("UI Root/Overlay Canvas/Main Menu/dsp-logo");
-            //var escLogo = GameObject.Find("UI Root/Overlay Canvas/In Game/Esc Menu/logo");
+            if(mainLogo == null)
+                mainLogo = GameObject.Find("UI Root/Overlay Canvas/Main Menu/dsp-logo");
+            if(escLogo == null)
+                escLogo = GameObject.Find("UI Root/Overlay Canvas/In Game/Esc Menu/logo");
 
-            //var iconstr = DSPGame.globalOption.languageLCID == 2052
-            //    ? "Assets/DSPBattle/logocn"
-            //    : "Assets/DSPBattle/logoen";
-            //var texture = Resources.Load<Sprite>(iconstr).texture;
-
-            //mainLogo.GetComponent<RawImage>().texture = texture;
-            //escLogo.GetComponent<RawImage>().texture = texture;
-            //mainLogo.GetComponent<RectTransform>().sizeDelta = new Vector2(texture.width, texture.height);
-            //escLogo.GetComponent<RectTransform>().sizeDelta = new Vector2(texture.width, texture.height);
+            
+            if (logoTexture == null || escLogoTexture == null)
+            {
+                var iconstr = DSPGame.globalOption.languageLCID == 2052
+                ? "Assets/DSPBattle/LOGO-cn"
+                : "Assets/DSPBattle/LOGO-en";
+                var escIconstr = DSPGame.globalOption.languageLCID == 2052
+                    ? "Assets/DSPBattle/LOGO-cn-c"
+                    : "Assets/DSPBattle/LOGO-en";
+                if (MoreMegaStructure.MoreMegaStructure.GenesisCompatibility)
+                {
+                    iconstr = DSPGame.globalOption.languageLCID == 2052
+                    ? "Assets/DSPBattle/LOGOGB-cn"
+                    : "Assets/DSPBattle/LOGOGB-en";
+                    escIconstr = iconstr;
+                    mainLogo.GetComponent<RectTransform>().sizeDelta = new Vector2(600, 250);
+                    escLogo.GetComponent<RectTransform>().sizeDelta = new Vector2(600, 250);
+                }
+                logoTexture = Resources.Load<Sprite>(iconstr).texture;
+                escLogoTexture = Resources.Load<Sprite>(escIconstr).texture;
+            }
+            if(mainLogo.GetComponent<RawImage>().texture != logoTexture)
+                mainLogo.GetComponent<RawImage>().texture = logoTexture;
+            if(escLogo.GetComponent<RawImage>().texture != escLogoTexture)
+                escLogo.GetComponent<RawImage>().texture = escLogoTexture;
         }
 
         [HarmonyPostfix]

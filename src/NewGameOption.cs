@@ -29,6 +29,7 @@ namespace DSP_Battle
         public static float seedKeyObjY1 = -387;
 
         public static Toggle DFToggle;
+        public static bool voidInvasionEnabledCache = true;
 
         [HarmonyPostfix]
         [HarmonyPatch(typeof(UIGalaxySelect), "_OnOpen")]
@@ -70,42 +71,44 @@ namespace DSP_Battle
                     oriSeedKeyObj.transform.localPosition = new Vector3(0, -351, 0);
                 }
             }
+            if (Configs.enableVoidInvasionUpdate)
+            {
+                if (voidInvasionToggleObj == null)
+                {
+                    GameObject oriToggleWithIcon = GameObject.Find("UI Root/Overlay Canvas/Galaxy Select/setting-group/DF-toggle/check-box");
+                    DFToggle = oriToggleWithIcon.GetComponent<Toggle>();
 
-            if(voidInvasionToggleObj == null)
-            { 
-                GameObject oriToggleWithIcon = GameObject.Find("UI Root/Overlay Canvas/Galaxy Select/setting-group/DF-toggle/check-box");
-                DFToggle = oriToggleWithIcon.GetComponent<Toggle>();
+                    voidInvasionToggleObj = GameObject.Instantiate(oriSettingObj);
+                    voidInvasionToggleObj.name = "void-invasion-toggle";
+                    voidInvasionToggleObj.transform.SetParent(GameObject.Find("UI Root/Overlay Canvas/Galaxy Select/setting-group/").transform, false);
+                    //GameObject.DestroyImmediate(voidInvasionToggleObj.transform.Find("CheckBox"));
+                    voidInvasionToggleObj.transform.Find("CheckBox").gameObject.SetActive(false);
+                    voidInvasionToggleObj.transform.localScale = Vector3.one;
+                    voidInvasionToggleObj.transform.localPosition = new Vector3(0, -316, 0);
 
-                voidInvasionToggleObj = GameObject.Instantiate(oriSettingObj);
-                voidInvasionToggleObj.name = "void-invasion-toggle";
-                voidInvasionToggleObj.transform.SetParent(GameObject.Find("UI Root/Overlay Canvas/Galaxy Select/setting-group/").transform, false);
-                //GameObject.DestroyImmediate(voidInvasionToggleObj.transform.Find("CheckBox"));
-                voidInvasionToggleObj.transform.Find("CheckBox").gameObject.SetActive(false);
-                voidInvasionToggleObj.transform.localScale = Vector3.one;
-                voidInvasionToggleObj.transform.localPosition = new Vector3(0, -316, 0);
+                    GameObject VICheckBoxObj = GameObject.Instantiate(oriToggleWithIcon, voidInvasionToggleObj.transform);
+                    VICheckBoxObj.transform.localScale = Vector3.one;
+                    VICheckBoxObj.transform.localPosition = new Vector3(-40, -15, 0);
+                    GameObject toggleIconObj = VICheckBoxObj.transform.Find("df-icon").gameObject;
+                    toggleIconObj.name = "vi-icon";
+                    voidInvasionLogo = toggleIconObj.GetComponent<Image>();
+                    voidInvasionLogo.sprite = Resources.Load<Sprite>("Assets/DSPBattle/techMD");
 
-                GameObject VICheckBoxObj = GameObject.Instantiate(oriToggleWithIcon, voidInvasionToggleObj.transform);
-                VICheckBoxObj.transform.localScale = Vector3.one;
-                VICheckBoxObj.transform.localPosition = new Vector3(-40, -15, 0);
-                GameObject toggleIconObj = VICheckBoxObj.transform.Find("df-icon").gameObject;
-                toggleIconObj.name = "vi-icon";
-                voidInvasionLogo = toggleIconObj.GetComponent<Image>();
-                voidInvasionLogo.sprite = Resources.Load<Sprite>("Assets/DSPBattle/techMD");
+                    voidInvasionTitleText = voidInvasionToggleObj.GetComponent<Text>();
+                    voidInvasionTitleText.text = "虚空入侵".Translate();
+                    voidInvasionToggleObj.GetComponentInChildren<UIButton>().tips.tipTitle = "虚空入侵".Translate();
+                    voidInvasionToggleObj.GetComponentInChildren<UIButton>().tips.tipText = "虚空入侵提示".Translate();
+                    voidInvasionToggle = voidInvasionToggleObj.GetComponentInChildren<Toggle>();
+                    voidInvasionToggle.onValueChanged.RemoveAllListeners();
+                    voidInvasionToggle.onValueChanged.AddListener(new UnityEngine.Events.UnityAction<bool>((isOn) => voidInvasionEnabledCache = isOn));
+                    voidInvasionToggleObj.GetComponentInChildren<Toggle>().isOn = true;
+                    voidInvasionUITg = voidInvasionToggleObj.GetComponentInChildren<UIToggle>();
 
-                voidInvasionTitleText = voidInvasionToggleObj.GetComponent<Text>();
-                voidInvasionTitleText.text = "虚空入侵".Translate();
-                voidInvasionToggleObj.GetComponentInChildren<UIButton>().tips.tipTitle = "虚空入侵".Translate();
-                voidInvasionToggleObj.GetComponentInChildren<UIButton>().tips.tipText = "虚空入侵提示".Translate();
-                voidInvasionToggle = voidInvasionToggleObj.GetComponentInChildren<Toggle>();
-                voidInvasionToggle.onValueChanged.RemoveAllListeners();
-                voidInvasionToggle.onValueChanged.AddListener(new UnityEngine.Events.UnityAction<bool>((isOn) => AssaultController.voidInvasionEnabled = isOn));
-                voidInvasionToggleObj.GetComponentInChildren<Toggle>().isOn = true;
-                voidInvasionUITg = voidInvasionToggleObj.GetComponentInChildren<UIToggle>();
+                    DFToggle.onValueChanged.AddListener(new UnityEngine.Events.UnityAction<bool>((isOn) => voidInvasionToggle.isOn = isOn));
+                }
 
-                DFToggle.onValueChanged.AddListener(new UnityEngine.Events.UnityAction<bool>((isOn) => voidInvasionToggle.isOn = isOn));
+                voidInvasionEnabledCache = voidInvasionToggle.isOn;
             }
-
-            AssaultController.voidInvasionEnabled = voidInvasionToggle.isOn;
         }
 
         [HarmonyPostfix]
@@ -123,26 +126,30 @@ namespace DSP_Battle
         [HarmonyPatch(typeof(UIGalaxySelect), "_OnUpdate")]
         public static void UIGalaxySelect_OnUpdate(ref UIGalaxySelect __instance)
         {
-            if(__instance.gameDesc.isCombatMode)
+            if (fastStartObj != null)
+                fastStartObj.GetComponent<Text>().text = "快速开局".Translate();
+            if (Configs.enableVoidInvasionUpdate)
             {
-                oriPropertyMultiplierObj.transform.localPosition = new Vector3(propertyObjX, propertyObjY1, 0);
-                oriSeedKeyObj.transform.localPosition = new Vector3(seedKeyObjX, seedKeyObjY1, 0);
-
-                voidInvasionToggleObj.SetActive(true);
-                voidInvasionTitleText.text = "虚空入侵".Translate();
-                voidInvasionLogo.color = new Color(1f, 1f, 1f, (AssaultController.voidInvasionEnabled ? 0.86f : 0.06f) + (voidInvasionUITg.isMouseEnter ? 0.14f : 0f));
-                if(voidInvasionToggleObj.transform.localPosition.y != -316)
+                if (__instance.gameDesc.isCombatMode)
                 {
-                    voidInvasionToggleObj.transform.localPosition = new Vector3(0, -316, 0);
+                    oriPropertyMultiplierObj.transform.localPosition = new Vector3(propertyObjX, propertyObjY1, 0);
+                    oriSeedKeyObj.transform.localPosition = new Vector3(seedKeyObjX, seedKeyObjY1, 0);
+
+                    voidInvasionToggleObj.SetActive(true);
+                    voidInvasionTitleText.text = "虚空入侵".Translate();
+                    voidInvasionLogo.color = new Color(1f, 1f, 1f, (voidInvasionEnabledCache ? 0.86f : 0.06f) + (voidInvasionUITg.isMouseEnter ? 0.14f : 0f));
+                    if (voidInvasionToggleObj.transform.localPosition.y != -316)
+                    {
+                        voidInvasionToggleObj.transform.localPosition = new Vector3(0, -316, 0);
+                    }
+                }
+                else
+                {
+                    oriPropertyMultiplierObj.transform.localPosition = new Vector3(propertyObjX, propertyObjY0, 0);
+                    oriSeedKeyObj.transform.localPosition = new Vector3(seedKeyObjX, seedKeyObjY0, 0);
+                    voidInvasionToggleObj.SetActive(false);
                 }
             }
-            else
-            {
-                oriPropertyMultiplierObj.transform.localPosition = new Vector3(propertyObjX, propertyObjY0, 0);
-                oriSeedKeyObj.transform.localPosition = new Vector3(seedKeyObjX, seedKeyObjY0, 0);
-                voidInvasionToggleObj.SetActive(false);
-            }
-
         }
 
         [HarmonyPrefix]
@@ -161,6 +168,7 @@ namespace DSP_Battle
                 DspBattlePlugin.logger.LogInfo("=======================================> FAST START");
                 Init();
             }
+            AssaultController.voidInvasionEnabled = voidInvasionEnabledCache;
             UIEscMenuPatch.Init();
         }
 

@@ -518,8 +518,9 @@ namespace DSP_Battle
         public static string consoleHelpTip = "Use command \"help\" to view all commands.";
         public static InputField consoleInputField = null;
         public static InputField consoleOutputField = null;
+        public static GameObject outputFieldObj = null;
         public static int outputClearCount = 0;
-        public static int maxOutputClearCount = 25;
+        public static int maxOutputClearCount = 23;
         public static void InitAll()
         {
             if (consoleObj == null)
@@ -558,7 +559,7 @@ namespace DSP_Battle
                 inputBgObj.transform.localScale = new Vector3(1, 1, 1);
                 inputBgObj.transform.localPosition = new Vector3(0, -278, 0);
 
-                GameObject oriInputFieldObj = GameObject.Find("UI Root/Overlay Canvas/In Game/Windows/Blueprint Browser/inspector-group/group-1/input-desc-text");
+                GameObject oriInputFieldObj = GameObject.Find("UI Root/Overlay Canvas/In Game/Windows/Blueprint Browser/inspector-group/Scroll View/Viewport/Content/group-1/input-short-text");
                 if (oriInputFieldObj == null)
                     oriInputFieldObj = GameObject.Find("UI Root/Overlay Canvas/In Game/Windows/Blueprint Browser/inspector-group/BP-panel-scroll(Clone)/Viewport/pane/group-1/input-desc-text");
                 GameObject inputFieldObj = GameObject.Instantiate(oriInputFieldObj, consoleObj.transform);
@@ -567,7 +568,8 @@ namespace DSP_Battle
                 inputFieldObj.GetComponent<UIButton>().tips.tipText = consoleHelpTip;
                 inputFieldObj.transform.localScale = new Vector3(1, 1, 1);
                 inputFieldObj.transform.localPosition = new Vector3(-390, -265);
-                inputFieldObj.GetComponent<RectTransform>().sizeDelta = new Vector2(-20, 26);
+                inputFieldObj.GetComponent<RectTransform>().sizeDelta = new Vector2(780, 26);
+                inputFieldObj.GetComponent<InputField>().lineType = InputField.LineType.MultiLineNewline;
                 inputFieldObj.transform.Find("value-text").GetComponent<Text>().color = Color.white;
                 //inputFieldObj.GetComponent<Image>().color = new Color(1f, 1f, 1f, 1f);
                 consoleInputField = inputFieldObj.GetComponent<InputField>();
@@ -582,14 +584,15 @@ namespace DSP_Battle
                 XObj.transform.localScale = new Vector3(1, 1, 1);
                 XObj.transform.localPosition = new Vector3(390, 290);
 
-                GameObject outputFieldObj = GameObject.Instantiate(oriInputFieldObj, consoleObj.transform);
+                outputFieldObj = GameObject.Instantiate(oriInputFieldObj, consoleObj.transform);
                 outputFieldObj.name = "outputfield";
                 outputFieldObj.GetComponent<UIButton>().tips.delay = 999999;
                 outputFieldObj.GetComponent<UIButton>().tips.tipTitle = "Outputs";
                 outputFieldObj.GetComponent<UIButton>().tips.tipText = "This console is only for mod devs.";
                 outputFieldObj.transform.localScale = new Vector3(1, 1, 1);
                 outputFieldObj.transform.localPosition = new Vector3(-390, 265);
-                outputFieldObj.GetComponent<RectTransform>().sizeDelta = new Vector2(-20, 500);
+                outputFieldObj.GetComponent<RectTransform>().sizeDelta = new Vector2(780, 500);
+                outputFieldObj.GetComponent<InputField>().lineType = InputField.LineType.MultiLineNewline;
                 outputFieldObj.transform.Find("value-text").GetComponent<Text>().supportRichText = true;
                 outputFieldObj.transform.Find("value-text").GetComponent<Text>().alignment = TextAnchor.LowerLeft;
                 outputFieldObj.transform.Find("value-text").GetComponent<Text>().color = new Color(0.1875f, 0.8125f, 1f);
@@ -610,13 +613,16 @@ namespace DSP_Battle
             {
                 consoleObj.SetActive(true);
                 consoleInputField.ActivateInputField();
+                outputFieldObj.SetActive(true);
             }
         }
 
         public static void Hide()
         {
             if (consoleObj != null)
+            {
                 consoleObj.SetActive(false);
+            }
         }
 
         public static bool EscLogic()
@@ -683,7 +689,7 @@ namespace DSP_Battle
                 //"<color=#ffffff>setsf [param1] [param2] [param3]</color>  立刻将星系index为[param1]的恒星要塞第[param2]个模块已建成数量设置为[param3]" + "\n" +
                 "<color=#ffffff>setrank [param1]</color> 将功勋等级设置为[param1]，改变等级后还会使经验降低至0" + "\n" +
                 "<color=#ffffff>addexp [param1]</color> 增加[param1]经验，可升级，也可为负但不会降级" + "\n" +
-                "<color=#ffffff>newrelic ([param1]) ([param2])</color> 立刻随机并打开选择元驱动窗口，可选参数用来强制在中间刷新某个特定稀有度，或刷新某个特定的元驱动" + "\n" +
+                "<color=#ffffff>newrelic ([param1]) ([param2])</color> 立刻随机并打开选择元驱动窗口，可选参数可强制在中间刷新某个特定稀有度，或特定元驱动" + "\n" +
                 "<color=#ffffff>addrelic [param1] [param2]</color> 立刻获得第[param1]类型第[param2]号元驱动" + "\n" +
                 "<color=#ffffff>rmrelic [param1] [param2]</color> 立刻删除第[param1]类型第[param2]号元驱动（如果已经拥有）" + "\n" +
                 "<color=#ffffff>lsrelic</color> 展示所有元驱动的名称" + "\n" +

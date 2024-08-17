@@ -590,7 +590,7 @@ namespace DSP_Battle
                             if (AssaultController.invincibleHives[hiveAstroId] >= 0 && curTargetLockTime > 60 && !ptr.isAssaultingUnit) // 攻击/追击近乎无敌的虚空同化中的目标超过一秒后会尝试切换目标
                             {
                                 if (Utils.RandDouble() <= 0.9)
-                                    return SearchNextNearestTarget(true, true); // 一定概率优先攻击距离机甲较近的，而非距离水滴自己当前位置较近的
+                                    return SearchNextNearestTarget(true, true); // 如果是因为攻击无敌目标而且换，有很大概率优先攻击距离机甲较近的，而非距离水滴自己当前位置较近的
                                 return SearchNextNearestTarget(false, true); // 通常攻击距离水滴自身距离比较近的单位
                             }
 
@@ -606,7 +606,7 @@ namespace DSP_Battle
                     }
                 }
             }
-            if(Utils.RandDouble() <= 0.25)
+            if(Utils.RandDouble() <= 0.05)
                 return SearchNextNearestTarget(true, true); // 一定概率优先攻击距离机甲较近的，而非距离水滴自己当前位置较近的
             return SearchNextNearestTarget(false, true); // 通常攻击距离水滴自身距离比较近的单位
         }
@@ -895,10 +895,26 @@ namespace DSP_Battle
                 caster.type = ETargetType.Player;
                 caster.astroId = 0;
                 ref CombatStat stat = ref sector.skillSystem.DamageObject(damage, 1, ref target, ref caster);
-                if (stat.hp <= 0 && Relic.HaveRelic(0, 10))
+                if (stat.hp <= 0)
                 {
-                    Droplets.DamageGrow();
-                    Droplets.RestoreMechaEnergy(Relic.dropletEnergyRestore);
+                    if (Relic.HaveRelic(0, 10))
+                    {
+                        Droplets.DamageGrow();
+                        Droplets.RestoreMechaEnergy(Relic.dropletEnergyRestore);
+                    }
+                    if(AssaultController.CheckCasterOrTargetHasModifier(ref target) && AssaultController.modifier[4] > 0) // modifier 4
+                    {
+                        if(Utils.RandDouble() * 100 < AssaultController.modifier[4])
+                        {
+                            int fleetIndex = dropletIndex / 3;
+                            int fighterIndex = dropletIndex % 3;
+                            ModuleFleet[] fleets = GameMain.mainPlayer?.mecha?.spaceCombatModule?.moduleFleets;
+                            if(fleets != null && fleets.Length > fleetIndex && fleets[fleetIndex].fighters.Length > fighterIndex)
+                            {
+                                fleets[fleetIndex].ClearFighterCount(fighterIndex);
+                            }
+                        }
+                    }
                 }
             }
             return damage;

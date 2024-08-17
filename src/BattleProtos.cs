@@ -549,6 +549,7 @@ namespace DSP_Battle
             RegisterString("遗物名称1-9", "Knight's Vow\n<size=18>- Framed -</size>", "骑士之誓\n<size=18>- 框架级 -</size>");
             RegisterString("遗物名称1-10", "True Damage\n<size=18>- Framed -</size>", "真实伤害\n<size=18>- 框架级 -</size>");
             RegisterString("遗物名称1-11", "Frozen Tomb\n<size=18>- Framed -</size>", "冰封陵墓\n<size=18>- 框架级 -</size>");
+            RegisterString("遗物名称1-12", "Quiet Death\n<size=18>- Framed -</size>", "衰寂\n<size=18>- 框架级 -</size>");
 
             RegisterString("遗物名称2-0", "Super Charger\n<size=18>- Packaged -</size>", "超充能器\n<size=18>- 封装级 -</size>");
             RegisterString("遗物名称2-1", "Honorary Promotion\n<size=18>- Packaged -</size>", "荣誉晋升\n<size=18>- 封装级 -</size>");
@@ -587,6 +588,7 @@ namespace DSP_Battle
             RegisterString("遗物名称3-15", "Super Mind\n<size=18>- Regular -</size>", "超级大脑\n<size=18>- 常规级 -</size>");
             RegisterString("遗物名称3-16", "Void Lens\n<size=18>- Regular -</size>", "虚空棱镜\n<size=18>- 常规级 -</size>");
             RegisterString("遗物名称3-17", "Level Up!\n<size=18>- Regular -</size>", "升级咯！\n<size=18>- 常规级 -</size>");
+            RegisterString("遗物名称3-18", "Secondary Hardened Shield\n<size=18>- Regular -</size>", "次级刚毅护盾\n<size=18>- 常规级 -</size>");
 
             RegisterString("遗物名称4-0", "The Weaver\n<size=18>- Axiomatic -</size>", "编织者\n<size=18>- 公理级 -</size>");
             RegisterString("遗物名称4-1", "Contract of Misfortune\n<size=18>- Axiomatic -</size>", "厄运契约\n<size=18>- 公理级 -</size>");
@@ -621,6 +623,8 @@ namespace DSP_Battle
             RegisterString("遗物名称带颜色1-9", "<color=#9040d0>Knight's Vow  [Framed]</color>", "<color=#9040d0>骑士之誓  [框架级]</color>");
             RegisterString("遗物名称带颜色1-10", "<color=#9040d0>True Damage  [Framed]</color>", "<color=#9040d0>真实伤害  [框架级]</color>");
             RegisterString("遗物名称带颜色1-11", "<color=#9040d0>Frozen Tomb  [Framed]</color>", "<color=#9040d0>冰封陵墓  [框架级]</color>");
+            RegisterString("遗物名称带颜色1-12", "<color=#9040d0>Quiet Death  [Framed]</color>", "<color=#9040d0>衰寂  [框架级]</color>");
+            RegisterString("遗物名称带颜色1-12+", "<color=#d2853d>Hide on Bush  [Fakered]</color>", "<color=#d2853d>隐形的翅膀  [定律级?]</color>");
 
             RegisterString("遗物名称带颜色2-0", "<color=#2080d0>Super Charger  [Packaged]</color>", "<color=#2080d0>超充能器  [封装级]</color>");
             RegisterString("遗物名称带颜色2-1", "<color=#2080d0>Honorary Promotion  [Packaged]</color>", "<color=#2080d0>荣誉晋升  [封装级]</color>");
@@ -637,7 +641,7 @@ namespace DSP_Battle
             RegisterString("遗物名称带颜色2-12", "<color=#2080d0>Last Breath  [Packaged]</color>", "<color=#2080d0>强攻  [封装级]</color>");
             RegisterString("遗物名称带颜色2-13", "<color=#2080d0>Infinity Edge  [Packaged]</color>", "<color=#2080d0>无尽之刃  [封装级]</color>");
             RegisterString("遗物名称带颜色2-14", "<color=#2080d0>Kleptomancy  [Packaged]</color>", "<color=#2080d0>行窃预兆  [封装级]</color>");
-            RegisterString("遗物名称带颜色2-15", "<color=#2080d0>Gravitational Fragmentation  [Packaged -<size>", "<color=#2080d0>引力碎裂  [封装级]</color>");
+            RegisterString("遗物名称带颜色2-15", "<color=#2080d0>Gravitational Fragmentation  [Packaged]</color>", "<color=#2080d0>引力碎裂  [封装级]</color>");
             RegisterString("遗物名称带颜色2-16", "<color=#2080d0>Hardened Shield  [Packaged]</color>", "<color=#2080d0>刚毅护盾  [封装级]</color>");
             RegisterString("遗物名称带颜色2-17", "<color=#2080d0>Aegis of the Immortal  [Packaged]</color>", "<color=#2080d0>不朽之守护  [封装级]</color>");
 
@@ -659,6 +663,7 @@ namespace DSP_Battle
             RegisterString("遗物名称带颜色3-15", "<color=#30b530>Super Mind  [Regular]</color>", "<color=#30b530>超级大脑  [常规级]</color>");
             RegisterString("遗物名称带颜色3-16", "<color=#30b530>Void Lens  [Regular]</color>", "<color=#30b530>虚空棱镜  [常规级]</color>");
             RegisterString("遗物名称带颜色3-17", "<color=#30b530>Level Up!  [Regular]</color>", "<color=#30b530>升级咯！  [常规级]</color>");
+            RegisterString("遗物名称带颜色3-18", "<color=#30b530>Secondary Hardened Shield  [Regular]</color>", "<color=#30b530>次级刚毅护盾  [常规级]</color>");
 
             RegisterString("遗物名称带颜色4-0", "<color=#00c560>The Weaver  [Axiomatic]</color>", "<color=#00c560>编织者  [公理级]</color>");
             RegisterString("遗物名称带颜色4-1", "<color=#00c560>Contract of Misfortune [Axiomatic]</color>", "<color=#00c560>厄运契约  [公理级]</color>");
@@ -694,13 +699,15 @@ namespace DSP_Battle
             RegisterString("遗物描述1-9", "When an ally fleet unit is about to take damage, if Icarus' shield is charged above 50%, Icarus will take the damage instead", "我方舰队中的单位将要承受伤害时，如果伊卡洛斯的能量盾充能高于50%，则由其代为承担");
             RegisterString("遗物描述1-10", "Ally damage will permanently ignore the armor of the dark fog unit. Won't occupy the meta driver slot", "友方伤害将永久无视黑雾单位的护甲，不占用元驱动槽位");
             RegisterString("遗物描述1-11", "Greatly enhanced jamming tower's effect", "大幅强化干扰塔的效果");
+            RegisterString("遗物描述1-12", "If Icarus is on the planet and hold still for more than 4 min, the void assimilation countdown will stop", "伊卡洛斯在行星上保持静止超过4min后，虚空同化将停止计时");
+            RegisterString("遗物描述1-12+", "If Icarus is on the planet and hold still for more than <color=#d2853d>10 second</color>, the void assimilation countdown will stop\n\n<color=#d2853d>Has been spatulled in shiny glow</color>", "伊卡洛斯在行星上保持静止超过<color=#d2853d>10s</color>后，虚空同化将停止计时\n\n<color=#d2853d>镀上了铲亮的光芒</color>");
 
             RegisterString("遗物描述2-0", "Planetary Shields gain 50% additional charge energy", "行星护盾获得50%额外的充能量");
             RegisterString("遗物描述2-1", "Each time your merit rank is promoted, random mega structures will be partly auto-constructed", "每次提升功勋阶级，显著推进各巨构的建造进度");
             RegisterString("遗物描述2-2", "Get merit points when allied buildings destroyed", "建筑被摧毁时，获得功勋点数");
             RegisterString("遗物描述2-3", "Each time a turret uses an ammo set to reload, there is 40% chance to restore an identical ammo set", "所有防御设施在装填时有40%概率回填一组弹药");
             RegisterString("遗物描述2-4", "When producing normal fuel rods, each output will returne 5 materials in the second slot", "生产常规燃料棒时，每次产出会回填5个第2位置的原材料（氢、重氢）");
-            RegisterString("遗物描述2-5", "Every second, if Icaros is on the planet and have moved in the previous second, you have 8% chance to obtain a multi-functional integrated component", "每过一秒，如果伊卡洛斯处于行星上并且在上一秒进行过移动，就有8%的概率获得一个多功能集成组件");
+            RegisterString("遗物描述2-5", "Every second, if Icarus is on the planet and have moved in the previous second, you have 8% chance to obtain a multi-functional integrated component", "每过一秒，如果伊卡洛斯处于行星上并且在上一秒进行过移动，就有8%的概率获得一个多功能集成组件");
             RegisterString("遗物描述2-6", "All your fleets energy consumption -40%", "战斗无人机各项能量消耗-40%");
             RegisterString("遗物描述2-7", "Kinetic, energy and explosive damage +10%. Won't occupy the meta driver slot", "动能武器伤害、爆破武器伤害、能量武器伤害+10%，不占用元驱动槽位");
             RegisterString("遗物描述2-8", "When decomposing critical photons, hydrogen is no longer produced, but the antimatter production increase 50%", "分解临界光子时，不再产出氢，但产出的反物质增加50%");
@@ -710,6 +717,7 @@ namespace DSP_Battle
             RegisterString("遗物描述2-12", "You gain +10% chance of critical hit", "你获得10%暴击几率");
             RegisterString("遗物描述2-13", "Double any <i>additional damage</i> (except the bonus from technology)", "你对黑雾造成的任何<i>额外伤害翻倍</i>（来自科技的加成除外）");
             RegisterString("遗物描述2-14", "Every time you destroy an enemy, you have chance to directly obtain an antimatter fuel rod or a space warper in the backpack", "每次击毁敌军单位，根据敌人强度有概率在背包直接获取1个反物质燃料棒或翘曲器，无视科技解锁进度");
+            RegisterString("遗物描述2-14+", "Every time you destroy an enemy, you have chance to directly obtain an <color=#d2853d>strange annihilation fuel rod</color> or a space warper in the backpack\n\n<color=#d2853d>Has been spatulled in shiny glow</color>", "每次击毁敌军单位，根据敌人强度有概率在背包直接获取1个<color=#d2853d>奇异湮灭燃料棒</color>或翘曲器，无视科技解锁进度\n\n<color=#d2853d>镀上了铲亮的光芒</color>");
             RegisterString("遗物描述2-15", "Explosive damage +10%. Won't occupy the meta driver slot", "爆破武器伤害+40%，不占用元驱动槽位");
             RegisterString("遗物描述2-16", "Planetary Shield and Icarus Shield gain 20% damage reduction", "行星护盾和伊卡洛斯的护盾获得20%伤害减免");
             RegisterString("遗物描述2-17", "When Icarus is about to be destroyed, restore all health and energy shields instead, and gains invincible for 30 seconds", "伊卡洛斯即将被摧毁时，转而立刻回复全部的生命值和能量盾，并获得30s的伤害免疫");
@@ -722,7 +730,7 @@ namespace DSP_Battle
             RegisterString("遗物描述3-5", "When Icarus is destroyed, give you options to use resurrection coins to redeploy or reassemble for free. Won't occupy the meta driver slot", "伊卡洛斯被毁时，可以选择消耗复活币来无消耗地重新部署或原地重组，不占用元驱动槽位");
             RegisterString("遗物描述3-6", "Gain some merit points based on your current rank level. Won't occupy the meta driver slot", "获得基于当前阶级的少量功勋点数，不占用元驱动槽位");
             RegisterString("遗物描述3-7", "Energy weapon damage +10%. Won't occupy the meta driver slot", "能量武器伤害+10%，不占用元驱动槽位");
-            RegisterString("遗物描述3-8", "Based on the unlocked matrix technology, immediately give a large number of normal matrix. Won't occupy the meta driver slot", "基于已解锁的矩阵科技，立刻获得大量普通矩阵（异星矩阵和宇宙矩阵除外），不会占用元驱动槽位");
+            RegisterString("遗物描述3-8", "Based on the unlocked matrix technology, immediately give a large number of normal matrix. Won't occupy the meta driver slot", "基于已解锁的矩阵科技，立刻获得大量普通矩阵（黑雾矩阵和宇宙矩阵除外），不会占用元驱动槽位");
             RegisterString("遗物描述3-9", "When a certain number of buildings are destroyed, random mega structure will be slightly auto-constructed", "一定数量的建筑被毁时，微量推进随机星系的巨构的建造进度");
             RegisterString("遗物描述3-10", "Every second, if Icaros is on the planet and have moved in the previous second, you have 3% chance to obtain a multi-functional integrated component", "每过一秒，如果伊卡洛斯处于行星上并且在上一秒进行过移动，就有3%的概率获得一个多功能集成组件");
             RegisterString("遗物描述3-11", "Solar sial adsorption speed increases 100%", "巨构的太阳帆吸附速度提升100%");
@@ -730,8 +738,9 @@ namespace DSP_Battle
             RegisterString("遗物描述3-13", "Star cannon's recharging speed +25%", "恒星炮充能速度提高25%");
             RegisterString("遗物描述3-14", "When producing electric motors or electromagnetic turbines , every time a product is produced, one magnetic coil will be returned", "生产电动机、电磁涡轮时，每生产一个产物，回填1个磁线圈作为原材料");
             RegisterString("遗物描述3-15", "The research speed of Icarus mecha +400%, and research energy consumption +400%", "伊卡洛斯机甲的研究速度+400%，研究能耗同步增加");
-            RegisterString("遗物描述3-16", "Star cannon deals 10% <i>additional damage</i>", "恒星炮对主要目标造成10%<i>额外伤害</i>");
+            RegisterString("遗物描述3-16", "Star cannon deals 10% <i>additional damage</i>", "恒星炮造成10%<i>额外伤害</i>");
             RegisterString("遗物描述3-17", "You get 25% extra merit points", "功勋点数获取+25%");
+            RegisterString("遗物描述3-18", "Planetary Shield gain 10% damage reduction", "行星护盾获得10%伤害减免");
 
             RegisterString("遗物描述4-0", "The mega structure in the star system with the max luminosity in the galaxy, will be constantly auto-constructing", "星区中光度最高的恒星系的巨构会不停地自动建造");
             RegisterString("遗物描述4-1", "Every time you interpret a meta driver, at least one Mensural decoding track will be available before you reroll. Reroll cost is halved", "每次解译完毕元驱动时，必然刷新一个定律级解码轨，重随消耗减半");
@@ -749,6 +758,8 @@ namespace DSP_Battle
             RegisterString("relicTipText1-2", "This effect has a separate 10min cooldown for each planet", "这个效果对每个行星具有独立的10分钟的冷却时间");
             RegisterString("relicTipTitle1-8", "Energy consumption", "能量消耗");
             RegisterString("relicTipText1-8", "It takes twice chamber fuel's energy to recharge the shield power. If this effect is triggered repeatedly within 1 minute, the energy consumption multiplier will rapidly increase to a maximum of 20 times", "需要消耗相当于回复护盾能量2倍的燃烧室燃料。如果在1分钟内反复触发此效果，能量消耗倍率会快速增长至最高20倍");
+            RegisterString("relicTipTitle1-12", "Hold still", "保持静止");
+            RegisterString("relicTipText1-12", "Once moved, the held still time will reset", "一旦移动，保持静止的计时时间将重置");
             RegisterString("relicTipTitle2-12", "Critical hit", "暴击");
             RegisterString("relicTipText2-12", "Critical hit will deal 100% additional damage", "暴击会对目标造成100%额外伤害");
             RegisterString("relicTipTitle2-16", "Damage reduction", "伤害减免");
@@ -958,6 +969,7 @@ namespace DSP_Battle
             RegisterString("PF弹道重写", "Ballistic Rewrite", "弹道重写");
             RegisterString("PF水滴", "Droplets", "水滴");
             RegisterString("PF事件链", "Event System", "事件链");
+            RegisterString("PF深空绘制调用", "Draw Call", "绘制调用");
 
             // 入侵逻辑
 
@@ -967,24 +979,38 @@ namespace DSP_Battle
             RegisterString("虚空入侵进攻中计时", "Invasion {0:D2}:{1:D2}", "正在入侵 {0:D2}:{1:D2}");
             RegisterString("虚空入侵数量", "Est. {0} Vessels", "预估数量 {0}");
             RegisterString("削弱入侵标题", "Weaken the Invasion", "削弱入侵");
-            RegisterString("削弱入侵内容", "After the invasion of the void is detected, conventional weapons are almost unable to damage the dark fog that is assimilating by the void. Before the attack begins, only star cannons can effectively weaken the hive, thereby weakening the incoming invasion intensity. \nHowever, once the assimilation process is completed, the Void Dark Fog will launch the attack immediately, the enemy ships will quickly lose their immunity to conventional weapons.", "在虚空入侵被探测到后，常规武器几乎无法伤害到正被虚空同化中的黑雾巢穴。在进攻开始前，只有动用恒星炮才可以有效削弱巢穴，以此削弱即将到来的入侵强度。\n然而，一旦同化完成，虚空黑雾将立即发动进攻，敌舰也将迅速失去对常规武器的免疫效果。");
+            RegisterString("削弱入侵内容", "When the dark fog is in the process of assimilation, the continuous projection of void energy makes it almost impossible for <color=#ffa800dd>conventional weapons</color> to damage the dark fog units. Only by using the <color=#ffa800dd>star cannon</color> can we ignore the protection of void energy, and damage the hive even during the assimilation process, thereby <color=#ffa800dd>weakening</color> the upcoming <color=#ffa800dd>invasion intensity</color>. \nOnce assimilation process is complete, the void will redirect its energy towards maintaining complete control over the dark fog, which will cause the dark fog to lose the shelter of void energy projection. This means that only after they initiate the invasion can they be damaged by conventional weapon.", "当黑雾正处在被同化的进程中时，持续的虚空能量投射使得<color=#ffa800dd>常规武器</color>几乎无法伤害到这些黑雾单位。只有动用<color=#ffa800dd>恒星炮</color>才可以无视虚空能量的庇护并在同化进程中对巢穴造成伤害，以此<color=#ffa800dd>削弱</color>即将到来的<color=#ffa800dd>入侵强度</color>。\n一旦同化完成，虚空会将能量转而用于维持对黑雾的完全控制，这同时也会使得黑雾失去虚空能量投射的庇护，这意味着其只有在发起入侵时才可以被常规武器伤害。");
 
 
             RegisterString("开启虚空入侵", "Enable Void Invasion", "开启虚空入侵");
             RegisterString("已开启虚空入侵", "Void Invasion Enabled", "虚空入侵已启用");
+            RegisterString("非黑雾模式", "Dark Fog Not Available", "黑雾势力未启用");
             RegisterString("虚空入侵", "Void Invasion", "虚空入侵");
-            RegisterString("虚空入侵提示", "Enabling Void Invasion will result in periodic and increasingly powerful dark fog invasions, and resisting invasion will earn you additional rewards. Recommended for a complete experience.\n\nWarning: Once you enabled the void invasion, you cannot disable it.", "启用虚空入侵会导致星区周期性地受到越来越强大的黑雾进攻，抵抗进攻也将获得额外奖励。建议启用以获得完整的体验。\n\n警告：一旦开启虚空入侵，此选项无法被关闭。");
-            RegisterString("虚空入侵版本更新提示", "They Come From Void has updated. There is a new mode available now. Enabling Void Invasion will result in periodic and increasingly powerful dark fog invasions, and resisting invasion will earn you additional rewards.\nNote: Recommended to enable it for a complete experience. However, once you enabled the void invasion, you cannot disable it.\nWill you enable it now?\n\n( You can also enable it later in Esc Menu. )", "深空来敌已更新虚空入侵模式，启用虚空入侵会导致星区周期性地受到越来越强大的黑雾进攻，抵抗进攻也将获得额外奖励。\n注意：推荐开启以获得完整的体验，但一旦开启虚空入侵，此选项无法被关闭。\n是否立即启用？\n\n（你也可以稍后在Esc菜单中启用虚空入侵。）");
+            RegisterString("虚空入侵提示", "Enabling Void Invasion will result in periodic and increasingly powerful dark fog invasions, and resisting invasion will earn you additional rewards. The intensity upper limit of the void invasion in late game will be affected by the dark fog difficulty, and that intensity upper limit will reach the maximum when the dark fog difficulty is larger than 4.0.\n\nWarning: Once you enabled the void invasion, you cannot disable it.", "启用虚空入侵会导致星区周期性地受到越来越强大的黑雾进攻，抵抗进攻也将获得额外奖励。游戏后期虚空入侵的强度的上限会受黑雾难度系数影响，在黑雾系数达到4.0以上后，后期入侵的强度将达到最大。\n\n警告：一旦开启虚空入侵，此选项无法被关闭。");
+            RegisterString("虚空入侵版本更新提示", "They Come From Void has updated. There is a new mode available now. Enabling Void Invasion will result in periodic and increasingly powerful dark fog invasions, and resisting invasion will earn you additional rewards.\nNote: The intensity upper limit of the void invasion in late game will be affected by the dark fog difficulty. Once you enabled the void invasion, you cannot disable it.\nWill you enable it now?\n\n( You can also enable it later in Esc Menu. )", "深空来敌已更新虚空入侵模式，启用虚空入侵会导致星区周期性地受到越来越强大的黑雾进攻，抵抗进攻也将获得额外奖励。\n注意：游戏后期虚空入侵的强度的上限会受黑雾难度系数影响，一旦开启虚空入侵，此选项无法被关闭。\n是否立即启用？\n\n（你也可以稍后在Esc菜单中启用虚空入侵。）");
 
-            RegisterString("侦测到虚空入侵提示", "Detected signs of void energy projection. Void is attempting to assimilate dark fog to invade {0}.", "探测到虚空能量投射，虚空正在尝试同化黑雾以入侵{0}。");
-
-            RegisterString("虚空入侵额外特性提示", "", "过载的虚空能量投射赋予了部分被同化的黑雾舰船额外特性：");
-
+            RegisterString("侦测到虚空入侵提示", "Void rift detected. Void is attempting to assimilate dark fog to \ninvade {0}.\n", "探测到虚空裂隙，虚空正在尝试同化黑雾以\n入侵{0}。\n");
+            RegisterString("虚空入侵额外特性提示", "Overload of void energy projection detected, which will give assimilated dark fog <color=#ffa800dd>additional properties</color>. They will:", "侦测到过载的虚空能量投射使得被同化的黑雾获得了<color=#ffa800dd>额外特性</color>，它们将：");
             RegisterString("虚空入侵结束", "Invasion Ended", "入侵结束");
-            RegisterString("虚空入侵结束提示", "", "虚空已无法继续维持连接，所有黑雾单位已脱离了同化。{0}/{1}艘敌舰已被消灭，COSMO技术伦理委员为奖励你对维护星区和平和贡献，向你发放了{2}授权点。");
+            RegisterString("虚空入侵结束提示", "The Void is no longer able to maintain the connection, and all dark fog units have broken away from assimilation.\n{0}/{1} vessels has been destroyed.\nThe COSMO Technology Ethics Committee has awarded you {2} authorization points for your contribution to the peace maintenance of the sector.", "虚空已无法继续维持连接，所有黑雾单位已脱离了同化。\n{0}/{1}艘敌舰已被消灭。\nCOSMO技术伦理委员为奖励你对维护星区和平和贡献，向你发放了{2}授权点。");
+            RegisterString("虚空入侵结束提示元驱动解译", "Since the strong void energy projection reveals the expansion point of some cosmological axioms, the next time you interpret an meta driver, there will be a greater probability of discovering Axiomatic decoding tracks.", "由于强大的虚空能量投射揭示了部分宇宙公理的扩展点位，下次解译元驱动时，将有更大概率发现公理级解码轨。");
+            RegisterString("虚空入侵结束提示元驱动发现", "A complete meta driver signal was detected at the void connection break. It has been added to the meta-driver interpretation event chain.", "在虚空连接的断裂出侦测到完整的元驱动信号，已添加到元驱动解译事件链。");
 
-            RegisterString("虚空入侵结束提示元驱动解译", "", "由于强大的虚空能量投射揭示了部分物理定律的扩展点位，下次解译元驱动时，将有更大概率发现定律级和框架级解码轨。");
-
+            RegisterString("额外特性描述0", "Gain {0}% damage reduction", "获得{0}%伤害减免");
+            RegisterString("额外特性描述1", "Have {0}% probability of fully dodging an attack", "有{0}%的概率完全闪避一次伤害");
+            RegisterString("额外特性描述2", "Gain {0} extra armor", "获得{0}额外护甲");
+            RegisterString("额外特性描述3", "Deal +{0}% extra damage to planetary shields", "对行星护盾造成+{0}%额外伤害");
+            RegisterString("额外特性描述4", "When killed by a droplet, there is a {0}% probability of destroying that droplet", "被水滴击杀时，有{0}%概率摧毁该水滴");
+            RegisterString("额外特性描述5", "Procvide no merit points when killed", "在死亡时不提供功勋点数");
+            RegisterString("额外特性描述6", "Reduces {0}% kinetic weapon damage in the whole sector", "削弱全星区的{0}%动能武器伤害");
+            RegisterString("额外特性描述7", "Reduces {0}% energy weapon damage in the whole sector", "削弱全星区的{0}%能量武器伤害");
+            RegisterString("额外特性描述8", "Reduces {0}% blast weapon damage in the whole sector", "削弱全星区的{0}%爆破武器伤害");
+            RegisterString("额外特性描述9", "Reduces {0}% magnetic weapon damage in the whole sector", "削弱全星区的{0}%电磁武器伤害");
+            RegisterString("额外特性描述10", "Incapacitated Icarus' space fleet (except for droplets)", "使伊卡洛斯的太空舰队无法作战（水滴除外）");
+            RegisterString("额外特性描述11", "Deal extra damage equal to {0}% of your maximum damage type bonus", "造成额外伤害，等同于你最高伤害类型加成的{0}%");
+            RegisterString("额外特性描述12", "Gain {0}/s extra health regeneration", "获得{0}/s额外生命回复");
+            RegisterString("额外特性描述13", "Gain +{0}% sailing speed", "获得+{0}%航行速度加成");
+            RegisterString("额外特性描述14", "", "");
         }
 
 

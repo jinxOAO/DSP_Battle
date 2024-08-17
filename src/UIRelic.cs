@@ -834,7 +834,23 @@ namespace DSP_Battle
             {
                 if (uibt.tips.tipTitle.Length == 0)
                     uibt.tips.tipTitle = ($"relicTipTitle{type}-{num}").Translate();
-                uibt.tips.tipText += "\n" + ($"relicTipText{type}-{num}").Translate();
+
+                string[] ori = uibt.tips.tipText.Split('\n');
+                int len = ori.Length;
+                if (len > 1 && ori[len - 1].Length > 3 && ori[len - 1][0] == '<' && ori[len - 1][1] == 'c') // 代表是<color=开头，判断为镀上了铲亮的光芒。将tip加载铲子镀光之前
+                {
+                    string final = "";
+                    for (int i = 0; i < len - 2; i++)
+                    {
+                        final += ori[i] + "\n";
+                    }
+                    final += ($"relicTipText{type}-{num}").Translate() + "\n" + ori[len - 2] + "\n" + ori[len - 1];
+                    uibt.tips.tipText = final;
+                }
+                else
+                {
+                    uibt.tips.tipText += "\n" + ($"relicTipText{type}-{num}").Translate();
+                }
             }
             if (type == 4)
             {
@@ -989,7 +1005,8 @@ namespace DSP_Battle
                             for (int num = 0; num < Relic.relicNumByType[type]; num++)
                             {
                                 if (Configs.developerMode) relicNotHave.Add(num);
-                                if (!Relic.HaveRelic(type, num) && !Relic.alternateRelics.Contains(type * 100 + num))
+                                if (!Relic.HaveRelic(type, num) && !Relic.alternateRelics.Contains(type * 100 + num) && 
+                                    (!Relic.relicOnlyForEnvasion.Contains(type * 100 + num) || AssaultController.voidInvasionEnabled))
                                 {
                                     if (type == 1 && num == 10 && Relic.trueDamageActive > 0) // 真实伤害不占用槽位，但是一旦获取后也不会再占用刷新栏
                                         continue;
@@ -1198,6 +1215,15 @@ namespace DSP_Battle
                             relicSlotImgs[slotNum].sprite = rankType_Num[type, num];
                             relicSlotUIBtns[slotNum].tips.tipTitle = ("遗物名称带颜色" + type.ToString() + "-" + num.ToString()).Translate();
                             relicSlotUIBtns[slotNum].tips.tipText = ("遗物描述" + type.ToString() + "-" + num.ToString()).Translate();
+                            if(Relic.HaveRelic(0, 9)) // 金铲铲对某些元驱动的隐藏效果，将在左侧栏显示
+                            {
+                                if (("遗物描述" + type.ToString() + "-" + num.ToString() + "+").Translate() != "遗物描述" + type.ToString() + "-" + num.ToString() + "+")
+                                {
+                                    relicSlotUIBtns[slotNum].tips.tipText = ("遗物描述" + type.ToString() + "-" + num.ToString() + "+").Translate();
+                                    if(("遗物名称带颜色" + type.ToString() + "-" + num.ToString() + "+").Translate() != "遗物名称带颜色" + type.ToString() + "-" + num.ToString() + "+")
+                                        relicSlotUIBtns[slotNum].tips.tipTitle = ("遗物名称带颜色" + type.ToString() + "-" + num.ToString() + "+").Translate();
+                                }
+                            }
                             if (type == 0 && num == 9)
                                 relicSlotUIBtns[slotNum].tips.tipText = "遗物描述0-9实际".Translate();
                             AddTipText(type, num, relicSlotUIBtns[slotNum], true); // 对于一些原本描述较短的，还要将更详细的描述加入
@@ -1334,9 +1360,11 @@ namespace DSP_Battle
                 {
                     foreach (var ah in AssaultController.assaultHives)
                     {
-                        if(ah.state == EAssaultHiveState.Assemble && ah.time > 3600)
+                        if(ah.state == EAssaultHiveState.Assemble && ah.time > 3600 || Configs.developerMode)
                         {
                             int maxAdvanceTime = Math.Min(3600, ah.time - 3600);
+                            if (Configs.developerMode)
+                                maxAdvanceTime = Math.Min(3600, ah.time);
                             ah.time -= maxAdvanceTime;
                             ah.timeTillAssault -= maxAdvanceTime;
                             AssaultController.timeChangedByRelic = true;
