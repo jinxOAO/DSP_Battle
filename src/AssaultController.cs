@@ -22,6 +22,7 @@ namespace DSP_Battle
         public static List<int> modifier; // 入侵修改器（附带效果）
 
         public static bool timeChangedByRelic = false;
+        public static int nextRollVoidEcho = 1; // 开启虚空入侵的首次入侵开始，之后的首次刷新元驱动，必定会刷出虚空回响。
 
         // 不需要存档
         public static int[] invincibleHives; // 因为虚空入侵处于几乎无敌（对恒星炮除外）的hive
@@ -74,6 +75,7 @@ namespace DSP_Battle
             alertHives = new int[GameMain.spaceSector.maxHiveCount];
             modifier = new List<int> { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             timeChangedByRelic = false;
+            nextRollVoidEcho = 1;
             ClearDataArrays();
         }
 
@@ -511,10 +513,17 @@ namespace DSP_Battle
                 {
                     if (Relic.GetRelicCount() <= 0)
                     {
-                        EventSystem.TransferTo(9997);
-                        EventSystem.recorder.decodeType = 24;
-                        EventSystem.recorder.decodeTimeNeed = 3600;
-                        EventSystem.recorder.decodeTimeSpend = 0;
+                        if (EventSystem.neverStartTheFirstEvent > 0)
+                        {
+                            EventSystem.InitNewEvent();
+                        }
+                        else
+                        {
+                            EventSystem.TransferTo(9997);
+                            EventSystem.recorder.decodeType = 24;
+                            EventSystem.recorder.decodeTimeNeed = 3600;
+                            EventSystem.recorder.decodeTimeSpend = 0;
+                        }
                     }
                     else
                     {
@@ -927,6 +936,14 @@ namespace DSP_Battle
             {
                 AskEnableVoidInvasion();
             }
+            if(Configs.versionWhenImporting >= 30240716 && Configs.versionWhenImporting < 30240825)
+            {
+                voidInvasionEnabled = false;
+            }
+            if(Configs.versionWhenImporting >= 30240830)
+            {
+                nextRollVoidEcho = r.ReadInt32();
+            }
         }
 
         public static void Export(BinaryWriter w)
@@ -945,6 +962,7 @@ namespace DSP_Battle
                 w.Write(modifier[i]);
             }
             w.Write(timeChangedByRelic);
+            w.Write(nextRollVoidEcho);
         }
 
         public static void IntoOtherSave()

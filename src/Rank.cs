@@ -51,7 +51,12 @@ namespace DSP_Battle
             if (rank > 10) return;
             int realExp = num;
             if (Relic.HaveRelic(3, 17)) // relic 3-17
-                realExp = (int)(realExp * 1.25);
+            {
+                if(Relic.HaveRelic(0, 9))
+                    realExp = (int)(realExp * 1.4);
+                else
+                    realExp = (int)(realExp * 1.25);
+            }
             Interlocked.Add(ref exp, realExp);
         }
 

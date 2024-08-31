@@ -33,7 +33,8 @@ namespace DSP_Battle
         public static List<int> orderedRelics = new List<int>(); // 与左侧ui显示一直的排序后的元驱动
         public static int relicHoldMax = 8; // 最多可以持有的遗物数
         public static int[] relicNumByType = { 11, 13, 18, 19, 8 }; // 当前版本各种类型的遗物各有多少种，每种类型均不能大于30
-        public static List<int> relicOnlyForEnvasion = new List<int> { 407, 112 };
+        public static List<int> relicOnlyForInvasion = new List<int> { 407, 112 };
+        public static List<int> relicCanClick = new List<int> { 400, 407 };
         public static double[] relicTypeProbability = { 0.03, 0.06, 0.13, 0.76, 0.02 }; // 各类型遗物刷新的权重
         public static double[] relicTypeProbabilityBuffed = { 0.045, 0.09, 0.195, 0.63, 0.04 }; // 五叶草buff后
         public static int[] modifierByEvent = new int[] { 0, 0, 0, 0, 0, 0 };
@@ -213,7 +214,8 @@ namespace DSP_Battle
                 {
                     for (int haveNum = 0; haveNum < relicNumByType[haveType] && count < maxCount; haveNum++)
                     {
-                        if (Relic.HaveRelic(haveType, haveNum))
+                        int fullNum = haveType * 100 + haveNum;
+                        if (Relic.HaveRelic(haveType, haveNum) && !relicCanClick.Contains(fullNum))
                         {
                             recordRelics.Add(haveType * 100 + haveNum);
                             count++;
@@ -337,6 +339,14 @@ namespace DSP_Battle
             EventSystem.probabilityForNewEvent = 0;
             UIRelic.OpenSelectionWindow();
             UIRelic.ShowSlots(); // 打开已有遗物栏
+
+            // 下面是实现：开启虚空入侵的首次入侵开始，之后的首次刷新元驱动，必定会刷出虚空回响。
+            if(AssaultController.nextRollVoidEcho > 0 && AssaultController.voidInvasionEnabled && (AssaultController.assaultHives.Count > 0 || Configs.totalWave > 0) && UIRelic.forceType < 0 && UIRelic.forceNum < 0)
+            {
+                UIRelic.forceType = 4;
+                UIRelic.forceNum = 7;
+                AssaultController.nextRollVoidEcho = 0;
+            }
 
             return true;
         }
@@ -1640,17 +1650,21 @@ namespace DSP_Battle
                                         if (num18 >= num4 && num18 <= num5)
                                         {
                                             ref EnemyUnitComponent ptr3 = ref buffer[ptr2.unitId];
-                                            float num19 = (2f - Mathf.Sqrt(num18) / _this.diffusionMaxRadius) * 0.5f * _this.disturbStrength * (Relic.HaveRelic(1, 11) ? 2 : 0.5f); // relic 1-11 额外强度，为什么不在turret那里改呢？因为改strength会导致特效太浓，干扰玩家的视角
+                                            float num19 = (2f - Mathf.Sqrt(num18) / _this.diffusionMaxRadius) * 0.5f * _this.disturbStrength * (Relic.HaveRelic(1, 11) ? 2 : 0.5f);
+                                            if(Relic.HaveRelic(0, 9)) // 金铲铲额外强化
+                                                num19 = (2f - Mathf.Sqrt(num18) / _this.diffusionMaxRadius) * 0.5f * _this.disturbStrength * (Relic.HaveRelic(1, 11) ? 7 : 1.5f);
                                             if (ptr3.disturbValue < num19)
                                             {
                                                 bool flag2 = true;
                                                 if (flag2)
                                                 {
                                                     // 造成伤害
-                                                    if (Relic.HaveRelic(0, 8))
+                                                    if (Relic.HaveRelic(0, 8) || (Relic.HaveRelic(0, 9) && Relic.HaveRelic(4, 5))) // 金铲铲额外强化，没有0-8也能造成伤害
                                                     {
                                                         int realDamage = Relic.disturbDamage1613;
-                                                        realDamage = (int)(realDamage * GameMain.history.magneticDamageScale * 0.2f);
+                                                        realDamage = (int)(realDamage * GameMain.history.magneticDamageScale * 0.2f); // 只有铲铲或者只有0-8其中之一的时候，造成弱化伤害，都没有的话是没伤害的
+                                                        if(Relic.HaveRelic(0, 8) && Relic.HaveRelic(0, 9)) // 金铲铲额外强化，既有0-8又有金铲铲则造成强化伤害
+                                                            realDamage = (int)(realDamage * GameMain.history.magneticDamageScale * 1.2f);
                                                         realDamage = Relic.BonusDamage(realDamage, 1);
                                                         SkillTargetLocal skillTargetLocal = default(SkillTargetLocal);
                                                         skillTargetLocal.type = ETargetType.Enemy;
@@ -1814,75 +1828,50 @@ namespace DSP_Battle
             bool r0110 = Relic.trueDamageActive > 0;
             bool r0212 = Relic.HaveRelic(2, 12);
             int cursedRelicCount = Relic.GetRelicCount(4);
-            if (r0103 || r0109 || r0110 || r0212 || cursedRelicCount > 0 || SkillPoints.criticalRate > 0 || SkillPoints.armorPenetration > 0)
+
+            ref var _this = ref __instance;
+            float factor = 1.0f;
+            int antiArmor = 0;
+            int astroId = target.astroId;
+            if (astroId > 1000000)
             {
-                ref var _this = ref __instance;
-                float factor = 1.0f;
-                int antiArmor = 0;
-                int astroId = target.astroId;
-                if (astroId > 1000000)
+                if (target.type == ETargetType.Enemy)
                 {
-                    if (target.type == ETargetType.Enemy)
+                    EnemyDFHiveSystem enemyDFHiveSystem = _this.sector.dfHivesByAstro[astroId - 1000000];
+                    int starIndex = enemyDFHiveSystem?.starData?.index ?? -1;
+                    if (r0103 && starIndex >= 0 && starIndex < GameMain.data.dysonSpheres.Length)
                     {
-                        EnemyDFHiveSystem enemyDFHiveSystem = _this.sector.dfHivesByAstro[astroId - 1000000];
-                        int starIndex = enemyDFHiveSystem?.starData?.index ?? -1;
-                        if (r0103 && starIndex >= 0 && starIndex < GameMain.data.dysonSpheres.Length)
+                        DysonSphere sphere = GameMain.data.dysonSpheres[starIndex];
+                        if (sphere != null)
                         {
-                            DysonSphere sphere = GameMain.data.dysonSpheres[starIndex];
-                            if (sphere != null)
+                            if (Relic.HaveRelic(0, 9))
+                                factor += (float)(5 * (1.0 - sphere.energyDFHivesDebuffCoef));
+                            else
                                 factor += (float)(3 * (1.0 - sphere.energyDFHivesDebuffCoef));
                         }
-                        if (r0110 && enemyDFHiveSystem != null)
-                        {
-                            int level = enemyDFHiveSystem.evolve.level;
-                            int num2 = 100 / slice;
-                            int num3 = level * num2 / 2;
-                            antiArmor = num3;
-                        }
-                        float critical = r0212 ? 0 : 0.1f + SkillPoints.criticalRate;
-                        if (Relic.Verify(critical)) // relic 2-12
-                        {
-                            factor += 1f;
-                        }
-                        factor *= SkillPoints.globalDamageRate;
-                        antiArmor += SkillPoints.armorPenetration / slice;
-                        damage = (int)(damage * (1 - 0.05f * cursedRelicCount));
                     }
-                    else if (target.type == ETargetType.Craft)
+                    if (r0110 && enemyDFHiveSystem != null)
                     {
-                        if (r0109 && __instance.mecha.energyShieldEnergy > __instance.mecha.energyShieldCapacity * 0.5)
-                        {
-                            __instance.MechaEnergyShieldResist(caster, ref damage);
-                            if (damage > 0)
-                            {
-                                __instance.mecha.TakeDamage(damage);
-                                __instance.AddMechaHatred(caster.astroId, caster.id, damage);
-                            }
-                            damage = 0;
-                        }
+                        int level = enemyDFHiveSystem.evolve.level;
+                        int num2 = 100 / slice;
+                        int num3 = level * num2 / 2;
+                        antiArmor = num3;
                     }
+                    float critical = r0212 ? 0 : 0.1f + SkillPoints.criticalRate;
+                    if (Relic.Verify(critical)) // relic 2-12
+                    {
+                        factor += 1f;
+                    }
+                    factor *= SkillPoints.globalDamageRate;
+                    antiArmor += SkillPoints.armorPenetration / slice;
+                    damage = (int)(damage * (1 - 0.05f * cursedRelicCount));
                 }
-                else if (astroId > 100 && astroId <= 204899 && astroId % 100 > 0)
-                {
-                    if (caster.astroId == astroId)
-                    {
-                        MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.Damage);
-                        MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MetaDrive);
-                        MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MainLogic);
-                        return true; // 交由DamageGroundObjectByLocalCaster的prePatch自行处理，因为这个DamageGroundObjectByLocalCaster不止被DamageObject调用，还被各种skill的TickSkillLogic调用
-                    }
-                    else
-                    {
-                        MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.Damage);
-                        MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MetaDrive);
-                        MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MainLogic);
-                        return true; // 也交由DamageGroundObjectByRemoteCaster的prePatch自行处理
-                    }
-                }
-                else if (astroId % 100 == 0 && target.type == ETargetType.Craft)
+                else if (target.type == ETargetType.Craft)
                 {
                     if (r0109 && __instance.mecha.energyShieldEnergy > __instance.mecha.energyShieldCapacity * 0.5)
                     {
+                        if (Relic.HaveRelic(0, 9))
+                            damage = (int)(damage * 0.5f);
                         __instance.MechaEnergyShieldResist(caster, ref damage);
                         if (damage > 0)
                         {
@@ -1892,8 +1881,41 @@ namespace DSP_Battle
                         damage = 0;
                     }
                 }
-                damage = Relic.BonusedDamage(damage, factor - 1) + antiArmor;
             }
+            else if (astroId > 100 && astroId <= 204899 && astroId % 100 > 0)
+            {
+                if (caster.astroId == astroId)
+                {
+                    MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.Damage);
+                    MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MetaDrive);
+                    MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MainLogic);
+                    return true; // 交由DamageGroundObjectByLocalCaster的prePatch自行处理，因为这个DamageGroundObjectByLocalCaster不止被DamageObject调用，还被各种skill的TickSkillLogic调用
+                }
+                else
+                {
+                    MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.Damage);
+                    MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MetaDrive);
+                    MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MainLogic);
+                    return true; // 也交由DamageGroundObjectByRemoteCaster的prePatch自行处理
+                }
+            }
+            else if (astroId % 100 == 0 && target.type == ETargetType.Craft)
+            {
+                if (r0109 && __instance.mecha.energyShieldEnergy > __instance.mecha.energyShieldCapacity * 0.5)
+                {
+                    if (Relic.HaveRelic(0, 9))
+                        damage = (int)(damage * 0.5f);
+                    __instance.MechaEnergyShieldResist(caster, ref damage);
+                    if (damage > 0)
+                    {
+                        __instance.mecha.TakeDamage(damage);
+                        __instance.AddMechaHatred(caster.astroId, caster.id, damage);
+                    }
+                    damage = 0;
+                }
+            }
+            damage = Relic.BonusedDamage(damage, factor - 1) + antiArmor;
+            
 
             // 虚空入侵的敌人，在入侵开始前几乎免疫常规武器伤害
             if(target.astroId > 1000000 && target.type == ETargetType.Enemy) 
@@ -1903,8 +1925,8 @@ namespace DSP_Battle
                 if (slice != starCannonDamageSlice && byAstroId >= 0 && byAstroId < AssaultController.invincibleHives.Length) // slice == 7 为恒星炮伤害，不为7的认定为常规武器
                 {
                     ref EnemyData ptr = ref __instance.sector.enemyPool[target.id];
-                    if(!ptr.isAssaultingUnit && AssaultController.invincibleHives[byAstroId] >= 0)
-                        damage = Math.Min(1000, (int)(damage * 0.001)); // 只能造成1‰的伤害，且单次不能超过10点。免伤效果对于正在进攻中的单位无效
+                    if(!ptr.isAssaultingUnit && AssaultController.invincibleHives[byAstroId] >= 0 && ptr.dfRelayId == 0)
+                        damage = Math.Min(1000, (int)(damage * 0.001)); // 只能造成1‰的伤害，且单次不能超过10点。免伤效果对于正在进攻中的单位无效，对于中继站无效
                 }
                 if(AssaultController.modifierEnabled)
                 {
@@ -1963,58 +1985,59 @@ namespace DSP_Battle
             bool r0110 = Relic.trueDamageActive > 0;
             bool r0212 = Relic.HaveRelic(2, 12);
             int cursedRelicCount = Relic.GetRelicCount(4);
-            if (r0109 || r0110 || r0212 || cursedRelicCount > 0 || SkillPoints.criticalRate > 0 || SkillPoints.armorPenetration > 0)
+
+            ref var _this = ref __instance;
+            float factor = 1.0f;
+            int antiArmor = 0;
+            if (target.type == ETargetType.Enemy)
             {
-                ref var _this = ref __instance;
-                float factor = 1.0f;
-                int antiArmor = 0;
-                if (target.type == ETargetType.Enemy)
+                ref EnemyData ptr2 = ref factory.enemyPool[target.id];
+                if (ptr2.id != target.id || ptr2.isInvincible)
                 {
-                    ref EnemyData ptr2 = ref factory.enemyPool[target.id];
-                    if (ptr2.id != target.id || ptr2.isInvincible)
-                    {
-                        return true;
-                    }
-                    DFGBaseComponent dfgbaseComponent = null;
-                    if (ptr2.owner > 0)
-                    {
-                        dfgbaseComponent = factory.enemySystem.bases[(int)ptr2.owner];
-                        if (dfgbaseComponent.id != (int)ptr2.owner)
-                        {
-                            dfgbaseComponent = null;
-                        }
-                    }
-                    if (dfgbaseComponent != null)
-                    {
-                        int level = dfgbaseComponent.evolve.level;
-                        int num2 = 100 / slice;
-                        int num3 = level * num2 / 5;
-                        antiArmor = num3;
-                    }
-                    float critical = r0212 ? 0 : 0.1f + SkillPoints.criticalRate;
-                    if (Relic.Verify(critical)) // relic 2-12
-                    {
-                        factor += 1f;
-                    }
-                    factor *= SkillPoints.globalDamageRate;
-                    damage = (int)(damage * (1 - 0.05f * cursedRelicCount));
-                    antiArmor += SkillPoints.armorPenetration / slice;
+                    return true;
                 }
-                else if (target.type == ETargetType.Craft)
+                DFGBaseComponent dfgbaseComponent = null;
+                if (ptr2.owner > 0)
                 {
-                    if (r0109 && __instance.mecha.energyShieldEnergy > __instance.mecha.energyShieldCapacity * 0.5)
+                    dfgbaseComponent = factory.enemySystem.bases[(int)ptr2.owner];
+                    if (dfgbaseComponent.id != (int)ptr2.owner)
                     {
-                        __instance.MechaEnergyShieldResist(caster, factory.planetId, ref damage);
-                        if (damage > 0)
-                        {
-                            __instance.mecha.TakeDamage(damage);
-                            __instance.AddMechaHatred(factory.planetId, caster.id, damage);
-                        }
-                        damage = 0;
+                        dfgbaseComponent = null;
                     }
                 }
-                damage = Relic.BonusedDamage(damage, factor - 1) + antiArmor;
+                if (r0110 && dfgbaseComponent != null)
+                {
+                    int level = dfgbaseComponent.evolve.level;
+                    int num2 = 100 / slice;
+                    int num3 = level * num2 / 5;
+                    antiArmor = num3;
+                }
+                float critical = r0212 ? 0 : 0.1f + SkillPoints.criticalRate;
+                if (Relic.Verify(critical)) // relic 2-12
+                {
+                    factor += 1f;
+                }
+                factor *= SkillPoints.globalDamageRate;
+                damage = (int)(damage * (1 - 0.05f * cursedRelicCount));
+                antiArmor += SkillPoints.armorPenetration / slice;
             }
+            else if (target.type == ETargetType.Craft)
+            {
+                if (r0109 && __instance.mecha.energyShieldEnergy > __instance.mecha.energyShieldCapacity * 0.5)
+                {
+                    if (Relic.HaveRelic(0, 9))
+                        damage = (int)(damage * 0.5f);
+                    __instance.MechaEnergyShieldResist(caster, factory.planetId, ref damage);
+                    if (damage > 0)
+                    {
+                        __instance.mecha.TakeDamage(damage);
+                        __instance.AddMechaHatred(factory.planetId, caster.id, damage);
+                    }
+                    damage = 0;
+                }
+            }
+            damage = Relic.BonusedDamage(damage, factor - 1) + antiArmor;
+            
             MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MainLogic);
             MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MetaDrive);
             MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.Damage);
@@ -2040,58 +2063,59 @@ namespace DSP_Battle
             bool r0110 = Relic.trueDamageActive > 0;
             bool r0212 = Relic.HaveRelic(2, 12);
             int cursedRelicCount = Relic.GetRelicCount(4);
-            if (r0109 || r0110 || r0212 || SkillPoints.criticalRate > 0 || SkillPoints.armorPenetration > 0)
+
+            ref var _this = ref __instance;
+            float factor = 1.0f;
+            int antiArmor = 0;
+            if (target.type == ETargetType.Enemy)
             {
-                ref var _this = ref __instance;
-                float factor = 1.0f;
-                int antiArmor = 0;
-                if (target.type == ETargetType.Enemy)
+                ref EnemyData ptr2 = ref factory.enemyPool[target.id];
+                if (ptr2.id != target.id || ptr2.isInvincible)
                 {
-                    ref EnemyData ptr2 = ref factory.enemyPool[target.id];
-                    if (ptr2.id != target.id || ptr2.isInvincible)
-                    {
-                        return true;
-                    }
-                    DFGBaseComponent dfgbaseComponent = null;
-                    if (ptr2.owner > 0)
-                    {
-                        dfgbaseComponent = factory.enemySystem.bases[(int)ptr2.owner];
-                        if (dfgbaseComponent.id != (int)ptr2.owner)
-                        {
-                            dfgbaseComponent = null;
-                        }
-                    }
-                    if (dfgbaseComponent != null)
-                    {
-                        int level = dfgbaseComponent.evolve.level;
-                        int num2 = 100 / slice;
-                        int num3 = level * num2 / 5;
-                        antiArmor = num3;
-                    }
-                    float critical = r0212 ? 0 : 0.1f + SkillPoints.criticalRate;
-                    if (Relic.Verify(critical)) // relic 2-12
-                    {
-                        factor += 1f;
-                    }
-                    factor *= SkillPoints.globalDamageRate;
-                    damage = (int)(damage * (1 - 0.05f * cursedRelicCount));
-                    antiArmor += SkillPoints.armorPenetration / slice;
+                    return true;
                 }
-                else if (target.type == ETargetType.Craft)
+                DFGBaseComponent dfgbaseComponent = null;
+                if (ptr2.owner > 0)
                 {
-                    if (r0109 && __instance.mecha.energyShieldEnergy > __instance.mecha.energyShieldCapacity * 0.5)
+                    dfgbaseComponent = factory.enemySystem.bases[(int)ptr2.owner];
+                    if (dfgbaseComponent.id != (int)ptr2.owner)
                     {
-                        __instance.MechaEnergyShieldResist(caster, ref damage);
-                        if (damage > 0)
-                        {
-                            __instance.mecha.TakeDamage(damage);
-                            __instance.AddMechaHatred(caster.astroId, caster.id, damage);
-                        }
-                        damage = 0;
+                        dfgbaseComponent = null;
                     }
                 }
-                damage = Relic.BonusedDamage(damage, factor - 1) + antiArmor;
+                if (r0110 && dfgbaseComponent != null)
+                {
+                    int level = dfgbaseComponent.evolve.level;
+                    int num2 = 100 / slice;
+                    int num3 = level * num2 / 5;
+                    antiArmor = num3;
+                }
+                float critical = r0212 ? 0 : 0.1f + SkillPoints.criticalRate;
+                if (Relic.Verify(critical)) // relic 2-12
+                {
+                    factor += 1f;
+                }
+                factor *= SkillPoints.globalDamageRate;
+                damage = (int)(damage * (1 - 0.05f * cursedRelicCount));
+                antiArmor += SkillPoints.armorPenetration / slice;
             }
+            else if (target.type == ETargetType.Craft)
+            {
+                if (r0109 && __instance.mecha.energyShieldEnergy > __instance.mecha.energyShieldCapacity * 0.5)
+                {
+                    if (Relic.HaveRelic(0, 9))
+                        damage = (int)(damage * 0.5f);
+                    __instance.MechaEnergyShieldResist(caster, ref damage);
+                    if (damage > 0)
+                    {
+                        __instance.mecha.TakeDamage(damage);
+                        __instance.AddMechaHatred(caster.astroId, caster.id, damage);
+                    }
+                    damage = 0;
+                }
+            }
+            damage = Relic.BonusedDamage(damage, factor - 1) + antiArmor;
+            
             MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MainLogic);
             MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MetaDrive);
             MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.Damage);
@@ -2550,7 +2574,7 @@ namespace DSP_Battle
         }
 
         /// <summary>
-        /// relic 2-17 ( 4-2 ) 不朽之守护以及(统治之冠的负面效果)
+        /// relic 2-17 不朽之守护
         /// </summary>
         /// <returns></returns>
         [HarmonyPrefix]
@@ -2589,32 +2613,41 @@ namespace DSP_Battle
             }
             if (time % 60 == 32)
             {
-                for (int slotNum = 0; slotNum < UIRelic.relicSlotUIBtns.Count; slotNum++)
+                //for (int slotNum = 0; slotNum < UIRelic.relicSlotUIBtns.Count; slotNum++)
+                //{
+                //    if (UIRelic.relicInSlots[slotNum] == 108)
+                //    {
+                //        UIRelic.relicSlotUIBtns[slotNum].tips.tipText = "遗物描述1-8".Translate();
+                //        UIRelic.AddTipText(1, 8, UIRelic.relicSlotUIBtns[slotNum], true); // 对于一些原本描述较短的，还要将更详细的描述加入
+                //        UIRelic.AddTipVarData(1, 8, UIRelic.relicSlotUIBtns[slotNum]); // 对于部分需要展示实时数据的，还需要加入数据
+                //        if (UIRelic.relicSlotUIBtns[slotNum].tipShowing)
+                //        {
+                //            UIRelic.relicSlotUIBtns[slotNum].OnPointerExit(null);
+                //            UIRelic.relicSlotUIBtns[slotNum].OnPointerEnter(null);
+                //            UIRelic.relicSlotUIBtns[slotNum].enterTime = 1;
+                //        }
+                //    }
+                //    else if (UIRelic.relicInSlots[slotNum] == 217)
+                //    {
+                //        UIRelic.relicSlotUIBtns[slotNum].tips.tipText = "遗物描述2-17".Translate();
+                //        UIRelic.AddTipText(2, 17, UIRelic.relicSlotUIBtns[slotNum], true); // 对于一些原本描述较短的，还要将更详细的描述加入
+                //        UIRelic.AddTipVarData(2, 17, UIRelic.relicSlotUIBtns[slotNum]); // 对于部分需要展示实时数据的，还需要加入数据
+                //        if (UIRelic.relicSlotUIBtns[slotNum].tipShowing)
+                //        {
+                //            UIRelic.relicSlotUIBtns[slotNum].OnPointerExit(null);
+                //            UIRelic.relicSlotUIBtns[slotNum].OnPointerEnter(null);
+                //            UIRelic.relicSlotUIBtns[slotNum].enterTime = 1;
+                //        }
+                //    }
+                //}
+                UIRelic.RefreshSlotsWindowUI(true);
+                if (Relic.HaveRelic(0, 9) && Relic.HaveRelic(2, 17) && GameMain.mainPlayer.invincible)
                 {
-                    if (UIRelic.relicInSlots[slotNum] == 108)
-                    {
-                        UIRelic.relicSlotUIBtns[slotNum].tips.tipText = "遗物描述1-8".Translate();
-                        UIRelic.AddTipText(1, 8, UIRelic.relicSlotUIBtns[slotNum], true); // 对于一些原本描述较短的，还要将更详细的描述加入
-                        UIRelic.AddTipVarData(1, 8, UIRelic.relicSlotUIBtns[slotNum]); // 对于部分需要展示实时数据的，还需要加入数据
-                        if (UIRelic.relicSlotUIBtns[slotNum].tipShowing)
-                        {
-                            UIRelic.relicSlotUIBtns[slotNum].OnPointerExit(null);
-                            UIRelic.relicSlotUIBtns[slotNum].OnPointerEnter(null);
-                            UIRelic.relicSlotUIBtns[slotNum].enterTime = 1;
-                        }
-                    }
-                    else if (UIRelic.relicInSlots[slotNum] == 217)
-                    {
-                        UIRelic.relicSlotUIBtns[slotNum].tips.tipText = "遗物描述2-17".Translate();
-                        UIRelic.AddTipText(2, 17, UIRelic.relicSlotUIBtns[slotNum], true); // 对于一些原本描述较短的，还要将更详细的描述加入
-                        UIRelic.AddTipVarData(2, 17, UIRelic.relicSlotUIBtns[slotNum]); // 对于部分需要展示实时数据的，还需要加入数据
-                        if (UIRelic.relicSlotUIBtns[slotNum].tipShowing)
-                        {
-                            UIRelic.relicSlotUIBtns[slotNum].OnPointerExit(null);
-                            UIRelic.relicSlotUIBtns[slotNum].OnPointerEnter(null);
-                            UIRelic.relicSlotUIBtns[slotNum].enterTime = 1;
-                        }
-                    }
+                    SkillPoints.globalDamageRate = 1.0f + SkillPoints.skillValuesR[0] / 100.0f * SkillPoints.skillLevelR[0] + 15;
+                }
+                else
+                {
+                    SkillPoints.globalDamageRate = 1.0f + SkillPoints.skillValuesR[0] / 100.0f * SkillPoints.skillLevelR[0];
                 }
             }
         }
@@ -3144,6 +3177,7 @@ namespace DSP_Battle
                     }
                 }
                 Relic.alreadyRecalcDysonStarLumin = true;
+                UIRelic.RefreshSlotsWindowUI();
             }
         }
 

@@ -161,7 +161,13 @@ namespace DSP_Battle
 
         public static bool TryConsumeMechaEnergy(double energy)
         {
-            if (Relic.HaveRelic(1, 4)) energy *= 0.5; // relic1-4 水滴减耗
+            if (Relic.HaveRelic(1, 4)) // relic1-4 水滴减耗
+            {
+                if (Relic.HaveRelic(0, 9)) // 铲子强化
+                    energy *= 0.4;
+                else
+                    energy *= 0.5;
+            }
             if (Relic.HaveRelic(2, 6)) energy *= 0.6; // relic2-6 水滴减耗
             if (GameMain.mainPlayer.mecha.coreEnergy >= energy)
             {

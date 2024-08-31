@@ -29,7 +29,7 @@ namespace DSP_Battle
         public static float seedKeyObjY1 = -387;
 
         public static Toggle DFToggle;
-        public static bool voidInvasionEnabledCache = true;
+        public static int voidInvasionEnabledCache = 1;
 
         [HarmonyPostfix]
         [HarmonyPatch(typeof(UIGalaxySelect), "_OnOpen")]
@@ -100,14 +100,14 @@ namespace DSP_Battle
                     voidInvasionToggleObj.GetComponentInChildren<UIButton>().tips.tipText = "虚空入侵提示".Translate();
                     voidInvasionToggle = voidInvasionToggleObj.GetComponentInChildren<Toggle>();
                     voidInvasionToggle.onValueChanged.RemoveAllListeners();
-                    voidInvasionToggle.onValueChanged.AddListener(new UnityEngine.Events.UnityAction<bool>((isOn) => voidInvasionEnabledCache = isOn));
+                    voidInvasionToggle.onValueChanged.AddListener(new UnityEngine.Events.UnityAction<bool>((isOn) => voidInvasionEnabledCache = isOn ? 1 : -1));
                     voidInvasionToggleObj.GetComponentInChildren<Toggle>().isOn = true;
                     voidInvasionUITg = voidInvasionToggleObj.GetComponentInChildren<UIToggle>();
 
                     DFToggle.onValueChanged.AddListener(new UnityEngine.Events.UnityAction<bool>((isOn) => voidInvasionToggle.isOn = isOn));
                 }
 
-                voidInvasionEnabledCache = voidInvasionToggle.isOn;
+                voidInvasionEnabledCache = voidInvasionToggle.isOn ? 1 : -1;
             }
         }
 
@@ -137,7 +137,7 @@ namespace DSP_Battle
 
                     voidInvasionToggleObj.SetActive(true);
                     voidInvasionTitleText.text = "虚空入侵".Translate();
-                    voidInvasionLogo.color = new Color(1f, 1f, 1f, (voidInvasionEnabledCache ? 0.86f : 0.06f) + (voidInvasionUITg.isMouseEnter ? 0.14f : 0f));
+                    voidInvasionLogo.color = new Color(1f, 1f, 1f, (voidInvasionEnabledCache == 1 ? 0.86f : 0.06f) + (voidInvasionUITg.isMouseEnter ? 0.14f : 0f));
                     if (voidInvasionToggleObj.transform.localPosition.y != -316)
                     {
                         voidInvasionToggleObj.transform.localPosition = new Vector3(0, -316, 0);
@@ -157,6 +157,7 @@ namespace DSP_Battle
         public static void GameSave_LoadCurrentGame()
         {
             fastStart = false;
+            voidInvasionEnabledCache = 0; // 读取游戏时阻止cache改变虚空入侵的开关，因为只有1或-1的时候才会更改虚空入侵的开关设定
         }   
 
         [HarmonyPostfix]
@@ -168,7 +169,10 @@ namespace DSP_Battle
                 DspBattlePlugin.logger.LogInfo("=======================================> FAST START");
                 Init();
             }
-            AssaultController.voidInvasionEnabled = voidInvasionEnabledCache;
+            if (voidInvasionEnabledCache == 1)
+                AssaultController.voidInvasionEnabled = true;
+            else if (voidInvasionEnabledCache == -1)
+                AssaultController.voidInvasionEnabled = false;
             UIEscMenuPatch.Init();
         }
 

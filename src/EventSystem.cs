@@ -717,7 +717,7 @@ namespace DSP_Battle
                                     }
                                 }
                             }
-                            else if (ptr.unitId == 0)
+                            else if (ptr.unitId == 0 && ptr.dfRelayId == 0) // 压制即将入侵的点数
                             {
                                 if(enemyDFHiveSystem2 != null && AssaultController.invincibleHives[enemyDFHiveSystem2.hiveAstroId - 1000000] >= 0)
                                 {

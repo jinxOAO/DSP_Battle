@@ -485,14 +485,14 @@ namespace DSP_Battle
                                     {
                                         if (recorder.requestMeet[requestIndex] == int.MinValue)
                                             tipTextNeed += "\n    "
-                                                + string.Format("消灭恒星系全部地面单位".Translate(), GameMain.galaxy.StarById(starId)?.name, finished ? "" : "点击以导航".Translate(), "数量未知gm".Translate());
+                                                + string.Format("消灭恒星系全部地面单位".Translate(), GameMain.galaxy.StarById(starId)?.displayName, finished ? "" : "点击以导航".Translate(), "数量未知gm".Translate());
                                         else
                                             tipTextNeed += "\n    "
-                                                + string.Format("消灭恒星系全部地面单位".Translate(), GameMain.galaxy.StarById(starId)?.name, finished ? "" : "点击以导航".Translate(), -recorder.requestMeet[requestIndex]);
+                                                + string.Format("消灭恒星系全部地面单位".Translate(), GameMain.galaxy.StarById(starId)?.displayName, finished ? "" : "点击以导航".Translate(), -recorder.requestMeet[requestIndex]);
                                     }
                                     else
                                         tipTextNeed += "\n    "
-                                            + string.Format("消灭恒星系地面单位".Translate(), GameMain.galaxy.StarById(starId)?.name, recorder.requestMeet[requestIndex], recorder.requestCount[requestIndex], finished ? "" : "点击以导航".Translate());
+                                            + string.Format("消灭恒星系地面单位".Translate(), GameMain.galaxy.StarById(starId)?.displayName, recorder.requestMeet[requestIndex], recorder.requestCount[requestIndex], finished ? "" : "点击以导航".Translate());
                                 }
                                 else if (code >= 50000 && code < 60000)
                                 {
@@ -500,35 +500,35 @@ namespace DSP_Battle
                                     if (recorder.requestCount[requestIndex] == 0)
                                     {
                                         tipTextNeed += "\n    "
-                                            + string.Format("消灭恒星系全部太空单位".Translate(), GameMain.galaxy.StarById(starId)?.name, finished ? "" : "点击以导航".Translate(), -recorder.requestMeet[requestIndex]);
+                                            + string.Format("消灭恒星系全部太空单位".Translate(), GameMain.galaxy.StarById(starId)?.displayName, finished ? "" : "点击以导航".Translate(), -recorder.requestMeet[requestIndex]);
                                     }
                                     else
                                         tipTextNeed += "\n    "
-                                            + string.Format("消灭恒星系太空单位".Translate(), GameMain.galaxy.StarById(starId)?.name, recorder.requestMeet[requestIndex], recorder.requestCount[requestIndex], finished ? "" : "点击以导航".Translate());
+                                            + string.Format("消灭恒星系太空单位".Translate(), GameMain.galaxy.StarById(starId)?.displayName, recorder.requestMeet[requestIndex], recorder.requestCount[requestIndex], finished ? "" : "点击以导航".Translate());
                                 }
                                 else if (code >= 60000 && code < 70000)
                                 {
                                     int starId = code - 60000 + 1;
-                                    tipTextNeed += "\n    " + string.Format("提升恒星系威胁等级".Translate(), GameMain.galaxy.StarById(starId)?.name, recorder.requestMeet[requestIndex], recorder.requestCount[requestIndex], finished ? "" : "点击以导航".Translate());
+                                    tipTextNeed += "\n    " + string.Format("提升恒星系威胁等级".Translate(), GameMain.galaxy.StarById(starId)?.displayName, recorder.requestMeet[requestIndex], recorder.requestCount[requestIndex], finished ? "" : "点击以导航".Translate());
                                 }
                                 else if (code >= 70000 && code < 80000)
                                 {
                                     int starId = code - 70000 + 1;
                                     if (recorder.requestMeet[requestIndex] == int.MinValue)
-                                        tipTextNeed += "\n    " + string.Format("肃清恒星系".Translate(), GameMain.galaxy.StarById(starId)?.name, finished ? "" : "点击以导航".Translate(), "数量未知gm".Translate());
+                                        tipTextNeed += "\n    " + string.Format("肃清恒星系".Translate(), GameMain.galaxy.StarById(starId)?.displayName, finished ? "" : "点击以导航".Translate(), "数量未知gm".Translate());
                                     else
-                                        tipTextNeed += "\n    " + string.Format("肃清恒星系".Translate(), GameMain.galaxy.StarById(starId)?.name, finished ? "" : "点击以导航".Translate(), -recorder.requestMeet[requestIndex]);
+                                        tipTextNeed += "\n    " + string.Format("肃清恒星系".Translate(), GameMain.galaxy.StarById(starId)?.displayName, finished ? "" : "点击以导航".Translate(), -recorder.requestMeet[requestIndex]);
                                 }
                                 else if (code >= 80000 && code < 90000)
                                 {
                                     int starId = code - 80000 + 1;
-                                    string starName = code == 89999 ? "任意gm".Translate() : GameMain.galaxy.StarById(starId)?.name;
+                                    string starName = code == 89999 ? "任意gm".Translate() : GameMain.galaxy.StarById(starId)?.displayName;
                                     tipTextNeed += "\n    " + string.Format("提升巨构能量水平".Translate(), starName, recorder.requestMeet[requestIndex] / 1000, recorder.requestCount[requestIndex] / 1000, finished || code == 89999 ? "" : "点击以导航".Translate());
                                 }
                                 else if (code >= 90000 && code < 100000)
                                 {
                                     int starId = code - 90000 + 1;
-                                    string starName = GameMain.galaxy.StarById(starId)?.name;
+                                    string starName = GameMain.galaxy.StarById(starId)?.displayName;
                                     tipTextNeed += "\n    " + string.Format("提升太空黑雾巢穴等级".Translate(), starName, recorder.requestMeet[requestIndex], recorder.requestCount[requestIndex], finished ? "" : "点击以导航".Translate());
                                 }
                                 else if (code >= 1000000 && code < 2000000)
@@ -537,7 +537,7 @@ namespace DSP_Battle
                                     EnemyDFHiveSystem hive = dfHivesByAstro[code - 1000000];
                                     if (hive != null)
                                     {
-                                        string starName = hive.starData.name;
+                                        string starName = hive.starData.displayName;
                                         string hiveName = hive.hiveCode;
                                         tipTextNeed += "\n    " + string.Format("消灭太空黑雾巢穴的所有单位".Translate(), starName, hiveName, -recorder.requestMeet[requestIndex], finished ? "" : "点击以导航".Translate());
                                     }
@@ -545,7 +545,7 @@ namespace DSP_Battle
                                 else if (code >= 2000000 && code < 3000000)
                                 {
                                     int planetId = code - 2000000;
-                                    string planetName = GameMain.galaxy.PlanetById(planetId)?.name;
+                                    string planetName = GameMain.galaxy.PlanetById(planetId)?.displayName;
                                     if (planetName != null)
                                     {
                                         if (recorder.requestCount[requestIndex] == 0)
@@ -563,7 +563,7 @@ namespace DSP_Battle
                                 else if (code >= 3000000 && code < 4000000)
                                 {
                                     int planetId = code - 3000000;
-                                    string planetName = GameMain.galaxy.PlanetById(planetId)?.name;
+                                    string planetName = GameMain.galaxy.PlanetById(planetId)?.displayName;
                                     if (planetName != null)
                                     {
                                         if (recorder.requestMeet[requestIndex] == int.MinValue)
@@ -575,7 +575,7 @@ namespace DSP_Battle
                                 else if (code >= 4000000 && code < 5000000)
                                 {
                                     int planetId = code - 4000000;
-                                    string planetName = GameMain.galaxy.PlanetById(planetId)?.name;
+                                    string planetName = GameMain.galaxy.PlanetById(planetId)?.displayName;
                                     if (planetName != null)
                                     {
                                         tipTextNeed += "\n    " + string.Format("到达行星gm".Translate(), planetName, finished ? "已到达gm".Translate() : "点击以导航".Translate());

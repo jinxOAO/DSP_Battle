@@ -560,8 +560,13 @@ namespace DSP_Battle
                 inputBgObj.transform.localPosition = new Vector3(0, -278, 0);
 
                 GameObject oriInputFieldObj = GameObject.Find("UI Root/Overlay Canvas/In Game/Windows/Blueprint Browser/inspector-group/Scroll View/Viewport/Content/group-1/input-short-text");
+                bool BPTEnabled = false;
                 if (oriInputFieldObj == null)
+                {
+                    BPTEnabled = true;
                     oriInputFieldObj = GameObject.Find("UI Root/Overlay Canvas/In Game/Windows/Blueprint Browser/inspector-group/BP-panel-scroll(Clone)/Viewport/pane/group-1/input-desc-text");
+                    maxOutputClearCount = 25;
+                }
                 GameObject inputFieldObj = GameObject.Instantiate(oriInputFieldObj, consoleObj.transform);
                 inputFieldObj.name = "inputfield";
                 inputFieldObj.GetComponent<UIButton>().tips.tipTitle = "Command";
@@ -569,6 +574,8 @@ namespace DSP_Battle
                 inputFieldObj.transform.localScale = new Vector3(1, 1, 1);
                 inputFieldObj.transform.localPosition = new Vector3(-390, -265);
                 inputFieldObj.GetComponent<RectTransform>().sizeDelta = new Vector2(780, 26);
+                if(BPTEnabled)
+                    inputFieldObj.GetComponent<RectTransform>().sizeDelta = new Vector2(-20, 26);
                 inputFieldObj.GetComponent<InputField>().lineType = InputField.LineType.MultiLineNewline;
                 inputFieldObj.transform.Find("value-text").GetComponent<Text>().color = Color.white;
                 //inputFieldObj.GetComponent<Image>().color = new Color(1f, 1f, 1f, 1f);
@@ -592,6 +599,8 @@ namespace DSP_Battle
                 outputFieldObj.transform.localScale = new Vector3(1, 1, 1);
                 outputFieldObj.transform.localPosition = new Vector3(-390, 265);
                 outputFieldObj.GetComponent<RectTransform>().sizeDelta = new Vector2(780, 500);
+                if (BPTEnabled)
+                    outputFieldObj.GetComponent<RectTransform>().sizeDelta = new Vector2(-20, 500);
                 outputFieldObj.GetComponent<InputField>().lineType = InputField.LineType.MultiLineNewline;
                 outputFieldObj.transform.Find("value-text").GetComponent<Text>().supportRichText = true;
                 outputFieldObj.transform.Find("value-text").GetComponent<Text>().alignment = TextAnchor.LowerLeft;

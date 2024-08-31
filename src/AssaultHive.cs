@@ -110,7 +110,7 @@ namespace DSP_Battle
             else if(!hive.isAlive && state != EAssaultHiveState.End && state != EAssaultHiveState.Remove)
             {
                 state = EAssaultHiveState.End;
-                time = 10;
+                time = 120;
             }
             switch (state)
             {
@@ -159,6 +159,9 @@ namespace DSP_Battle
         {
             timeTillAssault--;
             time--;
+            if(hive != null)
+                hive.evolve.threat = 0;
+
             if (time <= 0)
             {
                 state = EAssaultHiveState.Expand;
@@ -170,6 +173,9 @@ namespace DSP_Battle
         {
             timeTillAssault--;
             time--;
+            if (hive != null)
+                hive.evolve.threat = 0;
+
             QuickBuild(5);
 
             hive.evolve.threat = 0;
@@ -196,6 +202,8 @@ namespace DSP_Battle
                 timeTillAssault--;
                 time--;
             }
+            if (hive != null)
+                hive.evolve.threat = 0;
             QuickAssemble();
 
             hive.evolve.threat = 0;
@@ -268,7 +276,7 @@ namespace DSP_Battle
             if (hive == null)
             {
                 state = EAssaultHiveState.End;
-                time = 10;
+                time = 120;
             }
 
             if(hive.hasIncomingAssaultingUnit)
@@ -278,13 +286,13 @@ namespace DSP_Battle
             else
             {
                 state = EAssaultHiveState.End;
-                time = 2;
+                time = 120;
             }
 
             if (time == 1)
             {
                 state = EAssaultHiveState.End;
-                time = 2;
+                time = 120;
             }
             
         }
@@ -292,6 +300,61 @@ namespace DSP_Battle
         {
             timeTillAssault--;
             time--;
+            if (hive != null)
+            {
+                int slice = 100;
+                int len = hive.pbuilders.Length;
+                int begin = len / slice * (time % slice);
+                int end = len / slice * (time % slice + 1);
+                if (end > len)
+                    end = len;
+                if (time % slice == slice - 1)
+                    end = len;
+                for (int i = begin; i < end; i++)
+                {
+                    int piid = hive.pbuilders[i].instId;
+                    if(piid > 0)
+                        KillHiveStrcuture(piid);
+                }
+                //for (int i = 0; i < hive.units.buffer.Length; i++)
+                //{
+                //    int enemyId = hive.units.buffer[i].enemyId;
+                //    if(enemyId > 0)
+                //    {
+                //        CombatStat stat = default(CombatStat);
+                //        stat.objectId = enemyId;
+                //        GameMain.spaceSector.KillEnemyFinal(enemyId, ref stat);
+                //    }
+                //    hive.units.Remove(i);
+                //}
+                //int len2 = hive.forms[0].units.Length;
+                //int begin2 = len2 / slice * (time % slice);
+                //int end2 = len2 / slice * (time % slice + 1);
+                //if(end2 > len2)
+                //    end2 = len2;
+                //if (time % slice == slice - 1)
+                //    end2 = len2;
+                //if (hive.forms != null && hive.forms.Length > 2 && hive.forms[0] != null && hive.forms[1] != null && hive.forms[2] != null)
+                //{
+                //    for (int i = begin2; i < end2; i++)
+                //    {
+                //        if (hive.forms[0].units[i] == 1)
+                //        {
+                //            hive.forms[0].RemoveUnit(i);
+                //        }
+                //        if (hive.forms[1].units.Length > i)
+                //        {
+                //            if (hive.forms[1].units[i] == 1)
+                //                hive.forms[1].RemoveUnit(i);
+                //        }
+                //        if (hive.forms[2].units.Length > i)
+                //        {
+                //            if (hive.forms[2].units[i] == 1)
+                //                hive.forms[2].RemoveUnit(i);
+                //        }
+                //    }
+                //}
+            }
             if (hive.evolve.level > oriLevel)
             {
                 hive.evolve.level--;
@@ -311,6 +374,7 @@ namespace DSP_Battle
         {
 
         }
+
 
         void QuickBuild(int speedFactor)
         {
@@ -544,6 +608,17 @@ namespace DSP_Battle
                 }
             }
         }
+
+
+        void KillHiveStrcuture(int pbuilderInstId)
+        {
+            int id = pbuilderInstId;
+            CombatStat stat = default(CombatStat);
+            stat.objectId = id;
+            GameMain.spaceSector.KillEnemyFinal(id, ref stat);
+        }
+
+
 
         public void Import(BinaryReader r)
         {

@@ -834,23 +834,7 @@ namespace DSP_Battle
             {
                 if (uibt.tips.tipTitle.Length == 0)
                     uibt.tips.tipTitle = ($"relicTipTitle{type}-{num}").Translate();
-
-                string[] ori = uibt.tips.tipText.Split('\n');
-                int len = ori.Length;
-                if (len > 1 && ori[len - 1].Length > 3 && ori[len - 1][0] == '<' && ori[len - 1][1] == 'c') // 代表是<color=开头，判断为镀上了铲亮的光芒。将tip加载铲子镀光之前
-                {
-                    string final = "";
-                    for (int i = 0; i < len - 2; i++)
-                    {
-                        final += ori[i] + "\n";
-                    }
-                    final += ($"relicTipText{type}-{num}").Translate() + "\n" + ori[len - 2] + "\n" + ori[len - 1];
-                    uibt.tips.tipText = final;
-                }
-                else
-                {
-                    uibt.tips.tipText += "\n" + ($"relicTipText{type}-{num}").Translate();
-                }
+                uibt.tips.tipText += "\n" + $"relicTipText{type}-{num}".Translate();
             }
             if (type == 4)
             {
@@ -877,8 +861,16 @@ namespace DSP_Battle
                     AddTipVarData(rType, rNum, uibt);
                 }
             }
+            else if (type == 4 && num == 0 && isLeftSlot)
+            {
+                if(Relic.alreadyRecalcDysonStarLumin)
+                    uibt.tips.tipText += "\n<color=#61d8ffb4>" + string.Format("点击以导航到".Translate(), GameMain.galaxy.StarById(Relic.starIndexWithMaxLuminosity + 1).displayName) + "</color>";
+            }
         }
-
+        public static void AddSpatulaBuffedText(int type, int num, UIButton uibt)
+        {
+            uibt.tips.tipText += "铲子强化后字".Translate();
+        }
         public static void AddTipVarData(int type, int num, UIButton uibt)
         {
             if (type == 0 && num == 10)
@@ -1006,7 +998,7 @@ namespace DSP_Battle
                             {
                                 if (Configs.developerMode) relicNotHave.Add(num);
                                 if (!Relic.HaveRelic(type, num) && !Relic.alternateRelics.Contains(type * 100 + num) && 
-                                    (!Relic.relicOnlyForEnvasion.Contains(type * 100 + num) || AssaultController.voidInvasionEnabled))
+                                    (!Relic.relicOnlyForInvasion.Contains(type * 100 + num) || AssaultController.voidInvasionEnabled))
                                 {
                                     if (type == 1 && num == 10 && Relic.trueDamageActive > 0) // 真实伤害不占用槽位，但是一旦获取后也不会再占用刷新栏
                                         continue;
@@ -1194,7 +1186,15 @@ namespace DSP_Battle
                     {
                         if (onlyVarTips)
                         {
-                            if (!(type == 0 && num == 2) && !(type == 0 && num == 10) && !(type == 4 && num == 6 && (Relic.recordRelics.Contains(2) || Relic.recordRelics.Contains(10))))
+                            if (type == 4 && num == 6)
+                            {
+                                if (!Relic.recordRelics.Contains(002) && !Relic.recordRelics.Contains(010) && !Relic.recordRelics.Contains(108) && !Relic.recordRelics.Contains(217))
+                                {
+                                    slotNum++;
+                                    continue;
+                                }
+                            }
+                            else if (!(type == 0 && num == 2) && !(type == 0 && num == 10) && !(type == 1 && num == 8) && !(type == 2 && num == 17))
                             {
                                 slotNum++;
                                 continue;
@@ -1215,10 +1215,12 @@ namespace DSP_Battle
                             relicSlotImgs[slotNum].sprite = rankType_Num[type, num];
                             relicSlotUIBtns[slotNum].tips.tipTitle = ("遗物名称带颜色" + type.ToString() + "-" + num.ToString()).Translate();
                             relicSlotUIBtns[slotNum].tips.tipText = ("遗物描述" + type.ToString() + "-" + num.ToString()).Translate();
+                            bool hasSpatulaBuff = false;
                             if(Relic.HaveRelic(0, 9)) // 金铲铲对某些元驱动的隐藏效果，将在左侧栏显示
                             {
                                 if (("遗物描述" + type.ToString() + "-" + num.ToString() + "+").Translate() != "遗物描述" + type.ToString() + "-" + num.ToString() + "+")
                                 {
+                                    hasSpatulaBuff = true;
                                     relicSlotUIBtns[slotNum].tips.tipText = ("遗物描述" + type.ToString() + "-" + num.ToString() + "+").Translate();
                                     if(("遗物名称带颜色" + type.ToString() + "-" + num.ToString() + "+").Translate() != "遗物名称带颜色" + type.ToString() + "-" + num.ToString() + "+")
                                         relicSlotUIBtns[slotNum].tips.tipTitle = ("遗物名称带颜色" + type.ToString() + "-" + num.ToString() + "+").Translate();
@@ -1227,6 +1229,8 @@ namespace DSP_Battle
                             if (type == 0 && num == 9)
                                 relicSlotUIBtns[slotNum].tips.tipText = "遗物描述0-9实际".Translate();
                             AddTipText(type, num, relicSlotUIBtns[slotNum], true); // 对于一些原本描述较短的，还要将更详细的描述加入
+                            if(hasSpatulaBuff)
+                                AddSpatulaBuffedText(type, num, relicSlotUIBtns[slotNum]);
                             AddTipVarData(type, num, relicSlotUIBtns[slotNum]); // 对于部分需要展示实时数据的，还需要加入数据
 
                             //relicSlotUIBtns[slotNum].tips.offset = new Vector2(0, 0);
@@ -1386,6 +1390,14 @@ namespace DSP_Battle
                 }
             }
 
+            if (relic == 400 && Relic.alreadyRecalcDysonStarLumin)
+            {
+                if (GameMain.mainPlayer?.navigation != null)
+                {
+                    if (GameMain.mainPlayer.navigation.indicatorAstroId != (Relic.starIndexWithMaxLuminosity + 1) * 100)
+                        GameMain.mainPlayer.navigation.indicatorAstroId = (Relic.starIndexWithMaxLuminosity + 1) * 100;
+                }
+            }
             //Utils.Log($"onlick relic {relic}");
         }
     }
