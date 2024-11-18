@@ -4,7 +4,9 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading;
+using System.Xml.Schema;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -232,6 +234,8 @@ namespace DSP_Battle
                 relics[type] |= 1 << num;
             }
             RefreshConfigs();
+            int[] data = new int[] { type, num };
+            MP.Sync(EDataType.CallOnAddRelic, data);
             return 1;
         }
 
@@ -273,6 +277,9 @@ namespace DSP_Battle
                 UIRelic.RefreshSlotsWindowUI();
                 RefreshConfigs();
             }
+
+            int[] data = new int[] { removeType, removeNum };
+            MP.Sync(EDataType.CallOnRemoveRelic, data);
         }
 
         public static void RegretRemoveRelic()
@@ -1927,6 +1934,19 @@ namespace DSP_Battle
                     ref EnemyData ptr = ref __instance.sector.enemyPool[target.id];
                     if(!ptr.isAssaultingUnit && AssaultController.invincibleHives[byAstroId] >= 0 && ptr.dfRelayId == 0)
                         damage = Math.Min(1000, (int)(damage * 0.001)); // 只能造成1‰的伤害，且单次不能超过10点。免伤效果对于正在进攻中的单位无效，对于中继站无效
+                }
+                if(slice != starCannonDamageSlice && byAstroId >= 0 && byAstroId < AssaultController.alertHives.Length) // 所有被虚空同化的黑雾获得一个至多75%伤害减免buff，用来平衡后期舰队数量降低的buff
+                {
+                    if (AssaultController.alertHives[byAstroId] >= 0 && AssaultController.assaultHives.Count > 0)
+                    {
+                        int starIndex = AssaultController.assaultHives[0] != null ? AssaultController.assaultHives[0].starIndex : 0;
+                        int curStarWave = Configs.wavePerStar[starIndex];
+                        if (curStarWave < 0)
+                            curStarWave = 0;
+                        if (curStarWave >= Configs.voidEnemyTakeDamageFactor.Count)
+                            curStarWave = Configs.voidEnemyTakeDamageFactor.Count - 1;
+                        damage = (int)(damage * Configs.voidEnemyTakeDamageFactor[curStarWave]);
+                    }
                 }
                 if(AssaultController.modifierEnabled)
                 {

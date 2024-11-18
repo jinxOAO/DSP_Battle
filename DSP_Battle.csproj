@@ -49,7 +49,7 @@
     </Reference>
     <Reference Include="CommonAPI, Version=1.6.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\SteamLibrary\steamapps\common\Dyson Sphere Program\BepInEx\plugins\CommonAPI.dll</HintPath>
+      <HintPath>D:\SteamLibrary\steamapps\common\Dyson Sphere Program\BepInEx\plugins\CommonAPI\CommonAPI.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="DSPModSave, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -65,6 +65,11 @@
     <Reference Include="MoreMegaStructure, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\SteamLibrary\steamapps\common\Dyson Sphere Program\BepInEx\plugins\MoreMegaStructure.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="NebulaAPI, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\SteamLibrary\steamapps\common\Dyson Sphere Program\BepInEx\plugins\NebulaAPI\NebulaAPI.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -138,6 +143,11 @@
     <Compile Include="src\DropletFleetPatchers.cs" />
     <Compile Include="src\EventProto.cs" />
     <Compile Include="src\EventSystem.cs" />
+    <Compile Include="src\NebulaCompat\MP.cs" />
+    <Compile Include="src\NebulaCompat\NebulaCompatPlugin.cs" />
+    <Compile Include="src\NebulaCompat\PacketHandler.cs" />
+    <Compile Include="src\NebulaCompat\Packets.cs" />
+    <Compile Include="src\NebulaCompat\Synchronizer.cs" />
     <Compile Include="src\NewGameOption.cs" />
     <Compile Include="src\Rank.cs" />
     <Compile Include="src\Relic.cs" />
@@ -166,7 +176,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="battlebgm" />
+    <None Include="packages.config" />
     <None Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\Compat\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

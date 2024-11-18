@@ -128,7 +128,7 @@ namespace DSP_Battle
                     EventSystem.InitNewEvent();
                 }
             }
-
+            MP.Sync(EDataType.CallRankFull);
             UIRank.ForceRefreshAll();
         }
 
@@ -164,6 +164,7 @@ namespace DSP_Battle
                 SkillPoints.RefreshMiningConsumption();
                 UIRank.ForceRefreshAll();
             }
+            MP.Sync(EDataType.CallRankFull);
         }
 
         // 下面为提供算力科技不断提供经验值的patch

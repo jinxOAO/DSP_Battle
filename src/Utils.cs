@@ -205,7 +205,6 @@ namespace DSP_Battle
                 Log($"{i} cur prob is {basic}, total prob {1 - total}");
             }
         }
-
         
     }
 }

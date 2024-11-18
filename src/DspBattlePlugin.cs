@@ -15,7 +15,7 @@ using xiaoye97;
 
 namespace DSP_Battle
 {
-    [BepInPlugin("com.ckcz123.DSP_Battle", "DSP_Battle", "3.1.3")]
+    [BepInPlugin("com.ckcz123.DSP_Battle", "DSP_Battle", "3.2.5")]
     [BepInDependency(DSPModSavePlugin.MODGUID)]
     [BepInDependency(CommonAPIPlugin.GUID)]
     [BepInDependency(LDBToolPlugin.MODGUID)]
@@ -26,7 +26,7 @@ namespace DSP_Battle
 
     public class DspBattlePlugin : BaseUnityPlugin, IModCanSave
     {
-        public static string GUID = "com.ckcz123.DSP_Battle";
+        public const string GUID = "com.ckcz123.DSP_Battle";
         public static string MODID_tab = "DSPBattle";
 
         public static System.Random randSeed = new System.Random();
@@ -364,6 +364,7 @@ namespace DSP_Battle
         {
             BattleProtos.RewriteTutorialProtosWhenLoad();
             BattleProtos.EditProtossWhenLoad();
+            MP.InitBlocker();
         }
 
         public void Export(BinaryWriter w)
