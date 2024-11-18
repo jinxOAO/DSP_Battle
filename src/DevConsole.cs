@@ -409,6 +409,9 @@ namespace DSP_Battle
                         DspBattlePlugin.playerInvincible = false;
                         Print($"god mode off");
                         break;
+                    case "mpstat":
+                        Print($"MP.NebulaEnabled={MP.NebulaEnabled}, MP.clientBlocker={MP.clientBlocker}");
+                        break;
                     default:
                         Print($"未知的命令：{param[0]}，输入 \"help\" 查看所有命令说明。", 1, true);
                         break;
@@ -709,8 +712,9 @@ namespace DSP_Battle
                 "<color=#ffffff>ap [param1]</color> 授权点增加[param1]" + "\n" +
                 "<color=#ffffff>voidon</color> 开启虚空入侵" + "\n" +
                 "<color=#ffffff>voidoff</color> 禁止虚空入侵" + "\n" +
+                "<color=#ffffff>mpstat</color> 查看联机相关参数" + "\n" +
                 "---------------------- help ----------------------";
-            Print(allCmds, 19, false); // 这个forceLineCount传值取决于allCmds的行数
+            Print(allCmds, 20, false); // 这个forceLineCount传值取决于allCmds的行数
         }
 
         public static void ClearOutputField()

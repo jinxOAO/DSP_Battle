@@ -72,6 +72,7 @@ namespace DSP_Battle
         public void CreateOrGetHive()
         {
             hive = GameMain.data.spaceSector.dfHivesByAstro[byAstroIndex];
+            if (MP.clientBlocker) return;
             if(hive == null)
             {
                 int count = 8;
@@ -104,8 +105,15 @@ namespace DSP_Battle
         {
             if (hive == null)
             {
-                state = EAssaultHiveState.Remove;
-                time = 0;
+                if (!MP.clientBlocker)
+                {
+                    state = EAssaultHiveState.Remove;
+                    time = 0;
+                }
+                else
+                {
+                    Utils.Log("null hive, but not removing because you are client.");
+                }
             }
             else if(!hive.isAlive && state != EAssaultHiveState.End && state != EAssaultHiveState.Remove)
             {
@@ -192,6 +200,10 @@ namespace DSP_Battle
                 {
                     AssaultController.NotifyAssaultDetected();
                 }
+                if(CheckIfAllHiveReachedState(EAssaultHiveState.Assemble))
+                {
+                    MP.Sync(EDataType.CallOnAssaultStateSwitch);
+                }
             }
 
         }
@@ -206,11 +218,11 @@ namespace DSP_Battle
                 hive.evolve.threat = 0;
             QuickAssemble();
 
-            hive.evolve.threat = 0;
+            hive.evolve.threat = 1;
             hive.evolve.waveTicks = 0;
             hive.evolve.waveAsmTicks = 0;
 
-            if (time <= 0)
+            if (time <= 0 && !MP.clientBlocker)
             {
                 LaunchAssault();
                 state = EAssaultHiveState.Assault;
@@ -266,6 +278,11 @@ namespace DSP_Battle
                         AssaultController.modifier[9] = -realDebuffInt; // 设置为负数
                     }
                 }
+
+                if(CheckIfAllHiveReachedState(EAssaultHiveState.Assault))
+                {
+                    MP.Sync(EDataType.CallOnLaunchAllVoidAssault); // 当所有巢穴都发起攻击后，同步spacesector、assaultController以及gamehistory数据
+                }
             }
         }
         public void LogicTickAssault()
@@ -278,6 +295,7 @@ namespace DSP_Battle
                 state = EAssaultHiveState.End;
                 time = 120;
             }
+            if (MP.clientBlocker) return;
 
             if(hive.hasIncomingAssaultingUnit)
             {
@@ -382,7 +400,8 @@ namespace DSP_Battle
                 return;
             //if (GameMain.instance.timei % 4 != listIndex) // 多个巢穴，间隔进行快速建造
             //    return;
-
+            //if (MP.clientBlocker)
+            //    return;
             ref AnimData[] ptr2 = ref hive.sector.enemyAnimPool;
             if (hive.realized)
             {
@@ -419,6 +438,8 @@ namespace DSP_Battle
 
         void QuickAssemble()
         {
+            //if (MP.clientBlocker)
+            //    return;
             EnemyFormation enemyFormation = hive.forms[0];
             if (enemyFormation.vacancyCount > 0 && enemyFormation.unitCount < assembleNum)
             {
@@ -432,6 +453,8 @@ namespace DSP_Battle
 
         void LaunchAssault()
         {
+            if (MP.clientBlocker)
+                return;
             if (hive != null)
             {
                 hive.hatredAstros.Sort();
@@ -612,12 +635,30 @@ namespace DSP_Battle
 
         void KillHiveStrcuture(int pbuilderInstId)
         {
+            if (MP.clientBlocker)
+                return;
             int id = pbuilderInstId;
             CombatStat stat = default(CombatStat);
             stat.objectId = id;
             GameMain.spaceSector.KillEnemyFinal(id, ref stat);
         }
 
+        public static bool CheckIfAllHiveReachedState(EAssaultHiveState state)
+        {
+            int length = AssaultController.assaultHives.Count;
+            for (int i = length-1; i >= 0; i--)
+            {
+                if (AssaultController.assaultHives[i] != null)
+                {
+                    EAssaultHiveState cur = AssaultController.assaultHives[i].state;
+                    if(cur < state)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
 
 
         public void Import(BinaryReader r)

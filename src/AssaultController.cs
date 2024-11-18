@@ -171,7 +171,8 @@ namespace DSP_Battle
             }
             if (removeAll)
             {
-                OnAssaultEnd();
+                if(!MP.clientBlocker) // 客机只能等待主机的入侵结束信号，才能执行入侵结束逻辑
+                    OnAssaultEnd();
             }
         }
 
@@ -272,6 +273,8 @@ namespace DSP_Battle
 
         public static void InitNewAssault(int starIndex = -1)
         {
+            if (MP.clientBlocker) // 多人模式客户端不允许产生新的进攻
+                return;
             // 如果starIndex 为负 根据能量水平 选择一个恒星系
             if (starIndex < 0)
             {
@@ -379,6 +382,7 @@ namespace DSP_Battle
             timeChangedByRelic = false;
             Configs.wavePerStar[starIndex]++;
             //Utils.Log($"Initing new void invasion in star index {starIndex}.");
+            MP.Sync(EDataType.CallOnAssaultInited);
         }
 
         public static void InitModifiers(int waveCountTotal, int waveCountCur)
@@ -453,6 +457,7 @@ namespace DSP_Battle
 
         public static void OnAssaultEnd()
         {
+            MP.Sync(EDataType.CallOnAssaultEndSettleStart);
             assaultActive = false;
             modifierEnabled = false;
 
@@ -498,6 +503,8 @@ namespace DSP_Battle
             if (totalAssault <= 0)
                 totalAssault = 1;
             float rewardFactor = totalKill * 1.0f / totalAssault;
+            if(rewardFactor > 1)
+                rewardFactor = 1;
             int realReward = GiveReward(rewardFactor);
             string message = "";
             message += string.Format("虚空入侵结束提示".Translate(), totalKill, totalAssault, realReward);
@@ -540,6 +547,7 @@ namespace DSP_Battle
             BattleBGMController.SetWaveFinished();
         }
 
+
         public static int GiveReward(float factor)
         {
             int waveCount = Configs.totalWave;
@@ -566,7 +574,7 @@ namespace DSP_Battle
             else if (difficulty > fullDifficulty)
                 difficulty = fullDifficulty;
             int basic = 36; // 1.0及以下难度时的后期地址上限
-            int maxLen = Configs.totalAssaultNumMap.Count;
+            int maxLen = Configs.totalAssaultNumMap.Count - 1;
             int linearTotal = maxLen - 36;
             int realMaxLen = basic;
             if(difficulty > 1.0f)
@@ -614,11 +622,23 @@ namespace DSP_Battle
                     inc = 10;
                 waveCount += inc;
             }
+            float difficulty = GameMain.data.history.combatSettings.difficulty;
+            
+            int idxBack = 8 - (int)difficulty; // 根据难度，设定一个游戏后期最短的进攻间隔时间，难度8以上为10min，最低达到难度2及以下为20min
+            if(idxBack < 0)
+                idxBack = 0;
+            if(idxBack > 6)
+                idxBack = 6;
+            int lastIdx = Configs.assembleTimeMap.Count - 1 - idxBack;
+            if(lastIdx < 0)
+                lastIdx = 0;
+            if (lastIdx >= Configs.assembleTimeMap.Count)
+                lastIdx = Configs.assembleTimeMap.Count - 1;
 
-            if (waveCount >= Configs.assembleTimeMap.Count || waveCount < 0)
-                return Configs.assembleTimeMap.Last();
-            else
-                return Configs.assembleTimeMap[waveCount];
+            if (waveCount >= lastIdx || waveCount < 0)
+                waveCount = lastIdx;
+
+            return Configs.assembleTimeMap[waveCount];
         }
 
         public static int GetModifierCount(int superWaveCount)
@@ -1030,9 +1050,9 @@ namespace DSP_Battle
         public static List<int> modifierPoolEarly = new List<int> { 0, 1, 2, 3, 5, 11 }; // 精英波次小于5波（总波次小于25）
         public static List<int> modifierPoolMid = new List<int> { 0, 1, 2, 3, 5, 8, 10, 11, 13 }; // 精英波次6-10波次
         public static List<int> modifierPoolLate = new List<int> { 0, 1, 2, 3, 4, 5, 7, 8, 10, 11, 12, 13 }; // 精英波次11以上
-        public static List<int> modifierValueMinEarly = new List<int> { 10, 10, 10, 50, 1, 1, 30, 30, 30, 30, 1, 10, 60, 50 }; // max 为两倍
-        public static List<int> modifierValueMinMid = new List<int> { 20, 15, 100, 75, 2, 1, 100, 100, 100, 100, 1, 30, 180, 100 }; // max 为两倍
-        public static List<int> modifierValueMinLate = new List<int> { 30, 20, 500, 100, 5, 1, 300, 300, 300, 300, 1, 40, 600, 200 }; // max 为两倍
+        public static List<int> modifierValueMinEarly = new List<int> { 10, 10, 3, 50, 1, 1, 30, 30, 30, 30, 1, 10, 60, 50 }; // max 为两倍
+        public static List<int> modifierValueMinMid = new List<int> { 20, 15, 30, 75, 2, 1, 100, 100, 100, 100, 1, 30, 180, 100 }; // max 为两倍
+        public static List<int> modifierValueMinLate = new List<int> { 30, 20, 120, 100, 5, 1, 300, 300, 300, 300, 1, 40, 600, 200 }; // max 为两倍
         public static List<int> modifierMaxActiveCount = new List<int> { 1, 1, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 5, 5, 5 }; // 最多同时启用多少个修改器
         public static int modifierTypeCount = 14; // 一共有多少种修改器
 
