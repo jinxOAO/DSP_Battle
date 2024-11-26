@@ -634,11 +634,16 @@ namespace DSP_Battle
                 lastIdx = 0;
             if (lastIdx >= Configs.assembleTimeMap.Count)
                 lastIdx = Configs.assembleTimeMap.Count - 1;
+            if(DspBattlePlugin.voidInvasionMaxFrequency.Value >= 2)
+                lastIdx = Configs.assembleTimeMap.Count - 1;
 
             if (waveCount >= lastIdx || waveCount < 0)
                 waveCount = lastIdx;
 
-            return Configs.assembleTimeMap[waveCount];
+            if (DspBattlePlugin.voidInvasionMaxFrequency.Value >= 3 || waveCount == lastIdx) // 根据config文件设置，如果虚空入侵频率是三级，且是最终频率，则返回五分钟，否则正常返回
+                return 3600 * 5;
+            else
+                return Configs.assembleTimeMap[waveCount];
         }
 
         public static int GetModifierCount(int superWaveCount)

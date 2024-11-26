@@ -34,10 +34,16 @@ namespace DSP_Battle
             techDrop.PreItem = new int[] { 5201 };
 
             TechProto techExp = ProtoRegistry.RegisterTech(1998, "提供算力名称", "提供算力描述", "提供算力结论", "Assets/DSPBattle/rank10", new int[] { }, new int[] { 6006 },
-                new int[] { 2 }, 2997924580, new int[] { }, new Vector2(65 + techPosXBias, -11)); // 299792458000
+                new int[] { 2 }, 299792458000, new int[] { }, new Vector2(65 + techPosXBias, -11)); // 299792458000
             techExp.PreTechsImplicit = new int[] { };
             techExp.IsHiddenTech = true;
             techExp.PreItem = new int[] { 9513 };
+
+
+            TechProto techGuideBombing = ProtoRegistry.RegisterTech(1997, "微型恒星能量引导", "微型恒星能量引导描述", "微型恒星能量引导结论", "icons/achievement/115", new int[] {1918 }, new int[] { 5201 }, new int[] { 400 }, 36000, new int[] { }, new Vector2(69 + techPosXBias, -3)); // 299792458000
+            //techGuideBombing.PreTechsImplicit = new int[] { 1918 };
+            techGuideBombing.IsHiddenTech = true;
+            techGuideBombing.PreItem = new int[] { 5201 };
 
 
             ItemProto medal = ProtoRegistry.RegisterItem(9513, "星河卫士奖章", "星河卫士奖章描述", "Assets/DSPBattle/rank10", 9998, 1, EItemType.Decoration,
@@ -395,7 +401,7 @@ namespace DSP_Battle
             RegisterString("gmRankUnlockText4", "Ore loss per mining operation -20%", "采矿消耗 -20%");
             RegisterString("gmRankUnlockText5", "EM effect +20%", "电磁武器效果 +20%");
             RegisterString("gmRankUnlockText6", "Droplets can quickly approach distant target", "水滴能够快速接近远距离的目标");
-            RegisterString("gmRankUnlockText7", "Ore loss per mining operation -20%", "采矿消耗 -20%");
+            RegisterString("gmRankUnlockText7", "Ore loss per mining operation -20%\n-  Calling planetary purge permission", "采矿消耗 -20%\n-  呼叫行星清洗许可");
             RegisterString("gmRankUnlockText8", "Star cannon charging speed +50%", "恒星炮充能速度 +50%");
             RegisterString("gmRankUnlockText9", "Droplet damage +100%", "水滴伤害 +100%");
             RegisterString("gmRankUnlockText10", "Ore loss per mining operation -40%", "采矿消耗 -40%");
@@ -410,6 +416,7 @@ namespace DSP_Battle
             RegisterString("gmRankReward8", "Star cannon charging speed +50%", "恒星炮充能速度 +50%");
             RegisterString("gmRankReward9", "Droplet damage +100%", "水滴伤害 +100%");
             RegisterString("gmRankReward10", "Ore loss per mining operation  -80%", "采矿消耗 -80%");
+            RegisterString("gmRankReward7Add", "Calling planetary purge permission", "呼叫行星清洗许可");
             RegisterString("功勋阶级", "Merit Rank", "功勋阶级");
             RegisterString("当前阶级", "Current Rank", "当前等级");
             RegisterString("功勋点数", "Merit points", "功勋点数");
@@ -719,7 +726,7 @@ namespace DSP_Battle
             RegisterString("遗物描述2-11", "Smelter have 30% chance to produce an additional product", "熔炉每次产出，有30%的概率额外产出一个产物");
             RegisterString("遗物描述2-12", "You gain +10% chance of critical hit", "你获得10%暴击几率");
             RegisterString("遗物描述2-13", "Double any <i>additional damage</i> (except the bonus from technology)", "你对黑雾造成的任何<i>额外伤害翻倍</i>（来自科技的加成除外）");
-            RegisterString("遗物描述2-14", "Every time you destroy an enemy, you have chance to directly obtain an antimatter fuel rod or a space warper in the backpack", "每次击毁敌军单位，根据敌人强度有概率在背包直接获取1个反物质燃料棒或翘曲器，无视科技解锁进度");
+            RegisterString("遗物描述2-14", "Every time you destroy a space dark fog unit, you have chance to directly obtain an antimatter fuel rod or a space warper in the backpack", "每次击毁太空黑雾单位，有概率在背包直接获取1个反物质燃料棒或翘曲器，无视科技解锁进度");
             RegisterString("遗物描述2-14+", "Every time you destroy an enemy, you have chance to directly obtain an <color=#d2853d>strange annihilation fuel rod</color> or a space warper in the backpack", "每次击毁敌军单位，根据敌人强度有概率在背包直接获取1个<color=#d2853d>奇异湮灭燃料棒</color>或翘曲器，无视科技解锁进度");
             RegisterString("遗物描述2-15", "Explosive damage +10%. Won't occupy the meta driver slot", "爆破武器伤害+40%，不占用元驱动槽位");
             RegisterString("遗物描述2-16", "Planetary Shield and Icarus Shield gain 20% damage reduction", "行星护盾和伊卡洛斯的护盾获得20%伤害减免");
@@ -1020,6 +1027,23 @@ namespace DSP_Battle
             RegisterString("额外特性描述12", "Gain {0}/s extra health regeneration", "获得{0}/s额外生命回复");
             RegisterString("额外特性描述13", "Gain +{0}% sailing speed", "获得+{0}%航行速度加成");
             RegisterString("额外特性描述14", "", "");
+
+
+            RegisterString("引导太阳轰炸标题", "Guide Solar Bombardment", "引导太阳轰炸");
+            RegisterString("引导太阳轰炸描述", "Icarus consumes core energy to stimulate and guide the energy of stars, and uses itself as a beacon to bombard the surrounding surface.\nThe energy consumption that maintains stellar energy guidance will rapidly increase over time.\nClick again to stop the solar bombardment.\n<color=#c2853d>[cooling down 2:00]</color>", "伊卡洛斯消耗自身的能量来引导恒星级能量，并以自身作为信标，向周围的地表进行太阳轰炸。\n若持续开启，维持恒星能量引导的机甲耗能速度会迅速增长。\n再次点击以停止太阳轰炸。\n<color=#c2853d>[冷却时间2:00]</color>");
+            RegisterString("呼叫行星清洗标题", "Call For Planetary Purge", "呼叫行星清洗");
+            RegisterString("呼叫行星清洗描述", "Pay <color=#c2853d>1 authorization point</color> to request an orbital purge of the current planetary surface from the COSMO Technology Ethics Committee.\n<color=#c2853d>[cooldown time 0:45]</color>", "支付<color=#c2853d>1授权点</color>，向COSMO技术伦理委员会请求一次针对当前行星地表的轨道清洗。\n<color=#c2853d>[冷却时间0:45]</color>");
+            RegisterString("授权点不足警告", "Insufficient authorization points!", "授权点不足！");
+            RegisterString("启动行星清洗警告", "Warning! Planetary purge incoming!", "警告！行星清洗来袭！");
+            RegisterString("启动太阳轰炸警告", "Guiding Solar Bombardment!", "正在引导太阳轰炸！");
+            RegisterString("引导太阳轰炸", "Guide Solar Bombardment", "引导太阳轰炸");
+            RegisterString("太阳轰炸已终止", "Solar Bombardment Terminated!", "太阳轰炸已终止！");
+            RegisterString("只能在行星上启动", "Warning: You can only launch this skill on a planet!", "警告：只能在行星上启动！");
+
+
+            RegisterString("微型恒星能量引导", "Micro stellar energy guidance", "微型恒星能量引导");
+            RegisterString("微型恒星能量引导描述", "After successfully achieving a technological breakthrough in stellar energy guidance, a possibility of miniaturizing it has emerged. Perhaps Icarus can use its own energy to deflect and stimulate local stellar energy, making it possible for Icarus itself to guide the <color=#c2853d>solar bombardment</color>.", "在成功取得了恒星能量引导的技术突破之后，一个将其微型化的可能出现了。或许伊卡洛斯可以使用自身的能量输出来偏折并激发局部的恒星能量，这将使得伊卡洛斯自行引导<color=#c2853d>太阳轰炸</color>成为可能。");
+            RegisterString("微型恒星能量引导结论", "You have unlocked the ability to guide solar bombardment.", "你解锁了引导太阳轰炸的能力。");
         }
 
 

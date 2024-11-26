@@ -9,13 +9,15 @@ using HarmonyLib;
 using System;
 using System.IO;
 using System.Reflection;
+using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.UI;
 using xiaoye97;
+using static UnityEngine.EventSystems.EventTrigger;
 
 namespace DSP_Battle
 {
-    [BepInPlugin("com.ckcz123.DSP_Battle", "DSP_Battle", "3.2.5")]
+    [BepInPlugin("com.ckcz123.DSP_Battle", "DSP_Battle", "3.2.7")]
     [BepInDependency(DSPModSavePlugin.MODGUID)]
     [BepInDependency(CommonAPIPlugin.GUID)]
     [BepInDependency(LDBToolPlugin.MODGUID)]
@@ -37,6 +39,7 @@ namespace DSP_Battle
         public static ConfigEntry<bool> starCannonDirectionReverse;
         public static ConfigEntry<bool> enableBattleBGM;
         public static ConfigEntry<float> battleBGMVolume;
+        public static ConfigEntry<int> voidInvasionMaxFrequency;
 
         public static bool isControlDown = false;
         public static bool isShiftDown = false;
@@ -47,6 +50,7 @@ namespace DSP_Battle
         public static GameObject escLogo = null;
         public static Texture2D logoTexture = null;
         public static Texture2D escLogoTexture = null;
+
         public void Awake()
         {
             logger = Logger;
@@ -75,6 +79,7 @@ namespace DSP_Battle
             starCannonDirectionReverse = Config.Bind<bool>("config", "starCannonDirectionReverse", false, "Deprecated. 已弃用。");
             enableBattleBGM = Config.Bind<bool>("config", "EnableBattleBGM", true, "Set to false to disable the BGM switching when Icarus is in combat. 设置为false来关闭战斗时的BGM切换。");
             battleBGMVolume = Config.Bind<float>("config", "BattleBGMVolume", 1.0f, "( 0.0 - 2.0 )Control the Battle BGM's volume, will not affect the vanilla game BGM.  控制战斗音乐的音量大小，不会影响游戏默认BGM的音量。最小为0，最大为2.");
+            voidInvasionMaxFrequency = Config.Bind<int>("config", "voidInvasionMaxFrequency", 1, "(1,2 or 3) Setting to 2 will ignore the dark fog difficulty, and the minimum interval for void invasion at the end of the game is 10 minutes (as before v3.2.4). Setting to 3 will make it to 5min.    将此项设置为2会无视黑雾难度系数，让游戏末期的进攻间隔最小为10min（如同v3.2.4之前的版本），设置为3则会将最小间隔设置为5min.");
 
 
             MoreMegaStructure.StarCannon.renderLevel = starCannonRenderLevel.Value;
@@ -107,6 +112,9 @@ namespace DSP_Battle
             Harmony.CreateAndPatchAll(typeof(UIHiveNamePatcher));
             Harmony.CreateAndPatchAll(typeof(WormholeRenderer));
             Harmony.CreateAndPatchAll(typeof(UIEnemyBriefInfoPatcher));
+            Harmony.CreateAndPatchAll(typeof(PlanetBombing));
+            Harmony.CreateAndPatchAll(typeof(UIPlanetBombing));
+            Harmony.CreateAndPatchAll(typeof(UIMechaEnergyPatcher));
 
             LDBTool.PreAddDataAction += BattleProtos.AddProtos;
             BattleProtos.AddTranslate();
@@ -198,8 +206,14 @@ namespace DSP_Battle
                 if (GameMain.localPlanet != null)
                     planetId = GameMain.localPlanet.id;
             }
-            if (Configs.developerMode && isControlDown && Input.GetKeyDown(KeyCode.M))
+            if (isControlDown && Input.GetKeyDown(KeyCode.B))
             {
+                PlanetBombing.purgeBombingTime = 0;
+                PlanetBombing.isPurgeBombing = !PlanetBombing.isPurgeBombing;
+            }
+            if (isControlDown && Input.GetKeyDown(KeyCode.F))
+            {
+
             }
             if (Configs.developerMode && isControlDown && Input.GetKeyDown(KeyCode.K))
             {
@@ -207,6 +221,7 @@ namespace DSP_Battle
             }
             if (Configs.developerMode && isControlDown && Input.GetKeyDown(KeyCode.G))
             {
+                
             }
             if (Configs.developerMode && isControlDown && Input.GetKeyDown(KeyCode.H))
             {
@@ -239,6 +254,7 @@ namespace DSP_Battle
             if (playerInvincible && GameMain.mainPlayer != null)
                 GameMain.mainPlayer.invincibleTicks = 60;
 
+
             UIRelic.SelectionWindowAnimationUpdate();
             UIRelic.CheckRelicSlotsWindowShowByMouse();
             UIRelic.SlotWindowAnimationUpdate();
@@ -246,8 +262,10 @@ namespace DSP_Battle
             BattleBGMController.BGMLogicUpdate();
             UISkillPointsWindow.Update();
             DevConsole.Update();
+            UIPlanetBombing.OnUpdate();
         }
 
+        
 
         [HarmonyPostfix]
         [HarmonyPatch(typeof(GameMain), "OnDestroy")]
@@ -379,6 +397,8 @@ namespace DSP_Battle
             AssaultController.Export(w);
 
             DevConsole.Export(w);
+
+            PlanetBombing.Export(w);
         }
 
         public void Import(BinaryReader r)
@@ -393,6 +413,8 @@ namespace DSP_Battle
             AssaultController.Import(r);
 
             DevConsole.Import(r);
+
+            PlanetBombing.Import(r);
 
             BattleProtos.ReCheckTechUnlockRecipes();
             BattleProtos.UnlockTutorials();
@@ -415,6 +437,8 @@ namespace DSP_Battle
             DevConsole.IntoOtherSave();
             SkillPoints.IntoOtherSave();
             AssaultController.IntoOtherSave();
+
+            PlanetBombing.IntoOtherSave();
 
             BattleProtos.ReCheckTechUnlockRecipes();
             BattleProtos.UnlockTutorials();

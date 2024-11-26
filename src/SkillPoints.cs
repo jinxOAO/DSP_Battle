@@ -15,7 +15,7 @@ namespace DSP_Battle
         // 参数
         public static int skillCountL = 11;
         public static int skillCountR = 9;
-        public static List<int> spMinByRank = new List<int> { 0, 1, 3, 6, 10, 15, 21, 27, 37, 52, 72, 72, 72 }; // 满级前，sp不会低于
+        // public static List<int> spMinByRank = new List<int> { 0, 1, 3, 6, 10, 15, 21, 27, 37, 52, 72, 72, 72 }; // 满级前，sp不会低于， 已弃用
         public static List<int> spGainByRank = new List<int> { 0, 1, 2, 3, 4, 5, 6, 8, 10, 15, 20, 0, 0 }; // 首次升到该等级给予的授权点数
         public static int spGainFullLevel = 5; // 满级后每次升级给的点数
         public static List<int> skillMaxLevelL = new List<int> { 10, 200, 200, 400, 100, 1000, 100, 200, 100, 100, 100, 999, 999, 999 };

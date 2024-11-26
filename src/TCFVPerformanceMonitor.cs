@@ -18,6 +18,11 @@ namespace DSP_Battle
         public static int Droplet;
         public static int EventSys;
         public static int DrawCall;
+
+        //public static int Droplet1;
+        //public static int Droplet2;
+        //public static int Droplet3;
+
         public static void Awake()
         {
             MainLogic = MoreMegaStructure.PerformanceMonitorPatcher.AddCpuSampleLogic("PF深空来敌", 1, 2);
@@ -28,8 +33,12 @@ namespace DSP_Battle
             Kill = MoreMegaStructure.PerformanceMonitorPatcher.AddCpuSampleLogic("PF击杀逻辑", -1, MetaDrive);
             Ballistic = MoreMegaStructure.PerformanceMonitorPatcher.AddCpuSampleLogic("PF弹道重写", -1, MetaDrive);
             Droplet = MoreMegaStructure.PerformanceMonitorPatcher.AddCpuSampleLogic("PF水滴", 2, MainLogic);
+            //Droplet1 = MoreMegaStructure.PerformanceMonitorPatcher.AddCpuSampleLogic("水滴1", -1, Droplet);
+            //Droplet2 = MoreMegaStructure.PerformanceMonitorPatcher.AddCpuSampleLogic("水滴2", -1, Droplet);
+            //Droplet3 = MoreMegaStructure.PerformanceMonitorPatcher.AddCpuSampleLogic("水滴3", -1, Droplet);
             EventSys = MoreMegaStructure.PerformanceMonitorPatcher.AddCpuSampleLogic("PF事件链", 2, MainLogic);
             DrawCall = MoreMegaStructure.PerformanceMonitorPatcher.AddCpuSampleLogic("PF深空绘制调用", 2, MainLogic);
+
         }
     }
 }

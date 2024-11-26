@@ -688,9 +688,9 @@ namespace DSP_Battle
                             else
                                 Rank.AddExp(5 * (level + 1));
 
-                            if (Relic.HaveRelic(0, 0))
+                            if (Relic.HaveRelic(0, 0)) // relic 0-0
                             {
-                                Interlocked.Add(ref Relic.autoConstructMegaStructurePPoint, 50 * (level / 15 + 1));
+                                Interlocked.Add(ref Relic.autoConstructMegaStructurePPoint, 100 * (level / 15 + 1));
                             }
                             if (Relic.HaveRelic(2, 14) && Relic.Verify(Relic.kleptomancyProbability)) // relic 2-14
                             {
@@ -802,7 +802,7 @@ namespace DSP_Battle
                                         Rank.AddExp(level / 10);
                                 }
 
-                                if (Relic.HaveRelic(0, 0))
+                                if (Relic.HaveRelic(0, 0)) // relic 0-0
                                     Interlocked.Add(ref Relic.autoConstructMegaStructurePPoint, (level + 10) / 2);
 
                                 if (Relic.HaveRelic(4, 4)) // relic 4-4 击杀时进行研究

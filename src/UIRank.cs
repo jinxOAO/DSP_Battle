@@ -239,12 +239,14 @@ namespace DSP_Battle
                 res += "-  " + "gmRankReward5".Translate() + "\n";
             if (rank >= 6)
                 res += "-  " + "gmRankReward6".Translate() + "\n";
+            if (rank >= 7)
+                res += "-  " + "gmRankReward7Add".Translate() + "\n";
             if (rank >= 8)
                 res += "-  " + "gmRankReward8".Translate() + "\n";
             if (rank >= 9)
                 res += "-  " + "gmRankReward9".Translate();
             if (Relic.trueDamageActive > 0)
-                res += "\n- " + "真实伤害已启用".Translate();
+                res += "\n-  " + "真实伤害已启用".Translate();
             res += "</color>";
 
             int nextRank = rank + 1;
@@ -349,7 +351,6 @@ namespace DSP_Battle
             gTips.researchCompleteTip.Play();
             promotionNoticeSubText.text = "功勋阶级".Translate();
             VFAudio.Create("research-complete", null, Vector3.zero, true, 0, -1, -1L);
-
             UIDialogPatch.ShowUIDialog(("gmRankNoColor" + Rank.rank.ToString()).Translate(), ("gmRankUnlockText" + Rank.rank.ToString()).Translate(), 1, rankIcon.sprite);
         }
         public static void UIPointsGainNotify()

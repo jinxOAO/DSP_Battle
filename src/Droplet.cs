@@ -175,7 +175,7 @@ namespace DSP_Battle
                 lock (obj)
                 {
                     GameMain.mainPlayer.mecha.coreEnergy -= energy;
-                    GameMain.mainPlayer.mecha.MarkEnergyChange(13, -energy);
+                    GameMain.mainPlayer.mecha.MarkEnergyChange(21, -energy);
                 }
                 return true;
             }
@@ -189,6 +189,7 @@ namespace DSP_Battle
             lock (obj)
             {
                 GameMain.mainPlayer.mecha.coreEnergy += energy;
+                GameMain.mainPlayer.mecha.MarkEnergyChange(21, energy);
                 if (GameMain.mainPlayer.mecha.coreEnergy > GameMain.mainPlayer.mecha.coreEnergyCap)
                     GameMain.mainPlayer.mecha.coreEnergy = GameMain.mainPlayer.mecha.coreEnergyCap;
             }
@@ -204,7 +205,7 @@ namespace DSP_Battle
                 double curEnergy = GameMain.mainPlayer.mecha.coreEnergy;
                 energy = energy < curEnergy ? energy : curEnergy;
                 GameMain.mainPlayer.mecha.coreEnergy -= energy;
-                GameMain.mainPlayer.mecha.MarkEnergyChange(13, -energy);
+                GameMain.mainPlayer.mecha.MarkEnergyChange(21, -energy);
             }
         }
 
@@ -298,9 +299,13 @@ namespace DSP_Battle
         int swarmIndex = -1;
         int[] bulletIds = new int[bulletCnt];
         int targetEnemyId = -1;
-        int randSeed = 0; //决定水滴在撞向敌舰时的一个随机的小偏移，使其往返攻击时不是在两个点之间来回飞，而是有一些随机的角度变化，每次find敌人和从2阶段回到1阶段都会改变一次randSeed
+        int randSeed = 0;
+        VectorLF3[] bulletRandPos;
 
         int curTargetLockTime = 0; // 在一个敌人上持续锁定的时长。不存档。切换目标时置0。
+
+        // 不存档
+        bool hasNearEnemy; // 每半秒更新是否有近处的敌人，决定能量消耗是否是十倍
 
         public Droplet(int idx)
         {
@@ -315,6 +320,12 @@ namespace DSP_Battle
             }
             targetEnemyId = -1;
             randSeed = Utils.RandNext();
+            bulletRandPos = new VectorLF3[bulletCnt];
+            for (int i = 0; i < bulletRandPos.Length; i++)
+            {
+                bulletRandPos[i] = Utils.RandPosDelta();
+            }
+            hasNearEnemy = false;
         }
 
         public void SetEmpty()
@@ -596,7 +607,9 @@ namespace DSP_Battle
                             if (AssaultController.invincibleHives[hiveAstroId] >= 0 && curTargetLockTime > 60 && !ptr.isAssaultingUnit) // 攻击/追击近乎无敌的虚空同化中的目标超过一秒后会尝试切换目标
                             {
                                 if (Utils.RandDouble() <= 0.9)
+                                {
                                     return SearchNextNearestTarget(true, true); // 如果是因为攻击无敌目标而且换，有很大概率优先攻击距离机甲较近的，而非距离水滴自己当前位置较近的
+                                }
                                 return SearchNextNearestTarget(false, true); // 通常攻击距离水滴自身距离比较近的单位
                             }
 
@@ -612,8 +625,11 @@ namespace DSP_Battle
                     }
                 }
             }
-            if(Utils.RandDouble() <= 0.05)
+            if (Utils.RandDouble() <= 0.05)
+            {
                 return SearchNextNearestTarget(true, true); // 一定概率优先攻击距离机甲较近的，而非距离水滴自己当前位置较近的
+            }
+
             return SearchNextNearestTarget(false, true); // 通常攻击距离水滴自身距离比较近的单位
         }
 
@@ -696,6 +712,7 @@ namespace DSP_Battle
         {
             if (state < 0) return;
             //Utils.Log($"droplet {dropletIndex} state is {state}");
+
             if (swarmIndex < 0)
             {
                 swarmIndex = GameMain.localStar != null ? GameMain.localStar.index : -1;
@@ -718,10 +735,16 @@ namespace DSP_Battle
             }
             int playerSwarmIndex = GameMain.localStar != null ? GameMain.localStar.index : -1;
             //Utils.Log($"playerindex {playerSwarmIndex}/swarm{swarmIndex}, and state = {state}, forceL={forceLaunchState}, discover?{DiscoverSpaceEnemy()}", 60);
-            bool hasNearEnemy = DiscoverSpaceEnemy();
-            if (state == 0 && (hasNearEnemy || forceLaunchState > 0) && playerSwarmIndex >= 0)
+            bool checkNearEnemy = false;
+            if (GameMain.instance.timei % 30 == dropletIndex % 30)
             {
-                Launch(playerSwarmIndex);
+                checkNearEnemy = DiscoverSpaceEnemy();
+                hasNearEnemy = checkNearEnemy;
+            }
+            if (state == 0 && (checkNearEnemy || forceLaunchState > 0) && playerSwarmIndex >= 0)
+            {
+                if(!Launch(playerSwarmIndex))
+                    forceLaunchState = 0;
             }
             if (swarm.bulletPool.Length <= bulletIds[0])
             {
@@ -989,7 +1012,7 @@ namespace DSP_Battle
                 sector.skillSystem.GetObjectUPositionAndVelocity(ref target, out enemyUPos, out vec);
                 enemyUPos += (VectorLF3)vec * 0.016666667f;
                 if (addRandomPos)
-                    enemyUPos += Utils.RandPosDelta(ref randSeed) * 200;
+                    enemyUPos += Utils.RandPosDelta() * 200;
                 return true;
             }
             return false;
@@ -1008,10 +1031,15 @@ namespace DSP_Battle
             DysonSwarm swarm = GetSwarm();
             if (swarm != null)
             {
-                for (int i = 0; i < bulletIds.Length; i++)
+                if (swarm.bulletPool.Length > bulletIds[0])
+                {
+                    swarm.bulletPool[bulletIds[0]].uBegin = upos;
+                    swarm.bulletPool[bulletIds[0]].t = 0;
+                }
+                for (int i = 1; i < bulletIds.Length; i++)
                 {
                     if (swarm.bulletPool.Length <= bulletIds[i]) continue;
-                    swarm.bulletPool[bulletIds[i]].uBegin = upos;
+                    swarm.bulletPool[bulletIds[i]].uBegin = upos + bulletRandPos[i] * maxPosDelta;
                     swarm.bulletPool[bulletIds[i]].t = 0;
                 }
             }
@@ -1058,8 +1086,8 @@ namespace DSP_Battle
                 if (swarm.bulletPool.Length <= bulletIds[i]) continue;
                 swarm.bulletPool[bulletIds[i]].t = newBeginT;//0.0166667f * 4;
                 swarm.bulletPool[bulletIds[i]].maxt = newMaxt + newBeginT;
-                swarm.bulletPool[bulletIds[i]].uBegin = newUBegin + Utils.RandPosDelta(ref randSeed) * randomBeginRatio; //uBegin + Utils.RandPosDelta(randSeed + i + 100) * randomBeginRatio;
-                swarm.bulletPool[bulletIds[i]].uEnd = uEnd + Utils.RandPosDelta(ref randSeed) * randomEndRatio;
+                swarm.bulletPool[bulletIds[i]].uBegin = newUBegin + bulletRandPos[i] * randomBeginRatio; //uBegin + Utils.RandPosDelta(randSeed + i + 100) * randomBeginRatio;
+                swarm.bulletPool[bulletIds[i]].uEnd = uEnd + bulletRandPos[i] * randomEndRatio;
                 swarm.bulletPool[bulletIds[i]].uEndVel = uEndVel;
             }
 

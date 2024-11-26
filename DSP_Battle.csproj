@@ -38,9 +38,8 @@
       <HintPath>D:\SteamLibrary\steamapps\common\Dyson Sphere Program\BepInEx\core\0Harmony20.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Assembly-CSharp-publicized">
-      <HintPath>dependencies\Assembly-CSharp-publicized.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Assembly-CSharp-nstrip-allPublic">
+      <HintPath>dependencies\Assembly-CSharp-nstrip-allPublic.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx, Version=5.4.17.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -149,6 +148,7 @@
     <Compile Include="src\NebulaCompat\Packets.cs" />
     <Compile Include="src\NebulaCompat\Synchronizer.cs" />
     <Compile Include="src\NewGameOption.cs" />
+    <Compile Include="src\PlanetBombing.cs" />
     <Compile Include="src\Rank.cs" />
     <Compile Include="src\Relic.cs" />
     <Compile Include="src\PlanetEngine.cs" />
@@ -167,6 +167,8 @@
     <Compile Include="src\UIEscMenuPatch.cs" />
     <Compile Include="src\UIEventSystem.cs" />
     <Compile Include="src\UIHiveNamePatcher.cs" />
+    <Compile Include="src\UIMechaEnergyPatcher.cs" />
+    <Compile Include="src\UIPlanetBombing.cs" />
     <Compile Include="src\UIRank.cs" />
     <Compile Include="src\UIRelic.cs" />
     <Compile Include="src\UISkillPointsWindow.cs" />

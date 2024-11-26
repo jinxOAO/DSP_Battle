@@ -40,21 +40,21 @@ namespace DSP_Battle.src.NebulaCompat
 
         public void Awake()
         {
-            NebulaModAPI.RegisterPackets(Assembly.GetExecutingAssembly());
-            Harmony.CreateAndPatchAll(typeof(NebulaCompatPlugin));
-            Harmony.CreateAndPatchAll(typeof(MPSyncPatcher));
-            NebulaModAPI.OnPlayerJoinedGame += playerData => { OnPlayerJoined(); };
+            //NebulaModAPI.RegisterPackets(Assembly.GetExecutingAssembly());
+            //Harmony.CreateAndPatchAll(typeof(NebulaCompatPlugin));
+            //Harmony.CreateAndPatchAll(typeof(MPSyncPatcher));
+            //NebulaModAPI.OnPlayerJoinedGame += playerData => { OnPlayerJoined(); };
         }
 
         public void Update()
         {
-            if (NebulaModAPI.MultiplayerSession?.LocalPlayer != null)
-            {
-                if (NebulaModAPI.MultiplayerSession.LocalPlayer.IsClient)
-                    MP.clientBlocker = true;
-                else
-                    MP.clientBlocker = false;
-            }
+            //if (NebulaModAPI.MultiplayerSession?.LocalPlayer != null)
+            //{
+            //    if (NebulaModAPI.MultiplayerSession.LocalPlayer.IsClient)
+            //        MP.clientBlocker = true;
+            //    else
+            //        MP.clientBlocker = false;
+            //}
         }
 
         [HarmonyPostfix]

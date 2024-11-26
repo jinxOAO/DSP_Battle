@@ -26,7 +26,12 @@ namespace DSP_Battle
             return new VectorLF3(randSeed.Value.NextDouble() - 0.5, randSeed.Value.NextDouble() - 0.5, randSeed.Value.NextDouble() - 0.5);
         }
 
-        public static VectorLF3 RandPosDelta(ref int Seed)
+        /// <summary>
+        /// Do not use this in update.
+        /// </summary>
+        /// <param name="Seed"></param>
+        /// <returns></returns>
+        public static VectorLF3 RandPosDelta(int Seed)
         {
             System.Random rand = new System.Random(Seed);
             Seed = RandNext();
@@ -38,6 +43,7 @@ namespace DSP_Battle
             return randSeed.Value.Next(min, max);
         }
 
+        
         public static int RandNext()
         {
             return randSeed.Value.Next();

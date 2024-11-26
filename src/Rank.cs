@@ -37,6 +37,8 @@ namespace DSP_Battle
             {
                 Promotion();
             }
+            if (exp < 0)
+                exp = 0;
             CheckExpTechUploadHash();
             //int inc;
             //if(GameMain.mainPlayer.package.TakeItem(8033, 1, out inc)>0)
@@ -230,15 +232,17 @@ namespace DSP_Battle
             }
         }
 
-        public static int AddExpByHash(long hashChanged)
+        public static long AddExpByHash(long hashChanged)
         {
-            int expGain = (int)(hashChanged / hash2ExpDivisor);
-            int realExpGain = expGain;
+            long expGain = (hashChanged / hash2ExpDivisor);
+            long realExpGain = expGain;
             if (realExpGain > linearThreshold)
             {
-                realExpGain = linearThreshold + (int)Math.Sqrt(realExpGain - linearThreshold);
+                realExpGain = linearThreshold + (long)Math.Sqrt(realExpGain - linearThreshold);
             }
-            AddExp(realExpGain);
+            if(realExpGain > int.MaxValue / 2)
+                realExpGain = int.MaxValue / 2;
+            AddExp((int)realExpGain);
             return expGain;
         }
 

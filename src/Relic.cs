@@ -1076,18 +1076,19 @@ namespace DSP_Battle
         public static bool ThornmailFieldCounterattackGeneralExpImpProjectile(ref GeneralExpImpProjectile __instance, SkillSystem skillSystem, PlanetFactory[] factories, ref float __state)
         {
             float factor = 1.0f;
+            float voidBuffFactor = 1.0f;
             if (__instance.atfAstroId > 0 && __instance.atfRayId > 0)
             {
                 if (AssaultController.CheckCasterOrTargetHasModifier(ref __instance.caster)) // 虚空入侵修改器增伤
                 {
                     int value = AssaultController.modifier[3];
-                    factor += value * 1.0f / 100f;
+                    voidBuffFactor += value * 1.0f / 100f;
 
                     int value2 = AssaultController.modifier[11];
                     float maxDB = Math.Max(GameMain.data.history.kineticDamageScale, GameMain.data.history.blastDamageScale);
                     maxDB = Math.Max(maxDB, GameMain.data.history.energyDamageScale);
                     maxDB = Math.Max(maxDB, GameMain.data.history.magneticDamageScale);
-                    factor += (maxDB - 1.0f) * value2 / 100f;
+                    voidBuffFactor += (maxDB - 1.0f) * value2 / 100f;
                 }
                 bool r0005 = Relic.HaveRelic(0, 5);
                 bool r0216 = Relic.HaveRelic(2, 16);
@@ -1114,9 +1115,10 @@ namespace DSP_Battle
                 }
                 if (r0005) // 虚空荆棘
                 {
-                    int realDamage = (int)(Relic.BonusDamage(__instance.damage * (1.0 - factor), 1) * SkillPoints.voidDamageRate);
+                    int realDamage = (int)(Relic.BonusDamage(__instance.damage * (1.0 - factor) * voidBuffFactor, 1) * SkillPoints.voidDamageRate);
                     skillSystem.DamageObject(realDamage, 1, ref __instance.caster, ref __instance.target);
                 }
+                factor *= voidBuffFactor;
                 if (factor != 1.0f)
                 {
                     __instance.damage = (int)(__instance.damage * factor);
@@ -1140,18 +1142,19 @@ namespace DSP_Battle
         public static bool ThornmailFieldCounterattackGeneralProjectile(ref GeneralProjectile __instance, SkillSystem skillSystem, ref float __state)
         {
             float factor = 1.0f;
+            float voidBuffFactor = 1.0f;
             if (__instance.atfAstroId > 0 && __instance.atfRayId > 0)
             {
                 if (AssaultController.CheckCasterOrTargetHasModifier(ref __instance.caster)) // 虚空入侵修改器增伤
                 {
                     int value = AssaultController.modifier[3];
-                    factor += value * 1.0f / 100f;
+                    voidBuffFactor += value * 1.0f / 100f;
 
                     int value2 = AssaultController.modifier[11];
                     float maxDB = Math.Max(GameMain.data.history.kineticDamageScale, GameMain.data.history.blastDamageScale);
                     maxDB = Math.Max(maxDB, GameMain.data.history.energyDamageScale);
                     maxDB = Math.Max(maxDB, GameMain.data.history.magneticDamageScale);
-                    factor += (maxDB - 1.0f) * value2 / 100f;
+                    voidBuffFactor += (maxDB - 1.0f) * value2 / 100f;
                 }
                 bool r0005 = Relic.HaveRelic(0, 5);
                 bool r0216 = Relic.HaveRelic(2, 16);
@@ -1178,9 +1181,10 @@ namespace DSP_Battle
                 }
                 if (r0005) // 虚空荆棘
                 {
-                    int realDamage = (int)(Relic.BonusDamage(__instance.damage * (1.0 - factor), 1) * SkillPoints.voidDamageRate);
+                    int realDamage = (int)(Relic.BonusDamage(__instance.damage * (1.0 - factor) * voidBuffFactor, 1) * SkillPoints.voidDamageRate);
                     skillSystem.DamageObject(realDamage, 1, ref __instance.caster, ref __instance.target);
                 }
+                factor *= voidBuffFactor;
                 if (factor != 1.0f)
                 {
                     __instance.damage = (int)(__instance.damage * factor);
@@ -1202,18 +1206,19 @@ namespace DSP_Battle
         public static bool ThornmailFieldCounterattackSpaceLaserOneShot(ref SpaceLaserOneShot __instance, SkillSystem skillSystem, ref float __state)
         {
             float factor = 1.0f;
+            float voidBuffFactor = 1.0f;
             if (__instance.atfAstroId > 0 && __instance.atfRayId > 0)
             {
                 if (AssaultController.CheckCasterOrTargetHasModifier(ref __instance.caster)) // 虚空入侵修改器增伤
                 {
                     int value = AssaultController.modifier[3];
-                    factor += value * 1.0f / 100f;
+                    voidBuffFactor += value * 1.0f / 100f;
 
                     int value2 = AssaultController.modifier[11];
                     float maxDB = Math.Max(GameMain.data.history.kineticDamageScale, GameMain.data.history.blastDamageScale);
                     maxDB = Math.Max(maxDB, GameMain.data.history.energyDamageScale);
                     maxDB = Math.Max(maxDB, GameMain.data.history.magneticDamageScale);
-                    factor += (maxDB - 1.0f) * value2 / 100f;
+                    voidBuffFactor += (maxDB - 1.0f) * value2 / 100f;
                 }
                 bool r0005 = Relic.HaveRelic(0, 5);
                 bool r0216 = Relic.HaveRelic(2, 16);
@@ -1240,9 +1245,10 @@ namespace DSP_Battle
                 }
                 if (r0005) // 虚空荆棘
                 {
-                    int realDamage = (int)(Relic.BonusDamage(__instance.damage * (1.0 - factor), 1) * SkillPoints.voidDamageRate);
+                    int realDamage = (int)(Relic.BonusDamage(__instance.damage * (1.0 - factor) * voidBuffFactor, 1) * SkillPoints.voidDamageRate);
                     skillSystem.DamageObject(realDamage, 1, ref __instance.caster, ref __instance.target);
                 }
+                factor *= voidBuffFactor;
                 if (factor != 1.0f)
                 {
                     __instance.damage = (int)(__instance.damage * factor);
@@ -1264,6 +1270,7 @@ namespace DSP_Battle
         public static bool ThornmailFieldCounterattackSpaceLaserSweep(ref SpaceLaserSweep __instance, SkillSystem skillSystem, ref float __state)
         {
             float factor = 1.0f;
+            float voidBuffFactor = 1.0f;
             int timeTick = __instance.lifemax - (__instance.life - 1);
             if (__instance.life == 1)
                 timeTick = __instance.lifemax - (-9);
@@ -1272,13 +1279,13 @@ namespace DSP_Battle
                 if (AssaultController.CheckCasterOrTargetHasModifier(ref __instance.caster)) // 虚空入侵修改器增伤
                 {
                     int value = AssaultController.modifier[3];
-                    factor += value * 1.0f / 100f;
+                    voidBuffFactor += value * 1.0f / 100f;
 
                     int value2 = AssaultController.modifier[11];
                     float maxDB = Math.Max(GameMain.data.history.kineticDamageScale, GameMain.data.history.blastDamageScale);
                     maxDB = Math.Max(maxDB, GameMain.data.history.energyDamageScale);
                     maxDB = Math.Max(maxDB, GameMain.data.history.magneticDamageScale);
-                    factor += (maxDB - 1.0f) * value2 / 100f;
+                    voidBuffFactor += (maxDB - 1.0f) * value2 / 100f;
                 }
                 bool r0005 = Relic.HaveRelic(0, 5);
                 bool r0216 = Relic.HaveRelic(2, 16);
@@ -1305,13 +1312,14 @@ namespace DSP_Battle
                 }
                 if (r0005) // 虚空荆棘
                 {
-                    int realDamage = (int)(Relic.BonusDamage(__instance.damage * (1.0 - factor), 1) * SkillPoints.voidDamageRate);
+                    int realDamage = (int)(Relic.BonusDamage(__instance.damage * (1.0 - factor) * voidBuffFactor, 1) * SkillPoints.voidDamageRate);
                     SkillTarget emptyCaster;
                     emptyCaster.id = 0;
                     emptyCaster.type = ETargetType.None;
                     emptyCaster.astroId = __instance.atfAstroId;
                     skillSystem.DamageObject(realDamage, 1, ref __instance.caster, ref emptyCaster);
                 }
+                factor *= voidBuffFactor;
                 if (factor != 1.0f)
                 {
                     __instance.damage = (int)(__instance.damage * factor);
@@ -1723,7 +1731,7 @@ namespace DSP_Battle
         public static void AutoConstructMegaWhenTechUnlock()
         {
             if (Relic.HaveRelic(1, 0))
-                Interlocked.Add(ref Relic.autoConstructMegaStructureCountDown, 10 * 60);
+                Interlocked.Add(ref Relic.autoConstructMegaStructureCountDown, 8 * 60);
         }
 
         /// <summary>
