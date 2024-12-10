@@ -17,6 +17,8 @@ namespace DSP_Battle
         static int closingCountDown = -1;
         static int openingCountDown = -1;
         static int selectedRelicInUI = 0; // 本次选择了在UI上的左中右(123)哪个遗物
+        public static int curPage = 0; // 当前显示的relic页
+        public static bool leftSlotsShowing { get { return targetX >= -0.5 * resolutionX - 1; } }
 
         public static int forceType = -1; // 通过控制台强行刷新的元驱动稀有度，-1代表不是强制刷新任何稀有度
         public static int forceNum = -1; // 通过控制台强行刷新的元驱动序号，需要强制稀有度才有效，-1代表不强制序号
@@ -118,7 +120,7 @@ namespace DSP_Battle
 
         public static void InitAll()
         {
-            relicInSlots = new List<int> { -1, -1, -1, -1, -1, -1, -1, -1, -1 };
+            relicInSlots = new List<int> { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
             closingCountDown = -1;
             openingCountDown = -1;
             selectedRelicInUI = -1;
@@ -935,7 +937,7 @@ namespace DSP_Battle
                 int inc = 0;
                 GameMain.mainPlayer.package.TakeTailItems(ref itemId, ref need, out inc, false);
             }
-            if (Relic.GetRelicCount() >= 8) // 如果遗物已满，则刷新的都是删除遗物的按钮
+            if (Relic.GetRelicCount() >= Relic.relicHoldMax) // 如果遗物已满，则刷新的都是删除遗物的按钮
             {
                 List<int> relicAlreadyHave = new List<int>();
                 for (int type = 0; type < 4; type++)
@@ -976,6 +978,8 @@ namespace DSP_Battle
                         realWeight[type] = probWeight[type] * (1 + 0.01 * Relic.modifierByEvent[type] + (type == 0 ? SkillPoints.relic0WeightBuff : 0) + (type == 1 ? SkillPoints.relic1WeightBuff : 0));
                         if (realWeight[type] < 0)
                             realWeight[type] = 0;
+                        else if (Relic.HasTakenAllRelicByType(type)) // 已经持有了该稀有度的全部元驱动，则不再有机会刷新到
+                            realWeight[type] = 0;
                     }
                     double[] prob = new double[] { 0, 0, 0, 0, 0 };
                     double weightSum = realWeight.Sum();
@@ -992,6 +996,8 @@ namespace DSP_Battle
                         // 第四个判别条件是通过控制台强行在中间格子刷新目标稀有度的元驱动
                         {
                             if (i == 1 && forceType >= 0 && forceType <= 4 && forceType != type)
+                                continue;
+                            if (Relic.HasTakenAllRelicByType(type))
                                 continue;
                             List<int> relicNotHave = new List<int>();
                             for (int num = 0; num < Relic.relicNumByType[type]; num++)
@@ -1018,8 +1024,13 @@ namespace DSP_Battle
                             }
                         }
                     }
-                    // 有概率在最后一个格子设定为删除一个现有遗物，如果最后一个格子随机到了传说，避免将其改为移除遗物
-                    if (i == 2 && Utils.RandDouble() < Relic.relicRemoveProbabilityByRelicCount[Relic.GetRelicCount()] && Relic.alternateRelics[2] >= 100)
+                    // 有概率在最后一个格子设定为删除一个现有遗物，(如果最后一个格子随机到了传说，且传说没都拿到，避免将其改为移除遗物)
+                    int unusedSlotsCount = Relic.relicHoldMax - Relic.GetRelicCount();
+                    if (unusedSlotsCount > Relic.relicRemoveProbabilityByUnusedSlotCount.Length - 1)
+                        unusedSlotsCount = Relic.relicRemoveProbabilityByUnusedSlotCount.Length - 1;
+                    if (unusedSlotsCount < 0)
+                        unusedSlotsCount = 0;
+                    if (i == 2 && Utils.RandDouble() < Relic.relicRemoveProbabilityByUnusedSlotCount[unusedSlotsCount] && (Relic.alternateRelics[2] >= 100 || Relic.GetRelicCount(0) >= Relic.relicNumByType[0]))
                     {
                         List<int> relicAlreadyHave = new List<int>();
                         for (int type = 0; type < 4; type++)
@@ -1129,16 +1140,17 @@ namespace DSP_Battle
                 rightBarObj.GetComponent<RectTransform>().anchorMin = new Vector2(0, 0);
                 rightBarObj.GetComponent<RectTransform>().anchorMax = new Vector2(0, 0);
                 rightBarObj.GetComponent<Image>().fillAmount = 1;
-                rightBarObj.GetComponent<RectTransform>().sizeDelta = new Vector2(8, slotDis * Relic.relicHoldMax);
+                rightBarObj.GetComponent<RectTransform>().sizeDelta = new Vector2(8, slotDis * Relic.relicHoldMaxPerPage);
 
                 // 创建relic的slot
                 GameObject oriIconWithTips = GameObject.Find("UI Root/Overlay Canvas/In Game/Windows/Research Result Window/content/icon");
-                for (int i = 0; i < Relic.relicHoldMax; i++)
+                for (int i = 0; i < Relic.relicHoldMaxPerPage * Relic.relicHoldMaxPageCount; i++)
                 {
+                    int slotIndexInPage = i % Relic.relicHoldMaxPerPage;
                     GameObject iconObj = GameObject.Instantiate(oriIconWithTips);
                     iconObj.name = "slot" + i.ToString();
                     iconObj.transform.SetParent(relicSlotsWindowObj.transform);
-                    iconObj.transform.localPosition = new Vector3(50, 0.5f * resolutionY - 0.5f * slotDis - slotDis * i, 0);
+                    iconObj.transform.localPosition = new Vector3(50, 0.5f * resolutionY - 0.5f * slotDis - slotDis * slotIndexInPage, 0);
                     iconObj.transform.localScale = new Vector3(1, 1, 1);
                     iconObj.GetComponent<RectTransform>().sizeDelta = new Vector2(90, 90);
                     relicSlotObjs.Add(iconObj);
@@ -1154,7 +1166,10 @@ namespace DSP_Battle
                     uibtn.button = iconObj.GetComponent<Button>();
                     int index = i;
                     iconObj.GetComponent<Button>().onClick.AddListener(() => { RelicSlotOnClick(index); });
-                    iconObj.SetActive(true);
+                    if(i == slotIndexInPage)
+                        iconObj.SetActive(true);
+                    else
+                        iconObj.SetActive(false);
                 }
             }
             else
@@ -1164,6 +1179,31 @@ namespace DSP_Battle
             }
 
 
+        }
+
+        public static void ChangePage(float direction)
+        {
+            if(Relic.relicHoldMax <= Relic.relicHoldMaxPerPage)
+            {
+                if (curPage != 0)
+                {
+                    curPage = 0;
+                    RefreshSlotsWindowUI();
+                }
+                return;
+            }
+
+            if (direction == 0)
+                return;
+            if (direction < 0)
+                curPage = (curPage + 1) % Relic.relicHoldMaxPageCount;
+            else
+                curPage = (curPage + Relic.relicHoldMaxPageCount - 1) % Relic.relicHoldMaxPageCount;
+
+            if (curPage < 0)
+                curPage = 0;
+
+            RefreshSlotsWindowUI();
         }
 
         public static void RefreshSlotsWindowUI()
@@ -1282,6 +1322,17 @@ namespace DSP_Battle
                 relicInSlots[slotNum] = -1;
                 Relic.orderedRelics.Add(-1);
             }
+
+            if (!onlyVarTips)
+            {
+                for (int i = 0; i < Relic.relicHoldMaxPageCount * Relic.relicHoldMaxPerPage; i++)
+                {
+                    if (i >= curPage * Relic.relicHoldMaxPerPage && i < (curPage + 1) * Relic.relicHoldMaxPerPage && i < Relic.relicHoldMax)
+                        relicSlotObjs[i].SetActive(true);
+                    else
+                        relicSlotObjs[i].SetActive(false);
+                }
+            }
         }
 
         // 击杀时刷新左侧数据
@@ -1311,6 +1362,7 @@ namespace DSP_Battle
                 HideSlots();
             }
         }
+
 
         public static void SlotWindowAnimationUpdate()
         {

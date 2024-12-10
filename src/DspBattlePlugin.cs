@@ -11,13 +11,14 @@ using System.IO;
 using System.Reflection;
 using System.Security.Cryptography;
 using UnityEngine;
+using UnityEngine.Experimental.UIElements;
 using UnityEngine.UI;
 using xiaoye97;
 using static UnityEngine.EventSystems.EventTrigger;
 
 namespace DSP_Battle
 {
-    [BepInPlugin("com.ckcz123.DSP_Battle", "DSP_Battle", "3.2.7")]
+    [BepInPlugin("com.ckcz123.DSP_Battle", "DSP_Battle", Configs.versionString)]
     [BepInDependency(DSPModSavePlugin.MODGUID)]
     [BepInDependency(CommonAPIPlugin.GUID)]
     [BepInDependency(LDBToolPlugin.MODGUID)]
@@ -199,6 +200,13 @@ namespace DSP_Battle
             {
                 UISkillPointsWindow.Switch();
             }
+            if(UIRelic.leftSlotsShowing && Input.mouseScrollDelta.y!= 0)
+            {
+                UIRelic.ChangePage(Input.mouseScrollDelta.y);
+            }
+
+
+            // dev
             if (Configs.developerMode && isControlDown && Input.GetKeyDown(KeyCode.Z))
             {
                 Relic.PrepareNewRelic();
@@ -206,22 +214,25 @@ namespace DSP_Battle
                 if (GameMain.localPlanet != null)
                     planetId = GameMain.localPlanet.id;
             }
-            if (isControlDown && Input.GetKeyDown(KeyCode.B))
+            if (Configs.developerMode && isControlDown && Input.GetKeyDown(KeyCode.B))
             {
-                PlanetBombing.purgeBombingTime = 0;
-                PlanetBombing.isPurgeBombing = !PlanetBombing.isPurgeBombing;
+                //PlanetBombing.purgeBombingTime = 0;
+                //PlanetBombing.isPurgeBombing = !PlanetBombing.isPurgeBombing;
             }
-            if (isControlDown && Input.GetKeyDown(KeyCode.F))
+            if (Configs.developerMode && isControlDown && Input.GetKeyDown(KeyCode.F))
             {
-
+                PlanetBombing.LaserSweepTest();
+                //TestSkillCasts test = new TestSkillCasts();
+                //test.SweepLaserMulti(ETestSkillType.SpaceLaserSweepMulti, GameMain.spaceSector, GameMain.spaceSector.skillSystem, GameMain.localPlanet?.factory, GameMain.localStar, GameMain.mainPlayer);
+            }
+            if (Configs.developerMode && isControlDown && Input.GetKeyDown(KeyCode.G))
+            {
+                TestSkillCasts test = new TestSkillCasts();
+                test.SweepLaser(ETestSkillType.SpaceLaserSweep, GameMain.spaceSector, GameMain.spaceSector.skillSystem, GameMain.localPlanet?.factory, GameMain.localStar, GameMain.mainPlayer);
             }
             if (Configs.developerMode && isControlDown && Input.GetKeyDown(KeyCode.K))
             {
                 GameMain.mainPlayer.Kill();
-            }
-            if (Configs.developerMode && isControlDown && Input.GetKeyDown(KeyCode.G))
-            {
-                
             }
             if (Configs.developerMode && isControlDown && Input.GetKeyDown(KeyCode.H))
             {

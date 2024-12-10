@@ -33,14 +33,16 @@ namespace DSP_Battle
 
         //不存档的设定参数
         public static List<int> orderedRelics = new List<int>(); // 与左侧ui显示一直的排序后的元驱动
-        public static int relicHoldMax = 8; // 最多可以持有的遗物数
+        public static int relicHoldMax = 16; // 当前最多可以持有的遗物数，初始为一页（8个）
+        public static int relicHoldMaxPerPage = 8; // 初始以及每页最多可以持有数
+        public static int relicHoldMaxPageCount = 2; // 最多可以持有页数
         public static int[] relicNumByType = { 11, 13, 18, 19, 8 }; // 当前版本各种类型的遗物各有多少种，每种类型均不能大于30
         public static List<int> relicOnlyForInvasion = new List<int> { 407, 112 };
         public static List<int> relicCanClick = new List<int> { 400, 407 };
         public static double[] relicTypeProbability = { 0.03, 0.06, 0.13, 0.76, 0.02 }; // 各类型遗物刷新的权重
         public static double[] relicTypeProbabilityBuffed = { 0.045, 0.09, 0.195, 0.63, 0.04 }; // 五叶草buff后
         public static int[] modifierByEvent = new int[] { 0, 0, 0, 0, 0, 0 };
-        public static double[] relicRemoveProbabilityByRelicCount = { 0, 0, 0, 0, 0.05, 0.1, 0.12, 0.15, 1, 1, 1 }; // 拥有i个reilc时，第三个槽位刷新的是删除relic的概率
+        public static double[] relicRemoveProbabilityByUnusedSlotCount = {  1, 0.15, 0.12, 0.1, 0.05, 0, 0 }; // 拥有i个reilc时，第三个槽位刷新的是删除relic的概率
         public static double firstRelicIsRare = 0.5; // 第一个遗物至少是稀有的概率
         public static bool canSelectNewRelic = false; // 当canSelectNewRelic为true时点按按钮才是有效的选择
         public static int[] alternateRelics = { -1, -1, -1 }; // 三个备选，百位数字代表稀有度类型，0代表传说，个位十位是遗物序号。
@@ -107,6 +109,9 @@ namespace DSP_Battle
             UIEventSystem.InitAll();
             UIEventSystem.InitWhenLoad();
             isUsingResurrectCoin = false;
+            relicHoldMax = 8;
+            UIRelic.curPage = 0;
+
             //RelicFunctionPatcher.starCannonDamageSlice = MoreMegaStructure.StarCannon.damageSlice;
         }
 
@@ -137,6 +142,14 @@ namespace DSP_Battle
             }
             else if ((type == 0 && num == 3) || (type == 4 && num == 0))
             {
+                if (type == 4 && num == 0)
+                {
+                    int SNRocketRecipeId = 539;
+                    if (MoreMegaStructure.MoreMegaStructure.GenesisCompatibility)
+                        SNRocketRecipeId = 539 - 200;
+                    Debug.Log($"unlock recipe {SNRocketRecipeId}");
+                    GameMain.history.UnlockRecipe(SNRocketRecipeId);
+                }
                 relics[type] |= 1 << num;
                 RelicFunctionPatcher.CheckAndModifyStarLuminosity(type * 100 + num);
             }
@@ -329,6 +342,24 @@ namespace DSP_Battle
             }
         }
 
+        /// <summary>
+        /// 返回该稀有度的元驱动是否已经都获取了。（如果此类有可循环拿取且不占格子的元驱动，则总会返回false）。
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static bool HasTakenAllRelicByType(int type)
+        {
+            if (type != 1)
+                return GetRelicCount(type) >= relicNumByType[type];
+            else
+            {
+                if (GetRelicCount(type) >= relicNumByType[type] - 1 && trueDamageActive > 0)
+                    return true;
+                else
+                    return false;
+            }
+        }
+
         // 返回受诅咒的遗物的数量
         public static int GetCursedRelicCount()
         {
@@ -433,13 +464,22 @@ namespace DSP_Battle
         }
 
         // 有限制地建造某一(starIndex为-1时则是随机的)巨构的固定数量(amount)的进度，不因层数、节点数多少而改变一次函数建造的进度量
-        public static void AutoBuildMegaStructure(int starIndex = -1, int amount = 12, int frameCost = 5)
+        public static void AutoBuildMegaStructure(int starIndex = -1, int amount = 120, int frameCost = 5)
         {
             if (starsWithMegaStructureUnfinished.Count <= 0)
                 return;
-            if (starIndex < 0)
+            if (starIndex < 0) // 只有非编织者造球会进入这里
             {
                 starIndex = starsWithMegaStructureUnfinished[Utils.RandInt(0, starsWithMegaStructureUnfinished.Count)]; // 可能会出现点数被浪费的情况，因为有的巨构就差一点cell完成，差的那些正在吸附，那么就不会立刻建造，这些amount就被浪费了，但完全建成的巨构不会被包含在这个列表中，前面的情况也不会经常发生，所以不会经常大量浪费
+
+                // 非编织者造球的方法，
+                if (starIndex>=0 && starIndex < MoreMegaStructure.MoreMegaStructure.StarMegaStructureType.Length)
+                {
+                    if (MoreMegaStructure.MoreMegaStructure.StarMegaStructureType[starIndex] == 2) // 如果造的是科学枢纽，则会只有20%效能
+                        amount /= 10;
+                    else if (MoreMegaStructure.MoreMegaStructure.StarMegaStructureType[starIndex] == 6) // 如果造的是恒星炮，框架节点需要消耗的价值增加
+                        frameCost = 30;
+                }
             }
             if (starIndex >= 0 && starIndex < GameMain.data.dysonSpheres.Length)
             {
@@ -484,6 +524,30 @@ namespace DSP_Battle
             }
         }
 
+        public static void PunishmenWhenUnlockRelicSlot()
+        {
+            int punishmentPoints = 100;
+            SkillPoints.totalPoints -= 100;
+            for (int i = 0; i < 10; i++)
+            {
+                Rank.DownGrade();
+            }
+            UIDialogPatch.ShowUIDialog("COSMO技术伦理委员会警告".Translate(), string.Format( "COSMO技术伦理委员会惩罚".Translate(), punishmentPoints));
+        }
+
+        public static void CheckMaxRelic()
+        {
+            relicHoldMax = 8;
+            int bonus = 0;
+            for (int i = 0; i < 8; i++)
+            {
+                if (GameMain.history.TechUnlocked(BattleProtos.UpgradeTechBegin + i))
+                    bonus++;
+            }
+            relicHoldMax += bonus;
+
+            UIRelic.RefreshSlotsWindowUI();
+        }
 
         public static void Export(BinaryWriter w)
         {
@@ -563,6 +627,8 @@ namespace DSP_Battle
             aegisOfTheImmortalCooldown = r.ReadInt32();
             resurrectCoinCount = r.ReadInt32();
             InitAllAfterLoad();
+            CheckMaxRelic();
+            UIRelic.RefreshSlotsWindowUI();
         }
 
         public static void IntoOtherSave()
@@ -581,6 +647,7 @@ namespace DSP_Battle
             aegisOfTheImmortalCooldown = 0;
             resurrectCoinCount = 0;
             InitAllAfterLoad();
+            UIRelic.RefreshSlotsWindowUI();
         }
     }
 
@@ -749,8 +816,8 @@ namespace DSP_Battle
                 // relic0-1 蓝buff效果 要放在最后面，因为前面有加time的遗物，所以这个根据time结算的要放在最后
                 if (Relic.HaveRelic(0, 1) && __instance.requires.Length > 1)
                 {
-                    // 原材料未堆积过多才会返还，产物堆积未被取出则不返还。黑棒产线无视此遗物效果
-                    if (__instance.served[0] < 10 * __instance.requireCounts[0] && __instance.products[0] != 1803)
+                    // 原材料未堆积过多才会返还，原材料堆积未被取出则不返还。黑棒产线无视此遗物效果，产出白糖的产线无视此效果
+                    if (__instance.served[0] < 10 * __instance.requireCounts[0] && __instance.products[0] != 1803 && __instance.products[0] != 6006)
                     {
                         // Utils.Log("time = " + __instance.time + " / " + __instance.timeSpend); 这里是能输出两个相等的值的
                         // 不能直接用__instance.time >= __instance.timeSpend代替，必须-1，即便已经相等却无法触发，为什么？
@@ -1578,7 +1645,7 @@ namespace DSP_Battle
                                                     }
                                                     if (flag2)
                                                     {
-                                                        // 造成伤害
+                                                        // 造成伤害，有0-8或者是4-5击杀发出的波，均有伤害
                                                         if (Relic.HaveRelic(0, 8))
                                                         {
                                                             int realDamage = ptr.itemId == 1612 ? Relic.disturbDamage1612 : Relic.disturbDamage1613;
@@ -1674,12 +1741,12 @@ namespace DSP_Battle
                                                 if (flag2)
                                                 {
                                                     // 造成伤害
-                                                    if (Relic.HaveRelic(0, 8) || (Relic.HaveRelic(0, 9) && Relic.HaveRelic(4, 5))) // 金铲铲额外强化，没有0-8也能造成伤害
+                                                    if (true) // 金铲铲额外强化，没有0-8也能造成伤害。现在改成只有4-5就可以造成伤害了
                                                     {
                                                         int realDamage = Relic.disturbDamage1613;
-                                                        realDamage = (int)(realDamage * GameMain.history.magneticDamageScale * 0.2f); // 只有铲铲或者只有0-8其中之一的时候，造成弱化伤害，都没有的话是没伤害的
-                                                        if(Relic.HaveRelic(0, 8) && Relic.HaveRelic(0, 9)) // 金铲铲额外强化，既有0-8又有金铲铲则造成强化伤害
-                                                            realDamage = (int)(realDamage * GameMain.history.magneticDamageScale * 1.2f);
+                                                        realDamage = (int)(realDamage * GameMain.history.magneticDamageScale * 0.5f); // 只有铲铲或者只有0-8其中之一的时候，造成弱化伤害，都没有的话是没伤害的
+                                                        if(Relic.HaveRelic(0, 8)) // 如果有0-8虚空冲击，则造成全额伤害
+                                                            realDamage = (int)(Relic.disturbDamage1613 * GameMain.history.magneticDamageScale);
                                                         realDamage = Relic.BonusDamage(realDamage, 1);
                                                         SkillTargetLocal skillTargetLocal = default(SkillTargetLocal);
                                                         skillTargetLocal.type = ETargetType.Enemy;
@@ -1723,15 +1790,30 @@ namespace DSP_Battle
         }
 
 
+        public const int unlockTechHashToFreeMegaPointDivisor = 200000;
         /// <summary>
         /// relic 1-0
         /// </summary>
         [HarmonyPostfix]
         [HarmonyPatch(typeof(GameHistoryData), "NotifyTechUnlock")]
-        public static void AutoConstructMegaWhenTechUnlock()
+        public static void AutoConstructMegaWhenTechUnlock(int _techId, int _level)
         {
             if (Relic.HaveRelic(1, 0))
-                Interlocked.Add(ref Relic.autoConstructMegaStructureCountDown, 8 * 60);
+            {
+                TechProto tech = LDB.techs.Select(_techId);
+                if(tech != null)
+                {
+                    int factor;
+                    long totalHash = tech.GetHashNeeded(_level);
+                    factor = (int)(totalHash / unlockTechHashToFreeMegaPointDivisor);
+                    if (factor <= 0)
+                        factor = 1;
+                    else if (factor > 480)
+                        factor = 480;
+                    // Debug.Log($"unlock tech with hash = {totalHash}, and factor will be {factor}");
+                    Interlocked.Add(ref Relic.autoConstructMegaStructureCountDown, factor);
+                }
+            }
         }
 
         /// <summary>

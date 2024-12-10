@@ -21,7 +21,7 @@ namespace DSP_Battle
         public static List<int> skillMaxLevelL = new List<int> { 10, 200, 200, 400, 100, 1000, 100, 200, 100, 100, 100, 999, 999, 999 };
         public static List<int> skillMaxLevelR = new List<int> { 1000, 200, 200, 100, 400, 100, 400, 90, 1000, 200, 200, 200, 200, 200 };
         public static List<float> skillValuesL = new List<float> { 1f, 10f, 1f, 0.5f, -0.2f, 1f, 0.1f, 0.5f, -1f, 2f, 2f, 999f };
-        public static List<float> skillValuesR = new List<float> { 1f, 0.25f, 0.2f, 0.3f, 1f, 2f, 1f, -1f, 2f, 999f, 999f, 999f };
+        public static List<float> skillValuesR = new List<float> { 1f, 0.25f, 0.2f, 0.3f, 1f, 2f, 1f, -1f, 3f, 999f, 999f, 999f };
         public static List<string> skillSuffixesL = new List<string> { "m/s", "%", "", "m/s", "%", "%", "%", "%", "%", "%", "%" }; // 文本后缀
         public static List<string> skillSuffixesR = new List<string> { "%", "%", "", "%", "%", "%", "%", "%", "MW", "%", "%" };
 

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using UnityEngine;
 
 namespace DSP_Battle
 {
@@ -13,7 +14,7 @@ namespace DSP_Battle
         public static List<List<Tuple<int, int>>> alterItems; // 用于上交的物品的id和数量，以等级分（alterItems[level][i])
         public static Dictionary<int, List<int>> alterProtos;
         public static List<double> maxProbabilityBy10Minutes; // 刚获取完元驱动，一定时间内的击杀获取概率上限
-        public static List<double> probabilityDecreaseByRelicCount = new List<double> { 1, 1, 1, 0.9, 0.8, 0.75, 0.6, 0.5, 0.5, 0.5, 0.5 }; // 已经拥有x个元驱动之后，开启新的event的概率系数降低
+        public static List<double> probabilityDecreaseByRelicCount = new List<double> { 1, 1, 1, 0.9, 0.8, 0.75, 0.6, 0.5, 0.5, 0.5, 0.4 }; // 已经拥有x个元驱动之后，开启新的event的概率系数降低
         public static double probDecreaseByKill = 0.999; // 每次击杀有概率获取，但为了让曲线不被暴涨的击杀速度迅速拉高，每次击杀还会降低概率
 
         // 以下需要存档
@@ -675,22 +676,34 @@ namespace DSP_Battle
                             EnemyDFHiveSystem[] dfHivesByAstro2 = GameMain.data.spaceSector.dfHivesByAstro;
                             EnemyDFHiveSystem enemyDFHiveSystem2 = dfHivesByAstro2[ptr.originAstroId - 1000000];
                             int level = enemyDFHiveSystem2?.evolve.level ?? 0;
+                            int r00Factor = 1;
                             if (AssaultController.CheckHiveHasModifier(ptr.originAstroId) && AssaultController.modifier[5] > 0) // modifier 5 不给经验值
                             {
 
                             }
                             else if (ptr.dfSConnectorId + ptr.dfSGammaId + ptr.dfSNodeId + ptr.dfSReplicatorId + ptr.dfSTurretId + ptr.dfRelayId > 0)
+                            {
                                 Rank.AddExp(30 * (level + 1));
+                                r00Factor = 10;
+                            }
                             else if (ptr.dfSCoreId > 0)
+                            {
                                 Rank.AddExp(50 * (level + 1));
+                                r00Factor = 10;
+                            }
                             else if (ptr.dfTinderId > 0)
+                            {
                                 Rank.AddExp(1000);
+                                r00Factor = 10;
+                            }
                             else
+                            {
                                 Rank.AddExp(5 * (level + 1));
+                            }
 
                             if (Relic.HaveRelic(0, 0)) // relic 0-0
                             {
-                                Interlocked.Add(ref Relic.autoConstructMegaStructurePPoint, 100 * (level / 15 + 1));
+                                Interlocked.Add(ref Relic.autoConstructMegaStructurePPoint, r00Factor * 100 * (level / 15 + 1));
                             }
                             if (Relic.HaveRelic(2, 14) && Relic.Verify(Relic.kleptomancyProbability)) // relic 2-14
                             {
@@ -735,7 +748,10 @@ namespace DSP_Battle
                             // 获取元驱动事件可能性
                             if (recorder == null || recorder.protoId == 0)
                             {
-                                if (Utils.RandDouble() < probabilityForNewEvent * probabilityDecreaseByRelicCount[Relic.GetRelicCount()])
+                                int probIndex = Relic.GetRelicCount();
+                                if (probIndex > probabilityDecreaseByRelicCount.Count - 1)
+                                    probIndex = probabilityDecreaseByRelicCount.Count - 1;
+                                if (Utils.RandDouble() < probabilityForNewEvent * probabilityDecreaseByRelicCount[probIndex])
                                 {
                                     InitNewEvent();
                                 }
@@ -829,7 +845,10 @@ namespace DSP_Battle
                                 // 获取元驱动事件可能性
                                 if (recorder == null || recorder.protoId == 0)
                                 {
-                                    if (Utils.RandDouble() < probabilityForNewEvent * probabilityDecreaseByRelicCount[Relic.GetRelicCount()])
+                                    int probIndex = Relic.GetRelicCount();
+                                    if (probIndex > probabilityDecreaseByRelicCount.Count - 1)
+                                        probIndex = probabilityDecreaseByRelicCount.Count - 1;
+                                    if (Utils.RandDouble() < probabilityForNewEvent * probabilityDecreaseByRelicCount[probIndex])
                                     {
                                         InitNewEvent();
                                     }

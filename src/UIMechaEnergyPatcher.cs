@@ -47,10 +47,10 @@ namespace DSP_Battle
                     switch (func)
                     {
                         case 21:
-                            __result = "水滴gm2".Translate() + "<color=\"#FD965EC0\">" + text2 + "\r\n";
+                            __result = "水滴耗能".Translate() + "<color=\"#FD965EC0\">" + text2 + "\r\n";
                             return;
                         case 22:
-                            __result = "引导太阳轰炸".Translate() + "<color=\"#FD965EC0\">" + text2 + "\r\n";
+                            __result = "引导太阳轰炸耗能".Translate() + "<color=\"#FD965EC0\">" + text2 + "\r\n";
                             return;
                     }
                 }
@@ -59,10 +59,10 @@ namespace DSP_Battle
                     switch (func)
                     {
                         case 21:
-                            __result = "水滴gm2".Translate() + "<color=\"#61D8FFC0\">" + text2 + "\r\n";
+                            __result = "水滴耗能".Translate() + "<color=\"#61D8FFC0\">" + text2 + "\r\n";
                             return;
                         case 22:
-                            __result = "引导太阳轰炸".Translate() + "<color=\"#61D8FFC0\">" + text2 + "\r\n";
+                            __result = "引导太阳轰炸耗能".Translate() + "<color=\"#61D8FFC0\">" + text2 + "\r\n";
                             return;
                     }
                 }

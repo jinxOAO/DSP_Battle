@@ -3,6 +3,7 @@ using CommonAPI.Systems.ModLocalization;
 using HarmonyLib;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using xiaoye97;
 
@@ -11,6 +12,9 @@ namespace DSP_Battle
     class BattleProtos
     {
         public static int pageBias = 0;
+
+        public static int UpgradeTechBegin = 6601;
+        public const int UnlockFunctionBegin = 771;
 
         static void RegisterString(string key, string enTrans, string cnTrans)
         {
@@ -27,6 +31,7 @@ namespace DSP_Battle
         {
             int recipeIdBias = MoreMegaStructure.MoreMegaStructure.GenesisCompatibility ? -200 : 0;
             int techPosXBias = MoreMegaStructure.MoreMegaStructure.GenesisCompatibility ? -8 : 0;
+            int techPosYBiasPage2 = 0;
             TechProto techDrop = ProtoRegistry.RegisterTech(1999, "玻色子操控", "玻色子操控描述", "玻色子操控结论", "Assets/DSPBattle/bosontech", new int[] { }, new int[] { 5201 },
                 new int[] { 400 }, 72000, new int[] { 573 + recipeIdBias, 567 + recipeIdBias, 568 + recipeIdBias, 569 + recipeIdBias, 566 + recipeIdBias }, new Vector2(65 + techPosXBias, -7));
             techDrop.PreTechsImplicit = new int[] { 1823 };
@@ -40,7 +45,7 @@ namespace DSP_Battle
             techExp.PreItem = new int[] { 9513 };
 
 
-            TechProto techGuideBombing = ProtoRegistry.RegisterTech(1997, "微型恒星能量引导", "微型恒星能量引导描述", "微型恒星能量引导结论", "icons/achievement/115", new int[] {1918 }, new int[] { 5201 }, new int[] { 400 }, 36000, new int[] { }, new Vector2(69 + techPosXBias, -3)); // 299792458000
+            TechProto techGuideBombing = ProtoRegistry.RegisterTech(1997, "微型恒星能量引导", "微型恒星能量引导描述", "微型恒星能量引导结论", "icons/achievement/115", new int[] {1918 }, new int[] { 5201 }, new int[] { 400 }, 36000, new int[] { }, new Vector2(69 + techPosXBias, -3)); 
             //techGuideBombing.PreTechsImplicit = new int[] { 1918 };
             techGuideBombing.IsHiddenTech = true;
             techGuideBombing.PreItem = new int[] { 5201 };
@@ -50,6 +55,95 @@ namespace DSP_Battle
                                        ProtoRegistry.GetDefaultIconDesc(Color.white, new Color(0.7f, 0.4f, 0.1f)));
             medal.UnlockKey = -2;
             ProtoRegistry.RegisterRecipe(382, ERecipeType.Smelt, 60, new int[] { 1104 }, new int[] { 2 }, new int[] { 9513 }, new int[] { 1 }, "星河卫视奖章描述", 0, 9998, "Assets/DSPBattle/rank10");
+
+
+            TechProto techMoreRelic1 = ProtoRegistry.RegisterTech(UpgradeTechBegin, "元驱动挂载点位扩展1", "元驱动挂载点位扩展描述", "元驱动挂载点位扩展结论", "Assets/DSPBattle/techr1", new int[] {}, new int[] { 5201 }, new int[] { 900 }, 72000, new int[] { }, new Vector2(9, -107));
+            techMoreRelic1.UnlockFunctions = new int[] { UnlockFunctionBegin };
+            techMoreRelic1.UnlockValues = new double[] { 1 };
+            techMoreRelic1.Level = 1; 
+            techMoreRelic1.MaxLevel = 1;
+            techMoreRelic1.LevelCoef1 = 0;
+            techMoreRelic1.LevelCoef2 = 0;
+            techMoreRelic1.PreTechsImplicit = new int[] { 1303 };
+            techMoreRelic1.IsHiddenTech = true;
+            techMoreRelic1.PreItem = new int[] { 5201, 9513 };
+
+            TechProto techMoreRelic2 = ProtoRegistry.RegisterTech(UpgradeTechBegin + 1, "元驱动挂载点位扩展2", "元驱动挂载点位扩展描述", "元驱动挂载点位扩展结论", "Assets/DSPBattle/techr2", new int[] { UpgradeTechBegin }, new int[] { 5201 }, new int[] { 1800 }, 144000, new int[] { }, new Vector2(13, -107));
+            techMoreRelic2.UnlockFunctions = new int[] { UnlockFunctionBegin };
+            techMoreRelic2.UnlockValues = new double[] { 1 };
+            techMoreRelic2.Level = 2;
+            techMoreRelic2.MaxLevel = 2;
+            techMoreRelic2.LevelCoef1 = 0;
+            techMoreRelic2.LevelCoef2 = 0;
+            techMoreRelic2.PreTechsImplicit = new int[] { 1303 };
+            techMoreRelic2.IsHiddenTech = true;
+            techMoreRelic2.PreItem = new int[] { 5201, 9513 };
+
+            TechProto techMoreRelic3 = ProtoRegistry.RegisterTech(UpgradeTechBegin + 2, "元驱动挂载点位扩展3", "元驱动挂载点位扩展描述", "元驱动挂载点位扩展结论", "Assets/DSPBattle/techr3", new int[] { UpgradeTechBegin + 1 }, new int[] { 5201 }, new int[] { 3600 }, 324000, new int[] { }, new Vector2(17, -107));
+            techMoreRelic3.UnlockFunctions = new int[] { UnlockFunctionBegin };
+            techMoreRelic3.UnlockValues = new double[] { 1 };
+            techMoreRelic3.Level = 3;
+            techMoreRelic3.MaxLevel = 3;
+            techMoreRelic3.LevelCoef1 = 0;
+            techMoreRelic3.LevelCoef2 = 0;
+            techMoreRelic3.PreTechsImplicit = new int[] { 1303 };
+            techMoreRelic3.IsHiddenTech = true;
+            techMoreRelic3.PreItem = new int[] { 5201, 9513 };
+
+            TechProto techMoreRelic4 = ProtoRegistry.RegisterTech(UpgradeTechBegin + 3, "元驱动挂载点位扩展4", "元驱动挂载点位扩展描述", "元驱动挂载点位扩展结论", "Assets/DSPBattle/techr4", new int[] { UpgradeTechBegin + 2 }, new int[] { 5201 }, new int[] { 3600 }, 576000, new int[] { }, new Vector2(21, -107));
+            techMoreRelic4.UnlockFunctions = new int[] { UnlockFunctionBegin };
+            techMoreRelic4.UnlockValues = new double[] { 1 };
+            techMoreRelic4.Level = 4;
+            techMoreRelic4.MaxLevel = 4;
+            techMoreRelic4.LevelCoef1 = 0;
+            techMoreRelic4.LevelCoef2 = 0;
+            techMoreRelic4.PreTechsImplicit = new int[] { 1303 };
+            techMoreRelic4.IsHiddenTech = true;
+            techMoreRelic4.PreItem = new int[] { 5201, 9513 };
+
+            TechProto techMoreRelic5 = ProtoRegistry.RegisterTech(UpgradeTechBegin + 4, "元驱动挂载点位扩展5", "元驱动挂载点位扩展描述", "元驱动挂载点位扩展结论", "Assets/DSPBattle/techr5", new int[] { UpgradeTechBegin + 3 }, new int[] { 5201 }, new int[] { 3600 }, 900000, new int[] { }, new Vector2(25, -107));
+            techMoreRelic5.UnlockFunctions = new int[] { UnlockFunctionBegin };
+            techMoreRelic5.UnlockValues = new double[] { 1 };
+            techMoreRelic5.Level = 5;
+            techMoreRelic5.MaxLevel = 5;
+            techMoreRelic5.LevelCoef1 = 0;
+            techMoreRelic5.LevelCoef2 = 0;
+            techMoreRelic5.PreTechsImplicit = new int[] { 1303 };
+            techMoreRelic5.IsHiddenTech = true;
+            techMoreRelic5.PreItem = new int[] { 5201, 9513 };
+
+            TechProto techMoreRelic6 = ProtoRegistry.RegisterTech(UpgradeTechBegin + 5, "元驱动挂载点位扩展6", "元驱动挂载点位扩展描述", "元驱动挂载点位扩展结论", "Assets/DSPBattle/techr6", new int[] { UpgradeTechBegin + 4 }, new int[] { 5201 }, new int[] { 3600 }, 1296000, new int[] { }, new Vector2(29, -107));
+            techMoreRelic6.UnlockFunctions = new int[] { UnlockFunctionBegin };
+            techMoreRelic6.UnlockValues = new double[] { 1 };
+            techMoreRelic6.Level = 6;
+            techMoreRelic6.MaxLevel = 6;
+            techMoreRelic6.LevelCoef1 = 0;
+            techMoreRelic6.LevelCoef2 = 0;
+            techMoreRelic6.PreTechsImplicit = new int[] { 1303 };
+            techMoreRelic6.IsHiddenTech = true;
+            techMoreRelic6.PreItem = new int[] { 5201, 9513 };
+
+            TechProto techMoreRelic7 = ProtoRegistry.RegisterTech(UpgradeTechBegin + 6, "元驱动挂载点位扩展7", "元驱动挂载点位扩展描述", "元驱动挂载点位扩展结论", "Assets/DSPBattle/techr7", new int[] { UpgradeTechBegin + 5 }, new int[] { 5201 }, new int[] { 3600 }, 1764000, new int[] { }, new Vector2(33, -107));
+            techMoreRelic7.UnlockFunctions = new int[] { UnlockFunctionBegin };
+            techMoreRelic7.UnlockValues = new double[] { 1 };
+            techMoreRelic7.Level = 7;
+            techMoreRelic7.MaxLevel = 7;
+            techMoreRelic7.LevelCoef1 = 0;
+            techMoreRelic7.LevelCoef2 = 0;
+            techMoreRelic7.PreTechsImplicit = new int[] { 1303 };
+            techMoreRelic7.IsHiddenTech = true;
+            techMoreRelic7.PreItem = new int[] { 5201, 9513 };
+
+            TechProto techMoreRelic8 = ProtoRegistry.RegisterTech(UpgradeTechBegin + 7, "元驱动挂载点位扩展8", "元驱动挂载点位扩展描述", "元驱动挂载点位扩展结论", "Assets/DSPBattle/techr8", new int[] { UpgradeTechBegin + 6 }, new int[] { 5201 }, new int[] { 3600 }, 2304000, new int[] { }, new Vector2(37, -107));
+            techMoreRelic8.UnlockFunctions = new int[] { UnlockFunctionBegin };
+            techMoreRelic8.UnlockValues = new double[] { 1 };
+            techMoreRelic8.Level = 8;
+            techMoreRelic8.MaxLevel = 8;
+            techMoreRelic8.LevelCoef1 = 0;
+            techMoreRelic8.LevelCoef2 = 0;
+            techMoreRelic8.PreTechsImplicit = new int[] { 1303 };
+            techMoreRelic8.IsHiddenTech = true;
+            techMoreRelic8.PreItem = new int[] { 5201, 9513 };
 
             // Void-Recipes
             //ProtoRegistry.RegisterItem()
@@ -694,7 +788,7 @@ namespace DSP_Battle
             RegisterString("遗物描述0-9实际", "You have a higher probability of getting rarer meta drivers. If the first judgment fails with any probability from other meta drivers, it can be judged again. And the hidden effects...", "你有更高的可能性获取更稀有的元驱动。任何概率初次判定失败时，可以再判定一次。以及隐藏效果...");
             RegisterString("遗物描述0-10", "Every time a droplet destroys an enemy, restores 2MJ power to the Mecha, and all droplets permanently obtain 10 <i>additional damage</i>. ", "水滴每击杀一个敌人，为机甲回复2MJ能量，且所有水滴永久获得+10的<i>额外伤害</i>。");
 
-            RegisterString("遗物描述1-0", "Every time you unlock or upgrade a technology, random mega structures will be partially auto-constructed", "每解锁或升级一个科技，少量推进随机巨构的建造进度");
+            RegisterString("遗物描述1-0", "Every time you unlock or upgrade a technology, random mega structures will be partially auto-constructed based on the tech's hash point", "每解锁或升级一个科技，依据其Hash点数消耗推进随机巨构的建造进度");
             RegisterString("遗物描述1-1", "Turret supernova duration +200", "防御塔的超新星持续时间+200%");
             RegisterString("遗物描述1-2", "When the planetary shield is broken, immediately restore full shield and prevent it from recharge for 10 minutes", "行星护盾被打破时，立刻回复全部的护盾，并阻止其继续充能10min");
             RegisterString("遗物描述1-3", "For every 1% of mega structure's energy stolen by dark fog, space dark fog units in that star system take 3% <i>additional damage</i>", "巨构能量每被窃取1%，该星系的太空黑雾单位受到3%的<i>额外伤害</i>");
@@ -754,14 +848,13 @@ namespace DSP_Battle
             RegisterString("遗物描述3-17+", "You get <color=#d2853d>40%</color> extra merit points", "功勋点数获取<color=#d2853d>+40%</color>");
             RegisterString("遗物描述3-18", "Planetary Shield gain 10% damage reduction", "行星护盾获得10%伤害减免");
 
-            RegisterString("遗物描述4-0", "The mega structure in the star system with the max luminosity in the galaxy, will be constantly auto-constructing", "星区中光度最高的恒星系的巨构会不停地自动建造");
+            RegisterString("遗物描述4-0", "Unlock Science Nexus immediately. The mega structure in the star system with the max luminosity in the galaxy, will be constantly auto-constructing", "立即解锁科学枢纽，星区中光度最高的恒星系的巨构会不停地自动建造");
             RegisterString("遗物描述4-1", "Every time you interpret a meta driver, at least one Mensural decoding track will be available before you reroll. Reroll cost is halved", "每次解译完毕元驱动时，必然刷新一个定律级解码轨，重随消耗减半");
             RegisterString("遗物描述4-2", "Each droplet fleet configuration can have 3 droplets", "每个水滴的舰队配置可放置3个水滴");
             RegisterString("遗物描述4-3", "Comprehensively improve the extra products effect of proliferators", "全面提升增产剂的增产效果");
             RegisterString("遗物描述4-4", "Every an enemy is destoryed, slightly advance the research progress of the current non-darkfog matrix technology for free", "每当击杀敌军单位时，无消耗地略微推进当前非黑雾矩阵科技的研究进度");
-            RegisterString("遗物描述4-5", "When killing a ground dark fog unit, there is 15% chance of causing a weakened electromagnetic interference from it's place", "地面黑雾单位被击杀时，有15%概率在原地引发一次弱化的电磁干扰");
-            RegisterString("遗物描述4-5+", "When killing a ground dark fog unit, there is 15% chance of causing a <color=#d2853d>enhanced</color> electromagnetic interference from it's place", "地面黑雾单位被击杀时，有15%概率在原地引发一次<color=#d2853d>强化的</color>电磁干扰");
-            RegisterString("遗物描述4-6", "When pick up this meta driver, permanently record the top three meta drivers that you already have, retaining their effects but no longer occupying the slot", "获取此元驱动时，将左侧栏位最顶端的三个元驱动永久保存在符文之书中，保留他们的效果但是其不再占用栏位");
+            RegisterString("遗物描述4-5", "When killing a ground dark fog unit, there is 15% chance of causing a <color=#d2853d>harmful</color> electromagnetic interference from it's place", "地面黑雾单位被击杀时，有15%概率在原地引发一次<color=#d2853d>具有伤害的</color>电磁干扰");
+            RegisterString("遗物描述4-6", "When pick up this meta driver, permanently record the top three meta drivers that you already have, retaining their effects but no longer occupying the slot", "获取此元驱动时，将左侧栏位最顶端的三个元驱动永久保存在符文之书中，保留他们的效果但使其不再占用栏位");
             RegisterString("遗物描述4-7", "Each time you click this meta driver, delay the assimilation progress of the void by 60s. Hold Ctrl and click to advance the progress instead. ", "每次点击此元驱动，立即使虚空的同化进度延缓一分钟。按住Ctrl点击则反而推进一分钟。");
 
 
@@ -1032,18 +1125,36 @@ namespace DSP_Battle
             RegisterString("引导太阳轰炸标题", "Guide Solar Bombardment", "引导太阳轰炸");
             RegisterString("引导太阳轰炸描述", "Icarus consumes core energy to stimulate and guide the energy of stars, and uses itself as a beacon to bombard the surrounding surface.\nThe energy consumption that maintains stellar energy guidance will rapidly increase over time.\nClick again to stop the solar bombardment.\n<color=#c2853d>[cooling down 2:00]</color>", "伊卡洛斯消耗自身的能量来引导恒星级能量，并以自身作为信标，向周围的地表进行太阳轰炸。\n若持续开启，维持恒星能量引导的机甲耗能速度会迅速增长。\n再次点击以停止太阳轰炸。\n<color=#c2853d>[冷却时间2:00]</color>");
             RegisterString("呼叫行星清洗标题", "Call For Planetary Purge", "呼叫行星清洗");
-            RegisterString("呼叫行星清洗描述", "Pay <color=#c2853d>1 authorization point</color> to request an orbital purge of the current planetary surface from the COSMO Technology Ethics Committee.\n<color=#c2853d>[cooldown time 0:45]</color>", "支付<color=#c2853d>1授权点</color>，向COSMO技术伦理委员会请求一次针对当前行星地表的轨道清洗。\n<color=#c2853d>[冷却时间0:45]</color>");
+            RegisterString("呼叫行星清洗描述", "Pay <color=#c2853d>1 authorization point</color> to request an orbital purge of the current planetary surface and low altitude from the COSMO Technology Ethics Committee.\n<color=#c2853d>[cooldown time 0:45]</color>", "支付<color=#c2853d>1授权点</color>，向COSMO技术伦理委员会请求一次针对当前行星地表和低空的轨道清洗。\n<color=#c2853d>[冷却时间0:45]</color>");
             RegisterString("授权点不足警告", "Insufficient authorization points!", "授权点不足！");
             RegisterString("启动行星清洗警告", "Warning! Planetary purge incoming!", "警告！行星清洗来袭！");
             RegisterString("启动太阳轰炸警告", "Guiding Solar Bombardment!", "正在引导太阳轰炸！");
             RegisterString("引导太阳轰炸", "Guide Solar Bombardment", "引导太阳轰炸");
             RegisterString("太阳轰炸已终止", "Solar Bombardment Terminated!", "太阳轰炸已终止！");
             RegisterString("只能在行星上启动", "Warning: You can only launch this skill on a planet!", "警告：只能在行星上启动！");
+            RegisterString("引导太阳轰炸耗能", " - Guide Solar Bombardment", " - 引导太阳轰炸");
+            RegisterString("水滴耗能", " - Droplet", " - 水滴");
 
 
             RegisterString("微型恒星能量引导", "Micro stellar energy guidance", "微型恒星能量引导");
             RegisterString("微型恒星能量引导描述", "After successfully achieving a technological breakthrough in stellar energy guidance, a possibility of miniaturizing it has emerged. Perhaps Icarus can use its own energy to deflect and stimulate local stellar energy, making it possible for Icarus itself to guide the <color=#c2853d>solar bombardment</color>.", "在成功取得了恒星能量引导的技术突破之后，一个将其微型化的可能出现了。或许伊卡洛斯可以使用自身的能量输出来偏折并激发局部的恒星能量，这将使得伊卡洛斯自行引导<color=#c2853d>太阳轰炸</color>成为可能。");
             RegisterString("微型恒星能量引导结论", "You have unlocked the ability to guide solar bombardment.", "你解锁了引导太阳轰炸的能力。");
+
+
+            RegisterString("元驱动栏位数量", "Meta driver slots", "元驱动槽位");
+            RegisterString("元驱动挂载点位扩展1", "Meta driver mounting point extension", "元驱动挂载点位扩展");
+            RegisterString("元驱动挂载点位扩展2", "Meta driver mounting point extension", "元驱动挂载点位扩展");
+            RegisterString("元驱动挂载点位扩展3", "Meta driver mounting point extension", "元驱动挂载点位扩展");
+            RegisterString("元驱动挂载点位扩展4", "Meta driver mounting point extension", "元驱动挂载点位扩展");
+            RegisterString("元驱动挂载点位扩展5", "Meta driver mounting point extension", "元驱动挂载点位扩展");
+            RegisterString("元驱动挂载点位扩展6", "Meta driver mounting point extension", "元驱动挂载点位扩展");
+            RegisterString("元驱动挂载点位扩展7", "Meta driver mounting point extension", "元驱动挂载点位扩展");
+            RegisterString("元驱动挂载点位扩展8", "Meta driver mounting point extension", "元驱动挂载点位扩展");
+            RegisterString("元驱动挂载点位扩展描述", "Can hold more meta drivers.\nWhen viewing the meta driver on the left, <color=#c2853d>use the mouse scroll wheel to page</color>.\n<color=#F01010A0>Warning: Research on this technology is considered extreme provocation by the COSMO Technology Ethics Committee, and they will impose extremely severe penalties for such behavior.</color>", "可以持有更多数量的元驱动。\n在左侧查看元驱动时，<color=#c2853d>使用鼠标滚轮翻页</color>。\n<color=#F01010A0>警告：研究此技术被COSMO技术伦理委员会认为是极端的挑衅行为，COSMO技术伦理委员会会对该行为处以极其严厉的处罚。</color>");
+            RegisterString("元驱动挂载点位扩展结论", "Meta driver slots +1", "元驱动槽位 +1");
+            RegisterString("COSMO技术伦理委员会警告", "Warning from COSMO Technology Ethics Committee", "COSMO技术伦理委员会的警告");
+            RegisterString("COSMO技术伦理委员会惩罚", "Due to your provocative behavior, the COSMO Technology Ethics Committee has deducted your {0} authorization points and stripped you of all your merit levels.", "由于你的挑衅行为，COSMO技术伦理委员会扣除了你{0}授权点，并剥夺了你全部的功勋级别。");
+
         }
 
 
@@ -1350,48 +1461,52 @@ namespace DSP_Battle
         //    GameMain.gpuiManager.Init();
         //}
 
-        //[HarmonyPostfix]
-        //[HarmonyPatch(typeof(GameHistoryData), "UnlockTechFunction")]
-        //public static void UnlockBattleTechFunc(int func, double value, int level)
-        //{
-        //    switch (func)
-        //    {
-        //        case 50:
-        //            Configs.bulletAtkScale += value;
-        //            break;
-        //        case 51:
-        //            Configs.bulletSpeedScale += value;
-        //            break;
-        //        case 52:
-        //            Configs.wormholeRangeAdded += (int)value;
-        //            break;
-        //        case 53:
-        //            Droplets.maxDroplet += 0; //(int)value; // 改成了每帧根据科技等级刷新max数。就不存档了。
-        //            break;
-        //        default:
-        //            break;
-        //    }
-        //}
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(GameHistoryData), "UnlockTechFunction")]
+        public static void UnlockTechFunctionPatch(int func, double value, int level)
+        {
+            switch (func)
+            {
+                case UnlockFunctionBegin:
+                    Relic.CheckMaxRelic();
+                    Relic.PunishmenWhenUnlockRelicSlot();
+                    break;
+                default:
+                    break;
+            }
+        }
 
-        //[HarmonyPostfix]
-        //[HarmonyPatch(typeof(TechProto), "UnlockFunctionText")]
-        //public static void UnlockFunctionTextPatch(ref TechProto __instance, ref string __result, StringBuilder sb)
-        //{
-        //    if (__instance.ID >= 4901 && __instance.ID <= 4906)
-        //        __result = "子弹伤害和导弹伤害+15%".Translate() + "\n" + "相位裂解光束伤害+30%".Translate();
-        //    else if (__instance.ID >= 4911 && __instance.ID <= 4916)
-        //        __result = "子弹飞行速度+10%".Translate() + "\n" + "导弹飞行速度+5%".Translate();
-        //    //else if (__instance.ID == 4921)
-        //    //    __result = "虫洞生成最近范围向10AU推进3%".Translate();
-        //    //else if (__instance.ID == 4922)
-        //    //    __result = "虫洞生成最近范围向10AU推进5%".Translate();
-        //    //else if (__instance.ID == 4923)
-        //    //    __result = "虫洞生成最近范围向10AU推进8%".Translate();
-        //    else if (__instance.ID >= 4921 && __instance.ID <= 4926)
-        //        __result = "虫洞生成最近范围扩大0.25AU".Translate();
-        //    else if(__instance.ID >= 4927 && __instance.ID <= 4929)
-        //        __result = "水滴控制上限".Translate() + "+1";
-        //}
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(TechProto), "UnlockFunctionText")]
+        public static void UnlockFunctionTextPatch(ref TechProto __instance, ref string __result)
+        {
+            string text = "";
+            bool modified = false;
+            for (int i = 0; i < __instance.UnlockFunctions.Length; i++)
+            {
+                int num = __instance.UnlockFunctions[i];
+                double num2 = __instance.UnlockValues[i];
+                int num3 = (int)((num2 > 0.0) ? (num2 + 0.5) : (num2 - 0.5));
+                switch (num)
+                {
+                    case UnlockFunctionBegin:
+                        text = text + "元驱动栏位数量".Translate() + " +" + num3.ToString();
+                        modified = true;
+                        break;
+                }
+                if(i < __instance.UnlockFunctions.Length - 1)
+                {
+                    text += "\r\n";
+                }
+            }
+            if (modified)
+            {
+                if(__result.Length > 0)
+                    __result = __result + "\r\n" + text;
+                else
+                    __result = text;
+            }
+        }
 
         //public static Text infoLabel = null;
         //public static Text infoValue = null;
@@ -1994,7 +2109,7 @@ namespace DSP_Battle
             List<Tuple<int, int>> altItem0 = new List<Tuple<int, int>>();
             for (int i = 1101; i <= 1109; i++)
             {
-                if (i != 1107)
+                if (i != 1107 && i != 1102)
                     altItem0.Add(new Tuple<int, int>(i, 100));
             }
             for (int i = 1201; i <= 1203; i++)

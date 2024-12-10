@@ -84,7 +84,7 @@ namespace DSP_Battle
                 SkillPoints.totalPoints += SkillPoints.spGainFullLevel;
                 UIRank.UIPointsGainNotify();
                 if (Relic.HaveRelic(2, 1)) // relic 2-1
-                    Interlocked.Add(ref Relic.autoConstructMegaStructureCountDown, rank * 2 * 60);
+                    Interlocked.Add(ref Relic.autoConstructMegaStructureCountDown, rank * 60);
             }
 
             if (rank >= 10 && !GameMain.data.history.ItemUnlocked(9513))

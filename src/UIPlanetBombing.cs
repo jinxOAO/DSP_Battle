@@ -178,7 +178,7 @@ namespace DSP_Battle
                     purgeCDText = purgeCDTextObj.GetComponent<Text>();
                     purgeCDText.alignment = TextAnchor.MiddleCenter;
                     purgeCDText.color = coolDownTextColor;
-                    purgeCDText.fontSize = (int)(guideCDText.fontSize * 1.25);
+                    purgeCDText.fontSize = (int)(guideCDText.fontSize);
                     purgeCDText.text = "";
                 }
             }
@@ -254,7 +254,6 @@ namespace DSP_Battle
                 UIRealtimeTip.Popup("只能在行星上启动".Translate());
                 return;
             }
-            UIRealtimeTip.Popup("启动行星清洗警告".Translate());
             PlanetBombing.LaunchGuideBombing();
         }
 
@@ -268,7 +267,6 @@ namespace DSP_Battle
             if (SkillPoints.UnusedPoints() > 0)
             {
                 SkillPoints.totalPoints--;
-                UIRealtimeTip.Popup("启动太阳轰炸警告".Translate());
                 PlanetBombing.LaunchPurgeBombing();
             }
             else
