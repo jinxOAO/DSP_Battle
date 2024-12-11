@@ -774,7 +774,7 @@ namespace DSP_Battle
                         }
                     }
                 }
-                if (Relic.GetRelicCount() >= 8)
+                if (Relic.GetRelicCount() >= Relic.relicHoldMax)
                 {
                     probabilityTextCursed.text = "<color=#00c280>◈ --</color>";
                     probabilityTextLegend.text = "<color=#d2853d>◈ --</color>";

@@ -1925,6 +1925,8 @@ namespace DSP_Battle
             bool r0110 = Relic.trueDamageActive > 0;
             bool r0212 = Relic.HaveRelic(2, 12);
             int cursedRelicCount = Relic.GetRelicCount(4);
+            if (cursedRelicCount > 10)
+                cursedRelicCount = 10;
 
             ref var _this = ref __instance;
             float factor = 1.0f;

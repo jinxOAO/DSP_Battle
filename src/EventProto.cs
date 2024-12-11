@@ -236,8 +236,8 @@ namespace DSP_Battle
                 if (level < 0)
                 {
                     int relicCount = Relic.GetRelicCount() + (Relic.recordRelics == null ? 0 : Relic.recordRelics.Count);
-                    if (relicCount > levelByRelicCount.Length)
-                        relicCount = levelByRelicCount.Length;
+                    if (relicCount > levelByRelicCount.Length - 1)
+                        relicCount = levelByRelicCount.Length - 1;
                     level = levelByRelicCount[relicCount];
                 }
                 if (proto.requestLen > 0)
@@ -270,8 +270,8 @@ namespace DSP_Battle
                 requestCount = new int[] { };
                 requestMeet = new int[] { };
                 int relicCount = Relic.GetRelicCount() + (Relic.recordRelics == null ? 0 : Relic.recordRelics.Count);
-                if (relicCount > levelByRelicCount.Length)
-                    relicCount = levelByRelicCount.Length;
+                if (relicCount > levelByRelicCount.Length - 1)
+                    relicCount = levelByRelicCount.Length - 1;
                 level = levelByRelicCount[relicCount];
             }
             if (prevModifier == null)
