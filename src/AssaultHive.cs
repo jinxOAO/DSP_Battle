@@ -115,7 +115,7 @@ namespace DSP_Battle
                     Utils.Log("null hive, but not removing because you are client.");
                 }
             }
-            else if(!hive.isAlive && state != EAssaultHiveState.End && state != EAssaultHiveState.Remove)
+            else if (!hive.isAlive && state != EAssaultHiveState.End && state != EAssaultHiveState.Remove)
             {
                 state = EAssaultHiveState.End;
                 time = 120;
@@ -147,9 +147,22 @@ namespace DSP_Battle
             // Update invincible and modifier array
             // if not removing or assaulting state, add me to the invincibleHives array
             if (state == EAssaultHiveState.Idle || state == EAssaultHiveState.Expand || state == EAssaultHiveState.Assemble)
+            {
                 AssaultController.invincibleHives[byAstroIndex] = listIndex;
+            }
             else
+            {
                 AssaultController.invincibleHives[byAstroIndex] = -1;
+            }
+
+            if (state == EAssaultHiveState.Idle || state == EAssaultHiveState.Expand)
+            {
+                AssaultController.expandingHives[byAstroIndex] = listIndex;
+            }
+            else
+            {
+                AssaultController.expandingHives[byAstroIndex] = -1;
+            }
 
             // if not removing state, and have modifier, add me to the modifierHives array
             if (state == EAssaultHiveState.Assault && AssaultController.modifierEnabled)

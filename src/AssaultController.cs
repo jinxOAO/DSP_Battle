@@ -25,6 +25,7 @@ namespace DSP_Battle
         public static int nextRollVoidEcho = 1; // 开启虚空入侵的首次入侵开始，之后的首次刷新元驱动，必定会刷出虚空回响。
 
         // 不需要存档
+        public static int[] expandingHives; // 正在扩张中的hive
         public static int[] invincibleHives; // 因为虚空入侵处于几乎无敌（对恒星炮除外）的hive
         public static int[] modifierHives; // 因为虚空入侵获得了修改器的hive
         public static int[] alertHives; // 因为虚空入侵需要更改警告显示的hive
@@ -70,6 +71,7 @@ namespace DSP_Battle
             voidInvasionEnabled = false;
             difficulty = 2;
             assaultHives = new List<AssaultHive>();
+            expandingHives = new int[GameMain.spaceSector.maxHiveCount];
             invincibleHives = new int[GameMain.spaceSector.maxHiveCount];
             modifierHives = new int[GameMain.spaceSector.maxHiveCount];
             alertHives = new int[GameMain.spaceSector.maxHiveCount];
@@ -160,6 +162,7 @@ namespace DSP_Battle
             {
                 if (assaultHives[i].state == EAssaultHiveState.Remove)
                 {
+                    expandingHives[assaultHives[i].byAstroIndex] = -1;
                     invincibleHives[assaultHives[i].byAstroIndex] = -1;
                     modifierHives[assaultHives[i].byAstroIndex] = -1;
                     alertHives[assaultHives[i].byAstroIndex] = -1;
@@ -214,6 +217,18 @@ namespace DSP_Battle
 
         public static void ClearDataArrays()
         {
+            if (expandingHives == null)
+            {
+                expandingHives = new int[GameMain.spaceSector.maxHiveCount];
+            }
+            else
+            {
+                for (int i = 0; i < expandingHives.Length; i++)
+                {
+                    expandingHives[i] = -1;
+                }
+            }
+
             if (invincibleHives == null)
             {
                 invincibleHives = new int[GameMain.spaceSector.maxHiveCount];

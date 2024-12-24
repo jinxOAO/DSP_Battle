@@ -2021,6 +2021,10 @@ namespace DSP_Battle
             {
                 EnemyDFHiveSystem enemyDFHiveSystem = __instance.sector.dfHivesByAstro[target.astroId - 1000000];
                 int byAstroId = target.astroId - 1000000;
+                if(byAstroId >= 0 && byAstroId < AssaultController.expandingHives.Length && AssaultController.expandingHives[byAstroId] >= 0)
+                {
+                    damage = Math.Min(1000, (int)(damage * 0.001)); // 即使恒星炮，也无法伤害扩张中的巢穴。用于修复同化炮
+                }
                 if (slice != starCannonDamageSlice && byAstroId >= 0 && byAstroId < AssaultController.invincibleHives.Length) // slice == 7 为恒星炮伤害，不为7的认定为常规武器
                 {
                     ref EnemyData ptr = ref __instance.sector.enemyPool[target.id];

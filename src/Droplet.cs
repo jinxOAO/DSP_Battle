@@ -21,7 +21,8 @@ namespace DSP_Battle
         public static int dropletMaxActiveArea = 20000; // 水滴自动启用的最小敌军距离（游戏默认舰队是20000）
         public static int dropletArrayLength = 25;
 
-        public static EnemySorterSpace enemyPoolNearMecha;
+        public static EnemySorterSpace enemySorter;
+        public static bool noDropletWorking; // 是否没有水滴在工作
 
         //存档内容
         public static Droplet[] dropletPool = new Droplet[dropletArrayLength];
@@ -42,7 +43,8 @@ namespace DSP_Battle
             {
                 warpRushCharge.Add(0);
             }
-            enemyPoolNearMecha = new EnemySorterSpace(-1, EEnemySearchMode.NearMechaCurStar);
+            noDropletWorking = true;
+            enemySorter = new EnemySorterSpace(-1, EEnemySearchMode.NearMechaCurStar);
             InitUI();
         }
 
@@ -72,6 +74,9 @@ namespace DSP_Battle
         {
             MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.MainLogic);
             MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.Droplet);
+
+            enemySorter.GameTick(time, !noDropletWorking);
+
             // 计算当前舰队配置中有多少水滴已经填充，然后设置正确的dropletPool中的水滴状态
             CombatModuleComponent spaceModule = GameMain.mainPlayer?.mecha?.spaceCombatModule;
             int moduleNum = 0;
@@ -129,10 +134,20 @@ namespace DSP_Battle
             int maxWorkingDropletsNew = (int)((long)mechaCurEnergy / energyThreshold);
 
             //每个水滴update
+            bool noDropletWorkingTemp = true;
             for (int i = 0; i < dropletArrayLength; i++)
             {
                 if (warpRushCharge[i] < warpRushNeed)
                     warpRushCharge[i] += 1;
+                if (noDropletWorkingTemp && dropletPool[i].state > 0)
+                {
+                    noDropletWorkingTemp = false;
+                    if(noDropletWorking) // 说明上一帧还没有水滴在工作，需要刷新一下enemySorter的单位池子
+                    {
+                        enemySorter.SearchAndSort();
+                        noDropletWorking = noDropletWorkingTemp;
+                    }
+                }
                 if (dropletPool[i].state >= 2 && dropletPool[i].state <= 3)
                 {
                     if (maxWorkingDropletsNew > 0)
@@ -152,6 +167,10 @@ namespace DSP_Battle
                 if (time % 120 == i)
                     dropletPool[i].CheckBullet(); //游荡而又没有实体的子弹强行返回机甲
             }
+
+            
+            
+
             MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.Droplet);
             MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MainLogic);
 
@@ -374,7 +393,7 @@ namespace DSP_Battle
             if (swarmIndex == starIndex || state == 0)
             {
                 swarmIndex = starIndex;
-                if (SearchNextNearestTarget())
+                if (SearchNextNearestTargetInSortedPool())
                 {
                     if (CreateBulltes())
                     {
@@ -455,8 +474,42 @@ namespace DSP_Battle
             return validTarget;
         }
 
+        bool SearchNextNearestTargetInSortedPool()
+        {
+            if(forceLaunchState > 0)
+            {
+                if(Droplets.enemySorter.sortedPool != null && Droplets.enemySorter.sortedPool.Count > 0)
+                {
+                    int idx = Utils.RandInt(0, Droplets.enemySorter.sortedPool.Count);
+                    targetEnemyId = Droplets.enemySorter.sortedPool[idx].enemyId;
+                    if(Droplets.enemySorter.sortedPool[idx].isUnit)
+                        curTargetLockTime = 0;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if (Droplets.enemySorter.sortedPoolNear != null && Droplets.enemySorter.sortedPoolNear.Count > 0)
+                {
+                    int idx = Utils.RandInt(0, Droplets.enemySorter.sortedPoolNear.Count);
+                    targetEnemyId = Droplets.enemySorter.sortedPoolNear[idx].enemyId;
+                    if (Droplets.enemySorter.sortedPoolNear[idx].isUnit)
+                        curTargetLockTime = 0;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
         /// <summary>
-        /// 搜索最近的敌军单位（火种除外）
+        /// 搜索最近的敌军单位（火种除外） 已废弃
         /// </summary>
         /// <returns></returns>
         bool SearchNextNearestTarget(bool distanceCenterIsMecha = false, bool nearMecha = false)
@@ -611,9 +664,9 @@ namespace DSP_Battle
                             {
                                 if (Utils.RandDouble() <= 0.9)
                                 {
-                                    return SearchNextNearestTarget(true, true); // 如果是因为攻击无敌目标而且换，有很大概率优先攻击距离机甲较近的，而非距离水滴自己当前位置较近的
+                                    return SearchNextNearestTargetInSortedPool(); // xxxxxxxxxxx如果是因为攻击无敌目标而且换，有很大概率优先攻击距离机甲较近的，而非距离水滴自己当前位置较近的
                                 }
-                                return SearchNextNearestTarget(false, true); // 通常攻击距离水滴自身距离比较近的单位
+                                return SearchNextNearestTargetInSortedPool(); // xxxxxxxxxxx通常攻击距离水滴自身距离比较近的单位
                             }
 
                         }
@@ -628,12 +681,14 @@ namespace DSP_Battle
                     }
                 }
             }
-            if (Utils.RandDouble() <= 0.05)
-            {
-                return SearchNextNearestTarget(true, true); // 一定概率优先攻击距离机甲较近的，而非距离水滴自己当前位置较近的
-            }
+            return SearchNextNearestTargetInSortedPool();
 
-            return SearchNextNearestTarget(false, true); // 通常攻击距离水滴自身距离比较近的单位
+            //if (Utils.RandDouble() <= 0.05)
+            //{
+            //    return SearchNextNearestTarget(true, true); // 一定概率优先攻击距离机甲较近的，而非距离水滴自己当前位置较近的
+            //}
+
+            //return SearchNextNearestTarget(false, true); // 通常攻击距离水滴自身距离比较近的单位
         }
 
         // 发现附近的敌人
