@@ -2,6 +2,7 @@
 using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
+using xiaoye97;
 using Random = System.Random;
 
 namespace DSP_Battle
@@ -195,22 +196,89 @@ namespace DSP_Battle
             _this.time = (flag ? 0f : 0.3f);
         }
 
-        public static double beginBasic = 0.0001;
-        public static double minBasic = 0.0001;
-        public static double dec = 0.9999;
-        public static void Test()
+        public static void CopyModelProto(int oriId, int id, Color? color = null)
         {
-            double total = 1;
-            double basic = beginBasic;
-            for (int i = 0; i < 10000; i++)
+            ModelProto oriModel = LDB.models.Select(oriId);
+            ModelProto model = oriModel.Copy();
+            model.Name = id.ToString();
+            model.ID = id;
+
+            PrefabDesc desc = oriModel.prefabDesc;
+            GameObject prefab = desc.prefab ? desc.prefab : Resources.Load<GameObject>(oriModel.PrefabPath);
+            GameObject colliderPrefab = desc.colliderPrefab ? desc.colliderPrefab : Resources.Load<GameObject>(oriModel._colliderPath);
+
+            ref PrefabDesc modelPrefabDesc = ref model.prefabDesc;
+            modelPrefabDesc = prefab == null ? PrefabDesc.none :
+                colliderPrefab == null ? new PrefabDesc(id, prefab) : new PrefabDesc(id, prefab, colliderPrefab);
+
+            foreach (Material[] lodMaterial in modelPrefabDesc.lodMaterials)
             {
-                total *= 1 - basic;
-                basic *= dec;
-                if (basic < minBasic)
-                    basic = minBasic;
-                Log($"{i} cur prob is {basic}, total prob {1 - total}");
+                if (lodMaterial == null) continue;
+
+                for (var j = 0; j < lodMaterial.Length; j++)
+                {
+                    ref Material material = ref lodMaterial[j];
+
+                    if (material == null) continue;
+
+                    material = new Material(material);
+
+                    if (!color.HasValue) continue;
+
+                    material.SetColor("_Color", color.Value);
+                }
             }
+            //model.prefabDesc = oriModel.prefabDesc;
+            modelPrefabDesc.modelIndex = id;
+            modelPrefabDesc.hasBuildCollider = desc.hasBuildCollider;
+            modelPrefabDesc.colliders = desc.colliders;
+            modelPrefabDesc.buildCollider = desc.buildCollider;
+            modelPrefabDesc.buildColliders = desc.buildColliders;
+            modelPrefabDesc.colliderPrefab = desc.colliderPrefab;
+            modelPrefabDesc.dragBuild = desc.dragBuild;
+            modelPrefabDesc.dragBuildDist = desc.dragBuildDist;
+            modelPrefabDesc.blueprintBoxSize = desc.blueprintBoxSize;
+            modelPrefabDesc.roughHeight = desc.roughHeight;
+            modelPrefabDesc.roughWidth = desc.roughWidth;
+            modelPrefabDesc.roughRadius = desc.roughRadius;
+            modelPrefabDesc.barHeight = desc.barHeight;
+            modelPrefabDesc.barWidth = desc.barWidth;
+            modelPrefabDesc.unitAssaultArriveRange = desc.unitAssaultArriveRange;
+            modelPrefabDesc.unitAttackDamage0 = desc.unitAttackDamage0;
+            modelPrefabDesc.unitAttackDamageInc0 = desc.unitAttackDamageInc0;
+            modelPrefabDesc.unitAttackHeat0 = desc.unitAttackHeat0;
+            modelPrefabDesc.unitAttackInterval0 = desc.unitAttackInterval0;
+            modelPrefabDesc.unitAttackRange0 = desc.unitAttackRange0;
+            modelPrefabDesc.unitColdSpeed = desc.unitColdSpeed;
+            modelPrefabDesc.unitColdSpeedInc = desc.unitColdSpeedInc;
+            modelPrefabDesc.unitEngageArriveRange = desc.unitEngageArriveRange;
+            modelPrefabDesc.unitMarchMovementSpeed = desc.unitMarchMovementSpeed;
+            modelPrefabDesc.unitMaxMovementSpeed = desc.unitMaxMovementSpeed;
+            modelPrefabDesc.unitMaxMovementAcceleration = desc.unitMaxMovementAcceleration;
+
+            model.sid = "";
+            model.SID = "";
+
+            LDBTool.PreAddProto(model);
         }
-        
+
+        public static ModelProto Copy(this ModelProto proto) =>
+            new ModelProto
+            {
+                ObjectType = proto.ObjectType,
+                RuinType = proto.RuinType,
+                RendererType = proto.RendererType,
+                HpMax = proto.HpMax,
+                HpUpgrade = proto.HpUpgrade,
+                HpRecover = proto.HpRecover,
+                RuinId = proto.RuinId,
+                RuinCount = proto.RuinCount,
+                RuinLifeTime = proto.RuinLifeTime,
+                PrefabPath = proto.PrefabPath,
+                _colliderPath = proto._colliderPath,
+                //_ruinPath = proto._ruinPath,
+                //_wreckagePath = proto._wreckagePath,
+                //_ruinOriginModelIndex = proto._ruinOriginModelIndex,
+            };
     }
 }

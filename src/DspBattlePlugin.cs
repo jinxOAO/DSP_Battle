@@ -116,8 +116,11 @@ namespace DSP_Battle
             Harmony.CreateAndPatchAll(typeof(PlanetBombing));
             Harmony.CreateAndPatchAll(typeof(UIPlanetBombing));
             Harmony.CreateAndPatchAll(typeof(UIMechaEnergyPatcher));
+            if(DFGEliteUnits.enabled)
+                Harmony.CreateAndPatchAll(typeof(DFGEliteUnits));
 
             LDBTool.PreAddDataAction += BattleProtos.AddProtos;
+            LDBTool.PostAddDataAction += BattleProtos.PostEditModelProto;
             BattleProtos.AddTranslate();
             //LDBTool.PostAddDataAction += BattleProtos.PostDataAction;
             BattleProtos.InitEventProtos();

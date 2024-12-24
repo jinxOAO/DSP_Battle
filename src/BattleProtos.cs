@@ -25,6 +25,7 @@ namespace DSP_Battle
         {
             AddTutorialProtos();
             AddNormalProtos();
+            AddEnemyProtoAndModels();
         }
 
         public static void AddNormalProtos()
@@ -147,6 +148,38 @@ namespace DSP_Battle
 
             // Void-Recipes
             //ProtoRegistry.RegisterItem()
+        }
+
+        public static void AddEnemyProtoAndModels()
+        {
+            if (DFGEliteUnits.enabled)
+            {
+                EnemyProto ori8128 = LDB.enemies.Select(8128);
+                EnemyProto elite8128 = ori8128.Copy();
+                elite8128.ID = 9128;
+                elite8128.ForceID = ori8128.ForceID;
+                elite8128.ModelCount = ori8128.ModelCount;
+                elite8128.ModelIndex = ori8128.ModelIndex;
+                elite8128.prefabDesc = ori8128.prefabDesc;
+                elite8128._iconSprite = ori8128.iconSprite;
+
+                LDBTool.PreAddProto(elite8128);
+
+                Utils.CopyModelProto(300, 770);
+                elite8128.ModelIndex = 770;
+                elite8128.prefabDesc.modelIndex = 770;
+            }
+        }
+
+        public static void PostEditModelProto()
+        {
+            ModelProto model470 = LDB.models.Select(770);
+            if(model470 != null)
+            {
+                Debug.Log("\n\n\n MODEL not null\n\n\n");
+                model470.prefabDesc.enemyProtoId = 9128;
+                model470.HpMax = 9999999;
+            }
         }
         public static void AddTranslate()
         {
@@ -1063,7 +1096,7 @@ namespace DSP_Battle
             RegisterString("星河卫士奖章", "Galaxy Guardian's Medal", "星河卫士勋章");
             RegisterString("星河卫士奖章描述", "This is a medal given to you by the COSMO Technology Ethics Committee for your contribution to the sector, with your name engraved on it. The COSMO Technology Ethics Committee claims that the medal is extremely expensive and rare, and suggests you not to expose it to carbon dioxide, oxygen and water at the same time.", "这是COSMO技术伦理委员会为奖励你对星区做出的贡献而为你颁发的勋章，上面刻有你的名字。COSMO技术伦理委员会声称该奖章造价昂贵、极其稀有，并建议你<color=#c2853d>不要使其同时接触到二氧化碳、氧气和水</color>。");
             RegisterString("提供算力名称", "Incorporated into the COSMO architecture", "并入COSMO架构");
-            RegisterString("提供算力描述", "Provide area computing power to the COSMO Technology Ethics Committee by Incorporate all research facilities into the COSMO architecture, which will continuously earn you merit points. In addition, this protocol requires universe matrices to ensure that each section can efficiently handle the hash collision problem in the COSMO main-net.", "通过将所有科研设施并入COSMO架构来为COSMO技术伦理委员会提供星区算力，<color=#c2853d>这会为你持续提供功勋点数</color>。此外，这还需要消耗一定的宇宙矩阵来保证每个星区能高效处理主网内的散列碰撞问题。");
+            RegisterString("提供算力描述", "Provide area computing power to the COSMO Technology Ethics Committee by Incorporate all research facilities into the COSMO architecture. In addition, this protocol requires universe matrices to ensure that each section can efficiently handle the hash collision problem in the COSMO main-net. <color=#c2853d>During the process of researching this technology, you will continue to earn merit points</color>.", "通过将所有科研设施并入COSMO架构来为COSMO技术伦理委员会提供星区算力，这还需要消耗一定的宇宙矩阵来保证每个星区能高效处理主网内的散列碰撞问题。<color=#c2853d>研究此科技的过程中，你会持续获得功勋点数</color>。");
             RegisterString("提供算力结论", "This protocol allows unlimited progress and is automatically added to the end of the queue", "此项科技允许无限进行，已自动添加到队列末尾");
             RegisterString("版本更迭补偿", "Version change compensation", "版本更迭补偿");
             RegisterString("遗物4-5补偿说明", "Since the effect of the meta driver [Aftershock Echo] has been changed, you received a compensation from the void: you can immediately interpret a new meta driver, and a free resurrection coin. ", "由于[余震回响]元驱动的效果被更改，你收到了一个来自虚空的补偿：可以立刻解译一个新的元驱动，并获得一个复活币。");

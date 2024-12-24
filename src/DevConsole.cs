@@ -283,12 +283,6 @@ namespace DSP_Battle
                         SkillPoints.totalPoints += apAdd;
                         Print($"Authorization points {(apAdd >= 0 ? "+" : "")}{apAdd}");
                         break;
-                    case "t":
-                        Utils.beginBasic = Convert.ToDouble(param[1]);
-                        Utils.minBasic = Convert.ToDouble(param[2]);
-                        Utils.dec = Convert.ToDouble(param[3]);
-                        Print($"ok.");
-                        break;
                     case "probtick":
                         EventSystem.tickFromLastRelic = Convert.ToInt32(param[1]);
                         Print($"ok.");

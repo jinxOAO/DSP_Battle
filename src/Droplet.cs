@@ -21,6 +21,8 @@ namespace DSP_Battle
         public static int dropletMaxActiveArea = 20000; // 水滴自动启用的最小敌军距离（游戏默认舰队是20000）
         public static int dropletArrayLength = 25;
 
+        public static EnemySorterSpace enemyPoolNearMecha;
+
         //存档内容
         public static Droplet[] dropletPool = new Droplet[dropletArrayLength];
         public static int bonusDamage = 0;
@@ -40,6 +42,7 @@ namespace DSP_Battle
             {
                 warpRushCharge.Add(0);
             }
+            enemyPoolNearMecha = new EnemySorterSpace(-1, EEnemySearchMode.NearMechaCurStar);
             InitUI();
         }
 
