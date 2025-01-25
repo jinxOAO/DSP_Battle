@@ -209,6 +209,7 @@ namespace DSP_Battle
                 string iStr = i.ToString();
                 UIButton uibtn = buttonObj.GetComponent<UIButton>();
                 uibtn.button = btn;
+                uibtn.tips.corner = 5;
                 Action<int> action = (x) => { EventSystem.Decision(Convert.ToInt32(iStr)); };
                 uibtn.onClick += action;
                 decisionButtonObjs.Add(buttonObj);

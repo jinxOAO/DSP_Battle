@@ -240,6 +240,16 @@ namespace DSP_Battle
                 {
                     Interlocked.Add(ref bonusDamageLimit, Relic.dropletDamageLimitGrowth);
                 }
+                else if (GameMain.mainPlayer.deliveryPackage != null)
+                {
+                    int itemId = 9511;
+                    int count = 1;
+                    GameMain.mainPlayer.deliveryPackage.TakeItems(ref itemId, ref count, out inc); // 从物流背包拿
+                    if(itemId == 9511 && count >= 1)
+                    {
+                        Interlocked.Add(ref bonusDamageLimit, Relic.dropletDamageLimitGrowth);
+                    }
+                }
             }
             if (bonusDamage < bonusDamageLimit)
             {

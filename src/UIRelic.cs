@@ -62,6 +62,7 @@ namespace DSP_Battle
         static UIButton relic1UIBtn;
         static UIButton relic2UIBtn;
         static UIButton relic3UIBtn;
+        static GameObject dashboardObj;
 
         public static Text relicSelectWindowTitle;
         public static Text relicSelectionNoticeText;
@@ -320,8 +321,9 @@ namespace DSP_Battle
                 relic1BtnImg = relic1SelectButtonObj.GetComponent<Image>();
                 relic1BtnImg.color = colorBtnLegend;
                 relic1UIBtn = relic1SelectButtonObj.GetComponent<UIButton>();
+                relic1UIBtn.tips.corner = 6;
                 relic1UIBtn.tips.delay = 0;
-                relic1UIBtn.tips.offset = new Vector2(-250, 0);
+                relic1UIBtn.tips.offset = new Vector2(0, 0);
                 relic1UIBtn.tips.width = 300;
 
                 relic2SelectButtonObj = GameObject.Instantiate(oriButton, relicSelectionWindowObj.transform);
@@ -337,8 +339,9 @@ namespace DSP_Battle
                 relic2BtnImg = relic2SelectButtonObj.GetComponent<Image>();
                 relic2BtnImg.color = colorBtnEpic;
                 relic2UIBtn = relic2SelectButtonObj.GetComponent<UIButton>();
+                relic2UIBtn.tips.corner = 6;
                 relic2UIBtn.tips.delay = 0;
-                relic2UIBtn.tips.offset = new Vector2(250, 0);
+                relic2UIBtn.tips.offset = new Vector2(0, 0);
                 relic2UIBtn.tips.width = 300;
 
                 relic3SelectButtonObj = GameObject.Instantiate(oriButton, relicSelectionWindowObj.transform);
@@ -354,8 +357,9 @@ namespace DSP_Battle
                 relic3BtnImg = relic3SelectButtonObj.GetComponent<Image>();
                 relic3BtnImg.color = colorBtnRare;
                 relic3UIBtn = relic3SelectButtonObj.GetComponent<UIButton>();
+                relic3UIBtn.tips.corner = 6;
                 relic3UIBtn.tips.delay = 0;
-                relic3UIBtn.tips.offset = new Vector2(250, 0);
+                relic3UIBtn.tips.offset = new Vector2(0, 0);
                 relic3UIBtn.tips.width = 300;
 
                 // 提示文本
@@ -1118,6 +1122,8 @@ namespace DSP_Battle
             {
                 float slotDis = 90; // 每个遗物slot的竖向间隔（顶距离顶）
 
+                dashboardObj = GameObject.Find("UI Root/Overlay Canvas/In Game/Fullscreen UIs/Dashboard"); // 当仪表盘UI打开时，关闭relic窗口
+
                 Transform parentTrans = GameObject.Find("UI Root/Overlay Canvas/In Game/Windows").transform;
                 relicSlotsWindowObj = new GameObject("RelicPanel");
                 relicSlotsWindowObj.transform.SetParent(parentTrans);
@@ -1313,7 +1319,7 @@ namespace DSP_Battle
             }
             for (; slotNum < relicSlotImgs.Count; slotNum++)
             {
-                relicSlotImgs[slotNum].sprite = Resources.Load<Sprite>("Assets/DSPBattle/rEmpty");
+                relicSlotImgs[slotNum].sprite = rEmpty;
                 relicSlotUIBtns[slotNum].tips.tipTitle = ("未获取遗物标题").Translate();
                 relicSlotUIBtns[slotNum].tips.tipText = ("未获取遗物描述").Translate();
                 //relicSlotUIBtns[slotNum].tips.offset = new Vector2(160, 70);
@@ -1366,6 +1372,11 @@ namespace DSP_Battle
 
         public static void SlotWindowAnimationUpdate()
         {
+            if(dashboardObj != null)
+            {
+                relicSlotsWindowObj.SetActive(!dashboardObj.activeSelf);
+            }
+
             if (curX != targetX)
             {
                 float distance = Math.Abs(targetX - curX);

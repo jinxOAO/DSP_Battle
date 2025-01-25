@@ -123,6 +123,7 @@ namespace DSP_Battle
             RelicFunctionPatcher.RefreshBlueBuffStarAssemblyEffect();
             RelicFunctionPatcher.RefreshTearOfTheGoddessEffect();
             RelicFunctionPatcher.RefreshEnergyBurstEffect();
+            RelicFunctionPatcher.RefreshDiraacRelicEffect();
             RelicFunctionPatcher.RefreshStarCannonBuffs();
         }
 
@@ -936,6 +937,15 @@ namespace DSP_Battle
                 MoreMegaStructure.StarAssembly.r106ByTCFV = 1;
             else
                 MoreMegaStructure.StarAssembly.r106ByTCFV = 0;
+        }
+
+        public static void RefreshDiraacRelicEffect()
+        {
+            if(Relic.HaveRelic(2,8))
+                MoreMegaStructure.StarAssembly.r208ByTCFV = 1;
+            else
+                MoreMegaStructure.StarAssembly.r208ByTCFV = 0;
+
         }
 
 

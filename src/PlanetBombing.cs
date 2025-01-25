@@ -21,6 +21,7 @@ namespace DSP_Battle
         public static bool isGuideBombing;
         public static int guideBombingTime;
         public static int guideCoolDown;
+
         
         // 不存档
         public static int maxPurgeBombingTime = 2400;
@@ -31,6 +32,9 @@ namespace DSP_Battle
 
         public static int moduleFleetProtoId = 5;
 
+        public static int fireWorkCountDown;
+        public static bool haveGotNewYearGift;
+
         public static float minMechaEnergyCapCoeff = 0.005f; // 初始，每秒消耗机甲最大能量的百分比
         public static float growMechaEnergyCapCoeff = 0.025f; // 成长到最大时，每秒（除了初始之外）额外消耗机甲最大能量的百分比。最终最大值是此值+minMechaEnergyCapCoeff
         public static int energyCapCoeffGrowTime = 3600; // 需要多久，消耗机甲最大能量的百分比值能成长到最大值
@@ -38,6 +42,8 @@ namespace DSP_Battle
         public static int guideBasicEnergyComsumption = 50000; // 初始太阳轰炸每帧耗能
         public static float b = 5000f;
         public static float a = 500f; // ax^2 + bx + guideBasicEnergyComsumption 为引导太阳轰炸的非百分比耗能部分，x为已连续引导太阳轰炸秒数（而非帧数）
+
+        public static bool LastFrameLocalPlanetNotNull = false;
 
         public static bool purgeReady { get { return purgeCoolDown <= 0 && !isPurgeBombing; } }
         public static bool guideReady { get { return guideCoolDown <= 0; } }
@@ -52,6 +58,8 @@ namespace DSP_Battle
             guideBombingTime = 0;
             purgeCoolDown = 0;
             guideCoolDown = 0;
+            fireWorkCountDown = 0;
+            haveGotNewYearGift = false;
             if (MoreMegaStructure.MoreMegaStructure.GenesisCompatibility)
                 bombItemId = 7613;
         }
@@ -61,6 +69,33 @@ namespace DSP_Battle
         [HarmonyPatch(typeof(GameData), "GameTick")]
         public static void Update(long time)
         {
+            if (GameMain.localPlanet != null)
+            {
+                DateTime now = DateTime.Now;
+                if (now.Month == 12 && now.Day == 31 && now.Hour == 23 && now.Minute == 59 && now.Second >= 58 || now.Month == 1 && now.Day == 1 && now.Hour == 0 && now.Minute == 0 && now.Second <= 59) // 跨年瞬间给礼物
+                {
+                    fireWorkCountDown = 599;
+                    if (!haveGotNewYearGift)
+                    {
+                        haveGotNewYearGift = true;
+                        SkillPoints.totalPoints += 100;
+                        UIDialogPatch.ShowUIDialog("新年快乐标题".Translate(), "新年礼物内容".Translate());
+                    }
+                }
+                else if (!LastFrameLocalPlanetNotNull && DateTime.Today.Month == 12 && DateTime.Today.Day == 31 || !LastFrameLocalPlanetNotNull && DateTime.Today.Month == 1 && DateTime.Today.Day == 1) // 1号踏入星球会触发
+                {
+                    fireWorkCountDown = 900; // 倒数5秒后烟花
+                }
+
+                LastFrameLocalPlanetNotNull = true;
+            }
+            if(GameMain.localPlanet == null)
+            {
+                fireWorkCountDown = 0;
+                LastFrameLocalPlanetNotNull = false;
+            }
+
+
             if (isPurgeBombing)
             {
                 purgeBombingTime++;
@@ -137,11 +172,15 @@ namespace DSP_Battle
                     StopGuideBombing();
                 }
             }
+            if (fireWorkCountDown > 0 && fireWorkCountDown <= 600)
+                FireworkTest();
 
             if (purgeCoolDown > 0)
                 purgeCoolDown--;
             if (guideCoolDown > 0)
                 guideCoolDown--;
+            if(fireWorkCountDown > 0)
+                fireWorkCountDown--;
         }
 
 
@@ -292,6 +331,78 @@ namespace DSP_Battle
             ptr.mask = (ETargetTypeMask.Vegetable | ETargetTypeMask.Enemy);
             ptr.life = 3;
             skillSystem.audio.AddPlayerAudio(314, 2.1f, GameMain.mainPlayer.uPosition);
+        }
+
+        public static void FireworkTest(bool followMecha = true, float minRange = 0, float maxRange = 30)
+        {
+            if (GameMain.localPlanet == null)
+            {
+                if (isGuideBombing)
+                    StopGuideBombing();
+                isPurgeBombing = false;
+                isGuideBombing = false;
+                return;
+            }
+            if (!DspBattlePlugin.newYearFirework.Value)
+            {
+                return;
+            }
+
+            if (UIRoot.instance.uiMainMenu.active || UIRoot.instance.galaxySelect.active || UIRoot.instance.optionWindow.active || UIRoot.instance.saveGameWindow.active)
+            {
+                return;
+            }
+            Vector3 toCenterDir = GameMain.mainPlayer.uPosition - GameMain.localPlanet.uPosition;
+            Vector3 horizontalDir = MoreMegaStructure.Utils.GetVertical(toCenterDir);
+            horizontalDir = (Quaternion.AngleAxis((float)Utils.RandDouble() * 360, toCenterDir) * horizontalDir).normalized;
+
+            //if (toCenterDir.magnitude >= GameMain.galaxy.astrosData[GameMain.localPlanet.astroId].uRadius + 10)
+            //{
+            //    distance = 20 + (float)Utils.RandDouble() * 40;
+            //}
+            //else
+            float planetRadius = GameMain.galaxy.astrosData[GameMain.localPlanet.astroId].uRadius;
+
+
+            Vector3 targetLPos;
+            if (true) // 轰炸机甲周围
+            {
+                float width = maxRange - minRange;
+                float distance = minRange + (float)Utils.RandDouble() * width * (float)(GameMain.mainPlayer.uPosition - GameMain.localPlanet.uPosition).magnitude / planetRadius;
+                VectorLF3 uEnd = horizontalDir * distance;
+                Vector3 targetUPos = (uEnd + GameMain.mainPlayer.uPosition - GameMain.localPlanet.uPosition).normalized * (GameMain.galaxy.astrosData[GameMain.localPlanet.astroId].uRadius + Utils.RandInt(15,40) )+ GameMain.localPlanet.uPosition;
+
+
+                targetLPos = Quaternion.Inverse(GameMain.galaxy.astrosData[GameMain.localPlanet.astroId].uRot) * (targetUPos - (Vector3)GameMain.localPlanet.uPosition);
+            }
+            //else // 全行星随机轰炸
+            //{
+                //targetLPos = Utils.RandPosDelta().normalized * planetRadius;
+            //}
+
+            ItemProto itemProto = LDB.items.Select(bombItemId);
+            ref SkillSystem skillSystem = ref GameMain.spaceSector.skillSystem;
+            PrefabDesc pdesc = LDB.items.Select(3003).prefabDesc;
+            int astroId = GameMain.localPlanet.astroId;
+            ref LocalCannonade ptr = ref skillSystem.mechaLocalCannonades.Add();
+            ptr.astroId = astroId;
+            ptr.hitIndex = ((itemProto == null) ? 18 : itemProto.prefabDesc.AmmoHitIndex);
+            ptr.minorHitIndex = 17;
+            ptr.caster.type = ETargetType.Player;
+            ptr.caster.id = 1;
+            ptr.targetPos = targetLPos;
+            ptr.distance = (ptr.targetPos - GameMain.mainPlayer.mecha.skillCastLeftL).magnitude;
+            ptr.speed = 8f;
+            ptr.damage = 150000;
+            ptr.blastRadius0 = ((itemProto == null) ? SkillSystem.localCannonadeBlastRadius0 : itemProto.prefabDesc.AmmoBlastRadius0);
+            ptr.blastRadius1 = ((itemProto == null) ? SkillSystem.localCannonadeBlastRadius1 : itemProto.prefabDesc.AmmoBlastRadius1);
+            ptr.blastFalloff = ((itemProto == null) ? SkillSystem.localCannonadeBlastFalloff : itemProto.prefabDesc.AmmoBlastFalloff);
+            ptr.mask = (ETargetTypeMask.Vegetable | ETargetTypeMask.Enemy);
+            ptr.life = 3;
+            skillSystem.audio.AddPlayerAudio(314, 2.1f, GameMain.mainPlayer.uPosition);
+
+            if (Utils.RandDouble() < 0.1)
+                UIRealtimeTip.Popup("新年快乐".Translate(), Utils.RandPosDelta() * 520, false);
         }
 
         /// <summary>

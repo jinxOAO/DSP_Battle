@@ -775,7 +775,7 @@ namespace DSP_Battle
             RegisterString("遗物名称带颜色2-12", "<color=#2080d0>Last Breath  [Packaged]</color>", "<color=#2080d0>强攻  [封装级]</color>");
             RegisterString("遗物名称带颜色2-13", "<color=#2080d0>Infinity Edge  [Packaged]</color>", "<color=#2080d0>无尽之刃  [封装级]</color>");
             RegisterString("遗物名称带颜色2-14", "<color=#2080d0>Kleptomancy  [Packaged]</color>", "<color=#2080d0>行窃预兆  [封装级]</color>");
-            RegisterString("遗物名称带颜色2-15", "<color=#2080d0>Gravitational Fragmentation  [Packaged]</color>", "<color=#2080d0>引力碎裂  [封装级]</color>");
+            RegisterString("遗物名称带颜色2-15", "<color=#2080d0>Void Burst  [Packaged]</color>", "<color=#2080d0>虚空爆发  [封装级]</color>");
             RegisterString("遗物名称带颜色2-16", "<color=#2080d0>Hardened Shield  [Packaged]</color>", "<color=#2080d0>刚毅护盾  [封装级]</color>");
             RegisterString("遗物名称带颜色2-17", "<color=#2080d0>Aegis of the Immortal  [Packaged]</color>", "<color=#2080d0>不朽之守护  [封装级]</color>");
 
@@ -1128,7 +1128,7 @@ namespace DSP_Battle
             RegisterString("已开启虚空入侵", "Void Invasion Enabled", "虚空入侵已启用");
             RegisterString("非黑雾模式", "Dark Fog Not Available", "黑雾势力未启用");
             RegisterString("虚空入侵", "Void Invasion", "虚空入侵");
-            RegisterString("虚空入侵提示", "Enabling Void Invasion will result in periodic and increasingly powerful dark fog invasions, and resisting invasion will earn you additional rewards. The intensity upper limit of the void invasion in late game will be affected by the dark fog difficulty, and that intensity upper limit will reach the maximum when the dark fog difficulty is larger than 4.0.\n\nWarning: Once you enabled the void invasion, you cannot disable it.", "启用虚空入侵会导致星区周期性地受到越来越强大的黑雾进攻，抵抗进攻也将获得额外奖励。游戏后期虚空入侵的强度的上限会受黑雾难度系数影响，在黑雾系数达到4.0以上后，后期入侵的强度将达到最大。\n\n警告：一旦开启虚空入侵，此选项无法被关闭。");
+            RegisterString("虚空入侵提示", "Enabling Void Invasion will result in periodic and increasingly powerful dark fog invasions, and resisting invasion will earn you additional rewards.\nThe intensity upper limit of the void invasion in late game will be affected by the dark fog difficulty,\nand that intensity upper limit will reach the maximum when the dark fog difficulty is larger than 4.0.\n\nWarning: Once you enabled the void invasion, you cannot disable it.", "启用虚空入侵会导致星区周期性地受到越来越强大的黑雾进攻，抵抗进攻也将获得额外奖励。\n游戏后期虚空入侵的强度的上限会受黑雾难度系数影响，在黑雾系数达到4.0以上后，后期入侵的强度将达到最大。\n\n警告：一旦开启虚空入侵，此选项无法被关闭。");
             RegisterString("虚空入侵版本更新提示", "They Come From Void has updated. There is a new mode available now. Enabling Void Invasion will result in periodic and increasingly powerful dark fog invasions, and resisting invasion will earn you additional rewards.\nNote: The intensity upper limit of the void invasion in late game will be affected by the dark fog difficulty. Once you enabled the void invasion, you cannot disable it.\nWill you enable it now?\n\n( You can also enable it later in Esc Menu. )", "深空来敌已更新虚空入侵模式，启用虚空入侵会导致星区周期性地受到越来越强大的黑雾进攻，抵抗进攻也将获得额外奖励。\n注意：游戏后期虚空入侵的强度的上限会受黑雾难度系数影响，一旦开启虚空入侵，此选项无法被关闭。\n是否立即启用？\n\n（你也可以稍后在Esc菜单中启用虚空入侵。）");
 
             RegisterString("侦测到虚空入侵提示", "Void rift detected. Void is attempting to assimilate dark fog to \ninvade {0}.\n", "探测到虚空裂隙，虚空正在尝试同化黑雾以\n入侵{0}。\n");
@@ -1187,6 +1187,11 @@ namespace DSP_Battle
             RegisterString("元驱动挂载点位扩展结论", "Meta driver slots +1", "元驱动槽位 +1");
             RegisterString("COSMO技术伦理委员会警告", "Warning from COSMO Technology Ethics Committee", "COSMO技术伦理委员会的警告");
             RegisterString("COSMO技术伦理委员会惩罚", "Due to your provocative behavior, the COSMO Technology Ethics Committee has deducted your {0} authorization points and stripped you of all your merit levels.", "由于你的挑衅行为，COSMO技术伦理委员会扣除了你{0}授权点，并剥夺了你全部的功勋级别。");
+
+            RegisterString("新年快乐", "<color=#ff2020><size=50>Happy New Year!</size></color>", "<color=#ff2020><size=50>新年快乐！</size></color>");
+            RegisterString("新年快乐标题", "Happy New Year", "新年快乐");
+            RegisterString("新年礼物内容", "To celebrate the New Year, the COSMO Technology Ethics Committee has awarded you 100 authorization points.", "为庆祝新年，COSMO技术伦理委员会向你发放了100授权点奖励。");
+
 
         }
 
