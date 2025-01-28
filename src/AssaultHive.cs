@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using static UnityEngine.EventSystems.EventTrigger;
 
 namespace DSP_Battle
 {
@@ -23,7 +24,7 @@ namespace DSP_Battle
         public int timeTotalInit; // 最初的时间计数
         public int timeDelayedByRelic; // relic 4-7 增加的时间，最大为
         public int level;
-        public int oriLevel;
+        public int oriLevel; // -1代表这个巢穴是虚空生成的，结束后会摧毁。不为负代表原本就有巢穴，不执行销毁
 
         public int assaultNumTotal; // 初始入侵的舰队数量
         public int inhibitPoints; // 已通过恒星炮压制的点数
@@ -39,7 +40,7 @@ namespace DSP_Battle
         public int assembleNum { get { return Math.Min(1440, (int)(assaultNum * 1.5) + 1); } } // 一直制造的舰队数量上限
 
         public static int timeDelayedMax = 3600 * 20; // 最大推迟的时间
-
+        public static int pIndexMin = 2; // 自摧毁时的最小pIndex
 
         public int assaultNum
         {
@@ -82,6 +83,14 @@ namespace DSP_Battle
                     hive = GameMain.data.spaceSector.dfHivesByAstro[byAstroIndex];
                     count--;
                 }
+                oriLevel = -1; // 代表这个巢穴是虚空生成的
+            }
+            else
+            {
+                if (hive.isAlive)
+                    oriLevel = hive.evolve.level;
+                else
+                    oriLevel = -1;
             }
             if (hive != null)
             {
@@ -92,7 +101,6 @@ namespace DSP_Battle
                 }
                 if (!hive.realized)
                     hive.Realize();
-                oriLevel = hive.evolve.level;
             }
             else
             {
@@ -343,6 +351,30 @@ namespace DSP_Battle
                     end = len;
                 for (int i = begin; i < end; i++)
                 {
+                    if (Configs.developerMode)
+                    {
+                        ref GrowthPattern_DFSpace.Builder ptr = ref hive.pbuilders[i];
+                        int protoId = ptr.protoId;
+                        EnemyProto enemyProto = LDB.enemies.Select(protoId);
+                        if (enemyProto != null)
+                        {
+                            PrefabDesc prefabDesc = SpaceSector.PrefabDescByModelIndex[(int)enemyProto.ModelIndex];
+                            if (prefabDesc.isDFRelay)
+                            {
+                                DspBattlePlugin.logger.LogInfo($"index {i} is relay.");
+                            }
+                            else if (prefabDesc.isDFSpaceCore)
+                            {
+                                DspBattlePlugin.logger.LogInfo($"index {i} is core");
+                            }
+                        }
+                        else
+                        {
+                            DspBattlePlugin.logger.LogInfo($"index {i} proto is null");
+                        }
+                    }
+                    if (i < pIndexMin && oriLevel >= 0) // 原本就有的巢穴，会在自毁时，跳过核心（核心保留）
+                        continue;
                     int piid = hive.pbuilders[i].instId;
                     if(piid > 0)
                         KillHiveStrcuture(piid);
@@ -386,7 +418,7 @@ namespace DSP_Battle
                 //    }
                 //}
             }
-            if (hive.evolve.level > oriLevel)
+            if (hive.evolve.level > oriLevel && hive.evolve.level > 0)
             {
                 hive.evolve.level--;
                 hive.evolve.expf = 0;
@@ -394,7 +426,7 @@ namespace DSP_Battle
             }
             if (time <= 0)
             {
-                if (hive.evolve.level > oriLevel)
+                if (hive.evolve.level > oriLevel && oriLevel >= 0)
                 {
                     hive.evolve.level = oriLevel;
                 }

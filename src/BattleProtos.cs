@@ -633,7 +633,7 @@ namespace DSP_Battle
             RegisterString("删除遗物确认标题", "Confirm Remove Meta Driver", "确认移除元驱动");
             RegisterString("删除遗物确认警告",
                 "This will remove {0} and return the slot occupied by the meta driver!",
-                "这将移除圣物 {0}，并返还该圣物所占用的圣物槽位！");
+                "这将移除元驱动 {0}，并返还该元驱动所占用的槽位！");
             RegisterString("成功移除！", "Meta driver removed", "成功移除元驱动");
             RegisterString("已移除遗物描述", "You've removed meta driver ", "你已移除");
             RegisterString("未能移除！", "No mate drive can be removed", "没有可移除的元驱动");
