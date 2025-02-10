@@ -367,6 +367,10 @@ namespace DSP_Battle
                             {
                                 DspBattlePlugin.logger.LogInfo($"index {i} is core");
                             }
+                            else if(prefabDesc.isDFSpaceGammaReceiver)
+                            {
+
+                            }
                         }
                         else
                         {

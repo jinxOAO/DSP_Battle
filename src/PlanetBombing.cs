@@ -35,8 +35,8 @@ namespace DSP_Battle
         public static int fireWorkCountDown;
         public static bool haveGotNewYearGift;
 
-        public static float minMechaEnergyCapCoeff = 0.005f; // 初始，每秒消耗机甲最大能量的百分比
-        public static float growMechaEnergyCapCoeff = 0.025f; // 成长到最大时，每秒（除了初始之外）额外消耗机甲最大能量的百分比。最终最大值是此值+minMechaEnergyCapCoeff
+        public static float minMechaEnergyCapCoeff = 0.004f; // 初始，每秒消耗机甲最大能量的百分比
+        public static float growMechaEnergyCapCoeff = 0.020f; // 成长到最大时，每秒（除了初始之外）额外消耗机甲最大能量的百分比。最终最大值是此值+minMechaEnergyCapCoeff
         public static int energyCapCoeffGrowTime = 3600; // 需要多久，消耗机甲最大能量的百分比值能成长到最大值
 
         public static int guideBasicEnergyComsumption = 50000; // 初始太阳轰炸每帧耗能
@@ -157,8 +157,8 @@ namespace DSP_Battle
                     GuideBomb(true, 3, range);
                 }
                 long energyConsumption = 0;
-                int timeTillMax1 = guideBombingTime > 3600 ? guideBombingTime : 3600; 
-                float maxEnergyCapCoefficient = (0.01f + (0.04f * timeTillMax1/ 3600)) / 60f; // 每秒消耗1%最大能量，逐渐增加直至1分钟时每秒消耗5%最大能量
+                int timeTillMax1 = guideBombingTime > energyCapCoeffGrowTime ? guideBombingTime : energyCapCoeffGrowTime; 
+                float maxEnergyCapCoefficient = (0.01f + (0.04f * timeTillMax1/ energyCapCoeffGrowTime)) / 60f; // 每秒消耗1%最大能量，逐渐增加直至1分钟时每秒消耗5%最大能量
                 energyConsumption += (long)(maxEnergyCapCoefficient * GameMain.mainPlayer.mecha.coreEnergyCap);
                 // 然后消耗随时间增加的固定能量
                 float tSecond = 1.0f * guideBombingTime / 60;
@@ -166,10 +166,11 @@ namespace DSP_Battle
 
                 GameMain.mainPlayer.mecha.coreEnergy -= energyConsumption;
                 GameMain.mainPlayer.mecha.MarkEnergyChange(22, -energyConsumption);
-                if(GameMain.mainPlayer.mecha.coreEnergy <= 0)
+                if(GameMain.mainPlayer.mecha.coreEnergy <= GameMain.mainPlayer.mecha.coreEnergyCap * 0.1) // 如果少于10%能量，则停止
                 {
-                    GameMain.mainPlayer.mecha.coreEnergy = 0;
                     StopGuideBombing();
+                    if (GameMain.mainPlayer.mecha.coreEnergy < 0)
+                        GameMain.mainPlayer.mecha.coreEnergy = 0;
                 }
             }
             if (fireWorkCountDown > 0 && fireWorkCountDown <= 600)

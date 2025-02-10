@@ -1156,7 +1156,7 @@ namespace DSP_Battle
 
 
             RegisterString("引导太阳轰炸标题", "Guide Solar Bombardment", "引导太阳轰炸");
-            RegisterString("引导太阳轰炸描述", "Icarus consumes core energy to stimulate and guide the energy of stars, and uses itself as a beacon to bombard the surrounding surface.\nThe energy consumption that maintains stellar energy guidance will rapidly increase over time.\nClick again to stop the solar bombardment.\n<color=#c2853d>[cooling down 2:00]</color>", "伊卡洛斯消耗自身的能量来引导恒星级能量，并以自身作为信标，向周围的地表进行太阳轰炸。\n若持续开启，维持恒星能量引导的机甲耗能速度会迅速增长。\n再次点击以停止太阳轰炸。\n<color=#c2853d>[冷却时间2:00]</color>");
+            RegisterString("引导太阳轰炸描述", "Icarus consumes core energy to stimulate and guide the energy of stars, and uses itself as a beacon to bombard the surrounding surface.\nThe energy consumption that maintains stellar energy guidance will rapidly increase over time. When the mecha energy is below 10%, it will no longer be able to maintain the solar bombardment.\nClick again to stop the solar bombardment.\n<color=#c2853d>[cooling down 2:00]</color>", "伊卡洛斯消耗自身的能量来引导恒星级能量，并以自身作为信标，向周围的地表进行太阳轰炸。\n若持续开启，维持恒星能量引导的机甲耗能速度会迅速增长。当机甲能量低于10%时将无法继续引导。\n再次点击可以提前停止太阳轰炸。\n<color=#c2853d>[冷却时间2:00]</color>");
             RegisterString("呼叫行星清洗标题", "Call For Planetary Purge", "呼叫行星清洗");
             RegisterString("呼叫行星清洗描述", "Pay <color=#c2853d>1 authorization point</color> to request an orbital purge of the current planetary surface and low altitude from the COSMO Technology Ethics Committee.\n<color=#c2853d>[cooldown time 0:45]</color>", "支付<color=#c2853d>1授权点</color>，向COSMO技术伦理委员会请求一次针对当前行星地表和低空的轨道清洗。\n<color=#c2853d>[冷却时间0:45]</color>");
             RegisterString("授权点不足警告", "Insufficient authorization points!", "授权点不足！");

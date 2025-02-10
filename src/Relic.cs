@@ -3325,7 +3325,7 @@ namespace DSP_Battle
                 else if (energy > 16666667) // 1G
                     timeStep = 10;
                 else
-                    timeStep = 2;
+                    timeStep = 60;// 2;
             }
             if (Relic.HaveRelic(4, 0) && time % timeStep == 1)
             {
