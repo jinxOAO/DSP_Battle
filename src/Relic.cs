@@ -3435,6 +3435,82 @@ namespace DSP_Battle
                 Relic.basicMatrixCost = Relic.defaultBasicMatrixCost;
         }
 
+        /// <summary>
+        /// relic 0-6 打开炮塔面板自动放入首个弹药
+        /// </summary>
+        /// <param name="__instance"></param>
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(UITurretWindow), "OnTurretIdChange")]
+        public static void PutOneAmmoOnTurrentWindowOpen(ref UITurretWindow __instance)
+        {
+            if (!Relic.HaveRelic(0, 6))
+            { 
+                return; 
+            }
+
+            if (__instance.turretId == 0 || __instance.factory == null || __instance.player == null)
+            {
+                return;
+            }
+            ref TurretComponent ptr = ref __instance.defenseSystem.turrets.buffer[__instance.turretId];
+            if (ptr.id != __instance.turretId)
+            {
+                return;
+            }
+            if(ptr.itemId == 0 || ptr.itemCount == 0)
+            {
+                //TurretComponent[] buffer = __instance.defenseSystem.turrets.buffer;
+                int[] array = ItemProto.turretNeeds[(int)ptr.ammoType];
+                if (array == null)
+                    return;
+                if (__instance.player.inhandItemId > 0 && __instance.player.inhandItemCount > 0)
+                {
+                    for (int j = 0; j < array.Length; j++)
+                    {
+                        if (array[j] == __instance.player.inhandItemId)
+                        {
+                            int handCount = __instance.player.inhandItemCount;
+                            int handInc = __instance.player.inhandItemInc;
+                            int inc = __instance.split_inc(ref handCount, ref handInc, 1);
+
+                            __instance.player.AddHandItemCount_Unsafe(-1);
+                            __instance.player.SetHandItemInc_Unsafe(__instance.player.inhandItemInc - inc);
+                            ptr.itemId = (short)array[j];
+                            ptr.itemCount = 1;
+                            ptr.itemInc = (short)inc;
+
+                            if (__instance.player.inhandItemId > 0 && __instance.player.inhandItemCount == 0)
+                            {
+                                __instance.player.SetHandItems(0, 0, 0);
+                            }
+                            ptr.SetNewItem(ptr.itemId, ptr.itemCount, ptr.itemInc);
+                            return;
+                        }
+                    }
+                }
+                // 手里没有东西
+                StorageComponent playerPackage = __instance.player.package;
+                for (int i = 0; i < playerPackage.size; i++)
+                {
+                    for (int j = 0; j < array.Length; j++)
+                    {
+                        if (array[j] == playerPackage.grids[i].itemId && playerPackage.grids[i].count > 0)
+                        {
+                            int oriCount = playerPackage.grids[i].count;
+                            int oriInc = playerPackage.grids[i].inc;
+                            int inc = __instance.split_inc(ref oriCount, ref oriInc, 1);
+                            playerPackage.grids[i].count--;
+                            playerPackage.grids[i].inc -= inc;
+                            ptr.itemId = (short)array[j];
+                            ptr.itemCount = 1;
+                            ptr.itemInc = (short)inc;
+                            ptr.SetNewItem(ptr.itemId, ptr.itemCount, ptr.itemInc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
 
         // 原始relic 0-5 2-16 3-12 虚空荆棘（行星护盾部分）反弹伤害，各种护盾伤害减免和规避的逻辑，因为轰炸非护盾部位也会错误地反伤/减伤（原因是没有判断atfRayId，它决定交火点是否与护盾相交，而atfRayId是在DeterminePlanetATFieldRaytestInStar之后的其他方法进行设置的，没办法从这里获得），已被废弃
         //[HarmonyPostfix]

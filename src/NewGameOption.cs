@@ -1,4 +1,5 @@
 ﻿using BepInEx;
+using DSP_Battle.src.Compat;
 using HarmonyLib;
 using rail;
 using System.Linq;
@@ -24,6 +25,7 @@ namespace DSP_Battle
         public static float propertyObjX = 70;
         public static float propertyObjY0 = -325;
         public static float propertyObjY1 = -361;
+        public static float propertyObjY_UGT = -411;
         public static float seedKeyObjX = 0;
         public static float seedKeyObjY0 = -351;
         public static float seedKeyObjY1 = -387;
@@ -36,7 +38,12 @@ namespace DSP_Battle
         public static void UIGalaxySelect_OnOpen(ref UIGalaxySelect __instance)
         {
             fastStart = false;
-
+            if (CompatManager.UniverseGenTweak)
+            {
+                propertyObjY1 = propertyObjY_UGT;
+                propertyObjY0 = propertyObjY_UGT;
+                seedKeyObjY0 = seedKeyObjY1;
+            }
 
             GameObject oriSettingObj = GameObject.Find("UI Root/Overlay Canvas/Galaxy Select/setting-group/sandbox-mode");
 
@@ -51,6 +58,8 @@ namespace DSP_Battle
                 fastStartObj.name = "fast-start-mode";
                 fastStartObj.transform.SetParent(GameObject.Find("UI Root/Overlay Canvas/Galaxy Select/setting-group/").transform, false);
                 fastStartObj.transform.localPosition = new Vector3(0, -244, 0);
+                if(CompatManager.UniverseGenTweak)
+                    fastStartObj.transform.localPosition = new Vector3(400, -244, 0);
                 fastStartObj.GetComponent<Text>().text = "快速开局".Translate();
                 fastStartObj.GetComponentInChildren<UIButton>().tips.tipTitle = "快速开局".Translate();
                 fastStartObj.GetComponentInChildren<UIButton>().tips.tipText = "快速开局提示".Translate();
@@ -69,6 +78,13 @@ namespace DSP_Battle
                     oriDFToggleObj.transform.localPosition = new Vector3(0, -280, 0);
                     oriPropertyMultiplierObj.transform.localPosition = new Vector3(70, -325, 0);
                     oriSeedKeyObj.transform.localPosition = new Vector3(0, -351, 0);
+
+                    if (CompatManager.UniverseGenTweak)
+                    {
+                        oriDFToggleObj.transform.localPosition = new Vector3(400, -280, 0);
+
+                        oriSeedKeyObj.transform.localPosition = new Vector3(0, -351, 0);
+                    }
                 }
             }
             if (Configs.enableVoidInvasionUpdate)
@@ -85,6 +101,8 @@ namespace DSP_Battle
                     voidInvasionToggleObj.transform.Find("CheckBox").gameObject.SetActive(false);
                     voidInvasionToggleObj.transform.localScale = Vector3.one;
                     voidInvasionToggleObj.transform.localPosition = new Vector3(0, -316, 0);
+                    if (CompatManager.UniverseGenTweak)
+                        voidInvasionToggleObj.transform.localPosition = new Vector3(400, -316, 0);
 
                     GameObject VICheckBoxObj = GameObject.Instantiate(oriToggleWithIcon, voidInvasionToggleObj.transform);
                     VICheckBoxObj.transform.localScale = Vector3.one;
@@ -141,6 +159,9 @@ namespace DSP_Battle
                     if (voidInvasionToggleObj.transform.localPosition.y != -316)
                     {
                         voidInvasionToggleObj.transform.localPosition = new Vector3(0, -316, 0);
+                        if (CompatManager.UniverseGenTweak)
+                            voidInvasionToggleObj.transform.localPosition = new Vector3(400, -316, 0);
+
                     }
                 }
                 else

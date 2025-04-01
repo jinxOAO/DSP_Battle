@@ -280,5 +280,13 @@ namespace DSP_Battle
                 //_wreckagePath = proto._wreckagePath,
                 //_ruinOriginModelIndex = proto._ruinOriginModelIndex,
             };
+
+        public static int UIActualHeight
+        {
+            get
+            {
+                return DSPGame.globalOption.uiLayoutHeight > 0?DSPGame.globalOption.uiLayoutHeight: UICanvasScalerHandler.GetSuggestUILayoutHeight(DSPGame.globalOption.resolution.height);
+            }
+        }
     }
 }

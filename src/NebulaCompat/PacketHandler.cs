@@ -106,35 +106,35 @@ namespace DSP_Battle.src.NebulaCompat
                     if (isHost)
                         Synchronizer.BroadcastRankFull();
                 }
-                else if (type == EDataType.CallOnAssaultInited)
-                {
-                    if (isHost)
-                    {
-                        Synchronizer.BroadcastSpaceSectorAndAssaultData();
-                    }
-                }
-                else if (type == EDataType.CallOnAssaultStateSwitch)
-                {
-                    if (isHost)
-                    {
-                        Synchronizer.BroadcastDSPSpaceSector();
-                    }
-                }
-                else if (type == EDataType.CallOnLaunchAllVoidAssault)
-                {
-                    if (isHost)
-                    {
-                        Synchronizer.BroadcastSpaceSectorAndAssaultData();
-                        Synchronizer.BroadcastHistory_DamageScales();
-                    }
-                }
-                else if (type == EDataType.CallOnAssaultEndSettleStart)
-                {
-                    if (isHost)
-                    {
-                        Synchronizer.BroadcastSpaceSectorAndAssaultData();
-                    }
-                }
+                //else if (type == EDataType.CallOnAssaultInited)
+                //{
+                //    if (isHost)
+                //    {
+                //        Synchronizer.BroadcastSpaceSectorAndAssaultData();
+                //    }
+                //}
+                //else if (type == EDataType.CallOnAssaultStateSwitch)
+                //{
+                //    if (isHost)
+                //    {
+                //        Synchronizer.BroadcastDSPSpaceSector();
+                //    }
+                //}
+                //else if (type == EDataType.CallOnLaunchAllVoidAssault)
+                //{
+                //    if (isHost)
+                //    {
+                //        Synchronizer.BroadcastSpaceSectorAndAssaultData();
+                //        Synchronizer.BroadcastHistory_DamageScales();
+                //    }
+                //}
+                //else if (type == EDataType.CallOnAssaultEndSettleStart)
+                //{
+                //    if (isHost)
+                //    {
+                //        Synchronizer.BroadcastSpaceSectorAndAssaultData();
+                //    }
+                //}
             }
             return true;
         }
@@ -241,32 +241,32 @@ namespace DSP_Battle.src.NebulaCompat
             {
                 GameMain.history.constructionDroneSpeed = packet.valueFloat;
             }
-            else if (type == EDataType.SpaceSectorAndAssaultData)
-            {
-                IReaderProvider p = NebulaModAPI.GetBinaryReader(packet.dataBinary);
-                GameMain.spaceSector.Init(GameMain.data);
-                GameMain.spaceSector.Import(p.BinaryReader);
-                AssaultController.Import(p.BinaryReader);
-            }
-            else if (type == EDataType.SpaceSectorAndAssaultDataThenSettle)
-            {
-                IReaderProvider p = NebulaModAPI.GetBinaryReader(packet.dataBinary);
-                GameMain.spaceSector.Init(GameMain.data);
-                GameMain.spaceSector.Import(p.BinaryReader);
-                AssaultController.Import(p.BinaryReader);
-                AssaultController.OnAssaultEnd();
-            }
-            else if (type == EDataType.SpaceSector)
-            {
-                IReaderProvider p = NebulaModAPI.GetBinaryReader(packet.dataBinary);
-                GameMain.spaceSector.Init(GameMain.data);
-                GameMain.spaceSector.Import(p.BinaryReader);
-            }
-            else if (type == EDataType.AssaultData)
-            {
-                IReaderProvider p = NebulaModAPI.GetBinaryReader(packet.dataBinary);
-                AssaultController.Import(p.BinaryReader);
-            }
+            //else if (type == EDataType.SpaceSectorAndAssaultData)
+            //{
+            //    IReaderProvider p = NebulaModAPI.GetBinaryReader(packet.dataBinary);
+            //    GameMain.spaceSector.Init(GameMain.data);
+            //    GameMain.spaceSector.Import(p.BinaryReader);
+            //    AssaultController.Import(p.BinaryReader);
+            //}
+            //else if (type == EDataType.SpaceSectorAndAssaultDataThenSettle)
+            //{
+            //    IReaderProvider p = NebulaModAPI.GetBinaryReader(packet.dataBinary);
+            //    GameMain.spaceSector.Init(GameMain.data);
+            //    GameMain.spaceSector.Import(p.BinaryReader);
+            //    AssaultController.Import(p.BinaryReader);
+            //    AssaultController.OnAssaultEnd();
+            //}
+            //else if (type == EDataType.SpaceSector)
+            //{
+            //    IReaderProvider p = NebulaModAPI.GetBinaryReader(packet.dataBinary);
+            //    GameMain.spaceSector.Init(GameMain.data);
+            //    GameMain.spaceSector.Import(p.BinaryReader);
+            //}
+            //else if (type == EDataType.AssaultData)
+            //{
+            //    IReaderProvider p = NebulaModAPI.GetBinaryReader(packet.dataBinary);
+            //    AssaultController.Import(p.BinaryReader);
+            //}
         }
     }
 }

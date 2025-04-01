@@ -125,8 +125,8 @@ namespace DSP_Battle
             closingCountDown = -1;
             openingCountDown = -1;
             selectedRelicInUI = -1;
-            resolutionX = DSPGame.globalOption.resolution.width * DSPGame.globalOption.uiLayoutHeight / DSPGame.globalOption.resolution.height;
-            resolutionY = DSPGame.globalOption.uiLayoutHeight;
+            resolutionX = DSPGame.globalOption.resolution.width * Utils.UIActualHeight / DSPGame.globalOption.resolution.height;
+            resolutionY = Utils.UIActualHeight;
             InitRelicSelectionWindowUI();
             InitRelicSlotsWindowUI();
             relicSelectionWindowObj.SetActive(false);

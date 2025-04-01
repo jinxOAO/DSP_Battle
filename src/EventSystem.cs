@@ -16,6 +16,7 @@ namespace DSP_Battle
         public static List<double> maxProbabilityBy10Minutes; // 刚获取完元驱动，一定时间内的击杀获取概率上限
         public static List<double> probabilityDecreaseByRelicCount = new List<double> { 1, 1, 1, 0.9, 0.8, 0.75, 0.6, 0.5, 0.5, 0.5, 0.4 }; // 已经拥有x个元驱动之后，开启新的event的概率系数降低
         public static double probDecreaseByKill = 0.999; // 每次击杀有概率获取，但为了让曲线不被暴涨的击杀速度迅速拉高，每次击杀还会降低概率
+        public static int r46DebuffMinutes = 10; // 符文之书负面效果，解译时间增加
 
         // 以下需要存档
         public static EventRecorder recorder;
@@ -221,7 +222,7 @@ namespace DSP_Battle
                     recorder.decodeTimeSpend = 0;
                     if (Relic.HaveRelic(4, 6) && (code == 24 || code == 25)) // relic 4-6 负面效果 解译时间增加
                     {
-                        recorder.decodeTimeNeed = amount + 3600 * 15;
+                        recorder.decodeTimeNeed = amount + 3600 * r46DebuffMinutes;
                     }
                 }
                 else if (code > 10000 && code < 20000)

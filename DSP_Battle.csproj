@@ -138,6 +138,7 @@
     <Compile Include="src\AssaultHive.cs" />
     <Compile Include="src\BattleBGMController.cs" />
     <Compile Include="src\BattleProtos.cs" />
+    <Compile Include="src\Compat\CompatManager.cs" />
     <Compile Include="src\DevConsole.cs" />
     <Compile Include="src\DFGEliteUnits.cs" />
     <Compile Include="src\Droplet.cs" />
@@ -184,8 +185,6 @@
     <None Include="packages.config" />
     <None Include="README.md" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="src\Compat\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

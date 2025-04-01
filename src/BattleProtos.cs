@@ -912,7 +912,7 @@ namespace DSP_Battle
             RegisterString("relicTipText4-3", "Comprehensively reduce the production speedup effect of proliferators", "全面降低增产剂的加速效果");
             RegisterString("relicTipText4-4", "The amount of dark fog matrix drop is halved, and you won't obtain any dark fog matrix when you abort interpreting the decoding track\n(Hash gaining can be enhanced by the research speed technology)", "黑雾矩阵掉落减半，放弃解译元驱动的解码轨时不会获得黑雾矩阵\n(Hash点数获取量受研究速度科技加成)");
             RegisterString("relicTipText4-5", "You will get 90% less merit points by killing ground dark fog units", "击杀地面黑雾单位获得的功勋点数-90%");
-            RegisterString("relicTipText4-6", "The required time to interpret a meta driver +15min\nCannot record meta drivers that can be interacted with by clicking", "解译元驱动的所需时间增加15分钟\n无法记载可点击交互的元驱动");
+            RegisterString("relicTipText4-6", "The required time to interpret a meta driver +10min\nCannot record meta drivers that can be interacted with by clicking", "解译元驱动的所需时间增加10分钟\n无法记载可点击交互的元驱动");
             RegisterString("relicTipText4-7", "You can delay 20 minutes at most for each void invasion. The COSMO Technology Ethics Committee will dissatisfied with your behavior of taking the advantage of void power. The Void invasion wave which you used this meta driver's active effect can only earn you 2 authorization point rewards at most", "每次虚空入侵最多被延缓20分钟。COSMO技术伦理委员会不满你利用虚空力量的行为，使用过此元驱动主动效果的那次虚空入侵在结束时最多只能收到2点授权点奖励");
 
             RegisterString("relicTipTitle0-5", "Additional damage", "额外伤害");
@@ -924,6 +924,7 @@ namespace DSP_Battle
             RegisterString("relicTipTitle3-16", "Additional damage", "额外伤害");
 
             RegisterString("relicTipText0-5", "The type of additional damage is void damage.", "该额外伤害的类型为虚空伤害。");
+            RegisterString("relicTipText0-6", "After obtaining this meta driver, clicking on any turret will automatically put ONE legal ammo set in hand or found at the front of the backpack.", "获取此元驱动后，点击炮台时会自动放入1个手持或背包中找到的最靠前的合法弹药。");
             RegisterString("relicTipText0-7", "The type of additional damage is energy damage. \nIf the megastructure is star cannon, then the additional damage increases 100%.", "该额外伤害的类型为能量伤害。如果巨构为恒星炮，该伤害增加100%");
             RegisterString("relicTipText0-8", "Enemies take 20 EM damage. Take 30 if it is suppresing capsules.", "敌人会受到20电磁伤害，压制胶囊则转而造成30电磁伤害。");
             RegisterString("relicTipText1-3", "The type of additional damage is consistent with the original damage type.", "额外伤害类型与原有的伤害的类型一致。");

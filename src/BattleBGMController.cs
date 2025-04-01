@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
@@ -240,7 +241,8 @@ namespace DSP_Battle
 
 
         [HarmonyPostfix]
-        [HarmonyPatch(typeof(SkillSystem), "DeterminePlanetATFieldRaytestInStar")]
+        [HarmonyPatch(typeof(SkillSystem), "DeterminePlanetATFieldRaytestInStar", new Type[] { typeof(int),typeof(ERayTestSkillType), typeof(int), typeof(VectorLF3), typeof(VectorLF3),typeof(int) }, new ArgumentType[] { ArgumentType.Normal, ArgumentType.Normal,ArgumentType.Normal,ArgumentType.Ref,ArgumentType.Ref,ArgumentType.Normal})]
+        [HarmonyPatch(typeof(SkillSystem), "DeterminePlanetATFieldRaytestInStar", new Type[] { typeof(int), typeof(ERayTestSkillType), typeof(int), typeof(VectorLF3), typeof(Vector3), typeof(int) }, new ArgumentType[] { ArgumentType.Normal, ArgumentType.Normal, ArgumentType.Normal, ArgumentType.Ref, ArgumentType.Ref, ArgumentType.Normal })]
         public static void VerifyPlayerPlanetWillTakeDamage(int __result)
         {
             if (GameMain.data.localPlanet != null)
