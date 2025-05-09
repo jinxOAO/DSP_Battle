@@ -58,7 +58,6 @@ namespace DSP_Battle
             logger = Logger;
             config = Config;
             Configs.Init(Config);
-
             var pluginfolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var resources = new ResourceData(GUID, "DSPBattle", pluginfolder);
             resources.LoadAssetBundle("dspbattletex");

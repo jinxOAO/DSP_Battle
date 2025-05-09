@@ -1123,7 +1123,7 @@ namespace DSP_Battle
                 casterPlayer.type = ETargetType.Player;
                 casterPlayer.astroId = 0;
                 int realDamage = (int)(Relic.BonusDamage(__state, 1) * SkillPoints.voidDamageRate);
-                GameMain.data.spaceSector.skillSystem.DamageObject(realDamage, 1, ref caster, ref casterPlayer);
+                GameMain.data.spaceSector.skillSystem.DamageObject(realDamage, 3, ref caster, ref casterPlayer);
             }
             BattleBGMController.PlayerTakeDamage();
         }
@@ -1142,7 +1142,7 @@ namespace DSP_Battle
                 casterPlayer.type = ETargetType.Player;
                 casterPlayer.astroId = 0;
                 int realDamage = (int)(Relic.BonusDamage(__state, 1) * SkillPoints.voidDamageRate);
-                GameMain.data.spaceSector.skillSystem.DamageObject(realDamage, 1, ref target, ref casterPlayer);
+                GameMain.data.spaceSector.skillSystem.DamageObject(realDamage, 3, ref target, ref casterPlayer);
             }
             BattleBGMController.PlayerTakeDamage();
         }
@@ -1193,7 +1193,7 @@ namespace DSP_Battle
                 if (r0005) // 虚空荆棘
                 {
                     int realDamage = (int)(Relic.BonusDamage(__instance.damage * (1.0 - factor) * voidBuffFactor, 1) * SkillPoints.voidDamageRate);
-                    skillSystem.DamageObject(realDamage, 1, ref __instance.caster, ref __instance.target);
+                    skillSystem.DamageObject(realDamage, 3, ref __instance.caster, ref __instance.target);
                 }
                 factor *= voidBuffFactor;
                 if (factor != 1.0f)
@@ -1259,7 +1259,7 @@ namespace DSP_Battle
                 if (r0005) // 虚空荆棘
                 {
                     int realDamage = (int)(Relic.BonusDamage(__instance.damage * (1.0 - factor) * voidBuffFactor, 1) * SkillPoints.voidDamageRate);
-                    skillSystem.DamageObject(realDamage, 1, ref __instance.caster, ref __instance.target);
+                    skillSystem.DamageObject(realDamage, 3, ref __instance.caster, ref __instance.target);
                 }
                 factor *= voidBuffFactor;
                 if (factor != 1.0f)
@@ -1323,7 +1323,7 @@ namespace DSP_Battle
                 if (r0005) // 虚空荆棘
                 {
                     int realDamage = (int)(Relic.BonusDamage(__instance.damage * (1.0 - factor) * voidBuffFactor, 1) * SkillPoints.voidDamageRate);
-                    skillSystem.DamageObject(realDamage, 1, ref __instance.caster, ref __instance.target);
+                    skillSystem.DamageObject(realDamage, 3, ref __instance.caster, ref __instance.target);
                 }
                 factor *= voidBuffFactor;
                 if (factor != 1.0f)
@@ -1394,7 +1394,7 @@ namespace DSP_Battle
                     emptyCaster.id = 0;
                     emptyCaster.type = ETargetType.None;
                     emptyCaster.astroId = __instance.atfAstroId;
-                    skillSystem.DamageObject(realDamage, 1, ref __instance.caster, ref emptyCaster);
+                    skillSystem.DamageObject(realDamage, 3, ref __instance.caster, ref emptyCaster);
                 }
                 factor *= voidBuffFactor;
                 if (factor != 1.0f)
@@ -1505,9 +1505,9 @@ namespace DSP_Battle
                         target.astroId = e.originAstroId;
                         target.type = ETargetType.Enemy;
                         caster.id = 1;
-                        caster.type = ETargetType.Player;
+                        caster.type = ETargetType.Craft;
                         caster.astroId = 0;
-                        sector.skillSystem.DamageObject(damage, 1, ref target, ref caster);
+                        sector.skillSystem.DamageObject(damage, 4, ref target, ref caster);
                     }
                 }
             }
@@ -1904,7 +1904,7 @@ namespace DSP_Battle
         /// <returns></returns>
         [HarmonyPrefix]
         [HarmonyPatch(typeof(SkillSystem), "DamageObject")]
-        public static bool DamageObjectPrePatch(ref SkillSystem __instance, ref int damage, int slice, ref SkillTarget target, ref SkillTarget caster)
+        public static bool DamageObjectPrePatch(ref SkillSystem __instance, ref int damage, ref int slice, ref SkillTarget target, ref SkillTarget caster)
         {
             //if(target.type == ETargetType.Player)
             //{
@@ -1970,6 +1970,8 @@ namespace DSP_Battle
                     if (Relic.Verify(critical)) // relic 2-12
                     {
                         factor += 1f;
+                        if (slice == 1) // 暴击时设定一个50%护甲穿透，同时还可以作为暴击的标志
+                            slice = 2;
                     }
                     factor *= SkillPoints.globalDamageRate;
                     antiArmor += SkillPoints.armorPenetration / slice;
@@ -2094,7 +2096,7 @@ namespace DSP_Battle
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(SkillSystem), "DamageGroundObjectByLocalCaster")]
-        public static bool DamageGroundObjectByLocalCasterPrePatch(ref SkillSystem __instance, PlanetFactory factory, ref int damage, int slice, ref SkillTargetLocal target, ref SkillTargetLocal caster)
+        public static bool DamageGroundObjectByLocalCasterPrePatch(ref SkillSystem __instance, PlanetFactory factory, ref int damage, ref int slice, ref SkillTargetLocal target, ref SkillTargetLocal caster)
         {
             if(target.type == ETargetType.Player)
             {
@@ -2142,6 +2144,8 @@ namespace DSP_Battle
                 if (Relic.Verify(critical)) // relic 2-12
                 {
                     factor += 1f;
+                    if (slice == 1) // 暴击时设定一个50%护甲穿透，同时还可以作为暴击的标志
+                        slice = 2;
                 }
                 factor *= SkillPoints.globalDamageRate;
                 damage = (int)(damage * (1 - 0.05f * cursedRelicCount));
@@ -2172,7 +2176,7 @@ namespace DSP_Battle
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(SkillSystem), "DamageGroundObjectByRemoteCaster")]
-        public static bool DamageGroundObjectByRemoteCastPrePatch(ref SkillSystem __instance, PlanetFactory factory, ref int damage, int slice, ref SkillTargetLocal target, ref SkillTarget caster)
+        public static bool DamageGroundObjectByRemoteCastPrePatch(ref SkillSystem __instance, PlanetFactory factory, ref int damage, ref int slice, ref SkillTargetLocal target, ref SkillTarget caster)
         {
             if (target.type == ETargetType.Player)
             {
@@ -2220,6 +2224,8 @@ namespace DSP_Battle
                 if (Relic.Verify(critical)) // relic 2-12
                 {
                     factor += 1f;
+                    if (slice == 1) // 暴击时设定一个50%护甲穿透，同时还可以作为暴击的标志
+                        slice = 2;
                 }
                 factor *= SkillPoints.globalDamageRate;
                 damage = (int)(damage * (1 - 0.05f * cursedRelicCount));
@@ -3294,8 +3300,9 @@ namespace DSP_Battle
                 {
                     if (i < GameMain.data.dysonSpheres.Length && GameMain.data.dysonSpheres[i] != null)
                     {
+                        double ratio = 1;
                         DysonSphere sphere = GameMain.data.dysonSpheres[i];
-                        double num5 = (double)sphere.starData.dysonLumino;
+                        double num5 = (double)sphere.starData.dysonLumino * ratio;
                         sphere.energyGenPerSail = (long)(400.0 * num5);
                         sphere.energyGenPerNode = (long)(1500.0 * num5);
                         sphere.energyGenPerFrame = (long)(1500 * num5);
