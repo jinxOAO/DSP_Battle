@@ -26,6 +26,7 @@ namespace DSP_Battle
             AddTutorialProtos();
             AddNormalProtos();
             AddEnemyProtoAndModels();
+            AddSingalProtos();
         }
 
         public static void AddNormalProtos()
@@ -968,7 +969,7 @@ namespace DSP_Battle
             RegisterString("深空来敌介绍5标题", "Meta-Drive", "元驱动");
             RegisterString("深空来敌介绍6标题", "Axiomatic Meta-Drive", "公理级元驱动");
 
-            ProtoRegistry.RegisterItem(8035, "水滴伤害增加", "", "Assets/DSPBattle/r0-10", 9999, 100, EItemType.Material);
+            ProtoRegistry.RegisterItem(9514, "水滴伤害增加", "", "Assets/DSPBattle/r0-10", 9999, 100, EItemType.Material);
 
 
             RegisterString("事件链窗口标题", "Meta Driver Event Chain", "元驱动事件链");
@@ -1226,6 +1227,11 @@ namespace DSP_Battle
             tp6.PostText = "";
             tp6.ID = 44;
             LDBTool.PreAddProto(tp6);
+        }
+
+        public static void AddSingalProtos()
+        {
+            //ProtoRegistry.RegisterSignal(701, "Assets/DSPBattle/r0-1", 3501, "r0-1", "遗物描述0-1");
         }
 
         public static void RewriteTutorialProtosWhenLoad()

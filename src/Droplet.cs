@@ -236,18 +236,21 @@ namespace DSP_Battle
             if (bonusDamage >= bonusDamageLimit)
             {
                 int inc;
-                if (GameMain.mainPlayer.package.TakeItem(9511, 1, out inc) > 0) //拿到了
+                if (bonusDamageLimit < 2000000000)
                 {
-                    Interlocked.Add(ref bonusDamageLimit, Relic.dropletDamageLimitGrowth);
-                }
-                else if (GameMain.mainPlayer.deliveryPackage != null)
-                {
-                    int itemId = 9511;
-                    int count = 1;
-                    GameMain.mainPlayer.deliveryPackage.TakeItems(ref itemId, ref count, out inc); // 从物流背包拿
-                    if(itemId == 9511 && count >= 1)
+                    if (GameMain.mainPlayer.package.TakeItem(9511, 1, out inc) > 0) //拿到了
                     {
                         Interlocked.Add(ref bonusDamageLimit, Relic.dropletDamageLimitGrowth);
+                    }
+                    else if (GameMain.mainPlayer.deliveryPackage != null)
+                    {
+                        int itemId = 9511;
+                        int count = 1;
+                        GameMain.mainPlayer.deliveryPackage.TakeItems(ref itemId, ref count, out inc); // 从物流背包拿
+                        if (itemId == 9511 && count >= 1)
+                        {
+                            Interlocked.Add(ref bonusDamageLimit, Relic.dropletDamageLimitGrowth);
+                        }
                     }
                 }
             }
@@ -276,7 +279,7 @@ namespace DSP_Battle
                 try
                 {
                     int width = (int)Math.Log10(bonusDamage / 100) * 12 + 200;
-                    Utils.UIItemUp(8035, Relic.dropletDamageGrowth / 100, width, bonusDamage / 100);
+                    Utils.UIItemUp(9514, Relic.dropletDamageGrowth / 100, width, bonusDamage / 100);
                 }
                 catch (Exception)
                 { }

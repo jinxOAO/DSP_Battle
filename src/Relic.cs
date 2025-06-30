@@ -448,7 +448,7 @@ namespace DSP_Battle
             {
                 bonus = bonus * damage;
             }
-            return (int)bonus;
+            return bonus < 2000000000 ? (int)bonus : 2000000000;
         }
 
         public static int BonusedDamage(double damage, double bonus)
@@ -461,7 +461,8 @@ namespace DSP_Battle
             {
                 bonus = bonus * damage;
             }
-            return (int)(damage + bonus);
+            double result = damage + bonus;
+            return result < 2000000000 ? (int)result : 2000000000;
         }
 
         // 有限制地建造某一(starIndex为-1时则是随机的)巨构的固定数量(amount)的进度，不因层数、节点数多少而改变一次函数建造的进度量
