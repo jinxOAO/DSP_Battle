@@ -284,7 +284,7 @@ namespace DSP_Battle
         }
 
         [HarmonyPostfix]
-        [HarmonyPatch(typeof(GameData), "GameTick")]
+        [HarmonyPatch(typeof(ThreadManager), "ProcessFrame")]
         public static void OnUpdate()
         {
             MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.MainLogic);

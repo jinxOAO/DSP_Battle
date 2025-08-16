@@ -187,8 +187,8 @@ namespace DSP_Battle
         }
 
         [HarmonyPostfix]
-        [HarmonyPatch(typeof(GameData), "GameTick")]
-        public static void GameData_GameTick(long time)
+        [HarmonyPatch(typeof(ThreadManager), "ProcessFrame")]
+        public static void GameData_GameTick(long frameCounter)
         {
             return;
 
@@ -196,7 +196,7 @@ namespace DSP_Battle
                 RefreshDataCountDown -= 1;
             int starCount = GameMain.galaxy.starCount;
             int starsPerFrame = Math.Max(1, starCount / 60);
-            int f = (int)(time % 60);
+            int f = (int)(frameCounter % 60);
             int end = Math.Min((f + 1) * starsPerFrame, starCount);
             if (f == 59) end = starCount;
             for (int i = f * starsPerFrame; i < end; i++)
@@ -209,11 +209,11 @@ namespace DSP_Battle
                 }
             }
             RecalcRocketNeed(f * starsPerFrame, end);
-            if (time % 60 == 18)
+            if (frameCounter % 60 == 18)
                 RefreshEnemyPool();
 
             if (UIStarFortress.curDysonSphere == null) return;
-            if (time % 60 == 46)
+            if (frameCounter % 60 == 46)
             {
                 UIStarFortress.RefreshAll();
             }
@@ -411,7 +411,7 @@ namespace DSP_Battle
             ptr.target.astroId = enemy.originAstroId;
             ptr.caster.type = ETargetType.None;
             ptr.caster.id = 0;
-            ref CombatStat combatStat = ref skillSystem.GetCombatStat(ptr.target);
+            ref CombatStat combatStat = ref GetEnemyCombatStat(ref ptr.target);
             ptr.damageIncoming = skillSystem.CalculateDamageIncoming(ref ptr.target, ptr.damage, 1);
             combatStat.hpIncoming -= ptr.damageIncoming;
             ptr.targetCombatStatId = combatStat.id;
@@ -474,6 +474,104 @@ namespace DSP_Battle
             ptr.mask = ETargetTypeMask.Enemy;
         }
 
+        public static ref CombatStat GetEnemyCombatStat(ref SkillTarget obj)
+        {
+            SkillSystem skillSystem = GameMain.spaceSector.skillSystem;
+            CombatStat.temp.Reset();
+            if (obj.id == 0)
+            {
+                return ref CombatStat.temp;
+            }
+            if (obj.type == ETargetType.Enemy)
+            {
+                int astroId = obj.astroId;
+                if (astroId > 1000000)
+                {
+                    ref EnemyData ptr = ref skillSystem.sector.enemyPool[obj.id];
+                    if (ptr.isInvincible)
+                    {
+                        return ref CombatStat.temp;
+                    }
+                    object obj2 = skillSystem.combat_stat_rw_lock;
+                    lock (obj2)
+                    {
+                        int combatStatId = ptr.combatStatId;
+                        if (combatStatId > 0)
+                        {
+                            return ref skillSystem.combatStats.buffer[combatStatId];
+                        }
+                        EnemyDFHiveSystem enemyDFHiveSystem = skillSystem.sector.dfHivesByAstro[astroId - 1000000];
+                        int num = 0;
+                        if (enemyDFHiveSystem != null)
+                        {
+                            num = enemyDFHiveSystem.evolve.level;
+                        }
+                        int num2;
+                        using (skillSystem.combatStats.Add(out num2))
+                        {
+                            ref CombatStat ptr2 = ref skillSystem.combatStats.buffer[num2];
+                            ptr2.hpMax = SkillSystem.HpMaxByModelIndex[(int)ptr.modelIndex] + num * SkillSystem.HpUpgradeByModelIndex[(int)ptr.modelIndex];
+                            ptr2.hp = ptr2.hpMax;
+                            ptr2.hpRecover = SkillSystem.HpRecoverByModelIndex[(int)ptr.modelIndex];
+                            ptr2.astroId = (ptr2.originAstroId = astroId);
+                            ptr2.objectType = (int)obj.type;
+                            ptr2.objectId = obj.id;
+                            ptr2.dynamic = (ptr.dynamic ? 1 : 0);
+                            ptr2.localPos = (ptr.dynamic ? ptr.pos : (ptr.pos + new VectorLF3(0f, Mathf.Sign((float)ptr.pos.y) * SkillSystem.BarHeightByModelIndex[(int)ptr.modelIndex], 0f)));
+                            ptr2.size = SkillSystem.BarWidthByModelIndex[(int)ptr.modelIndex];
+                            ptr.combatStatId = ptr2.id;
+                            return ref ptr2;
+                        }
+                    }
+                }
+                if (astroId > 100 && astroId <= 204899 && astroId % 100 > 0)
+                {
+                    PlanetFactory planetFactory = skillSystem.astroFactories[astroId];
+                    ref EnemyData ptr3 = ref planetFactory.enemyPool[obj.id];
+                    if (ptr3.isInvincible)
+                    {
+                        return ref CombatStat.temp;
+                    }
+                    object obj2 = skillSystem.combat_stat_rw_lock;
+                    lock (obj2)
+                    {
+                        int combatStatId2 = ptr3.combatStatId;
+                        if (combatStatId2 > 0)
+                        {
+                            return ref skillSystem.combatStats.buffer[combatStatId2];
+                        }
+                        DFGBaseComponent dfgbaseComponent = (ptr3.owner > 0) ? planetFactory.enemySystem.bases.buffer[(int)ptr3.owner] : null;
+                        if (dfgbaseComponent != null && dfgbaseComponent.id != (int)ptr3.owner)
+                        {
+                            dfgbaseComponent = null;
+                        }
+                        int num3 = 0;
+                        if (dfgbaseComponent != null)
+                        {
+                            num3 = dfgbaseComponent.evolve.level;
+                        }
+                        int num4;
+                        using (skillSystem.combatStats.Add(out num4))
+                        {
+                            ref CombatStat ptr4 = ref skillSystem.combatStats.buffer[num4];
+                            ptr4.hpMax = SkillSystem.HpMaxByModelIndex[(int)ptr3.modelIndex] + num3 * SkillSystem.HpUpgradeByModelIndex[(int)ptr3.modelIndex];
+                            ptr4.hp = ptr4.hpMax;
+                            ptr4.hpRecover = SkillSystem.HpRecoverByModelIndex[(int)ptr3.modelIndex];
+                            ptr4.astroId = (ptr4.originAstroId = planetFactory.planetId);
+                            ptr4.objectType = (int)obj.type;
+                            ptr4.objectId = obj.id;
+                            ptr4.dynamic = (ptr3.dynamic ? 1 : 0);
+                            ptr4.localPos = (ptr3.dynamic ? ptr3.pos : (ptr3.pos + ptr3.pos.normalized * (double)SkillSystem.BarHeightByModelIndex[(int)ptr3.modelIndex]));
+                            ptr4.size = SkillSystem.BarWidthByModelIndex[(int)ptr3.modelIndex];
+                            ptr3.combatStatId = ptr4.id;
+                            return ref ptr4;
+                        }
+                    }
+                }
+                return ref CombatStat.temp;
+            }
+            return ref CombatStat.temp;
+        }
 
         public static void Export(BinaryWriter w)
         {

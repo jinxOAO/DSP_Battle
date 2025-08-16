@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 
 namespace DSP_Battle
@@ -110,7 +111,7 @@ namespace DSP_Battle
 
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(GameData), "GameTick")]
+        [HarmonyPatch(typeof(ThreadManager), "ProcessFrame")]
         public static bool BeforeGameTick()
         {
             if (RendererSphere.dropletSpheres.Count != GameMain.galaxy.starCount) RendererSphere.InitAll();
@@ -120,17 +121,56 @@ namespace DSP_Battle
 
 
         [HarmonyPostfix]
-        [HarmonyPatch(typeof(GameData), "GameTick")]
-        public static void RSphereGameTick(long time)
+        [HarmonyPatch(typeof(ThreadManager), "ProcessFrame")]
+        public static void RSphereGameTick(long frameCounter)
         {
             if (RendererSphere.dropletSpheres.Count != GameMain.galaxy.starCount) RendererSphere.InitAll();
             if (GameMain.localStar != null)
-                dropletSpheres[GameMain.localStar.index].swarm.GameTick(time);
+            {
+                dropletSpheres[GameMain.localStar.index].swarm.GameTick(frameCounter);
+                dropletSpheres[GameMain.localStar.index].swarm.BulletGameTick(frameCounter);
+            }
         }
 
 
         [HarmonyPostfix]
-        [HarmonyPatch(typeof(GameData), "OnPostDraw")]
+        [HarmonyPatch(typeof(GameLogic), "Update")]
+        public static void RSphereRenderBulletPostfix()
+        {
+            DeepProfiler.BeginSample(DPEntry.DysonSwarmBullet, -1, -1L);
+            //StarData starData = null;
+            //switch (DysonSphere.renderPlace)
+            //{
+            //    case ERenderPlace.Universe:
+            //        starData = GameMain.data.localStar;
+            //        break;
+            //    case ERenderPlace.Starmap:
+            //        starData = UIRoot.instance.uiGame.starmap.viewStarSystem;
+            //        break;
+            //    case ERenderPlace.Dysonmap:
+            //        starData = UIRoot.instance.uiGame.dysonEditor.selection.viewStar;
+            //        break;
+            //}
+            //if (starData != null && starData.index < dropletSpheres.Count)
+            //{
+            //    DysonSphere dysonSphere = dropletSpheres[starData.index];
+            //    if (dysonSphere != null)
+            //    {
+            //        DysonSwarm swarm = dysonSphere.swarm;
+            //        if (swarm != null)
+            //        {
+            //            swarm.RendererBullet();
+            //        }
+            //    }
+            //}
+            if (GameMain.localStar != null)
+                dropletSpheres[GameMain.data.localStar.index].swarm.RendererBullet();
+            //Debug.Log("renderbullet");
+            DeepProfiler.EndSample(-1, -2L);
+        }
+
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(GameLogic), "DrawPost")]
         public static void DrawPatch1(GameData __instance)
         {
             if (dropletSpheres.Count <= 0) return;

@@ -82,14 +82,14 @@ namespace DSP_Battle
         }
 
         [HarmonyPostfix]
-        [HarmonyPatch(typeof(GameData), "GameTick")]
-        public static void LogicTick(long time)
+        [HarmonyPatch(typeof(ThreadManager), "ProcessFrame")]
+        public static void LogicTick(long frameCounter)
         {
             MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.MainLogic);
             MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.Assault);
 
             // 一定条件下，开启新入侵
-            if (voidInvasionEnabled && assaultHives.Count == 0 && time % 3600 == 0)
+            if (voidInvasionEnabled && assaultHives.Count == 0 && frameCounter % 3600 == 0)
             {
                 int starIndex = -1;
                 bool haveStarEnergyUsing = false;
@@ -145,7 +145,7 @@ namespace DSP_Battle
                     SpaceSector.PrefabDescByModelIndex[lancerModelIndex].unitMaxMovementAcceleration = oriLancerMaxMovementAcceleration * (modifier[13] * 1.0f / 100f);
                 }
             }
-            PostLogicTick(time);
+            PostLogicTick(frameCounter);
             // SpaceSector.PrefabDescByModelIndex[lancerModelIndex].unitMarchMovementSpeed = oriLancerMarchMovementSpeed * speedRatio;
             MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.Assault);
             MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MainLogic);

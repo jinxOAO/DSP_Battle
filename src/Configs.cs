@@ -9,7 +9,7 @@ namespace DSP_Battle
 {
     public class Configs
     {
-        public const string versionString = "3.4.14";
+        public const string versionString = "3.4.15";
         public static string qq = "694213906 & 141801294";
         public static bool developerMode = false; //发布前务必修改！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
 

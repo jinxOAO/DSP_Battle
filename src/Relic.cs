@@ -80,12 +80,12 @@ namespace DSP_Battle
         public static GameObject respawnTitleText = null;
 
         [HarmonyPostfix]
-        [HarmonyPatch(typeof(GameData), "GameTick")]
-        public static void RelicGameTick(long time)
+        [HarmonyPatch(typeof(ThreadManager), "ProcessFrame")]
+        public static void RelicGameTick(long frameCounter)
         {
-            if (time % 60 == 7)
+            if (frameCounter % 60 == 7)
                 RefreshStarsWithMegaStructure();
-            if (time % 60 == 8)
+            if (frameCounter % 60 == 8)
                 RefreshMinShieldPlanet();
         }
 
@@ -660,23 +660,23 @@ namespace DSP_Battle
         public static int starCannonDamageSlice = 7; // 读档时从MoreMegaStructure中获取
 
         [HarmonyPostfix]
-        [HarmonyPatch(typeof(GameData), "GameTick")]
-        public static void RelicFunctionGameTick(long time)
+        [HarmonyPatch(typeof(ThreadManager), "ProcessFrame")]
+        public static void RelicFunctionGameTick(long frameCounter)
         {
             MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.MainLogic);
             MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.MetaDrive);
-            if (time % 60 == 8)
+            if (frameCounter % 60 == 8)
                 CheckMegaStructureAttack();
             //else if (time % 60 == 9)
             //    AutoChargeShieldByMegaStructure();
-            else if (time % 60 == 10)
+            else if (frameCounter % 60 == 10)
                 CheckPlayerHasaki();
 
             TryRecalcDysonLumin();
             AutoBuildMega();
-            AutoBuildMegaOfMaxLuminStar(time);
-            CheckBansheesVeilCountdown(time);
-            AegisOfTheImmortalCountDown(time);
+            AutoBuildMegaOfMaxLuminStar(frameCounter);
+            CheckBansheesVeilCountdown(frameCounter);
+            AegisOfTheImmortalCountDown(frameCounter);
             MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MainLogic);
             MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MetaDrive);
         }

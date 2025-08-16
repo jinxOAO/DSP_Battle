@@ -29,8 +29,8 @@ namespace DSP_Battle
         }
 
         [HarmonyPostfix]
-        [HarmonyPatch(typeof(GameData), "GameTick")]
-        public static void RankGameTick(ref GameData __instance, long time)
+        [HarmonyPatch(typeof(ThreadManager), "ProcessFrame")]
+        public static void RankGameTick()
         {
             //检查升级，因为AddExp有多线程调用，为了避免问题不在每次AddExp后检查升级，而是每帧检查
             if (exp >= Configs.expToNextRank[rank])

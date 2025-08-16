@@ -227,10 +227,10 @@ namespace DSP_Battle
         }
 
         [HarmonyPostfix]
-        [HarmonyPatch(typeof(GameData), "GameTick")]
-        public static void GameData_GameTick(ref GameData __instance, long time)
+        [HarmonyPatch(typeof(ThreadManager), "ProcessFrame")]
+        public static void GameData_GameTick(long frameCounter)
         {
-            if (time % 5 == 0 && isOverriding)
+            if (frameCounter % 5 == 0 && isOverriding)
                 MuteGameOriBgm();
         }
 
