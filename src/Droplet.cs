@@ -1198,7 +1198,7 @@ namespace DSP_Battle
         {
             if (swarmIndex >= 0 && swarmIndex < GameMain.galaxy.starCount)
             {
-                return RendererSphere.dropletSpheres[swarmIndex]?.swarm;
+                return RendererSphere.vanillaSpheres[swarmIndex]?.swarm; // 此处决定要不要用rendererSphere里面的独立颜色的子弹
             }
             else
             {
