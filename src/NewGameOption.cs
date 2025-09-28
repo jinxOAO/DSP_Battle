@@ -64,8 +64,8 @@ namespace DSP_Battle
                 fastStartObj.GetComponentInChildren<UIButton>().tips.tipTitle = "快速开局".Translate();
                 fastStartObj.GetComponentInChildren<UIButton>().tips.tipText = "快速开局提示".Translate();
                 fastStartObj.GetComponentInChildren<Toggle>().onValueChanged.RemoveAllListeners();
-                fastStartObj.GetComponentInChildren<Toggle>().onValueChanged.AddListener(new UnityEngine.Events.UnityAction<bool>((isOn) => fastStart = isOn));
-                fastStartObj.GetComponentInChildren<Toggle>().isOn = false;
+                fastStartObj.GetComponentInChildren<Toggle>().onValueChanged.AddListener(new UnityEngine.Events.UnityAction<bool>((isOn) => { OnFastStartToggle(isOn); }));
+                fastStartObj.GetComponentInChildren<Toggle>().isOn = DspBattlePlugin.fastStart.Value;
 
                 if (MoreMegaStructure.MoreMegaStructure.GenesisCompatibility)
                 {
@@ -118,11 +118,11 @@ namespace DSP_Battle
                     voidInvasionToggleObj.GetComponentInChildren<UIButton>().tips.tipText = "虚空入侵提示".Translate();
                     voidInvasionToggle = voidInvasionToggleObj.GetComponentInChildren<Toggle>();
                     voidInvasionToggle.onValueChanged.RemoveAllListeners();
-                    voidInvasionToggle.onValueChanged.AddListener(new UnityEngine.Events.UnityAction<bool>((isOn) => voidInvasionEnabledCache = isOn ? 1 : -1));
-                    voidInvasionToggleObj.GetComponentInChildren<Toggle>().isOn = true;
+                    voidInvasionToggle.onValueChanged.AddListener(new UnityEngine.Events.UnityAction<bool>((isOn) => { OnVoidInvasionToggle(isOn); }));
+                    voidInvasionToggleObj.GetComponentInChildren<Toggle>().isOn = DspBattlePlugin.invasionActiveByDefault.Value;
                     voidInvasionUITg = voidInvasionToggleObj.GetComponentInChildren<UIToggle>();
 
-                    DFToggle.onValueChanged.AddListener(new UnityEngine.Events.UnityAction<bool>((isOn) => voidInvasionToggle.isOn = isOn));
+                    DFToggle.onValueChanged.AddListener(new UnityEngine.Events.UnityAction<bool>((isOn) => { OnDFToggle(isOn); }));
                 }
 
                 voidInvasionEnabledCache = voidInvasionToggle.isOn ? 1 : -1;
@@ -179,23 +179,40 @@ namespace DSP_Battle
         {
             fastStart = false;
             voidInvasionEnabledCache = 0; // 读取游戏时阻止cache改变虚空入侵的开关，因为只有1或-1的时候才会更改虚空入侵的开关设定
-        }   
+        }
 
         [HarmonyPostfix]
         [HarmonyPatch(typeof(UIRoot), "OnGameBegin")]
         public static void UIRoot_OnGameBegin()
         {
-            if (!DSPGame.IsMenuDemo && fastStart)
+            if (false)
             {
-                DspBattlePlugin.logger.LogInfo("=======================================> FAST START");
-                Init();
+                if (!DSPGame.IsMenuDemo && fastStart)
+                {
+                    DspBattlePlugin.logger.LogInfo("=======================================> FAST START");
+                    Init();
+                }
+                if (voidInvasionEnabledCache == 1)
+                    AssaultController.voidInvasionEnabled = true;
+                else if (voidInvasionEnabledCache == -1)
+                    AssaultController.voidInvasionEnabled = false;
             }
-            if (voidInvasionEnabledCache == 1)
-                AssaultController.voidInvasionEnabled = true;
-            else if (voidInvasionEnabledCache == -1)
-                AssaultController.voidInvasionEnabled = false;
             UIEscMenuPatch.Init();
         }
+
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(GameData), "GameTick")]
+        public static void GameTickPostfix(long time)
+        {
+            if(time == 2)
+            {
+                if (DspBattlePlugin.fastStart.Value)
+                    Init();
+
+                AssaultController.voidInvasionEnabled = DspBattlePlugin.invasionActiveByDefault.Value;
+            }
+        }
+
 
         private static void Init()
         {
@@ -268,6 +285,25 @@ namespace DSP_Battle
             }
 
             //GameMain.data.mainPlayer.TryAddItemToPackage(1801, 60, 0, false); // 氢燃料棒
+        }
+
+        public static void OnFastStartToggle(bool isOn)
+        {
+            DspBattlePlugin.fastStart.Value = isOn;
+            DspBattlePlugin.fastStart.ConfigFile.Save();
+        }
+
+        public static void OnDFToggle(bool isOn)
+        {
+            voidInvasionToggleObj.GetComponentInChildren<Toggle>().isOn = isOn;
+            DspBattlePlugin.invasionActiveByDefault.Value = isOn;
+            DspBattlePlugin.invasionActiveByDefault.ConfigFile.Save();
+        }
+
+        public static void OnVoidInvasionToggle(bool isOn)
+        {
+            DspBattlePlugin.invasionActiveByDefault.Value = isOn;
+            DspBattlePlugin.invasionActiveByDefault.ConfigFile.Save();
         }
     }
 }

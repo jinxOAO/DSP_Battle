@@ -40,7 +40,7 @@ namespace DSP_Battle
         public int assembleNum { get { return Math.Min(1440, (int)(assaultNum * 1.5) + 1); } } // 一直制造的舰队数量上限
 
         public static int timeDelayedMax = 3600 * 20; // 最大推迟的时间
-        public static int pIndexMin = 2; // 自摧毁时的最小pIndex
+        public static int pIndexMin = 65535; // 自摧毁时的最小pIndex
 
         public int assaultNum
         {
@@ -377,7 +377,7 @@ namespace DSP_Battle
                             DspBattlePlugin.logger.LogInfo($"index {i} proto is null");
                         }
                     }
-                    if (i < pIndexMin && oriLevel >= 0) // 原本就有的巢穴，会在自毁时，跳过核心（核心保留）
+                    if (i < pIndexMin && oriLevel >= 0) // 原本就有的巢穴，会在自毁时，跳过核心（核心保留）或者某些结构
                         continue;
                     int piid = hive.pbuilders[i].instId;
                     if(piid > 0)
