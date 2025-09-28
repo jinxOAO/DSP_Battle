@@ -42,6 +42,8 @@ namespace DSP_Battle
         public static ConfigEntry<float> battleBGMVolume;
         public static ConfigEntry<int> voidInvasionMaxFrequency;
         public static ConfigEntry<bool> newYearFirework;
+        public static ConfigEntry<bool> fastStart;
+        public static ConfigEntry<bool> invasionActiveByDefault;
 
         public static bool isControlDown = false;
         public static bool isShiftDown = false;
@@ -82,6 +84,8 @@ namespace DSP_Battle
             battleBGMVolume = Config.Bind<float>("config", "BattleBGMVolume", 1.0f, "( 0.0 - 2.0 )Control the Battle BGM's volume, will not affect the vanilla game BGM.  控制战斗音乐的音量大小，不会影响游戏默认BGM的音量。最小为0，最大为2.");
             voidInvasionMaxFrequency = Config.Bind<int>("config", "voidInvasionMaxFrequency", 1, "(1,2 or 3) Setting to 2 will ignore the dark fog difficulty, and the minimum interval for void invasion at the end of the game is 10 minutes (as before v3.2.4). Setting to 3 will make it to 5min.    将此项设置为2会无视黑雾难度系数，让游戏末期的进攻间隔最小为10min（如同v3.2.4之前的版本），设置为3则会将最小间隔设置为5min.");
             newYearFirework = config.Bind<bool>("config", "NewYearFirework", true, "");
+            fastStart = config.Bind<bool>("config", "FastStart", true, "Whether fast start option is enabled by default. 快速开局选项是否默认启用。");
+            invasionActiveByDefault = config.Bind<bool>("config", "InvasionActiveByDefault", false, "Whether void invasion option is enabled by default. 虚空入侵选项是否默认启用。");
 
             MoreMegaStructure.StarCannon.renderLevel = starCannonRenderLevel.Value;
             MoreMegaStructure.StarCannon.renderLevel = MoreMegaStructure.StarCannon.renderLevel > 3 ? 3 : MoreMegaStructure.StarCannon.renderLevel;
