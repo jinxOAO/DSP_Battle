@@ -201,10 +201,10 @@ namespace DSP_Battle
         }
 
         [HarmonyPostfix]
-        [HarmonyPatch(typeof(GameData), "GameTick")]
-        public static void GameTickPostfix(long time)
+        [HarmonyPatch(typeof(GameLogic), "LogicFrame")]
+        public static void LogicFramePostfix(ref GameLogic __instance)
         {
-            if(time == 2)
+            if(GameMain.instance.timei == 2)
             {
                 if (DspBattlePlugin.fastStart.Value)
                     Init();
