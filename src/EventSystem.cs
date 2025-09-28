@@ -476,7 +476,7 @@ namespace DSP_Battle
 
                             }
                         }
-                        recorder.requestMeet[i] = unknown ? int.MinValue : -remaining;
+                        recorder.requestMeet[i] = unknown ? int.MinValue : -remaining + 5;
                     }
                     else if (code >= 80000 && code < 90000)
                     {

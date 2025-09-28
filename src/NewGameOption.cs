@@ -22,13 +22,13 @@ namespace DSP_Battle
         public static UIToggle voidInvasionUITg;
         public static Text voidInvasionTitleText;
 
-        public static float propertyObjX = 70;
-        public static float propertyObjY0 = -325;
-        public static float propertyObjY1 = -361;
-        public static float propertyObjY_UGT = -411;
+        public static float propertyObjX = 0;
+        public static float propertyObjY0 = -225;
+        public static float propertyObjY1 = -261;
+        public static float propertyObjY_UGT = -311;
         public static float seedKeyObjX = 0;
-        public static float seedKeyObjY0 = -351;
-        public static float seedKeyObjY1 = -387;
+        public static float seedKeyObjY0 = -251;
+        public static float seedKeyObjY1 = -287;
 
         public static Toggle DFToggle;
         public static int voidInvasionEnabledCache = 1;
@@ -45,10 +45,10 @@ namespace DSP_Battle
                 seedKeyObjY0 = seedKeyObjY1;
             }
 
-            GameObject oriSettingObj = GameObject.Find("UI Root/Overlay Canvas/Galaxy Select/setting-group/sandbox-mode");
+            GameObject oriSettingObj = GameObject.Find("UI Root/Overlay Canvas/Galaxy Select/setting-group/stretch-transform/sandbox-mode");
 
-            oriPropertyMultiplierObj = GameObject.Find("UI Root/Overlay Canvas/Galaxy Select/setting-group/property-multiplier");
-            oriSeedKeyObj = GameObject.Find("UI Root/Overlay Canvas/Galaxy Select/setting-group/seed-key");
+            oriPropertyMultiplierObj = GameObject.Find("UI Root/Overlay Canvas/Galaxy Select/setting-group/stretch-transform/property-multiplier");
+            oriSeedKeyObj = GameObject.Find("UI Root/Overlay Canvas/Galaxy Select/setting-group/stretch-transform/seed-key");
 
             if (fastStartObj == null)
             {
@@ -56,10 +56,10 @@ namespace DSP_Battle
                     return;
                 fastStartObj = GameObject.Instantiate(oriSettingObj);
                 fastStartObj.name = "fast-start-mode";
-                fastStartObj.transform.SetParent(GameObject.Find("UI Root/Overlay Canvas/Galaxy Select/setting-group/").transform, false);
-                fastStartObj.transform.localPosition = new Vector3(0, -244, 0);
+                fastStartObj.transform.SetParent(GameObject.Find("UI Root/Overlay Canvas/Galaxy Select/setting-group/stretch-transform").transform, false);
+                fastStartObj.transform.localPosition = new Vector3(0, -144, 0);
                 if(CompatManager.UniverseGenTweak)
-                    fastStartObj.transform.localPosition = new Vector3(400, -244, 0);
+                    fastStartObj.transform.localPosition = new Vector3(400, -144, 0);
                 fastStartObj.GetComponent<Text>().text = "快速开局".Translate();
                 fastStartObj.GetComponentInChildren<UIButton>().tips.tipTitle = "快速开局".Translate();
                 fastStartObj.GetComponentInChildren<UIButton>().tips.tipText = "快速开局提示".Translate();
@@ -74,16 +74,16 @@ namespace DSP_Battle
                 }
                 else
                 {
-                    GameObject oriDFToggleObj = GameObject.Find("UI Root/Overlay Canvas/Galaxy Select/setting-group/DF-toggle");
-                    oriDFToggleObj.transform.localPosition = new Vector3(0, -280, 0);
-                    oriPropertyMultiplierObj.transform.localPosition = new Vector3(70, -325, 0);
-                    oriSeedKeyObj.transform.localPosition = new Vector3(0, -351, 0);
+                    GameObject oriDFToggleObj = GameObject.Find("UI Root/Overlay Canvas/Galaxy Select/setting-group/stretch-transform/DF-toggle");
+                    oriDFToggleObj.transform.localPosition = new Vector3(0, -180, 0);
+                    oriPropertyMultiplierObj.transform.localPosition = new Vector3(0, -225, 0);
+                    oriSeedKeyObj.transform.localPosition = new Vector3(0, -251, 0);
 
                     if (CompatManager.UniverseGenTweak)
                     {
-                        oriDFToggleObj.transform.localPosition = new Vector3(400, -280, 0);
+                        oriDFToggleObj.transform.localPosition = new Vector3(400, -180, 0);
 
-                        oriSeedKeyObj.transform.localPosition = new Vector3(0, -351, 0);
+                        oriSeedKeyObj.transform.localPosition = new Vector3(0, -251, 0);
                     }
                 }
             }
@@ -91,22 +91,22 @@ namespace DSP_Battle
             {
                 if (voidInvasionToggleObj == null)
                 {
-                    GameObject oriToggleWithIcon = GameObject.Find("UI Root/Overlay Canvas/Galaxy Select/setting-group/DF-toggle/check-box");
+                    GameObject oriToggleWithIcon = GameObject.Find("UI Root/Overlay Canvas/Galaxy Select/setting-group/stretch-transform/DF-toggle/check-box");
                     DFToggle = oriToggleWithIcon.GetComponent<Toggle>();
 
                     voidInvasionToggleObj = GameObject.Instantiate(oriSettingObj);
                     voidInvasionToggleObj.name = "void-invasion-toggle";
-                    voidInvasionToggleObj.transform.SetParent(GameObject.Find("UI Root/Overlay Canvas/Galaxy Select/setting-group/").transform, false);
+                    voidInvasionToggleObj.transform.SetParent(GameObject.Find("UI Root/Overlay Canvas/Galaxy Select/setting-group/stretch-transform").transform, false);
                     //GameObject.DestroyImmediate(voidInvasionToggleObj.transform.Find("CheckBox"));
                     voidInvasionToggleObj.transform.Find("CheckBox").gameObject.SetActive(false);
                     voidInvasionToggleObj.transform.localScale = Vector3.one;
-                    voidInvasionToggleObj.transform.localPosition = new Vector3(0, -316, 0);
+                    voidInvasionToggleObj.transform.localPosition = new Vector3(0, -216, 0);
                     if (CompatManager.UniverseGenTweak)
-                        voidInvasionToggleObj.transform.localPosition = new Vector3(400, -316, 0);
+                        voidInvasionToggleObj.transform.localPosition = new Vector3(400, -216, 0);
 
                     GameObject VICheckBoxObj = GameObject.Instantiate(oriToggleWithIcon, voidInvasionToggleObj.transform);
                     VICheckBoxObj.transform.localScale = Vector3.one;
-                    VICheckBoxObj.transform.localPosition = new Vector3(-40, -15, 0);
+                    VICheckBoxObj.transform.localPosition = new Vector3(0, -15, 0);
                     GameObject toggleIconObj = VICheckBoxObj.transform.Find("df-icon").gameObject;
                     toggleIconObj.name = "vi-icon";
                     voidInvasionLogo = toggleIconObj.GetComponent<Image>();
@@ -156,11 +156,11 @@ namespace DSP_Battle
                     voidInvasionToggleObj.SetActive(true);
                     voidInvasionTitleText.text = "虚空入侵".Translate();
                     voidInvasionLogo.color = new Color(1f, 1f, 1f, (voidInvasionEnabledCache == 1 ? 0.86f : 0.06f) + (voidInvasionUITg.isMouseEnter ? 0.14f : 0f));
-                    if (voidInvasionToggleObj.transform.localPosition.y != -316)
+                    if (voidInvasionToggleObj.transform.localPosition.y != -216)
                     {
-                        voidInvasionToggleObj.transform.localPosition = new Vector3(0, -316, 0);
+                        voidInvasionToggleObj.transform.localPosition = new Vector3(0, -216, 0);
                         if (CompatManager.UniverseGenTweak)
-                            voidInvasionToggleObj.transform.localPosition = new Vector3(400, -316, 0);
+                            voidInvasionToggleObj.transform.localPosition = new Vector3(400, -216, 0);
 
                     }
                 }
