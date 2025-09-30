@@ -20,7 +20,7 @@ namespace DSP_Battle
 
         public EAssaultHiveState state;
         public int time;
-        public int timeTillAssault; // totalTime before assault begins
+        public int timeTillAssault; // totalTime(tick) before assault begins 
         public int timeTotalInit; // 最初的时间计数
         public int timeDelayedByRelic; // relic 4-7 增加的时间，最大为
         public int level;

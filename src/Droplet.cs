@@ -776,6 +776,7 @@ namespace DSP_Battle
 
         public void Update(bool working = true)
         {
+            //Debug.Log($"droplet {dropletIndex} state is {state}, force is {forceLaunchState}");
             if (state < 0) return;
 
             if (swarmIndex < 0)
@@ -1198,6 +1199,8 @@ namespace DSP_Battle
         {
             if (swarmIndex >= 0 && swarmIndex < GameMain.galaxy.starCount)
             {
+                if (RendererSphere.vanillaSpheres[swarmIndex] == null)
+                    RendererSphere.vanillaSpheres[swarmIndex] = GameMain.data.CreateDysonSphere(swarmIndex);
                 return RendererSphere.vanillaSpheres[swarmIndex]?.swarm; // 此处决定要不要用rendererSphere里面的独立颜色的子弹
             }
             else

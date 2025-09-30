@@ -59,14 +59,14 @@ namespace DSP_Battle
                         int hiveListIndex = AssaultController.alertHives[byAstroIndex];
                         if (hiveListIndex >= 0 && hiveListIndex < AssaultController.assaultHives.Count)
                         {
-                            __result = int.MaxValue - Math.Max(AssaultController.assaultHives[hiveListIndex].timeTillAssault, 0);
+                            __result = Math.Max(AssaultController.assaultHives[0].timeTillAssault, 0) + 80 - Math.Max(AssaultController.assaultHives[hiveListIndex].timeTillAssault, 0);
                             return false;
                         }
                     }
                 }
                 else if (byAstroIndex >= 0 && byAstroIndex >= AssaultController.alertHives.Length && byAstroIndex < GameMain.spaceSector.maxHiveCount)
                 {
-                    DspBattlePlugin.logger.LogWarning("Sbnormal byAstroIndex in UIAssaultAlert.UrgentValuePostfix");
+                    DspBattlePlugin.logger.LogWarning("Abnormal byAstroIndex in UIAssaultAlert.UrgentValuePostfix");
                 }
             }
             return true;
