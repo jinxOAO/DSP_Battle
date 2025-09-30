@@ -458,7 +458,7 @@ namespace DSP_Battle
             string message = "";
             for (int i = 0; i < modifier.Count; i++)
             {
-                if (modifier[i] > 0)
+                if (modifier[i] > 0 || (i >= 6 && i <= 9 && modifier[i] < 0))
                 {
                     int value = modifier[i];
                     message += "\n<color=#ffa800dd>";
