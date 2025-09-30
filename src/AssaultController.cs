@@ -397,6 +397,7 @@ namespace DSP_Battle
             timeChangedByRelic = false;
             Configs.wavePerStar[starIndex]++;
             //Utils.Log($"Initing new void invasion in star index {starIndex}.");
+            UIAssaultAlert.tipRefreshCounter = UIAssaultAlert.tipRefreshCounterResetValue;
             MP.Sync(EDataType.CallOnAssaultInited);
         }
 

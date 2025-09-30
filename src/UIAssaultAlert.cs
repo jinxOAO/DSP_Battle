@@ -36,6 +36,8 @@ namespace DSP_Battle
 
         public static bool showAmount = false; // 如果有一个DarkFogMonitorEntry 的鼠标放入了 threatBar, 所有巢穴都要显示数量而非倒计时
 
+        public static int tipRefreshCounter = 8; // 刷新tip计数器
+        public static int tipRefreshCounterResetValue = 8; // 每次刷新进攻时将tipRefreshCounter置为此值
 
         // 虚空入侵巢穴 返回极高的威胁度
         [HarmonyPrefix]
@@ -225,6 +227,20 @@ namespace DSP_Battle
                                     __instance.thrtButton.tips.tipText = "削弱入侵内容".Translate() + modifierDesc;
                                 }
 
+                                __instance.thrtButton.UpdateTip();
+                            }
+                            else if (tipRefreshCounter > 0)
+                            {
+                                tipRefreshCounter--;
+                                if (AssaultController.assaultHives[listIndex].isSuper)
+                                {
+                                    string modifierDesc = "\n\n" + "虚空入侵额外特性提示".Translate() + AssaultController.GetModifierDesc();
+                                    __instance.thrtButton.tips.tipText = "削弱入侵内容".Translate() + modifierDesc;
+                                }
+                                else
+                                {
+                                    __instance.thrtButton.tips.tipText = "削弱入侵内容";
+                                }
                                 __instance.thrtButton.UpdateTip();
                             }
                         }
