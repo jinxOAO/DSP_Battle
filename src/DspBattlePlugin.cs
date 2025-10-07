@@ -5,6 +5,7 @@ using CommonAPI;
 using CommonAPI.Systems;
 using CommonAPI.Systems.ModLocalization;
 using crecheng.DSPModSave;
+using DSP_Battle.src.Compat;
 using HarmonyLib;
 using System;
 using System.IO;
@@ -21,6 +22,8 @@ namespace DSP_Battle
     [BepInDependency(DSPModSavePlugin.MODGUID)]
     [BepInDependency(CommonAPIPlugin.GUID)]
     [BepInDependency(LDBToolPlugin.MODGUID)]
+    [BepInDependency(CompatManager.UniverseGenTweak_GUID, BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency(CompatManager.GB_GUID, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("Gnimaerd.DSP.plugin.MoreMegaStructure")]
     [CommonAPISubmoduleDependency(nameof(ProtoRegistry))]
     [CommonAPISubmoduleDependency(nameof(TabSystem))]
@@ -129,6 +132,8 @@ namespace DSP_Battle
             BattleProtos.InitEventProtos();
             TCFVPerformanceMonitor.Awake();
             EvolveData.levelExps[100] = 2147483647; // 防止出现除以0的错误
+
+            CompatManager.Init();
         }
 
         public void Start()

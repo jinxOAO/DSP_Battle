@@ -206,7 +206,7 @@ namespace DSP_Battle
         {
             if(GameMain.instance.timei == 2)
             {
-                if (DspBattlePlugin.fastStart.Value)
+                if (DspBattlePlugin.fastStart.Value && !CompatManager.GB)
                     Init();
 
                 AssaultController.voidInvasionEnabled = DspBattlePlugin.invasionActiveByDefault.Value;
