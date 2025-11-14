@@ -122,7 +122,9 @@ namespace DSP_Battle
             Harmony.CreateAndPatchAll(typeof(PlanetBombing));
             Harmony.CreateAndPatchAll(typeof(UIPlanetBombing));
             Harmony.CreateAndPatchAll(typeof(UIMechaEnergyPatcher));
-            if(DFGEliteUnits.enabled)
+            Harmony.CreateAndPatchAll(typeof(StarCannonAutoFire));
+            Harmony.CreateAndPatchAll(typeof(UITechPatch));
+            if (DFGEliteUnits.enabled)
                 Harmony.CreateAndPatchAll(typeof(DFGEliteUnits));
 
             LDBTool.PreAddDataAction += BattleProtos.AddProtos;
@@ -421,6 +423,7 @@ namespace DSP_Battle
             DevConsole.Export(w);
 
             PlanetBombing.Export(w);
+            StarCannonAutoFire.Export(w);
         }
 
         public void Import(BinaryReader r)
@@ -437,6 +440,7 @@ namespace DSP_Battle
             DevConsole.Import(r);
 
             PlanetBombing.Import(r);
+            StarCannonAutoFire.Import(r);
 
             BattleProtos.ReCheckTechUnlockRecipes();
             BattleProtos.UnlockTutorials();
@@ -461,6 +465,7 @@ namespace DSP_Battle
             AssaultController.IntoOtherSave();
 
             PlanetBombing.IntoOtherSave();
+            StarCannonAutoFire.IntoOtherSave();
 
             BattleProtos.ReCheckTechUnlockRecipes();
             BattleProtos.UnlockTutorials();

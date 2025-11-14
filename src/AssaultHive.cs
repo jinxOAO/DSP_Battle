@@ -128,6 +128,23 @@ namespace DSP_Battle
                 state = EAssaultHiveState.End;
                 time = 120;
             }
+            else if (time % 120 == 0)
+            {
+                bool haveInst = false;
+                for (int i = 0; i < hive.pbuilders.Length; i++)
+                {
+                    if (hive.pbuilders[i].instId > 0)
+                    {
+                        haveInst = true;
+                        break;
+                    }
+                }
+                if(!haveInst)
+                {
+                    state = EAssaultHiveState.End;
+                    time = 120;
+                }
+            }
             switch (state)
             {
                 case EAssaultHiveState.Idle:
@@ -304,6 +321,12 @@ namespace DSP_Battle
                 {
                     MP.Sync(EDataType.CallOnLaunchAllVoidAssault); // 当所有巢穴都发起攻击后，同步spacesector、assaultController以及gamehistory数据
                 }
+            }
+
+            // 恒星炮自动开火逻辑
+            if(listIndex == 0 && time > 7200 && time % 120 == 0)
+            {
+                StarCannonAutoFire.CheckAutoFire();
             }
         }
         public void LogicTickAssault()

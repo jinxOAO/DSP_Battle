@@ -1189,12 +1189,17 @@ namespace DSP_Battle
             RegisterString("元驱动挂载点位扩展结论", "Meta driver slots +1", "元驱动槽位 +1");
             RegisterString("COSMO技术伦理委员会警告", "Warning from COSMO Technology Ethics Committee", "COSMO技术伦理委员会的警告");
             RegisterString("COSMO技术伦理委员会惩罚", "Due to your provocative behavior, the COSMO Technology Ethics Committee has deducted your {0} authorization points and stripped you of all your merit levels.", "由于你的挑衅行为，COSMO技术伦理委员会扣除了你{0}授权点，并剥夺了你全部的功勋级别。");
+            RegisterString("警告红色gm", "<color=#FF0000FF>Warning</color>", "<color=#FF0000FF>警告</color>");
+            RegisterString("研究元驱动挂载点位时警告", "<color=#FF0000A0>The COSMO Technology Ethics Committee WARNS YOU:</color>\nIf you persist in researching this technology, the committee will strip you of all merit levels and deduct 100 authorization points!", "<color=#FF0000A0>COSMO技术伦理委员会警告你：</color>\n若你一意孤行，坚持研究该科技，委员会将剥夺你全部的功勋级别，并扣除你100授权点。");
+            RegisterString("明白gm", "I Understood", "了解");
 
             RegisterString("新年快乐", "<color=#ff2020><size=50>Happy New Year!</size></color>", "<color=#ff2020><size=50>新年快乐！</size></color>");
             RegisterString("新年快乐标题", "Happy New Year", "新年快乐");
             RegisterString("新年礼物内容", "To celebrate the New Year, the COSMO Technology Ethics Committee has awarded you 100 authorization points.", "为庆祝新年，COSMO技术伦理委员会向你发放了100授权点奖励。");
 
 
+            RegisterString("恒星炮自动开火", "Star cannon auto fire", "恒星炮自动开火");
+            RegisterString("恒星炮自动开火说明", "When the void invasion is detected, if the star cannon has cooled down and fully charged, it will automatically attempt to fire at the star system.\nAutomatic firing will not set any priority.", "当虚空入侵被检测到后，如果恒星炮已冷却并充能完毕，将自动尝试向该星系开火。\n自动开火不会设定任何优先级。");
         }
 
 

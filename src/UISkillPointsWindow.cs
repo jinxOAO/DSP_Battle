@@ -110,6 +110,8 @@ namespace DSP_Battle
                 closeButtonObj.GetComponent<RectTransform>().sizeDelta = new Vector2(20, 20);
                 closeButtonText = closeButtonObj.transform.Find("Text").gameObject.GetComponent<Text>();
                 closeButtonText.text = "-";
+                closeButtonText.horizontalOverflow = HorizontalWrapMode.Overflow;
+                closeButtonText.verticalOverflow = VerticalWrapMode.Overflow;
                 GameObject.DestroyImmediate(closeButtonObj.GetComponent<Button>());
                 Button closeBtn = closeButtonObj.AddComponent<Button>();
                 closeBtn.interactable = true;

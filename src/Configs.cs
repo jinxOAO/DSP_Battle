@@ -18,7 +18,7 @@ namespace DSP_Battle
         public static bool enableAlertTextGlowing = true;
         public static bool enableVoidInvasionUpdate = true;
         public static int versionWhenImporting = -1;
-        public static int versionCode = 30241130;
+        public static int versionCode = 30251114;
 
 
         public static int difficulty = 0; // -1 easy, 0 normal, 1 hard

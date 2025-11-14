@@ -398,6 +398,8 @@ namespace DSP_Battle
                                     continue;
                                 if (ptr.id == 0)
                                     continue;
+                                if (ptr.dfRelayId != 0)
+                                    continue;
                                 EnemyDFHiveSystem enemyDFHiveSystem = dfHivesByAstro[ptr.originAstroId - 1000000];
                                 if (enemyDFHiveSystem != null && enemyDFHiveSystem.starData?.index == starIndex)
                                     remaining++;
@@ -469,6 +471,8 @@ namespace DSP_Battle
                                 if (ptr.dfTinderId != 0)
                                     continue;
                                 if (ptr.id == 0)
+                                    continue;
+                                if (ptr.dfRelayId != 0)
                                     continue;
                                 EnemyDFHiveSystem enemyDFHiveSystem = dfHivesByAstro[ptr.originAstroId - 1000000];
                                 if (enemyDFHiveSystem != null && enemyDFHiveSystem.starData?.index == starIndex)
@@ -548,6 +552,8 @@ namespace DSP_Battle
                             if (ptr.dfTinderId != 0)
                                 continue;
                             if (ptr.id == 0)
+                                continue;
+                            if (ptr.dfRelayId != 0)
                                 continue;
                             remaining++;
                         }

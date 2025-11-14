@@ -168,7 +168,9 @@
     <Compile Include="src\UIRank.cs" />
     <Compile Include="src\UIRelic.cs" />
     <Compile Include="src\UISkillPointsWindow.cs" />
+    <Compile Include="src\StarCannonAutoFire.cs" />
     <Compile Include="src\UIStarFortress.cs" />
+    <Compile Include="src\UITechPatch.cs" />
     <Compile Include="src\Utils.cs" />
     <Compile Include="src\WormholeRenderer.cs" />
   </ItemGroup>
