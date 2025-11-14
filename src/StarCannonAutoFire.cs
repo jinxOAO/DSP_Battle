@@ -1,4 +1,5 @@
-﻿using MoreMegaStructure;
+﻿using HarmonyLib;
+using MoreMegaStructure;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -65,6 +66,9 @@ namespace DSP_Battle
             RefreshUI();
         }
 
+
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(UIDysonEditor), "_OnOpen")]
         public static void RefreshUI()
         {
             if(autoFireObj == null)
@@ -76,6 +80,11 @@ namespace DSP_Battle
                 autoFireCheckboxImg.sprite = checkboxOnSprite;
             else
                 autoFireCheckboxImg.sprite = checkboxOffSprite;
+
+            if (AssaultController.voidInvasionEnabled)
+                autoFireObj.SetActive(true);
+            else
+                autoFireObj.SetActive(false);
         }
 
         public static void CheckAutoFire()
