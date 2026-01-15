@@ -892,6 +892,7 @@ namespace DSP_Battle
             RegisterString("遗物描述4-7", "Each time you click this meta driver, delay the assimilation progress of the void by 60s. Hold Ctrl and click to advance the progress instead. ", "每次点击此元驱动，立即使虚空的同化进度延缓一分钟。按住Ctrl点击则反而推进一分钟。");
 
 
+            RegisterString("relicTipTitle0-6", "Quick Loading", "快捷装填");
             RegisterString("relicTipTitle0-10", "Upper Limit", "上限");
             RegisterString("relicTipText0-10", "The upper limit is 200 at the begining. After reaching the upper limit, the mecha will automatically consume a droplet in inventory then increase the upper limit by 200. The upper limit growth is unlimited\nThe type of additional damage is is consistent with the original damage type", "加成上限初始为200，达到上限后，自动消耗背包中的一个水滴并再次提升200加成上限，提升上限的次数不受限制\n额外伤害的类型与原有伤害的类型一致");
             RegisterString("relicTipTitle1-2", "Cooldown", "冷却时间");
