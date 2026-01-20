@@ -67,7 +67,7 @@ namespace DSP_Battle
 
 
         [HarmonyPostfix]
-        [HarmonyPatch(typeof(GameData), "GameTick")]
+        [HarmonyPatch(typeof(ThreadManager), "ProcessFrame")]
         public static void HandleIdleEnemyCombatStat()
         {
             foreach (var combatStatId in eliteEnemyCombatStats)

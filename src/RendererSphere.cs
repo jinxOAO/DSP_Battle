@@ -1,5 +1,7 @@
 ﻿using HarmonyLib;
+using rail;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 
 namespace DSP_Battle
@@ -9,7 +11,8 @@ namespace DSP_Battle
     {
         //public static List<DysonSphere> enemySpheres = new List<DysonSphere>();
         public static List<DysonSphere> dropletSpheres = new List<DysonSphere>();
-
+        //public static DysonSphere[] dropletSpheres { get { return GameMain.data.dysonSpheres; } set { } }
+        public static DysonSphere[] vanillaSpheres { get { return GameMain.data.dysonSpheres; } set { } }
 
         public static void InitAll()
         {
@@ -100,6 +103,84 @@ namespace DSP_Battle
 
         }
 
+        public static void LegacyBulletGameTick(DysonSwarm swarm, long time)
+        {
+            for (int i = 1; i < swarm.orbitCursor; i++)
+            {
+                if (swarm.orbits[i].id == i && swarm.orbits[i].count == 0 && !swarm.orbits[i].enabled)
+                {
+                    swarm.RemoveOrbit(i);
+                }
+            }
+            DeepProfiler.BeginSample(DPEntry.DysonSwarmBullet, -1, -1L);
+            float num = 0.016666668f;
+            int num2 = (int)(GameMain.history.solarSailLife * 60f + 0.1f);
+            long expiryTime = time + (long)num2;
+            VectorLF3 relativePos = swarm.gameData.relativePos;
+            Quaternion relativeRot = swarm.gameData.relativeRot;
+            for (int j = 1; j < swarm.bulletCursor; j++)
+            {
+                if (swarm.bulletPool[j].id == j)
+                {
+                    SailBullet[] array = swarm.bulletPool;
+                    int num3 = j;
+                    array[num3].t = array[num3].t + num;
+                    if (swarm.bulletPool[j].t >= swarm.bulletPool[j].maxt)
+                    {
+                        if (swarm.bulletPool[j].state > 0)
+                        {
+                            if (swarm.bulletPool[j].state < swarm.orbitCursor && swarm.orbits[swarm.bulletPool[j].state].id == swarm.bulletPool[j].state)
+                            {
+                                DysonSail ss = default(DysonSail);
+                                VectorLF3 vectorLF = swarm.bulletPool[j].uEnd - swarm.starData.uPosition;
+                                ss.px = (float)vectorLF.x;
+                                ss.py = (float)vectorLF.y;
+                                ss.pz = (float)vectorLF.z;
+                                vectorLF = swarm.bulletPool[j].uEndVel;
+                                vectorLF += RandomTable.SphericNormal(ref swarm.randSeed, 0.5);
+                                ss.vx = (float)vectorLF.x;
+                                ss.vy = (float)vectorLF.y;
+                                ss.vz = (float)vectorLF.z;
+                                ss.gs = 1f;
+                                swarm.AddSolarSail(ss, swarm.bulletPool[j].state, expiryTime);
+                            }
+                        }
+                        else if (swarm.bulletPool[j].t > swarm.bulletPool[j].maxt + 0.7f)
+                        {
+                            swarm.RemoveBullet(j);
+                        }
+                        swarm.bulletPool[j].state = 0; 
+                        if (DysonSphere.renderPlace == ERenderPlace.Universe)
+                        {
+                            swarm.bulletPool[j].rBegin = Maths.QInvRotateLF(relativeRot, swarm.bulletPool[j].uBegin - relativePos);
+                            swarm.bulletPool[j].rEnd = Maths.QInvRotateLF(relativeRot, swarm.bulletPool[j].uEnd - relativePos);
+                        }
+                        else if (DysonSphere.renderPlace == ERenderPlace.Starmap)
+                        {
+                            swarm.bulletPool[j].rBegin = (swarm.bulletPool[j].uBegin - UIStarmap.viewTargetStatic) * 0.00025;
+                            swarm.bulletPool[j].rEnd = (swarm.bulletPool[j].uEnd - UIStarmap.viewTargetStatic) * 0.00025;
+                        }
+                        else if (DysonSphere.renderPlace == ERenderPlace.Dysonmap)
+                        {
+                            swarm.bulletPool[j].rBegin = (swarm.bulletPool[j].uBegin - swarm.starData.uPosition) * 0.00025;
+                            swarm.bulletPool[j].rEnd = (swarm.bulletPool[j].uEnd - swarm.starData.uPosition) * 0.00025;
+                        }
+                    }
+                }
+            }
+            if (swarm.bulletBuffer == null)
+            {
+                swarm.bulletBuffer = new ComputeBuffer(swarm.bulletCapacity, 112, ComputeBufferType.Default);
+            }
+            if (swarm.bulletBuffer.count != swarm.bulletCapacity)
+            {
+                swarm.bulletBuffer.Release();
+                swarm.bulletBuffer = new ComputeBuffer(swarm.bulletCapacity, 112, ComputeBufferType.Default);
+            }
+            swarm.bulletBuffer.SetData(swarm.bulletPool);
+            DeepProfiler.EndSample(-1, -2L);
+        }
+
         [HarmonyPostfix]
         [HarmonyPatch(typeof(GameMain), "Start")]
         public static void GameStartPatch()
@@ -110,7 +191,7 @@ namespace DSP_Battle
 
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(GameData), "GameTick")]
+        [HarmonyPatch(typeof(ThreadManager), "ProcessFrame")]
         public static bool BeforeGameTick()
         {
             if (RendererSphere.dropletSpheres.Count != GameMain.galaxy.starCount) RendererSphere.InitAll();
@@ -120,23 +201,63 @@ namespace DSP_Battle
 
 
         [HarmonyPostfix]
-        [HarmonyPatch(typeof(GameData), "GameTick")]
-        public static void RSphereGameTick(long time)
+        [HarmonyPatch(typeof(ThreadManager), "ProcessFrame")]
+        public static void RSphereGameTick(long frameCounter)
         {
             if (RendererSphere.dropletSpheres.Count != GameMain.galaxy.starCount) RendererSphere.InitAll();
             if (GameMain.localStar != null)
-                dropletSpheres[GameMain.localStar.index].swarm.GameTick(time);
+            {
+                dropletSpheres[GameMain.localStar.index].swarm.GameTick(frameCounter);
+                LegacyBulletGameTick(dropletSpheres[GameMain.localStar.index].swarm, frameCounter);
+                //dropletSpheres[GameMain.localStar.index].swarm.BulletGameTick(frameCounter);
+            }
         }
 
 
         [HarmonyPostfix]
-        [HarmonyPatch(typeof(GameData), "OnPostDraw")]
+        [HarmonyPatch(typeof(GameLogic), "Update")]
+        public static void RSphereRenderBulletPostfix()
+        {
+            DeepProfiler.BeginSample(DPEntry.DysonSwarmBullet, -1, -1L);
+            //StarData starData = null;
+            //switch (DysonSphere.renderPlace)
+            //{
+            //    case ERenderPlace.Universe:
+            //        starData = GameMain.data.localStar;
+            //        break;
+            //    case ERenderPlace.Starmap:
+            //        starData = UIRoot.instance.uiGame.starmap.viewStarSystem;
+            //        break;
+            //    case ERenderPlace.Dysonmap:
+            //        starData = UIRoot.instance.uiGame.dysonEditor.selection.viewStar;
+            //        break;
+            //}
+            //if (starData != null && starData.index < dropletSpheres.Count)
+            //{
+            //    DysonSphere dysonSphere = dropletSpheres[starData.index];
+            //    if (dysonSphere != null)
+            //    {
+            //        DysonSwarm swarm = dysonSphere.swarm;
+            //        if (swarm != null)
+            //        {
+            //            swarm.RendererBullet();
+            //        }
+            //    }
+            ////}
+            //if (GameMain.localStar != null)
+            //    dropletSpheres[GameMain.data.localStar.index].swarm.RendererBullet();
+            DeepProfiler.EndSample(-1, -2L);
+        }
+
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(GameLogic), "DrawPost")]
         public static void DrawPatch1(GameData __instance)
         {
             if (dropletSpheres.Count <= 0) return;
             if (GameMain.localStar != null && DysonSphere.renderPlace == ERenderPlace.Universe)
             {
-                dropletSpheres[GameMain.localStar.index].DrawPost();
+                //dropletSpheres[GameMain.data.localStar.index].swarm.RendererBullet();
+                dropletSpheres[GameMain.localStar.index].swarm.DrawPost(DysonSphere.renderPlace);
             }
         }
 
@@ -148,7 +269,8 @@ namespace DSP_Battle
             if (dropletSpheres.Count <= 0) return;
             if (GameMain.localStar != null && __instance.uiStarmap.viewStarSystem != null && !UIStarmap.isChangingToMilkyWay && DysonSphere.renderPlace == ERenderPlace.Starmap)
             {
-                dropletSpheres[GameMain.localStar.index].DrawPost();
+                //dropletSpheres[GameMain.data.localStar.index].swarm.RendererBullet();
+                dropletSpheres[GameMain.localStar.index].swarm.DrawPost(DysonSphere.renderPlace);
             }
         }
 

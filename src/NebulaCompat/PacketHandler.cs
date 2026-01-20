@@ -52,14 +52,14 @@ namespace DSP_Battle.src.NebulaCompat
 
 
         [HarmonyPostfix]
-        [HarmonyPatch(typeof(GameData), "GameTick")]
-        public static void SyncAfterGameTick(long time)
+        [HarmonyPatch(typeof(ThreadManager), "ProcessFrame")]
+        public static void SyncAfterGameTick(long frameCounter)
         {
             if (NebulaModAPI.MultiplayerSession?.LocalPlayer != null)
             {
                 if (isHost)
                 {
-                    if (time % 60 == 0)
+                    if (frameCounter % 60 == 0)
                     {
                         Synchronizer.BroadcastRankExp();
                     }

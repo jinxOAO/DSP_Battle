@@ -110,6 +110,8 @@ namespace DSP_Battle
                 closeButtonObj.GetComponent<RectTransform>().sizeDelta = new Vector2(20, 20);
                 closeButtonText = closeButtonObj.transform.Find("Text").gameObject.GetComponent<Text>();
                 closeButtonText.text = "-";
+                closeButtonText.horizontalOverflow = HorizontalWrapMode.Overflow;
+                closeButtonText.verticalOverflow = VerticalWrapMode.Overflow;
                 GameObject.DestroyImmediate(closeButtonObj.GetComponent<Button>());
                 Button closeBtn = closeButtonObj.AddComponent<Button>();
                 closeBtn.interactable = true;
@@ -282,6 +284,7 @@ namespace DSP_Battle
                 Button plusBtn = plusObj.AddComponent<Button>();
                 //plusBtn.onClick.RemoveAllListeners();
                 plusBtn.onClick.AddListener(() => { OnAssignOneClick(Convert.ToInt32(sign)); });
+                plusObj.transform.Find("Text").GetComponent<Text>().verticalOverflow = VerticalWrapMode.Overflow;
 
                 GameObject minusObj = GameObject.Instantiate(buttonObj, skillObj.transform);
                 minusObj.name = "withdraw-" + sign;
@@ -294,6 +297,7 @@ namespace DSP_Battle
                 Button minusBtn = minusObj.AddComponent<Button>();
                 //minusBtn.onClick.RemoveAllListeners();
                 minusBtn.onClick.AddListener(() => { OnWithdrawOneClick(Convert.ToInt32(sign)); });
+                minusObj.transform.Find("Text").GetComponent<Text>().verticalOverflow = VerticalWrapMode.Overflow;
 
                 if (isLeft)
                 {

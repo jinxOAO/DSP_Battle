@@ -263,8 +263,8 @@ namespace DSP_Battle
         }
 
         [HarmonyPostfix]
-        [HarmonyPatch(typeof(GameData), "GameTick")]
-        public static void UIRankGameTick(ref GameData __instance, long time)
+        [HarmonyPatch(typeof(ThreadManager), "ProcessFrame")]
+        public static void UIRankGameTick(long frameCounter)
         {
             if (Rank.rank >= 0 && Rank.rank <= 10)
             {
@@ -285,7 +285,7 @@ namespace DSP_Battle
             if (promotionNoticeSubText == null)
                 promotionNoticeSubText = GameObject.Find("UI Root/Overlay Canvas/In Game/Top Tips/research-complete/sub-text").GetComponent<Text>();
 
-            if (time % 120 == 22)
+            if (frameCounter % 120 == 22)
             {
                 int fullLevel = 0;
                 for (int i = 0; i < SkillPoints.skillCountL; i++)

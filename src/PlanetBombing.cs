@@ -66,8 +66,8 @@ namespace DSP_Battle
 
 
         [HarmonyPostfix]
-        [HarmonyPatch(typeof(GameData), "GameTick")]
-        public static void Update(long time)
+        [HarmonyPatch(typeof(ThreadManager), "ProcessFrame")]
+        public static void Update()
         {
             if (GameMain.localPlanet != null)
             {

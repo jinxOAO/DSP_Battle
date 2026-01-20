@@ -20,7 +20,7 @@ namespace DSP_Battle
 
         public EAssaultHiveState state;
         public int time;
-        public int timeTillAssault; // totalTime before assault begins
+        public int timeTillAssault; // totalTime(tick) before assault begins 
         public int timeTotalInit; // 最初的时间计数
         public int timeDelayedByRelic; // relic 4-7 增加的时间，最大为
         public int level;
@@ -127,6 +127,23 @@ namespace DSP_Battle
             {
                 state = EAssaultHiveState.End;
                 time = 120;
+            }
+            else if (time % 120 == 0 && state != EAssaultHiveState.End && state != EAssaultHiveState.Remove)
+            {
+                bool haveInst = false;
+                for (int i = 0; i < hive.pbuilders.Length; i++)
+                {
+                    if (hive.pbuilders[i].instId > 0)
+                    {
+                        haveInst = true;
+                        break;
+                    }
+                }
+                if(!haveInst)
+                {
+                    state = EAssaultHiveState.End;
+                    time = 120;
+                }
             }
             switch (state)
             {
@@ -305,6 +322,12 @@ namespace DSP_Battle
                     MP.Sync(EDataType.CallOnLaunchAllVoidAssault); // 当所有巢穴都发起攻击后，同步spacesector、assaultController以及gamehistory数据
                 }
             }
+
+            // 恒星炮自动开火逻辑
+            if(listIndex == 0 && time > 7200 && time % 120 == 0)
+            {
+                StarCannonAutoFire.CheckAutoFire();
+            }
         }
         public void LogicTickAssault()
         {
@@ -361,11 +384,11 @@ namespace DSP_Battle
                             PrefabDesc prefabDesc = SpaceSector.PrefabDescByModelIndex[(int)enemyProto.ModelIndex];
                             if (prefabDesc.isDFRelay)
                             {
-                                DspBattlePlugin.logger.LogInfo($"index {i} is relay.");
+                                //DspBattlePlugin.logger.LogInfo($"index {i} is relay.");
                             }
                             else if (prefabDesc.isDFSpaceCore)
                             {
-                                DspBattlePlugin.logger.LogInfo($"index {i} is core");
+                                //DspBattlePlugin.logger.LogInfo($"index {i} is core");
                             }
                             else if(prefabDesc.isDFSpaceGammaReceiver)
                             {
@@ -374,7 +397,7 @@ namespace DSP_Battle
                         }
                         else
                         {
-                            DspBattlePlugin.logger.LogInfo($"index {i} proto is null");
+                            //DspBattlePlugin.logger.LogInfo($"index {i} proto is null");
                         }
                     }
                     if (i < pIndexMin && oriLevel >= 0) // 原本就有的巢穴，会在自毁时，跳过核心（核心保留）或者某些结构

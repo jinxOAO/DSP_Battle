@@ -66,17 +66,16 @@ namespace DSP_Battle
             ////mechaDropletObj.transform.Find("icon").localPosition = new Vector3(0, 0, 0);
             //mechaDropletAmountText = mechaDropletObj.transform.Find("cnt-text").GetComponent<Text>();
         }
-
+        
 
         [HarmonyPostfix]
-        [HarmonyPatch(typeof(GameData), "GameTick")]
-        public static void GameData_GameTick(ref GameData __instance, long time)
+        [HarmonyPatch(typeof(ThreadManager), "ProcessFrame")]
+        public static void GameData_GameTick(long frameCounter)
         {
             MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.MainLogic);
             MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.Droplet);
 
-            enemySorter.GameTick(time, !noDropletWorking);
-
+            enemySorter.GameTick(frameCounter, !noDropletWorking);
             // 计算当前舰队配置中有多少水滴已经填充，然后设置正确的dropletPool中的水滴状态
             CombatModuleComponent spaceModule = GameMain.mainPlayer?.mecha?.spaceCombatModule;
             int moduleNum = 0;
@@ -164,16 +163,12 @@ namespace DSP_Battle
                 {
                     dropletPool[i].Update(true);
                 }
-                if (time % 120 == i)
+                if (frameCounter % 120 == i)
                     dropletPool[i].CheckBullet(); //游荡而又没有实体的子弹强行返回机甲
             }
 
-            
-            
-
             MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.Droplet);
             MoreMegaStructure.MMSCPU.EndSample(TCFVPerformanceMonitor.MainLogic);
-
         }
 
         public static int RefreshDropletNum()
@@ -781,8 +776,8 @@ namespace DSP_Battle
 
         public void Update(bool working = true)
         {
+            //Debug.Log($"droplet {dropletIndex} state is {state}, force is {forceLaunchState}");
             if (state < 0) return;
-            //Utils.Log($"droplet {dropletIndex} state is {state}");
 
             if (swarmIndex < 0)
             {
@@ -1204,7 +1199,9 @@ namespace DSP_Battle
         {
             if (swarmIndex >= 0 && swarmIndex < GameMain.galaxy.starCount)
             {
-                return RendererSphere.dropletSpheres[swarmIndex]?.swarm;
+                if (RendererSphere.vanillaSpheres[swarmIndex] == null)
+                    RendererSphere.vanillaSpheres[swarmIndex] = GameMain.data.CreateDysonSphere(swarmIndex);
+                return RendererSphere.vanillaSpheres[swarmIndex]?.swarm; // 此处决定要不要用rendererSphere里面的独立颜色的子弹
             }
             else
             {
@@ -1246,12 +1243,14 @@ namespace DSP_Battle
             randSeed = r.ReadInt32();
         }
     }
-    public enum EDropletState
+    public enum EDropletState//-1空-根本没有水滴，0有水滴-正在机甲中待命，1刚刚从机甲出来-慢，2攻击-飞向目标或在太空中待命，3攻击-已越过目标准备折返，4强制返航,5马上要回到机甲-慢
     {
-        Empty = -2,
-        Inactive = -1,
+        Empty = -1,
         Standby = 0,
-        OrbitIdle = 1,
-        FollowIdle = 2,
+        Launching = 1,
+        Active = 2,
+        TurningBack = 3,
+        ForceReturning = 4,
+        ReturningSlowly = 5
     }
 }

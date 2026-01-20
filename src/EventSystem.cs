@@ -284,7 +284,7 @@ namespace DSP_Battle
         }
 
         [HarmonyPostfix]
-        [HarmonyPatch(typeof(GameData), "GameTick")]
+        [HarmonyPatch(typeof(ThreadManager), "ProcessFrame")]
         public static void OnUpdate()
         {
             MoreMegaStructure.MMSCPU.BeginSample(TCFVPerformanceMonitor.MainLogic);
@@ -398,6 +398,8 @@ namespace DSP_Battle
                                     continue;
                                 if (ptr.id == 0)
                                     continue;
+                                if (ptr.dfRelayId != 0)
+                                    continue;
                                 EnemyDFHiveSystem enemyDFHiveSystem = dfHivesByAstro[ptr.originAstroId - 1000000];
                                 if (enemyDFHiveSystem != null && enemyDFHiveSystem.starData?.index == starIndex)
                                     remaining++;
@@ -470,13 +472,15 @@ namespace DSP_Battle
                                     continue;
                                 if (ptr.id == 0)
                                     continue;
+                                if (ptr.dfRelayId != 0)
+                                    continue;
                                 EnemyDFHiveSystem enemyDFHiveSystem = dfHivesByAstro[ptr.originAstroId - 1000000];
                                 if (enemyDFHiveSystem != null && enemyDFHiveSystem.starData?.index == starIndex)
                                     remaining++;
 
                             }
                         }
-                        recorder.requestMeet[i] = unknown ? int.MinValue : -remaining;
+                        recorder.requestMeet[i] = unknown ? int.MinValue : -remaining + 5;
                     }
                     else if (code >= 80000 && code < 90000)
                     {
@@ -548,6 +552,8 @@ namespace DSP_Battle
                             if (ptr.dfTinderId != 0)
                                 continue;
                             if (ptr.id == 0)
+                                continue;
+                            if (ptr.dfRelayId != 0)
                                 continue;
                             remaining++;
                         }

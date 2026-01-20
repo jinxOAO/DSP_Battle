@@ -5,13 +5,13 @@ using CommonAPI;
 using CommonAPI.Systems;
 using CommonAPI.Systems.ModLocalization;
 using crecheng.DSPModSave;
+using DSP_Battle.src.Compat;
 using HarmonyLib;
 using System;
 using System.IO;
 using System.Reflection;
 using System.Security.Cryptography;
 using UnityEngine;
-using UnityEngine.Experimental.UIElements;
 using UnityEngine.UI;
 using xiaoye97;
 using static UnityEngine.EventSystems.EventTrigger;
@@ -22,6 +22,8 @@ namespace DSP_Battle
     [BepInDependency(DSPModSavePlugin.MODGUID)]
     [BepInDependency(CommonAPIPlugin.GUID)]
     [BepInDependency(LDBToolPlugin.MODGUID)]
+    [BepInDependency(CompatManager.UniverseGenTweak_GUID, BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency(CompatManager.GB_GUID, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("Gnimaerd.DSP.plugin.MoreMegaStructure")]
     [CommonAPISubmoduleDependency(nameof(ProtoRegistry))]
     [CommonAPISubmoduleDependency(nameof(TabSystem))]
@@ -120,7 +122,9 @@ namespace DSP_Battle
             Harmony.CreateAndPatchAll(typeof(PlanetBombing));
             Harmony.CreateAndPatchAll(typeof(UIPlanetBombing));
             Harmony.CreateAndPatchAll(typeof(UIMechaEnergyPatcher));
-            if(DFGEliteUnits.enabled)
+            Harmony.CreateAndPatchAll(typeof(StarCannonAutoFire));
+            Harmony.CreateAndPatchAll(typeof(UITechPatch));
+            if (DFGEliteUnits.enabled)
                 Harmony.CreateAndPatchAll(typeof(DFGEliteUnits));
 
             LDBTool.PreAddDataAction += BattleProtos.AddProtos;
@@ -130,6 +134,8 @@ namespace DSP_Battle
             BattleProtos.InitEventProtos();
             TCFVPerformanceMonitor.Awake();
             EvolveData.levelExps[100] = 2147483647; // 防止出现除以0的错误
+
+            CompatManager.Init();
         }
 
         public void Start()
@@ -417,6 +423,7 @@ namespace DSP_Battle
             DevConsole.Export(w);
 
             PlanetBombing.Export(w);
+            StarCannonAutoFire.Export(w);
         }
 
         public void Import(BinaryReader r)
@@ -433,6 +440,7 @@ namespace DSP_Battle
             DevConsole.Import(r);
 
             PlanetBombing.Import(r);
+            StarCannonAutoFire.Import(r);
 
             BattleProtos.ReCheckTechUnlockRecipes();
             BattleProtos.UnlockTutorials();
@@ -457,6 +465,7 @@ namespace DSP_Battle
             AssaultController.IntoOtherSave();
 
             PlanetBombing.IntoOtherSave();
+            StarCannonAutoFire.IntoOtherSave();
 
             BattleProtos.ReCheckTechUnlockRecipes();
             BattleProtos.UnlockTutorials();
