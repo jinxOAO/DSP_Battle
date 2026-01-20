@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using DSP_Battle.src.Compat;
+using HarmonyLib;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -3302,11 +3303,13 @@ namespace DSP_Battle
                     if (i < GameMain.data.dysonSpheres.Length && GameMain.data.dysonSpheres[i] != null)
                     {
                         double ratio = 1;
+                        if (CompatManager.GB)
+                            ratio = 8;
                         DysonSphere sphere = GameMain.data.dysonSpheres[i];
-                        double num5 = (double)sphere.starData.dysonLumino * ratio;
+                        double num5 = (double)sphere.starData.dysonLumino;
                         sphere.energyGenPerSail = (long)(400.0 * num5);
-                        sphere.energyGenPerNode = (long)(1500.0 * num5);
-                        sphere.energyGenPerFrame = (long)(1500 * num5);
+                        sphere.energyGenPerNode = (long)(1500.0 * num5 * ratio);
+                        sphere.energyGenPerFrame = (long)(1500 * num5 * ratio);
                         sphere.energyGenPerShell = (long)(300 * num5);
                     }
                 }
