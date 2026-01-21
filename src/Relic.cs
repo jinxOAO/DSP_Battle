@@ -3304,16 +3304,19 @@ namespace DSP_Battle
                     {
                         DysonSphere sphere = GameMain.data.dysonSpheres[i];
                         double num5 = (double)sphere.starData.dysonLumino;
-                        sphere.energyGenPerSail = (long)(400.0 * num5);
-                        sphere.energyGenPerNode = (long)(1500.0 * num5);
-                        sphere.energyGenPerFrame = (long)(1500 * num5);
-                        sphere.energyGenPerShell = (long)(300 * num5);
                         if (CompatManager.GB)
                         {
-                            sphere.energyGenPerSail = (long)(400.0 * num5 * 8);
-                            sphere.energyGenPerNode = (long)(1500.0 * num5 * 2);
-                            sphere.energyGenPerFrame = (long)(1500 * num5 * 2);
-                            sphere.energyGenPerShell = (long)(300 * num5 * 8);
+                            sphere.energyGenPerSail = (long)(600 * num5 * 8);
+                            sphere.energyGenPerNode = (long)(1600 * num5 * 2);
+                            sphere.energyGenPerFrame = (long)(1600 * num5 * 2);
+                            sphere.energyGenPerShell = (long)(250 * num5 * 8);
+                        }
+                        else
+                        {
+                            sphere.energyGenPerSail = (long)(600.0 * num5);
+                            sphere.energyGenPerNode = (long)(1600.0 * num5);
+                            sphere.energyGenPerFrame = (long)(1600 * num5);
+                            sphere.energyGenPerShell = (long)(250 * num5);
                         }
                     }
                 }
