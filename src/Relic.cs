@@ -3302,15 +3302,19 @@ namespace DSP_Battle
                 {
                     if (i < GameMain.data.dysonSpheres.Length && GameMain.data.dysonSpheres[i] != null)
                     {
-                        double ratio = 1;
-                        if (CompatManager.GB)
-                            ratio = 8;
                         DysonSphere sphere = GameMain.data.dysonSpheres[i];
                         double num5 = (double)sphere.starData.dysonLumino;
                         sphere.energyGenPerSail = (long)(400.0 * num5);
-                        sphere.energyGenPerNode = (long)(1500.0 * num5 * ratio);
-                        sphere.energyGenPerFrame = (long)(1500 * num5 * ratio);
+                        sphere.energyGenPerNode = (long)(1500.0 * num5);
+                        sphere.energyGenPerFrame = (long)(1500 * num5);
                         sphere.energyGenPerShell = (long)(300 * num5);
+                        if (CompatManager.GB)
+                        {
+                            sphere.energyGenPerSail = (long)(400.0 * num5 * 8);
+                            sphere.energyGenPerNode = (long)(1500.0 * num5 * 2);
+                            sphere.energyGenPerFrame = (long)(1500 * num5 * 2);
+                            sphere.energyGenPerShell = (long)(300 * num5 * 8);
+                        }
                     }
                 }
                 Relic.alreadyRecalcDysonStarLumin = true;
