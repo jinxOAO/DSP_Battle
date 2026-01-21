@@ -123,7 +123,7 @@ namespace DSP_Battle
                 //GameMain.history.miningCostRate *= 0.2f;
                 SkillPoints.RefreshMiningConsumption();
             }
-            if (rank > 8 && Utils.RandDouble() < 0.3)
+            if (rank > 8 && Utils.RandDouble() < 0.3 && EventSystem.tickFromLastRelic > 108000)
             {
                 if (EventSystem.recorder == null || EventSystem.recorder.protoId == 0)
                 {
