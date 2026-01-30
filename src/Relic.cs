@@ -697,21 +697,32 @@ namespace DSP_Battle
         {
             if (power < 0.1f)
                 return true;
+            // 20260122--------------------------------------------------------------
+            int timeSpend = __instance.recipeExecuteData.timeSpend;
+            int extraTimeSpend = __instance.recipeExecuteData.extraTimeSpend;
+
+            int[] products = __instance.recipeExecuteData.products;
+            int[] productCounts = __instance.recipeExecuteData.productCounts;
+
+            int[] requireCounts = __instance.recipeExecuteData.requireCounts;
+            int[] requires = __instance.recipeExecuteData.requires;
+            // 20260122--------------------------------------------------------------
+
             if (__instance.recipeType == ERecipeType.Assemble || (int)__instance.recipeType == 9 || (int)__instance.recipeType == 10 || (int)__instance.recipeType == 12)
             {
                 // relic1-6
                 if (Relic.HaveRelic(1, 6))
                 {
-                    if (__instance.time >= __instance.timeSpend - 1 && __instance.produced[0] < 10 * __instance.productCounts[0])
+                    if (__instance.time >= timeSpend - 1 && __instance.produced[0] < 10 * productCounts[0])
                     {
-                        int rocketId = __instance.products[0];
+                        int rocketId = products[0];
                         int rodNum = -1;
                         if (rocketId >= 9488 && rocketId <= 9490 || rocketId == 1503 && MoreMegaStructure.MoreMegaStructure.GenesisCompatibility)
                             rodNum = 2;
                         else if (rocketId == 9491 || rocketId == 9492 || rocketId == 9510 || rocketId == 1503)
                             rodNum = 1;
 
-                        if (rodNum > 0 && __instance.served[rodNum] < 10 * __instance.requireCounts[rodNum]) // 判断原材料是否已满
+                        if (rodNum > 0 && __instance.served[rodNum] < 10 * requireCounts[rodNum]) // 判断原材料是否已满
                         {
                             //if (__instance.served[rodNum] > 0)
                             //    __instance.incServed[rodNum] += __instance.incServed[rodNum] / __instance.served[rodNum] * 2; // 增产点数也要返还
@@ -720,46 +731,46 @@ namespace DSP_Battle
                             int[] obj = consumeRegister;
                             lock (obj)
                             {
-                                consumeRegister[__instance.requires[rodNum]] -= 2;
+                                consumeRegister[requires[rodNum]] -= 2;
                             }
                         }
                     }
                 }
 
                 // relic2-4
-                if (__instance.products[0] == 1801 || __instance.products[0] == 1802)
+                if (products[0] == 1801 || products[0] == 1802)
                 {
-                    if (Relic.HaveRelic(2, 4) && __instance.requires.Length > 1)
+                    if (Relic.HaveRelic(2, 4) && requires.Length > 1)
                     {
-                        if (__instance.served[1] < 10 * __instance.requireCounts[1])
+                        if (__instance.served[1] < 10 * requireCounts[1])
                         {
-                            if (__instance.time >= __instance.timeSpend - 1 && __instance.produced[0] < 10 * __instance.productCounts[0])
+                            if (__instance.time >= timeSpend - 1 && __instance.produced[0] < 10 * productCounts[0])
                             {
                                 __instance.incServed[1] += 20; // 返还满级增产点数
                                 __instance.served[1] += 5;
                                 int[] obj = consumeRegister;
                                 lock (obj)
                                 {
-                                    consumeRegister[__instance.requires[1]] -= 5;
+                                    consumeRegister[requires[1]] -= 5;
                                 }
                             }
-                            if (__instance.extraTime >= __instance.extraTimeSpend - 1 && __instance.produced[0] < 10 * __instance.productCounts[0])
+                            if (__instance.extraTime >= extraTimeSpend - 1 && __instance.produced[0] < 10 * productCounts[0])
                             {
                                 __instance.incServed[1] += 20; // 返还满级增产点数
                                 __instance.served[1] += 5;
                                 int[] obj = consumeRegister;
                                 lock (obj)
                                 {
-                                    consumeRegister[__instance.requires[1]] -= 5;
+                                    consumeRegister[requires[1]] -= 5;
                                 }
                             }
 
                         }
                     }
                 }
-                else if (__instance.products[0] == 1501 && Relic.HaveRelic(3, 0)) // relic3-0
+                else if (products[0] == 1501 && Relic.HaveRelic(3, 0)) // relic3-0
                 {
-                    if (__instance.time >= __instance.timeSpend - 1 && __instance.produced[0] < 10 * __instance.productCounts[0])
+                    if (__instance.time >= timeSpend - 1 && __instance.produced[0] < 10 * productCounts[0])
                     {
                         __instance.produced[0]++;
                         int[] obj = productRegister;
@@ -768,7 +779,7 @@ namespace DSP_Battle
                             productRegister[1501] += 1;
                         }
                     }
-                    if (__instance.extraTime >= __instance.extraTimeSpend - 1 && __instance.produced[0] < 10 * __instance.productCounts[0])
+                    if (__instance.extraTime >= extraTimeSpend - 1 && __instance.produced[0] < 10 * productCounts[0])
                     {
                         __instance.produced[0]++;
                         int[] obj = productRegister;
@@ -785,31 +796,31 @@ namespace DSP_Battle
                 //        __instance.extraTime += (int)(0.5 * __instance.extraSpeed);
                 //    }
                 //}
-                else if ((__instance.products[0] == 1203 || __instance.products[0] == 1204) && Relic.HaveRelic(3, 14)) // relic3-14
+                else if ((products[0] == 1203 || products[0] == 1204) && Relic.HaveRelic(3, 14)) // relic3-14
                 {
-                    int reloadNum = __instance.products[0] == 1203 ? 2 : 1;
+                    int reloadNum = products[0] == 1203 ? 2 : 1;
                     if (MoreMegaStructure.MoreMegaStructure.GenesisCompatibility)
                         reloadNum = __instance.produced[0] == 1203 ? 1 : -1;
-                    if (reloadNum >= 0 && __instance.served[reloadNum] < 10 * __instance.requireCounts[reloadNum])
+                    if (reloadNum >= 0 && __instance.served[reloadNum] < 10 * requireCounts[reloadNum])
                     {
-                        if (__instance.time >= __instance.timeSpend - 1 && __instance.produced[0] < 10 * __instance.productCounts[0])
+                        if (__instance.time >= timeSpend - 1 && __instance.produced[0] < 10 * productCounts[0])
                         {
                             __instance.incServed[reloadNum] += 4;
                             __instance.served[reloadNum] += 1;
                             int[] obj = consumeRegister;
                             lock (obj)
                             {
-                                consumeRegister[__instance.requires[reloadNum]] -= 1;
+                                consumeRegister[requires[reloadNum]] -= 1;
                             }
                         }
-                        if (__instance.extraTime >= __instance.extraTimeSpend - 1 && __instance.produced[0] < 10 * __instance.productCounts[0])
+                        if (__instance.extraTime >= extraTimeSpend - 1 && __instance.produced[0] < 10 * productCounts[0])
                         {
                             __instance.incServed[reloadNum] += 4;
                             __instance.served[reloadNum] += 1;
                             int[] obj = consumeRegister;
                             lock (obj)
                             {
-                                consumeRegister[__instance.requires[reloadNum]] -= 1;
+                                consumeRegister[requires[reloadNum]] -= 1;
                             }
                         }
 
@@ -817,35 +828,35 @@ namespace DSP_Battle
                 }
 
                 // relic0-1 蓝buff效果 要放在最后面，因为前面有加time的遗物，所以这个根据time结算的要放在最后
-                if (Relic.HaveRelic(0, 1) && __instance.requires.Length > 1)
+                if (Relic.HaveRelic(0, 1) && requires.Length > 1)
                 {
                     // 原材料未堆积过多才会返还，原材料堆积未被取出则不返还。黑棒产线无视此遗物效果，产出白糖的产线无视此效果
-                    if (__instance.served[0] < 10 * __instance.requireCounts[0] && __instance.products[0] != 1803 && __instance.products[0] != 6006)
+                    if (__instance.served[0] < 10 * requireCounts[0] && products[0] != 1803 && products[0] != 6006)
                     {
                         // Utils.Log("time = " + __instance.time + " / " + __instance.timeSpend); 这里是能输出两个相等的值的
                         // 不能直接用__instance.time >= __instance.timeSpend代替，必须-1，即便已经相等却无法触发，为什么？
-                        if (__instance.time >= __instance.timeSpend - 1 && __instance.produced[0] < 10 * __instance.productCounts[0])
+                        if (__instance.time >= timeSpend - 1 && __instance.produced[0] < 10 * productCounts[0])
                         {
                             //if(__instance.served[0] > 0)
                             //    __instance.incServed[0] += __instance.incServed[0] / __instance.served[0] * __instance.productCounts[0]; // 增产点数也要返还
-                            __instance.incServed[0] += 4 * __instance.productCounts[0]; // 返还满级增产点数
-                            __instance.served[0] += __instance.productCounts[0]; // 注意效果是每产出一个产物返还一个1号材料而非每次产出，因此还需要在extraTime里再判断回填原料
+                            __instance.incServed[0] += 4 * productCounts[0]; // 返还满级增产点数
+                            __instance.served[0] += productCounts[0]; // 注意效果是每产出一个产物返还一个1号材料而非每次产出，因此还需要在extraTime里再判断回填原料
                             int[] obj = consumeRegister;
                             lock (obj)
                             {
-                                consumeRegister[__instance.requires[0]] -= __instance.productCounts[0];
+                                consumeRegister[requires[0]] -= productCounts[0];
                             }
                         }
-                        if (__instance.extraTime >= __instance.extraTimeSpend - 1 && __instance.produced[0] < 10 * __instance.productCounts[0])
+                        if (__instance.extraTime >= extraTimeSpend - 1 && __instance.produced[0] < 10 * productCounts[0])
                         {
                             //if (__instance.served[0] > 0)
                             //    __instance.incServed[0] += __instance.incServed[0] / __instance.served[0] * __instance.productCounts[0];
-                            __instance.incServed[0] += 4 * __instance.productCounts[0]; // 返还满级增产点数
-                            __instance.served[0] += __instance.productCounts[0];
+                            __instance.incServed[0] += 4 * productCounts[0]; // 返还满级增产点数
+                            __instance.served[0] += productCounts[0];
                             int[] obj = consumeRegister;
                             lock (obj)
                             {
-                                consumeRegister[__instance.requires[0]] -= __instance.productCounts[0];
+                                consumeRegister[requires[0]] -= productCounts[0];
                             }
                         }
 
@@ -880,22 +891,22 @@ namespace DSP_Battle
                 // relic 2-11 副产物提炼
                 if (Relic.HaveRelic(2, 11))
                 {
-                    if (__instance.time >= __instance.timeSpend - 1 && __instance.produced[0] + __instance.productCounts[0] < 100 && Relic.Verify(0.3))
+                    if (__instance.time >= timeSpend - 1 && __instance.produced[0] + productCounts[0] < 100 && Relic.Verify(0.3))
                     {
                         __instance.produced[0]++;
                         int[] obj = productRegister;
                         lock (obj)
                         {
-                            productRegister[__instance.products[0]] += 1;
+                            productRegister[products[0]] += 1;
                         }
                     }
-                    if (__instance.extraTime >= __instance.extraTimeSpend - 1 && __instance.produced[0] + __instance.productCounts[0] < 100 && Relic.Verify(0.3))
+                    if (__instance.extraTime >= extraTimeSpend - 1 && __instance.produced[0] + productCounts[0] < 100 && Relic.Verify(0.3))
                     {
                         __instance.produced[0]++;
                         int[] obj = productRegister;
                         lock (obj)
                         {
-                            productRegister[__instance.products[0]] += 1;
+                            productRegister[products[0]] += 1;
                         }
                     }
 
@@ -903,7 +914,7 @@ namespace DSP_Battle
             }
             else if (__instance.recipeType == ERecipeType.Particle && Relic.HaveRelic(2, 8)) // relic2-8
             {
-                if (__instance.products.Length > 1 && __instance.products[0] == 1122)
+                if (products.Length > 1 && products[0] == 1122)
                 {
                     if (__instance.replicating)
                     {
@@ -963,52 +974,43 @@ namespace DSP_Battle
         /// <param name="inc"></param>
         /// <param name="__result"></param>
         [HarmonyPostfix]
-        [HarmonyPatch(typeof(PlanetFactory), "PickFrom")]
-        public static void AutoProliferate(ref PlanetFactory __instance, int entityId, int offset, int filter, int[] needs, ref byte stack, ref byte inc, ref int __result)
+        [HarmonyPatch(typeof(PlanetFactory), "PickFrom", new Type[] { typeof(uint), typeof(int), typeof(int), typeof(int[]), typeof(byte), typeof(byte) }, new ArgumentType[] { ArgumentType.Normal, ArgumentType.Normal , ArgumentType.Normal , ArgumentType.Normal , ArgumentType.Out, ArgumentType.Out})]
+        public static void AutoProliferate(ref PlanetFactory __instance, uint ioTargetTypedId, int offset, int filter, int[] needs, ref byte stack, ref byte inc, ref int __result)
         {
             if (!Relic.HaveRelic(0, 2)) return;
             int itemId = __result;
             if (itemId == 0) return;
 
+            int num = (int)(ioTargetTypedId & 16777215u);
+            EFactoryIOTargetType efactoryIOTargetType = (EFactoryIOTargetType)(ioTargetTypedId & 4278190080u);
+
             var _this = __instance;
-            int beltId = _this.entityPool[entityId].beltId;
-            if (beltId <= 0)
+
+            if (efactoryIOTargetType == EFactoryIOTargetType.Assembler)
             {
-                int assemblerId = _this.entityPool[entityId].assemblerId;
-                if (assemblerId > 0)
+                ref AssemblerComponent ptr = ref _this.factorySystem.assemblerPool[num];
+                int[] products = ptr.recipeExecuteData.products;
+                int productCount = products.Length;
+                for (int i = 0; i < productCount; i++)
                 {
-                    Mutex obj = _this.entityMutexs[entityId];
-                    lock (obj)
+                    if (products[i] == itemId)
                     {
-                        int[] products = _this.factorySystem.assemblerPool[assemblerId].products;
-                        int num = products.Length;
-                        for (int i = 0; i < num; i++)
-                        {
-                            if (products[i] == itemId)
-                            {
-                                inc = (byte)(4 * stack);
-                                return;
-                            }
-                        }
+                        inc = (byte)(4 * stack);
                         return;
                     }
                 }
-                int labId = _this.entityPool[entityId].labId;
-                if (labId > 0)
+            }
+            else if (efactoryIOTargetType == EFactoryIOTargetType.Lab)
+            {
+                ref LabComponent ptr5 = ref _this.factorySystem.labPool[num];
+                int[] products = ptr5.recipeExecuteData.products;
+                int productCount = products.Length;
+                for (int i = 0; i < productCount; i++)
                 {
-                    Mutex obj = _this.entityMutexs[entityId];
-                    lock (obj)
+                    if (products[i] == itemId)
                     {
-                        int[] products = _this.factorySystem.labPool[labId].products;
-                        int num = products.Length;
-                        for (int i = 0; i < num; i++)
-                        {
-                            if (products[i] == itemId)
-                            {
-                                inc = (byte)(4 * stack);
-                                return;
-                            }
-                        }
+                        inc = (byte)(4 * stack);
+                        return;
                     }
                 }
             }

@@ -112,7 +112,7 @@ namespace DSP_Battle
         public static void ExecuteCommand(string cmd)
         {
             RegNewLine(cmd);
-            Print("<color=#ffffff>>>" + cmd + "</color>");
+            Print("<color=#ffffff80>>>" + cmd + "</color>");
             string[] param = cmd.Split(' '); // 已确定cmd必定不为空
             try
             {
@@ -217,15 +217,15 @@ namespace DSP_Battle
                         for (int i = 0; i < 5; i++)
                         {
                             if (i == 0)
-                                allRelicNames += "<color=#ffa03d>";
+                                allRelicNames += "<color=#ffa03da0>";
                             else if (i == 1)
-                                allRelicNames += "<color=#d060ff>";
+                                allRelicNames += "<color=#d060ffa0>";
                             else if (i == 2)
-                                allRelicNames += "<color=#20c0ff>";
+                                allRelicNames += "<color=#20c0ffa0>";
                             else if (i == 3)
-                                allRelicNames += "<color=#30ff30>";
+                                allRelicNames += "<color=#30ff30a0>";
                             else if (i == 4)
-                                allRelicNames += "<color=#00c560>";
+                                allRelicNames += "<color=#00c560a0>";
                             for (int j = 0; j < Relic.relicNumByType[i]; j++)
                             {
                                 allRelicNames += $"{i}-{j}:{($"遗物名称{i}-{j}").Translate().Split('\n')[0]}    ";
@@ -547,34 +547,40 @@ namespace DSP_Battle
                 consoleObj.GetComponent<UIWindowDrag>().refTrans = consoleObj.GetComponent<RectTransform>();
                 consoleObj.GetComponent<UIWindowDrag>().dragTrans = consoleObj.GetComponent<RectTransform>();
 
-                GameObject inputBgObj = new GameObject();
-                inputBgObj.name = "input-bg";
-                inputBgObj.transform.SetParent(consoleObj.transform);
-                inputBgObj.AddComponent<Image>();
-                inputBgObj.GetComponent<Image>().color = new Color(1, 1, 1, 0.15f);
-                inputBgObj.GetComponent<RectTransform>().sizeDelta = new Vector2(780, 27);
-                inputBgObj.transform.localScale = new Vector3(1, 1, 1);
-                inputBgObj.transform.localPosition = new Vector3(0, -278, 0);
+                //GameObject inputBgObj = new GameObject();
+                //inputBgObj.name = "input-bg";
+                //inputBgObj.transform.SetParent(consoleObj.transform);
+                //inputBgObj.AddComponent<Image>();
+                //inputBgObj.GetComponent<Image>().color = new Color(1, 1, 1, 0.15f);
+                //inputBgObj.GetComponent<RectTransform>().sizeDelta = new Vector2(780, 27);
+                //inputBgObj.transform.localScale = new Vector3(1, 1, 1);
+                //inputBgObj.transform.localPosition = new Vector3(0, -278, 0);
 
-                GameObject oriInputFieldObj = GameObject.Find("UI Root/Overlay Canvas/In Game/Windows/Blueprint Browser/inspector-group/Scroll View/Viewport/Content/group-1/input-short-text");
-                bool BPTEnabled = false;
-                if (oriInputFieldObj == null)
-                {
-                    BPTEnabled = true;
-                    oriInputFieldObj = GameObject.Find("UI Root/Overlay Canvas/In Game/Windows/Blueprint Browser/inspector-group/BP-panel-scroll(Clone)/Viewport/pane/group-1/input-desc-text");
-                    maxOutputClearCount = 25;
-                }
+                GameObject oriInputFieldObj = GameObject.Find("UI Root/Overlay Canvas/In Game/Windows/Belt Window/number-input");
                 GameObject inputFieldObj = GameObject.Instantiate(oriInputFieldObj, consoleObj.transform);
                 inputFieldObj.name = "inputfield";
                 inputFieldObj.GetComponent<UIButton>().tips.tipTitle = "Command";
                 inputFieldObj.GetComponent<UIButton>().tips.tipText = consoleHelpTip;
+                inputFieldObj.GetComponent<UIButton>().tips.corner = 4;
+                inputFieldObj.GetComponent<UIButton>().tips.delay = 0.5f;
+                if (inputFieldObj.GetComponent<UIButton>().transitions.Length > 0)
+                {
+                    inputFieldObj.GetComponent<UIButton>().transitions[0].normalColor = new Color(0, 0, 0, 0.5f);
+                    inputFieldObj.GetComponent<UIButton>().transitions[0].mouseoverColor = new Color(0, 0, 0, 0.5f);
+                    inputFieldObj.GetComponent<UIButton>().transitions[0].highlightColorOverride = new Color(0, 0, 0, 0.5f);
+                    inputFieldObj.GetComponent<UIButton>().transitions[0].pressedColor = new Color(0, 0, 0, 0.5f);
+                }
+                inputFieldObj.GetComponent<RectTransform>().anchorMax = new Vector2(0, 1);
+                inputFieldObj.GetComponent<RectTransform>().anchorMin = new Vector2(0, 1);
+                inputFieldObj.GetComponent<RectTransform>().pivot = new Vector2(0, 1);
                 inputFieldObj.transform.localScale = new Vector3(1, 1, 1);
                 inputFieldObj.transform.localPosition = new Vector3(-390, -265);
                 inputFieldObj.GetComponent<RectTransform>().sizeDelta = new Vector2(780, 26);
-                if(BPTEnabled)
-                    inputFieldObj.GetComponent<RectTransform>().sizeDelta = new Vector2(-20, 26);
                 inputFieldObj.GetComponent<InputField>().lineType = InputField.LineType.MultiLineNewline;
-                inputFieldObj.transform.Find("value-text").GetComponent<Text>().color = Color.white;
+                inputFieldObj.GetComponent<InputField>().contentType = InputField.ContentType.Standard;
+                inputFieldObj.GetComponent<InputField>().characterLimit = 999999;
+                inputFieldObj.transform.Find("number-text").GetComponent<Text>().alignment = TextAnchor.MiddleLeft;
+                inputFieldObj.transform.Find("number-text").GetComponent<RectTransform>().sizeDelta = new Vector2(-10, 0);
                 //inputFieldObj.GetComponent<Image>().color = new Color(1f, 1f, 1f, 1f);
                 consoleInputField = inputFieldObj.GetComponent<InputField>();
                 consoleInputField.onValueChange.RemoveAllListeners();
@@ -593,15 +599,26 @@ namespace DSP_Battle
                 outputFieldObj.GetComponent<UIButton>().tips.delay = 999999;
                 outputFieldObj.GetComponent<UIButton>().tips.tipTitle = "Outputs";
                 outputFieldObj.GetComponent<UIButton>().tips.tipText = "This console is only for mod devs.";
+                if(outputFieldObj.GetComponent<UIButton>().transitions.Length > 0)
+                {
+                    outputFieldObj.GetComponent<UIButton>().transitions[0].normalColor = new Color(0, 0, 0, 0.5f);
+                    outputFieldObj.GetComponent<UIButton>().transitions[0].mouseoverColor = new Color(0, 0, 0, 0.5f);
+                    outputFieldObj.GetComponent<UIButton>().transitions[0].highlightColorOverride = new Color(0, 0, 0, 0.5f);
+                    outputFieldObj.GetComponent<UIButton>().transitions[0].pressedColor = new Color(0, 0, 0, 0.5f);
+                }
+                outputFieldObj.GetComponent<RectTransform>().anchorMax = new Vector2(0, 1);
+                outputFieldObj.GetComponent<RectTransform>().anchorMin = new Vector2(0, 1);
+                outputFieldObj.GetComponent<RectTransform>().pivot = new Vector2(0, 1);
                 outputFieldObj.transform.localScale = new Vector3(1, 1, 1);
                 outputFieldObj.transform.localPosition = new Vector3(-390, 265);
-                outputFieldObj.GetComponent<RectTransform>().sizeDelta = new Vector2(780, 500);
-                if (BPTEnabled)
-                    outputFieldObj.GetComponent<RectTransform>().sizeDelta = new Vector2(-20, 500);
+                outputFieldObj.GetComponent<RectTransform>().sizeDelta = new Vector2(780, 520);
                 outputFieldObj.GetComponent<InputField>().lineType = InputField.LineType.MultiLineNewline;
-                outputFieldObj.transform.Find("value-text").GetComponent<Text>().supportRichText = true;
-                outputFieldObj.transform.Find("value-text").GetComponent<Text>().alignment = TextAnchor.LowerLeft;
-                outputFieldObj.transform.Find("value-text").GetComponent<Text>().color = new Color(0.1875f, 0.8125f, 1f);
+                outputFieldObj.GetComponent<InputField>().contentType = InputField.ContentType.Standard;
+                outputFieldObj.GetComponent<InputField>().characterLimit = 999999;
+                outputFieldObj.transform.Find("number-text").GetComponent<Text>().supportRichText = true;
+                outputFieldObj.transform.Find("number-text").GetComponent<Text>().alignment = TextAnchor.LowerLeft;
+                outputFieldObj.transform.Find("number-text").GetComponent<Text>().color = new Color(0.1875f, 0.8125f, 1f, 0.5f);
+                outputFieldObj.transform.Find("number-text").GetComponent<RectTransform>().sizeDelta = new Vector2(-10, -10);
                 consoleOutputField = outputFieldObj.GetComponent<InputField>();
                 consoleOutputField.onValueChange.RemoveAllListeners();
                 consoleOutputField.interactable = false;
@@ -677,7 +694,7 @@ namespace DSP_Battle
             }
             if (err)
             {
-                consoleOutputField.text = consoleOutputField.text + "<color=#ff2020>" + msg + "</color>\n";
+                consoleOutputField.text = consoleOutputField.text + "<color=#ff202090>" + msg + "</color>\n";
             }
             else
             {
@@ -688,25 +705,25 @@ namespace DSP_Battle
         public static void ShowAllCommands(int page = 1)
         {
             string allCmds = "---------------------- help ----------------------" + "\n" +
-                "<color=#ffffff>h</color>或<color=#ffffff>help</color> 输出所有可用命令" + "\n" +
-                "<color=#ffffff>c</color>或<color=#ffffff>clear</color> 清空输出缓存" + "\n" +
-                "<color=#ffffff>cur</color> 输出伊卡洛斯所在星系的starId和starIndex，并输出伊卡洛斯所在行星的planetId" + "\n" +
-                "<color=#ffffff>setmega [param1] [param2]</color> 立刻将星系index为[param1]的巨构类型设置为[param2]" + "\n" +
-                //"<color=#ffffff>setsf [param1] [param2] [param3]</color>  立刻将星系index为[param1]的恒星要塞第[param2]个模块已建成数量设置为[param3]" + "\n" +
-                "<color=#ffffff>setrank [param1]</color> 将功勋等级设置为[param1]，改变等级后还会使经验降低至0" + "\n" +
-                "<color=#ffffff>addexp [param1]</color> 增加[param1]经验，可升级，也可为负但不会降级" + "\n" +
-                "<color=#ffffff>newrelic ([param1]) ([param2])</color> 立刻随机并打开选择元驱动窗口，可选参数可强制在中间刷新某个特定稀有度，或特定元驱动" + "\n" +
-                "<color=#ffffff>addrelic [param1] [param2]</color> 立刻获得第[param1]类型第[param2]号元驱动" + "\n" +
-                "<color=#ffffff>rmrelic [param1] [param2]</color> 立刻删除第[param1]类型第[param2]号元驱动（如果已经拥有）" + "\n" +
-                "<color=#ffffff>lsrelic</color> 展示所有元驱动的名称" + "\n" +
-                "<color=#ffffff>give [param1] [param2]</color> 立刻给予[param2]个itemId为[param1]的物品" + "\n" +
-                "<color=#ffffff>cool</color> 恒星炮立即冷却完毕" + "\n" +
-                "<color=#ffffff>es [param1]</color> 设定当前事件链为[param1]，不提供参数则初始化合法的事件" + "\n" +
-                "<color=#ffffff>est [param1]</color> 当前事件链转移至[param1]" + "\n" +
-                "<color=#ffffff>ap [param1]</color> 授权点增加[param1]" + "\n" +
-                "<color=#ffffff>voidon</color> 开启虚空入侵" + "\n" +
-                "<color=#ffffff>voidoff</color> 禁止虚空入侵" + "\n" +
-                "<color=#ffffff>mpstat</color> 查看联机相关参数" + "\n" +
+                "<color=#ffffff80>h</color>或<color=#ffffff80>help</color> 输出所有可用命令" + "\n" +
+                "<color=#ffffff80>c</color>或<color=#ffffff80>clear</color> 清空输出缓存" + "\n" +
+                "<color=#ffffff80>cur</color> 输出伊卡洛斯所在星系的starId和starIndex，并输出伊卡洛斯所在行星的planetId" + "\n" +
+                "<color=#ffffff80>setmega [param1] [param2]</color> 立刻将星系index为[param1]的巨构类型设置为[param2]" + "\n" +
+                //"<color=#ffffff80>setsf [param1] [param2] [param3]</color>  立刻将星系index为[param1]的恒星要塞第[param2]个模块已建成数量设置为[param3]" + "\n" +
+                "<color=#ffffff80>setrank [param1]</color> 将功勋等级设置为[param1]，改变等级后还会使经验降低至0" + "\n" +
+                "<color=#ffffff80>addexp [param1]</color> 增加[param1]经验，可升级，也可为负但不会降级" + "\n" +
+                "<color=#ffffff80>newrelic ([param1]) ([param2])</color> 立刻随机并打开选择元驱动窗口，可选参数可强制在中间刷新某个特定稀有度，或特定元驱动" + "\n" +
+                "<color=#ffffff80>addrelic [param1] [param2]</color> 立刻获得第[param1]类型第[param2]号元驱动" + "\n" +
+                "<color=#ffffff80>rmrelic [param1] [param2]</color> 立刻删除第[param1]类型第[param2]号元驱动（如果已经拥有）" + "\n" +
+                "<color=#ffffff80>lsrelic</color> 展示所有元驱动的名称" + "\n" +
+                "<color=#ffffff80>give [param1] [param2]</color> 立刻给予[param2]个itemId为[param1]的物品" + "\n" +
+                "<color=#ffffff80>cool</color> 恒星炮立即冷却完毕" + "\n" +
+                "<color=#ffffff80>es [param1]</color> 设定当前事件链为[param1]，不提供参数则初始化合法的事件" + "\n" +
+                "<color=#ffffff80>est [param1]</color> 当前事件链转移至[param1]" + "\n" +
+                "<color=#ffffff80>ap [param1]</color> 授权点增加[param1]" + "\n" +
+                "<color=#ffffff80>voidon</color> 开启虚空入侵" + "\n" +
+                "<color=#ffffff80>voidoff</color> 禁止虚空入侵" + "\n" +
+                "<color=#ffffff80>mpstat</color> 查看联机相关参数" + "\n" +
                 "---------------------- help ----------------------";
             Print(allCmds, 20, false); // 这个forceLineCount传值取决于allCmds的行数
         }

@@ -23,7 +23,7 @@ namespace DSP_Battle
 
         public static void AddProtos()
         {
-            AddTutorialProtos();
+            //AddTutorialProtos();
             AddNormalProtos();
             AddEnemyProtoAndModels();
             AddSingalProtos();
@@ -625,7 +625,7 @@ namespace DSP_Battle
             RegisterString("重新随机可以长", "Re-roll", "重新随机");
             RegisterString("免费", "free", "免费");
             RegisterString("移除遗物", "Remove", "移除");
-            RegisterString("放弃解译", "   Abort This           +", "放弃解译         +");
+            RegisterString("放弃解译", "   Abort This           +", "放弃解译           +");
             RegisterString("放弃解译居中", "Abort Interpret", "放弃解译");
             RegisterString("删除遗物名称", "Remove Meta Driver", "移除元驱动");
             RegisterString("删除遗物描述",
@@ -1205,104 +1205,104 @@ namespace DSP_Battle
 
 
 
-        public static void AddTutorialProtos()
-        {
-            TutorialProto tp2 = LDB.tutorial.Select(1).Copy();
-            tp2.Name = "功勋阶级".Translate();
-            tp2.name = "功勋阶级".Translate();
-            tp2.Video = "";
-            tp2.PreText = "深空来敌介绍2前字";
-            tp2.PostText = "";
-            tp2.ID = 42;
-            LDBTool.PreAddProto(tp2);
+        //public static void AddTutorialProtos()
+        //{
+        //    TutorialProto tp2 = LDB.tutorial.Select(1).Copy();
+        //    tp2.Name = "功勋阶级".Translate();
+        //    tp2.name = "功勋阶级".Translate();
+        //    tp2.Video = "";
+        //    tp2.PreText = "深空来敌介绍2前字";
+        //    tp2.PostText = "";
+        //    tp2.ID = 42;
+        //    LDBTool.PreAddProto(tp2);
 
-            TutorialProto tp5 = LDB.tutorial.Select(1).Copy();
-            tp5.Name = "深空来敌介绍5标题".Translate();
-            tp5.name = "深空来敌介绍5标题".Translate();
-            tp5.Video = "";
-            tp5.PreText = "深空来敌介绍5前字";
-            tp5.PostText = "";
-            tp5.ID = 43;
-            LDBTool.PreAddProto(tp5);
+        //    TutorialProto tp5 = LDB.tutorial.Select(1).Copy();
+        //    tp5.Name = "深空来敌介绍5标题".Translate();
+        //    tp5.name = "深空来敌介绍5标题".Translate();
+        //    tp5.Video = "";
+        //    tp5.PreText = "深空来敌介绍5前字";
+        //    tp5.PostText = "";
+        //    tp5.ID = 43;
+        //    LDBTool.PreAddProto(tp5);
 
-            TutorialProto tp6 = LDB.tutorial.Select(1).Copy();
-            tp6.Name = "深空来敌介绍6标题".Translate();
-            tp6.name = "深空来敌介绍6标题".Translate();
-            tp6.Video = "";
-            tp6.PreText = "";
-            tp6.PostText = "";
-            tp6.ID = 44;
-            LDBTool.PreAddProto(tp6);
-        }
+        //    TutorialProto tp6 = LDB.tutorial.Select(1).Copy();
+        //    tp6.Name = "深空来敌介绍6标题".Translate();
+        //    tp6.name = "深空来敌介绍6标题".Translate();
+        //    tp6.Video = "";
+        //    tp6.PreText = "";
+        //    tp6.PostText = "";
+        //    tp6.ID = 44;
+        //    LDBTool.PreAddProto(tp6);
+        //}
 
         public static void AddSingalProtos()
         {
             //ProtoRegistry.RegisterSignal(701, "Assets/DSPBattle/r0-1", 3501, "r0-1", "遗物描述0-1");
         }
 
-        public static void RewriteTutorialProtosWhenLoad()
-        {
-            TutorialProto relicTutorial = LDB.tutorial.Select(43);
-            TutorialProto relicCursedTutorial = LDB.tutorial.Select(44);
-            if (relicTutorial != null)
-            {
-                try
-                {
-                    string text = "";
-                    string text2 = ""; //这里必须分成两部分要不然英文部分过长，超过65000报错，无法显示
-                    for (int type = 0; type < 2; type = (type + 1) % 5)
-                    {
-                        text += "<size=16>" + ($"圣物稀有度{type}").Translate() + "</size>\n";
-                        for (int num = 0; num < Relic.relicNumByType[type]; num++)
-                        {
-                            text += $"遗物名称带颜色{type}-{num}".Translate().Split('[')[0].Trim() + "</color>\n";
-                            text += $"遗物描述{type}-{num}".Translate();
-                            if ($"relicTipText{type}-{num}".Translate() != $"relicTipText{type}-{num}")
-                            {
-                                text += "\n" + $"relicTipText{type}-{num}".Translate();
-                            }
-                            text += "\n\n";
-                        }
-                        text += "\n";
-                    }
-                    relicTutorial.PreText = text;
-                    for (int type = 2; type < 4; type++)
-                    {
-                        text2 += "<size=16>" + ($"圣物稀有度{type}").Translate() + "</size>\n";
-                        for (int num = 0; num < Relic.relicNumByType[type]; num++)
-                        {
-                            text2 += $"遗物名称带颜色{type}-{num}".Translate().Split('[')[0].Trim() + "</color>\n";
-                            text2 += $"遗物描述{type}-{num}".Translate();
-                            if ($"relicTipText{type}-{num}".Translate() != $"relicTipText{type}-{num}")
-                            {
-                                text2 += "\n" + $"relicTipText{type}-{num}".Translate();
-                            }
-                            text2 += "\n\n";
-                        }
-                        text2 += "\n";
-                    }
-                    relicTutorial.PostText = text2;
+        //public static void RewriteTutorialProtosWhenLoad()
+        //{
+        //    TutorialProto relicTutorial = LDB.tutorial.Select(43);
+        //    TutorialProto relicCursedTutorial = LDB.tutorial.Select(44);
+        //    if (relicTutorial != null)
+        //    {
+        //        try
+        //        {
+        //            string text = "";
+        //            string text2 = ""; //这里必须分成两部分要不然英文部分过长，超过65000报错，无法显示
+        //            for (int type = 0; type < 2; type = (type + 1) % 5)
+        //            {
+        //                text += "<size=16>" + ($"圣物稀有度{type}").Translate() + "</size>\n";
+        //                for (int num = 0; num < Relic.relicNumByType[type]; num++)
+        //                {
+        //                    text += $"遗物名称带颜色{type}-{num}".Translate().Split('[')[0].Trim() + "</color>\n";
+        //                    text += $"遗物描述{type}-{num}".Translate();
+        //                    if ($"relicTipText{type}-{num}".Translate() != $"relicTipText{type}-{num}")
+        //                    {
+        //                        text += "\n" + $"relicTipText{type}-{num}".Translate();
+        //                    }
+        //                    text += "\n\n";
+        //                }
+        //                text += "\n";
+        //            }
+        //            relicTutorial.PreText = text;
+        //            for (int type = 2; type < 4; type++)
+        //            {
+        //                text2 += "<size=16>" + ($"圣物稀有度{type}").Translate() + "</size>\n";
+        //                for (int num = 0; num < Relic.relicNumByType[type]; num++)
+        //                {
+        //                    text2 += $"遗物名称带颜色{type}-{num}".Translate().Split('[')[0].Trim() + "</color>\n";
+        //                    text2 += $"遗物描述{type}-{num}".Translate();
+        //                    if ($"relicTipText{type}-{num}".Translate() != $"relicTipText{type}-{num}")
+        //                    {
+        //                        text2 += "\n" + $"relicTipText{type}-{num}".Translate();
+        //                    }
+        //                    text2 += "\n\n";
+        //                }
+        //                text2 += "\n";
+        //            }
+        //            relicTutorial.PostText = text2;
 
-                    string text3 = "";
-                    //text3 += "<size=16>" + ("圣物稀有度4").Translate() + "</size>\n";
-                    text3 += "诅咒描述独立".Translate() + "\n\n";
-                    for (int num = 0; num < Relic.relicNumByType[4]; num++)
-                    {
-                        text3 += $"遗物名称带颜色{4}-{num}".Translate().Split('[')[0].Trim() + "</color>\n";
-                        text3 += $"遗物描述{4}-{num}".Translate();
-                        if ($"relicTipText{4}-{num}".Translate() != $"relicTipText{4}-{num}")
-                        {
-                            text3 += "\n" + $"relicTipText{4}-{num}".Translate();
-                        }
-                        text3 += "\n\n";
-                    }
-                    text3 += "\n";
-                    relicCursedTutorial.PreText = text3;
-                }
-                catch (Exception)
-                { }
-            }
-        }
+        //            string text3 = "";
+        //            //text3 += "<size=16>" + ("圣物稀有度4").Translate() + "</size>\n";
+        //            text3 += "诅咒描述独立".Translate() + "\n\n";
+        //            for (int num = 0; num < Relic.relicNumByType[4]; num++)
+        //            {
+        //                text3 += $"遗物名称带颜色{4}-{num}".Translate().Split('[')[0].Trim() + "</color>\n";
+        //                text3 += $"遗物描述{4}-{num}".Translate();
+        //                if ($"relicTipText{4}-{num}".Translate() != $"relicTipText{4}-{num}")
+        //                {
+        //                    text3 += "\n" + $"relicTipText{4}-{num}".Translate();
+        //                }
+        //                text3 += "\n\n";
+        //            }
+        //            text3 += "\n";
+        //            relicCursedTutorial.PreText = text3;
+        //        }
+        //        catch (Exception)
+        //        { }
+        //    }
+        //}
 
 
         public static void EditProtossWhenLoad()

@@ -415,6 +415,7 @@ namespace DSP_Battle
                 abortBtnObj.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0.5f);
                 abortBtnObj.GetComponent<RectTransform>().sizeDelta = new Vector2(200, 40);
                 abortBtnText = abortBtnObj.transform.Find("button-text").GetComponent<Text>();
+                abortBtnText.fontSize = 20;
                 abortBtnText.text = "放弃解译".Translate() + Relic.AbortReward.ToString();
                 abortBtnObj.transform.Find("button-text").GetComponent<Text>().resizeTextMaxSize = 20;
                 abortBtnObj.GetComponent<Button>().onClick.RemoveAllListeners();

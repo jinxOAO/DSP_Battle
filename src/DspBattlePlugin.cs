@@ -404,7 +404,7 @@ namespace DSP_Battle
 
         public static void InitStaticDataWhenLoad()
         {
-            BattleProtos.RewriteTutorialProtosWhenLoad();
+            ////////////////////////////////////////////////////////////////////////////////BattleProtos.RewriteTutorialProtosWhenLoad();
             BattleProtos.EditProtossWhenLoad();
             MP.InitBlocker();
         }
