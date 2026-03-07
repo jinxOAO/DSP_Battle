@@ -47,6 +47,7 @@ namespace DSP_Battle
             GameObject autoFireTextObj = autoFireObj.transform.Find("in-editor-text").gameObject;
             autoFireTextObj.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(90, 0, 0);
             autoFireTextObj.GetComponent<Text>().color = new Color(1, 1, 1, 0.811f);
+            autoFireTextObj.GetComponent<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
             autoFireTextObj.GetComponent<Localizer>().stringKey = "恒星炮自动开火";
             autoFireObj.GetComponent<UIButton>().tips.tipTitle = "恒星炮自动开火";
             autoFireObj.GetComponent<UIButton>().tips.tipText = "恒星炮自动开火说明";

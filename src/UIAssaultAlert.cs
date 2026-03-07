@@ -127,7 +127,7 @@ namespace DSP_Battle
             if(__instance.targetHive != null)
             {
                 int byAstroIndex = __instance.targetHive.hiveAstroId - 1000000;
-                if(byAstroIndex >= 0 && byAstroIndex < GameMain.spaceSector.maxHiveCount && AssaultController.alertHives[byAstroIndex] >= 0)
+                if(byAstroIndex >= 0 && byAstroIndex < GameMain.spaceSector.maxHiveCount && byAstroIndex < AssaultController.alertHives.Length && AssaultController.alertHives[byAstroIndex] >= 0)
                 {
                     int listIndex = AssaultController.alertHives[byAstroIndex];
                     if (listIndex >= 0 && listIndex < AssaultController.assaultHives.Count)
@@ -297,6 +297,9 @@ namespace DSP_Battle
         [HarmonyPatch(typeof(UIDarkFogMonitor), "RefreshEntries")]
         public static void CheckIfMouseIn(ref UIDarkFogMonitor __instance)
         {
+            if (!GameMain.data.gameDesc.isCombatMode)
+                return;
+
             showAmount = false;
             if (__instance.hiveEntries != null)
             {
@@ -308,7 +311,7 @@ namespace DSP_Battle
                         if (entry.targetHive != null)
                         {
                             int byAstroIndex = entry.targetHive.hiveAstroId - 1000000;
-                            if (byAstroIndex >= 0 && byAstroIndex < GameMain.spaceSector.maxHiveCount && AssaultController.alertHives[byAstroIndex] >= 0)
+                            if (byAstroIndex >= 0 && byAstroIndex < GameMain.spaceSector.maxHiveCount && byAstroIndex < AssaultController.alertHives.Length && AssaultController.alertHives[byAstroIndex] >= 0)
                             {
                                 int listIndex = AssaultController.alertHives[byAstroIndex];
                                 if (listIndex >= 0 && listIndex < AssaultController.assaultHives.Count)
