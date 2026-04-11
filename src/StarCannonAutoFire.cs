@@ -45,7 +45,7 @@ namespace DSP_Battle
             checkboxOffSprite = Resources.Load<Sprite>("ui/textures/sprites/icons/checkbox-off");
 
             GameObject autoFireTextObj = autoFireObj.transform.Find("in-editor-text").gameObject;
-            autoFireTextObj.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(90, 0, 0);
+            autoFireTextObj.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(20, 0, 0);
             autoFireTextObj.GetComponent<Text>().color = new Color(1, 1, 1, 0.811f);
             autoFireTextObj.GetComponent<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
             autoFireTextObj.GetComponent<Localizer>().stringKey = "恒星炮自动开火";

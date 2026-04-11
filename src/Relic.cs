@@ -3098,7 +3098,7 @@ namespace DSP_Battle
             int[] matrixIds = PropertySystem.matrixIds;
             for (int i = 0; i < matrixIds.Length; i++)
             {
-                int itemAvaliablePropertyForRespawn = propertySystem.GetItemAvaliablePropertyForRespawn(clusterSeedKey, matrixIds[i]);
+                long itemAvaliablePropertyForRespawn = propertySystem.GetItemAvaliablePropertyForRespawn(clusterSeedKey, matrixIds[i]);
                 __instance.propertyItems[i].SetCountTextN0(itemAvaliablePropertyForRespawn);
             }
             for (int j = 0; j < __instance.propertyTips.Length; j++)
