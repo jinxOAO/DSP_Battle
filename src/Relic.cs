@@ -1027,8 +1027,9 @@ namespace DSP_Battle
         {
             if (Relic.HaveRelic(0, 4) && __instance.catalystPoint < 3600)
             {
+                __instance.curCatalystId = 1211;
                 __instance.catalystPoint = 3500; // 为什么不是3600，因为3600在锅盖消耗后会计算一个透镜消耗
-                __instance.catalystIncPoint = 14000; // 4倍是满增产
+                __instance.catalystIncLevel = 4; // 4倍是满增产
             }
         }
 
