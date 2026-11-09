@@ -25,19 +25,28 @@ namespace DSP_Battle
 
         public static void Awake()
         {
-            //MainLogic = MoreMegaStructure.PerformanceMonitorPatcher.AddCpuSampleLogic("PF深空来敌", 1, 2);
-            //Assault = MoreMegaStructure.PerformanceMonitorPatcher.AddCpuSampleLogic("PF入侵逻辑", 2, MainLogic);
-            //MetaDrive = MoreMegaStructure.PerformanceMonitorPatcher.AddCpuSampleLogic("PF元驱动", 2, MainLogic);
-            ////Factory = MoreMegaStructure.PerformanceMonitorPatcher.AddCpuSampleLogic("PF工厂重写", -1, MetaDrive);
-            //Damage = MoreMegaStructure.PerformanceMonitorPatcher.AddCpuSampleLogic("PF伤害逻辑", -1, MetaDrive);
-            //Kill = MoreMegaStructure.PerformanceMonitorPatcher.AddCpuSampleLogic("PF击杀逻辑", -1, MetaDrive);
-            //Ballistic = MoreMegaStructure.PerformanceMonitorPatcher.AddCpuSampleLogic("PF弹道重写", -1, MetaDrive);
-            //Droplet = MoreMegaStructure.PerformanceMonitorPatcher.AddCpuSampleLogic("PF水滴", 2, MainLogic);
-            ////Droplet1 = MoreMegaStructure.PerformanceMonitorPatcher.AddCpuSampleLogic("水滴1", -1, Droplet);
-            ////Droplet2 = MoreMegaStructure.PerformanceMonitorPatcher.AddCpuSampleLogic("水滴2", -1, Droplet);
-            ////Droplet3 = MoreMegaStructure.PerformanceMonitorPatcher.AddCpuSampleLogic("水滴3", -1, Droplet);
-            //EventSys = MoreMegaStructure.PerformanceMonitorPatcher.AddCpuSampleLogic("PF事件链", 2, MainLogic);
-            //DrawCall = MoreMegaStructure.PerformanceMonitorPatcher.AddCpuSampleLogic("PF深空绘制调用", 2, MainLogic);
+            // 使用 MoreMegaStructure 新版性能统计 API 注册本 mod 的各项 CPU 采样点。
+            // RegisterEntry(localizationKey, level)：入参为本地化 key，性能面板中会经
+            // 游戏 Translate() 显示，对应中英文翻译在 BattleProtos.AddTranslate 中注册。
+            // level：0 顶层、1 一级、2 二级；父子关系由 level + 注册顺序自动推导，
+            // 因此必须严格“父项在前、子项紧随其后”。返回的内部索引与 BeginSample/EndSample 配对使用。
+            // 顶层：深空来敌各项逻辑合计。
+            MainLogic = MoreMegaStructure.MMSCPU.RegisterEntry("PF深空来敌", 0);
+
+            // 入侵逻辑。
+            Assault = MoreMegaStructure.MMSCPU.RegisterEntry("PF入侵逻辑", 1);
+
+            // 元驱动及其子项：伤害、击杀、弹道重写。
+            MetaDrive = MoreMegaStructure.MMSCPU.RegisterEntry("PF元驱动", 1);
+            ////Factory = MoreMegaStructure.MMSCPU.RegisterEntry("PF工厂重写", 2); // 工厂重写暂未启用
+            Damage = MoreMegaStructure.MMSCPU.RegisterEntry("PF伤害逻辑", 2);
+            Kill = MoreMegaStructure.MMSCPU.RegisterEntry("PF击杀逻辑", 2);
+            Ballistic = MoreMegaStructure.MMSCPU.RegisterEntry("PF弹道重写", 2);
+
+            // 其余一级子项。
+            Droplet = MoreMegaStructure.MMSCPU.RegisterEntry("PF水滴", 1);
+            EventSys = MoreMegaStructure.MMSCPU.RegisterEntry("PF事件链", 1);
+            DrawCall = MoreMegaStructure.MMSCPU.RegisterEntry("PF深空绘制调用", 1);
 
         }
     }

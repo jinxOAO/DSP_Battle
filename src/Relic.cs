@@ -1049,7 +1049,8 @@ namespace DSP_Battle
 
             __instance.currentStrength = 1;
             float num2 = (float)Cargo.accTableMilli[__instance.catalystIncLevel];
-            __instance.capacityCurrentTick = (long)(__instance.currentStrength * (1f + __instance.warmup * 1.5f) * ((__instance.catalystPoint > 0) ? (2f * (1f + num2)) : 1f) * ((__instance.productId > 0) ? 8f : 1f) * (float)__instance.genEnergyPerTick);
+            float num3 = ItemProto.catalystAbilityById[__instance.curCatalystId];
+            __instance.capacityCurrentTick = (long)(__instance.currentStrength * (1f + __instance.warmup * 1.5f) * ((__instance.catalystPoint > 0 || __instance.catalystCount > 0) ? (num3 * (1f + num2)) : 1f) * ((__instance.productId > 0) ? 8f : 1f) * (float)__instance.genEnergyPerTick);
             eta = 1f - (1f - eta) * (1f - __instance.warmup * __instance.warmup * 0.4f);
             __instance.warmupSpeed = 0.25f * 4f * 1.3888889E-05f;
             __result = (long)((double)__instance.capacityCurrentTick / (double)eta + 0.49999999);

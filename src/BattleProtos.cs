@@ -1114,7 +1114,7 @@ namespace DSP_Battle
             RegisterString("PF弹道重写", "Ballistic Rewrite", "弹道重写");
             RegisterString("PF水滴", "Droplets", "水滴");
             RegisterString("PF事件链", "Event System", "事件链");
-            RegisterString("PF深空绘制调用", "Draw Call", "绘制调用");
+            RegisterString("PF深空绘制调用", "Render Call", "渲染调用");
 
             // 入侵逻辑
 

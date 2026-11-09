@@ -388,6 +388,13 @@ FodyWeavers.xsd
 # Local History for Visual Studio Code
 .history/
 
+# Game source reference (decompiled DSP Assembly-CSharp, local only)
+_ref/
+_ref
+_dev/
+_dev
+
+
 # Windows Installer files from build outputs
 *.cab
 *.msi
